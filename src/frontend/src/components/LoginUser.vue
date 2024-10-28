@@ -1,34 +1,23 @@
 <template>
-  <div class="container">
-    <div style="margin-top: 200px;">
-      <form @submit.prevent="login" id="loginForm">
-        <table>
-          <tbody>
-          <tr>
-            <td>Enter the account:</td>
-            <td><input type="text" v-model="username" required="required"></td>
-          </tr>
-          <tr>
-            <td>Enter the password:</td>
-            <td><input type="password" v-model="password" required="required"></td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" value="Login" class="button-green">
-              <p>Or login with admin account
-                <router-link id="adminLink" to="/login_admin"> Here</router-link>
-              </p>
-            </td>
-
-          </tr>
-          </tbody>
-
-        </table>
-        <input type="hidden" id="token" value="">
-      </form>
+    <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
     </div>
-    <p>Haven't got an account? <span></span></p>
-  </div>
+    <form>
+      <h3>Đăng nhập</h3>
+      <label for="username">Tên đăng nhập</label>
+      <input type="text" placeholder="Email or Phone" id="username" />
+
+      <label for="password">Mật khẩu</label>
+      <input type="password" placeholder="Password" id="password" />
+
+      <button>Đăng nhập</button>
+      <div class="social">
+        <div class="go"><i class="fab fa-google"></i> Google</div>
+        <div class="fb"><i class="fab fa-facebook"></i> Facebook</div>
+      </div>
+    </form>
+   
 </template>
 
 <script>
@@ -78,49 +67,109 @@ export default {
   },
   mounted() {
     document.title = 'My login page';
+    document.body.style.backgroundColor = '#080710'
   }
 }
 </script>
 
 <style scoped>
-.button-green {
-  background-color: #04AA6D;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+*,
+*:before,
+*:after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+.background {
+  width: 430px;
+  height: 520px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  background-color: #080710;
+}
+
+form {
+  height: 520px;
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.13);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
   border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  padding: 50px 35px;
 }
-
-.button-green:hover {
-  background-color: darkgreen;
-  color: white;
-}
-
-#register-link {
-  background-color: steelblue;
+form * {
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  outline: none;
   border: none;
-  color: white;
-  padding: 15px 32px;
+}
+form h3 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 42px;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
+}
+
+label {
+  display: block;
+  margin-top: 30px;
   font-size: 16px;
-  margin: 4px 2px;
+  font-weight: 500;
+}
+input {
+  display: block;
+  height: 50px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0 10px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+}
+::placeholder {
+  color: #e5e5e5;
+}
+button {
+  margin-top: 50px;
+  width: 100%;
+  background-color: #ffffff;
+  color: #080710;
+  padding: 15px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 5px;
   cursor: pointer;
-  border-radius: 10px;
 }
-
-#register-link:hover {
-  background-color: #0a58ca;
+.social {
+  margin-top: 30px;
+  display: flex;
 }
-
-#adminLink {
-  margin-left: 5px;
+.social div {
+  background: red;
+  width: 150px;
+  border-radius: 3px;
+  padding: 5px 10px 10px 5px;
+  background-color: rgba(255, 255, 255, 0.27);
+  color: #eaf0fb;
+  text-align: center;
+}
+.social div:hover {
+  background-color: rgba(255, 255, 255, 0.47);
+}
+.social .fb {
+  margin-left: 25px;
+}
+.social i {
+  margin-right: 4px;
 }
 </style>
