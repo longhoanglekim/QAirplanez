@@ -4,7 +4,6 @@ dist/
 *.log
 
 # Vue.js
-*.vue
 .vscode/
 npm-debug.log*
 yarn-error.log
