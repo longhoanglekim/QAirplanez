@@ -22,13 +22,7 @@ public class ApplicationConfiguration {
         this.accountService = accountService;
     }
 
-    @Bean
-    UserDetailsService userDetailsService() {
-        if (userRepository == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return userRepository::findByUsername;
-    }
+
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
@@ -44,7 +38,7 @@ public class ApplicationConfiguration {
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(accountService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;

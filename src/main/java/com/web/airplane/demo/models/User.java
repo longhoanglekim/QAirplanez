@@ -8,9 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -23,10 +21,13 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false)
-    private String fullName;
+    private String firstname;
+    @Column(nullable = false)
+    private String lastname;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+    @Column(nullable = false)
+    private Date birthdate;
+
 
     @Column(nullable = false)
     @Size(min = 8)
@@ -35,20 +36,29 @@ public class User implements UserDetails {
     @Column
     private String phoneNumber;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<UserRole> userRoles = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
     // Implementing methods of UserDetails interface
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().getName()))
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

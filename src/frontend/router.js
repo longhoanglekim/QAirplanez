@@ -2,6 +2,7 @@ import HomePage from "@/components/HomePage.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import LoginUser from "@/components/LoginUser.vue";
 import axios from "core-js/internals/queue";
+import SignUpUser from "@/components/SignUpUser.vue";
 
 const routes = [
     {
@@ -18,6 +19,11 @@ const routes = [
         path : '/login_user',
         name : 'LoginUser',
         component: LoginUser
+    },
+    {
+        path : '/signup_user',
+        name : 'SignUpUser',
+        component: SignUpUser
     }
 
 
