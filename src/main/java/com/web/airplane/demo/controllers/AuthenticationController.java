@@ -1,9 +1,16 @@
 package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.LoginDTO;
+import com.web.airplane.demo.dtos.LoginResponse;
+import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.services.AuthenticationService;
+import com.web.airplane.demo.services.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,19 +19,39 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthenticationController {
     private final UserJPARepository userJPARepository;
-
-    public AuthenticationController(UserJPARepository userJPARepository) {
+    private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
+    @Autowired
+    public AuthenticationController(UserJPARepository userJPARepository, AuthenticationService authenticationService, JwtService jwtService) {
         this.userJPARepository = userJPARepository;
+        this.authenticationService = authenticationService;
+        this.jwtService = jwtService;
     }
-    @PostMapping("/login")
-    public ResponseEntity<?> loginAuth(@RequestBody LoginDTO loginDTO) {
-        User user = userJPARepository.findByUsernameAndPassword(loginDTO.getUsername(), loginDTO.getPassword());
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody RegisterDTO registerAccountDto) {
+        // register new account with encoded password
 
-        if (user != null) {
-            return ResponseEntity.ok(user);
+        User newAccount = authenticationService.signup(registerAccountDto);
+        if (newAccount == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(newAccount);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
+        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+        Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(60 * 60 * 24);
+        response.addCookie(jwtCookie);
+        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        return ResponseEntity.ok(loginResponse);
+
+    }
 
 }

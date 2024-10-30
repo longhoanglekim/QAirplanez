@@ -39,11 +39,12 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("aa").permitAll()  // Cho phép truy cập không cần xác thực tới tài nguyên tĩnh
-                        .requestMatchers("/api/**", "/login_user").authenticated() // Chỉ cho phép người dùng có quyền USER truy cập
-                        .anyRequest().authenticated())  // Bảo vệ các endpoint khác
+                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("abc").authenticated()
+                        .anyRequest().authenticated())
+
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session for JWT
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Adding JWT filter before the default authentication filter
 
