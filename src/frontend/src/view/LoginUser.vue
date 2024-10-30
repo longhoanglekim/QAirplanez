@@ -1,21 +1,7 @@
 <template>
   <div id="wrapper">
       <form action="">
-        <h3>Đăng ký tài khoản</h3>
-        <div class="form-group">
-          <div class="form-field">
-            <input type="text" name="ho" id="ho" required />
-            <label class="lb-tit" for="ho">Họ</label>
-          </div>
-          <div class="form-field">
-            <input type="text" name="ten" id="ten" required />
-            <label class="lb-tit" for="ten">Tên</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <input type="text" name="sinh-nhat" id="birthday" required />
-          <label for="" class="lb-tit">Ngày sinh</label>
-        </div>
+        <h3>Đăng nhập</h3>
         <div class="form-group">
           <input type="email" name="email" id="email" required /><label
             class="lb-tit"
@@ -23,48 +9,77 @@
             >Email</label
           >
         </div>
-        <div class="form-group">
-          <input type="text" name="so-dien-thoai" id="phone" required />
-          <label class="lb-tit" for="">Số điện thoại</label>
-        </div>
+        
         <div class="form-group">
           <input type="password" name="password" id="password" required />
           <label class="lb-tit" for="">Mật khẩu</label>
         </div>
-        <div class="form-group">
-          <input
-            type="password"
-            name="retype-password"
-            id="rePassword"
-            required
-          />
-          <label class="lb-tit" for="">Nhập lại mật khẩu</label>
-        </div>
-        <button>xac nhan</button>
+        <button>Dang nhap</button>
       </form>
     </div>
+    <PageFooter/>
 </template>
 
 <script>
+import PageFooter from '@/components/PageFooter.vue';
 export default {
-    name: 'SignUpUser',
+  name: 'LoginUser',
+  components: {
+    PageFooter
+  },
   data() {
     return {
-      
+      username: '',
+      password: ''
     }
   },
   methods: {
-    
+    async login() {
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password
+          })
+        });
+
+        // Log the response to see what is returned
+        console.log(response);
+
+        if (response.status === 401) {
+          throw new Error("Invalid credentials");
+        } else if (!response.ok) {
+          throw new Error("Login error");
+        } else {
+          // Try to parse the response as JSON
+          const data = await response.json();
+          console.log("Token: " + data.token);
+
+          localStorage.setItem('token', data.token);
+          this.$router.push({path : '/welcome'});
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
   },
   mounted() {
-    document.title = 'Đăng ký tài khoản';
-    document.body.style.backgroundColor = '#080710'
+    document.title = 'My login page';
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundSize = "cover";
+    //document.body.style.backgroundColor = "#080710"
+    document.body.style.backgroundImage = "url(../assets/login/bg-login.jpeg)";
   }
 }
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
   --cl-border: black;
@@ -149,5 +164,26 @@ h3 {
     width: 80vw;
   }
 }
-
+.social {
+  margin-top: 30px;
+  display: flex;
+}
+.social div {
+  background: red;
+  width: 150px;
+  border-radius: 3px;
+  padding: 5px 10px 10px 5px;
+  background-color: rgba(255, 255, 255, 0.27);
+  color: #eaf0fb;
+  text-align: center;
+}
+.social div:hover {
+  background-color: rgba(255, 255, 255, 0.47);
+}
+.social .fb {
+  margin-left: 25px;
+}
+.social i {
+  margin-right: 4px;
+}
 </style>

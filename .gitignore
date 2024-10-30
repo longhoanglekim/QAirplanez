@@ -1,3 +1,38 @@
+# Node.js (cho Vue.js)
+node_modules/
+dist/
+*.log
+
+# Vue.js
+.vscode/
+npm-debug.log*
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Build output
+/dist/
+/build/
+
+# IDE và Editor
+.idea/
+*.iml
+*.swp
+*.swo
+.DS_Store
+
+# Spring Boot
+*.class
+*.jar
+*.war
+*.log
+/build/
+target/
+out/
+*.db
+*.h2.db
+
+=======
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
