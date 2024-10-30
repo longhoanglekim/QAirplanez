@@ -33,6 +33,3 @@ out/
 *.db
 *.h2.db
 
-# Thư mục môi trường
-.env
-*.env
