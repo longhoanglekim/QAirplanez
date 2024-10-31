@@ -1,21 +1,18 @@
 <template>
   <div id="wrapper">
-      <form action="">
-        <h3>Đăng nhập</h3>
-        <div class="form-group">
-          <input type="email" name="email" id="email" required /><label
-            class="lb-tit"
-            for=""
-            >Email</label
-          >
-        </div>
-        
-        <div class="form-group">
-          <input type="password" name="password" id="password" required />
-          <label class="lb-tit" for="">Mật khẩu</label>
-        </div>
-        <button>Dang nhap</button>
-      </form>
+    <form @submit.prevent="login">
+      <h3>Đăng nhập</h3>
+      <div class="form-group">
+        <input type="email" v-model="username" id="email" required />
+        <label class="lb-tit">Email hoặc số điện thoại</label>
+      </div>
+
+      <div class="form-group">
+        <input type="password" v-model="password" id="password" required />
+        <label class="lb-tit">Mật khẩu</label>
+      </div>
+      <button type="submit">Đăng nhập</button> <!-- Giữ button như bình thường -->
+    </form>
     </div>
     <PageFooter/>
 </template>
@@ -46,25 +43,23 @@ export default {
             password: this.password
           })
         });
-
-        // Log the response to see what is returned
-        console.log(response);
-
-        if (response.status === 401) {
-          throw new Error("Invalid credentials");
-        } else if (!response.ok) {
-          throw new Error("Login error");
-        } else {
-          // Try to parse the response as JSON
+        if (response.ok) {
           const data = await response.json();
-          console.log("Token: " + data.token);
+          console.log("Token:", data.token);
 
           localStorage.setItem('token', data.token);
-          this.$router.push({path : '/welcome'});
+          this.$router.push({ path: '/home' });
         }
+          else if (response.status === 401) {
+
+            console.error("Sai tài khoản hoặc mật khẩu.");
+          } else {
+
+            console.error("Đã xảy ra lỗi khi đăng nhập.");
+          }
 
       } catch (error) {
-        console.error(error);
+        console.error("Error:", error.message); // Log lỗi nếu có ngoại lệ xảy ra
       }
     }
 
@@ -74,7 +69,7 @@ export default {
     document.body.style.backgroundRepeat = "no-repeat";
     document.body.style.backgroundSize = "cover";
     //document.body.style.backgroundColor = "#080710"
-    document.body.style.backgroundImage = "url(../assets/login/bg-login.jpeg)";
+    // document.body.style.backgroundImage = "url(../assets/login/bg-login.jpeg)";
   }
 }
 </script>
@@ -118,6 +113,7 @@ h3 {
   font-size: inherit;
   left: 10px;
   border: none;
+  padding: 10px 0 5px;
   border-bottom: 1px solid var(--cl-border);
   transition: all 0.3s ease-in-out;
 }
@@ -131,7 +127,7 @@ h3 {
   background: transparent;
   position: absolute;
   left: 10px;
-  top: 50%;
+  top: -20%;
   transform: translateY(-50%);
   pointer-events: none;
   transition: all 0.3s ease-in-out;

@@ -1,40 +1,40 @@
 <template>
   <div id="wrapper">
-      <form action="">
+      <form @submit.prevent="signup">
         <h3>Đăng ký tài khoản</h3>
         <div class="form-group">
           <div class="form-field">
-            <input type="text" name="ho" id="ho" required />
+            <input type="text" v-model="firstname" id="ho" required />
             <label class="lb-tit" for="ho">Họ</label>
           </div>
           <div class="form-field">
-            <input type="text" name="ten" id="ten" required />
+            <input type="text" v-model="lastname" id="ten" required />
             <label class="lb-tit" for="ten">Tên</label>
           </div>
         </div>
         <div class="form-group">
-          <input type="text" name="sinh-nhat" id="birthday" required />
+          <input type="text" v-model="birthdate"  id="birthday" required />
           <label for="" class="lb-tit">Ngày sinh</label>
         </div>
         <div class="form-group">
-          <input type="email" name="email" id="email" required /><label
+          <input type="email" v-model="email" id="email" required /><label
             class="lb-tit"
             for=""
             >Email</label
           >
         </div>
         <div class="form-group">
-          <input type="text" name="so-dien-thoai" id="phone" required />
+          <input type="text" v-model="phoneNumber" id="phone" required />
           <label class="lb-tit" for="">Số điện thoại</label>
         </div>
         <div class="form-group">
-          <input type="password" name="password" id="password" required />
+          <input type="password" v-model="password" id="password" required />
           <label class="lb-tit" for="">Mật khẩu</label>
         </div>
         <div class="form-group">
           <input
             type="password"
-            name="retype-password"
+            v-model="retypePassword"
             id="rePassword"
             required
           />
@@ -56,11 +56,48 @@ export default {
     },
   data() {
     return {
-      
+      firstname : '',
+      lastname : '',
+      birthdate : '',
+      email : '',
+      phoneNumber : '',
+      password : '',
+      retypePassword : ''
     }
   },
   methods: {
-    
+    async signup() {
+      try {
+        if (this.retypePassword.value !== this.password.value) {
+          return;
+        }
+        const response = await fetch('http://localhost:8080/api/auth/register', {
+          method : 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            firstname : this.firstname,
+            lastname : this.lastname,
+            birthdate : new Date('2024-10-31T00:00:00'),
+            email : this.email,
+            phoneNumber : this.phoneNumber,
+            password : this.password
+          })
+
+        });
+        if (response.ok) {
+          this.$router.push({path : '/login'});
+        } else if (response.status === 409) {
+          console.error("Email hoặc số điện thoại này đã được sử dụng!");
+        } else {
+          console.error("Đã xảy ra lỗi khi đăng ký.");
+        }
+      }
+      catch (error) {
+        console.log(error.message)
+      }
+    }
 
   },
   mounted() {
