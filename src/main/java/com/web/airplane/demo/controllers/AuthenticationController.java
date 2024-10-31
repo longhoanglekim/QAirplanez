@@ -3,6 +3,7 @@ package com.web.airplane.demo.controllers;
 import com.web.airplane.demo.dtos.LoginDTO;
 import com.web.airplane.demo.dtos.LoginResponse;
 import com.web.airplane.demo.dtos.RegisterDTO;
+import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.UserJPARepository;
 import com.web.airplane.demo.services.AuthenticationService;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,29 +30,38 @@ public class AuthenticationController {
         this.jwtService = jwtService;
     }
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterDTO registerAccountDto) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO registerAccountDto) {
         // register new account with encoded password
 
-        User newAccount = authenticationService.signup(registerAccountDto);
-        if (newAccount == null) {
-            return ResponseEntity.badRequest().build();
+        User newAccount;
+        try {
+            newAccount = authenticationService.signup(registerAccountDto);
+            return ResponseEntity.ok(newAccount);
+        } catch (AccountAlreadyExistedException e) {
+            return ResponseEntity.status(409).body("Account has already existed!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("");
         }
-        return ResponseEntity.ok(newAccount);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        try {
+            User authenticatedUser = authenticationService.authenticate(loginUserDto);
+            String jwtToken = jwtService.generateToken(authenticatedUser);
+            Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(jwtCookie);
+            LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+            return ResponseEntity.ok(loginResponse);
+        } catch (BadCredentialsException e) {
+            LoginResponse error = new LoginResponse().setError("Sai tài khoản hoặc mật khẩu");
+            return ResponseEntity.status(401).body(error);
+        }
 
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-        Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(60 * 60 * 24);
-        response.addCookie(jwtCookie);
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginResponse);
 
     }
 
