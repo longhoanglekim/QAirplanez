@@ -1,19 +1,23 @@
 <template>
-  <div id="wrapper">
+  <div id="container">
+    <div id="wrapper">
     <form @submit.prevent="login">
       <h3>Đăng nhập</h3>
       <div class="form-group">
         <input type="email" v-model="username" id="email" required />
         <label class="lb-tit">Email hoặc số điện thoại</label>
       </div>
-
       <div class="form-group">
         <input type="password" v-model="password" id="password" required />
         <label class="lb-tit">Mật khẩu</label>
       </div>
       <button type="submit">Đăng nhập</button> <!-- Giữ button như bình thường -->
     </form>
+    <p @click="goToSignup">
+      Chưa có tài khoản? <router-link to="/signup">Đăng ký</router-link>
+    </p>
     </div>
+  </div>
     <PageFooter/>
 </template>
 
@@ -61,15 +65,13 @@ export default {
       } catch (error) {
         console.error("Error:", error.message); // Log lỗi nếu có ngoại lệ xảy ra
       }
+    },
+    goToSignup() {
+      this.$router.push('/signup');
     }
-
   },
   mounted() {
     document.title = 'My login page';
-    document.body.style.backgroundRepeat = "no-repeat";
-    document.body.style.backgroundSize = "cover";
-    //document.body.style.backgroundColor = "#080710"
-    // document.body.style.backgroundImage = "url(../assets/login/bg-login.jpeg)";
   }
 }
 </script>
@@ -80,13 +82,25 @@ export default {
   --cl-border: black;
 }
 
-#wrapper {
+#container {
+  height: 150vh;
+  width: 100vw;
+  background-image: url('../assets/login/bg-login.jpg');
+  background-size: cover;
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  background-color: #999999;
-  border-radius: 40px;
+}
+
+#wrapper {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
 }
 
 h3 {
@@ -165,11 +179,10 @@ h3 {
   display: flex;
 }
 .social div {
-  background: red;
   width: 150px;
   border-radius: 3px;
   padding: 5px 10px 10px 5px;
-  background-color: rgba(255, 255, 255, 0.27);
+  background: rgba(255, 255, 255, 0.27);
   color: #eaf0fb;
   text-align: center;
 }
@@ -181,5 +194,28 @@ h3 {
 }
 .social i {
   margin-right: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+p {
+  margin-top: 1rem;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>
