@@ -13,8 +13,8 @@
           </div>
         </div>
         <div class="form-group">
-          <input type="text" v-model="birthdate"  id="birthday" required />
-          <label for="" class="lb-tit">Ngày sinh</label>
+          <input type="date" v-model="birthdate"  id="birthday" required />
+          <label for="" class="lb-tit" id="birthday-lb">Ngày sinh</label>
         </div>
         <div class="form-group">
           <input type="email" v-model="email" id="email" required /><label
@@ -82,7 +82,7 @@ export default {
           body: JSON.stringify({
             firstname : this.firstname,
             lastname : this.lastname,
-            birthdate : new Date('2024-10-31T00:00:00'),
+            birthdate : this.birthdate,
             email : this.email,
             phoneNumber : this.phoneNumber,
             password : this.password
@@ -180,8 +180,13 @@ h3 {
   pointer-events: none;
   transition: all 0.3s ease-in-out;
 }
-
 .form-group input:focus + .lb-tit {
+  top: -10px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+#birthday-lb {
   top: -10px;
   font-size: 14px;
   font-weight: bold;
