@@ -38,8 +38,6 @@
       </nav>
       <div class="ref-links">Something</div>
     </div>
-
-
 </template>
 
 <script>
@@ -94,8 +92,6 @@ export default {
     color : #fff;
     font-weight: 500;
     text-decoration: none ;
-    
-    
   }
 
   .navMenu > li:hover {
@@ -145,5 +141,11 @@ export default {
   img {
     width : 50px;
     height : 50px;
+  }
+
+  @media screen and (max-width: 800px) {
+    .navBar > ul {
+      display: block;
+    }
   }
 </style>

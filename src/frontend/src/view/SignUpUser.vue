@@ -1,5 +1,6 @@
 <template>
-  <div id="container"><div id="wrapper">
+  <div id="container">
+    <div id="wrapper">
       <form @submit.prevent="signup">
         <h3>Đăng ký tài khoản</h3>
         <div class="form-group">
@@ -46,17 +47,17 @@
       Đã có tài khoản? <router-link to="/login">Đăng nhập</router-link>
     </p>
   </div></div>
-    <PageFooter/>
 </template>
 
 
 <script scoped>
-import PageFooter from '@/components/PageFooter.vue';
+import { goToLogin } from '@/composable';
+
 export default {
     name: 'SignUpUser',
     components: {
-      PageFooter
     },
+    goToLogin,
   data() {
     return {
       firstname : '',
@@ -90,7 +91,7 @@ export default {
 
         });
         if (response.ok) {
-          this.$router.push({path : '/login'});
+          goToLogin();
         } else if (response.status === 409) {
           console.error("Email hoặc số điện thoại này đã được sử dụng!");
         } else {
@@ -100,9 +101,6 @@ export default {
       catch (error) {
         console.log(error.message)
       }
-    },
-    goToLogin() {
-      this.$router.push('/login');
     }
   },
   mounted() {
@@ -115,6 +113,8 @@ export default {
 * {
   box-sizing: border-box;
   --cl-border: black;
+  transition: all 0.3s ease-in-out;
+  
 }
 
 #container {
@@ -163,8 +163,13 @@ h3 {
   left: 10px;
   border: none;
   border-bottom: 1px solid var(--cl-border);
-  transition: all 0.3s ease-in-out;
+  
 }
+
+.form-group > input {
+  width: 100%;
+}
+
 
 .form-group input:focus,
 .form-group input:hover {
@@ -178,19 +183,17 @@ h3 {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  transition: all 0.3s ease-in-out;
+
 }
 .form-group input:focus + .lb-tit {
   top: -10px;
   font-size: 14px;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
 }
 #birthday-lb {
   top: -10px;
   font-size: 14px;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
 }
 
 .form-group input:valid + .lb-tit {
