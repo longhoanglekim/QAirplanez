@@ -1,4 +1,5 @@
 <template>
+
   <div id="container">
     <div id="wrapper">
     <form @submit.prevent="login">
@@ -18,15 +19,14 @@
     </p>
     </div>
   </div>
-    <PageFooter/>
 </template>
 
 <script>
-import PageFooter from '@/components/PageFooter.vue';
+
+
 export default {
   name: 'LoginUser',
   components: {
-    PageFooter
   },
   data() {
     return {
@@ -81,11 +81,15 @@ export default {
   box-sizing: border-box;
   --cl-border: black;
 }
+body,html {
+  background-image: url('../assets/login/bg-login.jpg');
+}
 
 #container {
-  height: 150vh;
+
   width: 100vw;
-  background-image: url('../assets/login/bg-login.jpg');
+
+  //background-image: url('../assets/login/bg-login.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
