@@ -1,5 +1,5 @@
 async function goToLogin() {
-    this.$router.push('/signup');
+    this.$router.push('/login');
 }
 
 export {goToLogin};

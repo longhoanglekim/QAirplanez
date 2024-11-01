@@ -31,9 +31,9 @@ body, html {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  background-image: url('@/assets/home/bg-home.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
 }
 
 #app {
@@ -41,8 +41,11 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-
-
+}
+footer {
+  font-family: "Rubik", sans-serif;
+  background-color: rgb(255, 242, 242);
+  margin-top: 0;
+  padding-top: 1px;
 }
 </style>
