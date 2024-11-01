@@ -73,13 +73,15 @@ export default {
   .navMenu > li {
     position: absolute;
     padding: 10px;
-    border-radius: 5px 5px 0px 0px;
+    border-radius: 15px 15px 0px 0px;
     text-align: center;
     background: transparent;
     color: white;
     transition: all 0.3s ease-in-out;
     width: 100px; 
-    height: 50px; 
+    height: 35px; 
+    justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
   }
 
   .navMenu > li:nth-child(1) { left: -300px; top: 0; }
@@ -92,7 +94,8 @@ export default {
     color : #fff;
     font-weight: 500;
     text-decoration: none ;
-    position : relative;
+    
+    
   }
 
   .navMenu > li:hover {
@@ -116,7 +119,7 @@ export default {
     position : absolute;
     left : 0;
     width : 100%;
-    height : 2px;
+  
   }
 
   .navMenu > li > div {
