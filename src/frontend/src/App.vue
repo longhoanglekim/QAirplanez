@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header><PageNavBar/></header>
+    <header><PageHeader/></header>
     <router-view></router-view>
     <footer><PageFooter/></footer>
   </div>
@@ -9,12 +9,12 @@
 
 <script>
 
-import PageNavBar from "@/components/PageNavBar.vue";
+import PageHeader from "@/components/PageHeader.vue";
 import PageFooter from "@/components/PageFooter.vue";
 
 export default {
   name: 'App',
-  components: {PageFooter, PageNavBar},
+  components: {PageFooter, PageHeader},
 
   data() {
     return {
@@ -31,9 +31,6 @@ body, html {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
   background-image: url('@/assets/home/bg-home.png');
   background-size: cover;
   background-repeat: no-repeat;

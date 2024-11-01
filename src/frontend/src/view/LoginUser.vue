@@ -1,11 +1,10 @@
 <template>
-
   <div id="container">
     <div id="wrapper">
     <form @submit.prevent="login">
       <h3>Đăng nhập</h3>
       <div class="form-group">
-        <input type="email" v-model="username" id="email" required />
+        <input type="text" v-model="username" id="username" required />
         <label class="lb-tit">Email hoặc số điện thoại</label>
       </div>
       <div class="form-group">
@@ -80,16 +79,11 @@ export default {
 * {
   box-sizing: border-box;
   --cl-border: black;
-}
-body,html {
-  background-image: url('../assets/login/bg-login.jpg');
+  transition: all 0.3s ease-in-out;
 }
 
 #container {
-
   width: 100vw;
-
-  //background-image: url('../assets/login/bg-login.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -119,11 +113,6 @@ h3 {
   display: flex;
 }
 
-.form-field {
-  position: relative;
-  margin-right: 1rem;
-}
-
 .form-group input {
   background: transparent;
   height: 24px;
@@ -131,9 +120,9 @@ h3 {
   font-size: inherit;
   left: 10px;
   border: none;
-  padding: 10px 0 5px;
+  padding: 10px 5px;
   border-bottom: 1px solid var(--cl-border);
-  transition: all 0.3s ease-in-out;
+  width: 100%;
 }
 
 .form-group input:focus,
@@ -145,28 +134,26 @@ h3 {
   background: transparent;
   position: absolute;
   left: 10px;
-  top: -20%;
-  transform: translateY(-50%);
   pointer-events: none;
-  transition: all 0.3s ease-in-out;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .form-group input:focus + .lb-tit {
   top: -10px;
   font-size: 14px;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  
 }
 
 .form-group input:valid + .lb-tit {
   top: -10px;
 }
+
+
 @media screen and (max-width: 768px) {
   .form-group {
     display: block;
-  }
-  .form-field {
-    margin-bottom: inherit;
   }
   input {
     width: 70vw;
@@ -177,27 +164,6 @@ h3 {
   input {
     width: 80vw;
   }
-}
-.social {
-  margin-top: 30px;
-  display: flex;
-}
-.social div {
-  width: 150px;
-  border-radius: 3px;
-  padding: 5px 10px 10px 5px;
-  background: rgba(255, 255, 255, 0.27);
-  color: #eaf0fb;
-  text-align: center;
-}
-.social div:hover {
-  background-color: rgba(255, 255, 255, 0.47);
-}
-.social .fb {
-  margin-left: 25px;
-}
-.social i {
-  margin-right: 4px;
 }
 
 button {
