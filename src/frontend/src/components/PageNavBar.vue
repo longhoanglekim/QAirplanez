@@ -4,10 +4,37 @@
         <img src="@/assets/home/logo.jpg" alt="Background Image">
       </p></a>
       <nav class="navBar">
-          <a href="#">Khám phá</a>
-          <a href="#">Đặt vé</a>
-          <a href="#">Thông tin hành trình</a>
-          <a href="#">QAirline Club</a>
+        <ul class="navMenu">
+          <li>
+            <a href="#">Khám phá</a>
+            <div>
+              <ul>
+                <li><a href="">Hello 1</a></li>
+                <li><a href=""> Hello 2</a></li>
+                <li><a href="">Hello 3</a></li>
+              </ul>
+            </div>
+          </li>
+          <li><a href="#">Đặt vé</a></li>
+          <li><a href="#">Thông tin hành trình
+            <div>
+              <ul>
+                <li><a href="">Hello 1</a></li>
+                <li><a href=""> Hello 2</a></li>
+                <li><a href="">Hello 3</a></li>
+              </ul>
+            </div>
+          </a></li>
+          <li><a href="#">QAirline Club
+            <div>
+              <ul>
+                <li><a href="">Hello 1</a></li>
+                <li><a href=""> Hello 2</a></li>
+                <li><a href="">Hello 3</a></li>
+              </ul>
+            </div>
+          </a></li>
+        </ul>
       </nav>
       <div class="ref-links">Something</div>
     </div>
@@ -21,6 +48,10 @@ export default {
 }
 </script>
 <style scoped>
+  li {
+    list-style-type:none;
+  }
+  a {color:inherit;}
   .header {
     width: 100%;
     display : flex;
@@ -33,27 +64,75 @@ export default {
     padding-bottom: 5px;
     padding-top : 5px;
   }
-  .navBar {
+  .navBar > ul {
     display : flex;
     gap : 20px;
-
+    position: relative;
   }
-  .navBar a {
+
+  .navMenu > li {
+    position: absolute;
+    padding: 10px;
+    border-radius: 5px 5px 0px 0px;
+    text-align: center;
+    background: transparent;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    width: 100px; 
+    height: 50px; 
+  }
+
+  .navMenu > li:nth-child(1) { left: -300px; top: 0; }
+  .navMenu > li:nth-child(2) { left: -150px; top: 0; } /* Thay đổi vị trí ngang */
+  .navMenu > li:nth-child(3) { left: 0px; top: 0; }
+  .navMenu > li:nth-child(4) { left: 150px; top: 0; }
+
+  .navMenu > li > a {
     font-size : 18px;
     color : #fff;
     font-weight: 500;
     text-decoration: none ;
     position : relative;
   }
-  .navBar a::before {
+
+  .navMenu > li:hover {
+    background: white;
+    color: darkcyan;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navMenu > li:hover > div {
+    background: white;
+    color: darkcyan;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navMenu > li > a {
+    color: inherit;
+  }
+  .navMenu > li > a::before {
     content : '';
     top : 100%;
     position : absolute;
     left : 0;
     width : 100%;
     height : 2px;
-    background : #fff;
   }
+
+  .navMenu > li > div {
+    display: none;
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    /* right: 0px; */
+    padding: 10px;
+    border-radius: 0px 10px 10px 10px;
+  }
+
+  .navMenu> li:hover >  div {
+    display: block;
+  }
+
   .logo {
     width : 25%;
   }
