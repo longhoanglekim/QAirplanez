@@ -4,19 +4,18 @@ import com.web.airplane.demo.dtos.LoginDTO;
 import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
 import com.web.airplane.demo.models.User;
-import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class AuthenticationService {
-    private final UserJPARepository userRepository;
+    private final UserRepository userRepository;
 
 
     private final UserService userService;
@@ -24,7 +23,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     @Autowired
     public AuthenticationService(
-           UserJPARepository userRepository,
+           UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             UserService userService) {

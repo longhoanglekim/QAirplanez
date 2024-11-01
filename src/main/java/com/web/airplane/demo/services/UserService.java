@@ -3,28 +3,25 @@ package com.web.airplane.demo.services;
 import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.models.Role;
 import com.web.airplane.demo.models.User;
-import com.web.airplane.demo.repositories.RoleJPARepository;
-import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.repositories.RoleRepository;
+import com.web.airplane.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 @Service
 public class UserService {
-    private final UserJPARepository userRepository ;
+    private final UserRepository userRepository ;
     private final PasswordEncoder passwordEncoder;
-    private final RoleJPARepository roleRepository;
+    private final RoleRepository roleRepository;
 
 
 
     @Autowired
-    public UserService(UserJPARepository userRepository, PasswordEncoder passwordEncoder, RoleJPARepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
