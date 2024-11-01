@@ -57,7 +57,6 @@ export default {
     name: 'SignUpUser',
     components: {
     },
-    goToLogin,
   data() {
     return {
       firstname : '',
@@ -91,7 +90,7 @@ export default {
 
         });
         if (response.ok) {
-          goToLogin();
+          this.$router.push('/login');
         } else if (response.status === 409) {
           console.error("Email hoặc số điện thoại này đã được sử dụng!");
         } else {

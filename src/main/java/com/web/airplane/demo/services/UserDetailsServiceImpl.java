@@ -1,7 +1,7 @@
 package com.web.airplane.demo.services;
 
 import com.web.airplane.demo.models.User;
-import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserJPARepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserJPARepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

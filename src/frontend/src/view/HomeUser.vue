@@ -13,7 +13,7 @@ export default {
     Home User
   </div>
 </template>
-<style>
+<style scoped>
   .container {
     background-image: url('../assets/home/bg-home.png');
   }
