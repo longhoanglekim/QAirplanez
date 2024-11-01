@@ -57,7 +57,6 @@ export default {
     name: 'SignUpUser',
     components: {
     },
-    goToLogin,
   data() {
     return {
       firstname : '',

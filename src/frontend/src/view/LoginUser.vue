@@ -83,7 +83,9 @@ export default {
 }
 
 #container {
+  height: 150vh;
   width: 100vw;
+  background-image: url('../assets/login/bg-login.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
