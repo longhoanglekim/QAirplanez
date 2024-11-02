@@ -11,27 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "airports")
+@Table(name = "countries")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Airport {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotBlank
-    private int airportId;
-    @NotBlank
-    private String airportCode;
-    @NotBlank
-    private String airportName;
-    @NotBlank
-    private String city;
-    @NotBlank
-    @ManyToOne
-    private Country country;
+    private Long id;
 
+    @NotBlank
+    private String description;
 
-    @OneToMany(mappedBy = "departureAirport")
-    List<Flight> flights = new ArrayList<>();
+    @OneToMany(mappedBy = "country")
+    List<Airport> airportList = new ArrayList<>();
+
 }
