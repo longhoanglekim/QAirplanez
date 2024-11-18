@@ -43,21 +43,18 @@
         </div>
         <button>Xác nhận</button>
       </form>
-    <p @click="goToLogin">
+    <p @click="this.$route.push('/login')">
       Đã có tài khoản? <router-link to="/login">Đăng nhập</router-link>
     </p>
   </div></div>
 </template>
 
 
-<script scoped>
-import { goToLogin } from '@/composable';
-
+<script>
 export default {
     name: 'SignUpUser',
     components: {
     },
-    goToLogin,
   data() {
     return {
       firstname : '',
@@ -91,7 +88,7 @@ export default {
 
         });
         if (response.ok) {
-          goToLogin();
+          this.$route.push('/login');
         } else if (response.status === 409) {
           console.error("Email hoặc số điện thoại này đã được sử dụng!");
         } else {
