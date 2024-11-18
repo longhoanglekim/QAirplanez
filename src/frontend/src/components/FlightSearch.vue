@@ -1,157 +1,165 @@
+<!-- FlightSearchForm.vue -->
 <template>
-    <div>This is booking</div>
-    <div class="flight-booking-form">
-        <form action="" @submit.prevent="submitForm">
-          <div class="form-row">
-            <button @click=changeKhuHoi(true) id="kh">Khu hoi</button>
-            <button @click="changeKhuHoi(false)">Mot chieu</button>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="flightFrom">Điểm đi:</label>
-              <select id="flightFrom" v-model="form.departure">
-                  <option value="">Chọn chuyến bay</option>
-                  <option value="SG">TP.HCM</option>
-                  <option value="HN">Hà Nội</option>
-                  <option value="DN">Đà Nẵng</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="flightTo">Điểm tới:</label>
-              <select id="flightTo" v-model="form.arrival">
-                  <option value="">Chọn chuyến bay</option>
-                  <option value="SG">TP.HCM</option>
-                  <option value="HN">Hà Nội</option>
-                  <option value="DN">Đà Nẵng</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="departureDate">Ngày đi:</label>
-              <input type="date" id="departureDate" v-model="form.departureDate"  />
-            </div>
-            <div class="form-group" v-if="laKhuHoi">
-              <label for="departureDate">Ngày về:</label>
-              <input type="date" id="departureDate" v-model="form.returnDate"  />
-            </div>
-          </div>
-            
-          <div class="form-row">
-            <div class="form-group">
-                <input type="text" name="" id="chonHanhKhach">
-                <label for="chonHanhKhach">Hanh khach</label>
-                <input type="hidden" name="nguoiLon" id="soNguoiLon"><input type="hidden" name="treEm" id="soTreEm">
-                <ul>
-                  <li>
-                    <div>
-                      <p>Nguoi lon</p>
-                      <button @click="tangNguoiLon">+</button>
-                      <span>{{ form.soNguoiLon }}</span>
-                      <button @click="giamNguoiLon">-</button>
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <p>Tre em</p>
-                      <button v-on:click="tangTreEm">+</button>
-                      <span>{{ form.soTreEm }}</span>
-                      <button v-on:click="giamTreEm">-</button>
-                    </div>
-                  </li>
-                </ul>
-            </div>
-          </div>
-          <div>
-            <button type="submit" @click="submitForm">Đăng ký chuyến bay</button>
-          </div>
-            
-        </form>
-    </div>
+  <div class="flight-search-form">
+    <h2>Tìm Vé Máy Bay</h2>
+    <button @click="toSearch">to search</button>
+
+    <form @submit.prevent="submitForm">
+      <!-- Loại vé -->
+      <div class="form-group">
+        <label for="ticketType">Loại vé</label>
+        <select v-model="form.ticketType" id="ticketType" required>
+          <option value="one-way">Một chiều</option>
+          <option value="round-trip">Khứ hồi</option>
+        </select>
+      </div>
+
+      <!-- Điểm đi -->
+      <div class="form-group">
+        <label for="fromCity">Điểm đi</label>
+        <input type="text" v-model="form.fromCity" id="fromCity" required placeholder="Nhập điểm đi">
+      </div>
+
+      <!-- Điểm đến -->
+      <div class="form-group">
+        <label for="toCity">Điểm đến</label>
+        <input type="text" v-model="form.toCity" id="toCity" required placeholder="Nhập điểm đến">
+      </div>
+
+      <!-- Ngày đi -->
+      <div class="form-group">
+        <label for="departureDate">Ngày đi</label>
+        <input type="date" v-model="form.departureDate" id="departureDate" required />
+      </div>
+
+      <!-- Ngày về (chỉ hiển thị khi chọn vé khứ hồi) -->
+      <div v-if="form.ticketType === 'round-trip'" class="form-group">
+        <label for="returnDate">Ngày về</label>
+        <input type="date" v-model="form.returnDate" id="returnDate" required />
+      </div>
+
+      <!-- Số vé người lớn -->
+      <div class="form-group">
+        <label for="adults">Số vé người lớn</label>
+        <input type="number" v-model="form.adults" id="adults" min="1" required />
+      </div>
+
+      <!-- Số vé trẻ em -->
+      <div class="form-group">
+        <label for="children">Số vé trẻ em</label>
+        <input type="number" v-model="form.children" id="children" :max="form.adults" min="0" required />
+      </div>
+
+      <!-- Thông báo lỗi -->
+      <div v-if="error" class="error-message">
+        <p>{{ error }}</p>
+      </div>
+
+      <!-- Nút tìm kiếm -->
+      <div class="form-group">
+        <button type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
+      </div>
+    </form>
+  </div>
 </template>
-<script scoped>
+
+<script>
 export default {
-    name: 'FlightSearch',
-    data() {
+  data() {
     return {
       form: {
-        departure:'',
-        arrival:'',
-        departureDate: '',
-        returnDate:'',
-        ticketType:'',
-        soNguoiLon: 0,
-          soTreEm:0
-        },
-      submitted: false,
-      laKhuHoi:true
+        ticketType: 'round-trip', // Loại vé (1 chiều hoặc khứ hồi)
+        fromCity: '',          // Điểm đi
+        toCity: '',            // Điểm đến
+        departureDate: '',     // Ngày đi
+        returnDate: '',        // Ngày về (chỉ khi chọn vé khứ hồi)
+        adults: 1,             // Số vé người lớn
+        children: 0            // Số vé trẻ em
+      },
+      error: ''
     };
   },
+  computed: {
+    isSubmitDisabled() {
+      // Kiểm tra các điều kiện để vô hiệu hóa nút tìm kiếm
+      return this.form.adults <= 0 || this.form.children >= this.form.adults || !this.form.fromCity || !this.form.toCity || !this.form.departureDate || (this.form.ticketType === 'round-trip' && !this.form.returnDate);
+    }
+  },
   methods: {
-    async sendRequestToServer() {
-      console.log(this.form);
+
+    toSearch() {
+      // Chuyển hướng sang trang kết quả tìm kiếm và truyền các tham số tìm kiếm qua URL
+      this.$router.push('/booking/avaibility/0');
     },
-    changeKhuHoi(i) {
-      if (i == true) this.laKhuHoi = true;
-      else this.laKhuHoi = false;
-    },
-    async submitForm() {
-      this.submitted = true;
-      console.log('Form submitted:', this.form);
-      this.$route.push('/booking/avaibility/0');
-    },
-    tangNguoiLon() {
-      if(this.form.soNguoiLon < 10) this.form.soNguoiLon++;
-    }, 
-    giamNguoiLon() {
-      if(this.form.soNguoiLon > 0) this.form.soNguoiLon--;
-    },
-    tangTreEm() {
-      if (this.form.soTreEm < this.form.soNguoiLon) this.form.soTreEm++;
-    },
-    giamTreEm() {
-      if (this.form.soTreEm > 0) this.form.soTreEm--;
+    submitForm() {
+      // Kiểm tra và xử lý dữ liệu form khi người dùng nhấn nút tìm kiếm
+      if (this.form.adults <= 0) {
+        this.error = 'Số vé người lớn phải lớn hơn 0.';
+        return;
+      }
+      if (this.form.children >= this.form.adults) {
+        this.error = 'Số vé trẻ em phải nhỏ hơn số vé người lớn.';
+        return;
+      }
+      if (!this.form.fromCity || !this.form.toCity) {
+        this.error = 'Điểm đi và điểm đến không thể để trống.';
+        return;
+      }
+      if (!this.form.departureDate) {
+        this.error = 'Ngày đi không thể để trống.';
+        return;
+      }
+      if (this.form.ticketType === 'round-trip' && !this.form.returnDate) {
+        this.error = 'Ngày về không thể để trống khi chọn vé khứ hồi.';
+        return;
+      }
+
+      this.error = ''; // Reset lỗi nếu tất cả điều kiện hợp lệ
+
+      // Ở đây, bạn có thể gọi API hoặc thực hiện thao tác tìm kiếm vé
+      console.log('Tìm vé máy bay với các thông tin:', this.form);
+      // Gửi thông tin tìm vé đến server hoặc xử lý logic tiếp theo ở đây
+      this.toSearch();
     }
   }
-}
+};
 </script>
 
 <style scoped>
-.flight-booking-form {
-  max-width: 400px;
+.flight-search-form {
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-row {
-  display: flex;
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .form-group {
-  display: block;
   margin-bottom: 15px;
 }
 
 label {
-  font-weight: bold;
   display: block;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
-input:not([type="radio"]),
-select {
+input[type="text"], input[type="date"], select, input[type="number"] {
   width: 100%;
   padding: 8px;
+  margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box;
 }
 
 button {
-  padding: 10px 15px;
+  width: 100%;
+  padding: 10px;
   background-color: #007bff;
   color: white;
   border: none;
@@ -159,19 +167,13 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-.confirmation-message {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #e9f7ef;
-  border: 1px solid #d4edda;
-  border-radius: 4px;
-}
-
-.confirmation-message h3 {
-  margin-top: 0;
+.error-message {
+  color: red;
+  margin-top: 15px;
 }
 </style>
