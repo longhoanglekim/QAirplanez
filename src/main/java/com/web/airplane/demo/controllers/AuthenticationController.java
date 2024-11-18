@@ -5,7 +5,7 @@ import com.web.airplane.demo.dtos.LoginResponse;
 import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
 import com.web.airplane.demo.models.User;
-import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.AuthenticationService;
 import com.web.airplane.demo.services.JwtService;
 import jakarta.servlet.http.Cookie;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @Slf4j
 public class AuthenticationController {
-    private final UserJPARepository userJPARepository;
+    private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     @Autowired
-    public AuthenticationController(UserJPARepository userJPARepository, AuthenticationService authenticationService, JwtService jwtService) {
-        this.userJPARepository = userJPARepository;
+    public AuthenticationController(UserRepository userRepository, AuthenticationService authenticationService, JwtService jwtService) {
+        this.userRepository = userRepository;
         this.authenticationService = authenticationService;
         this.jwtService = jwtService;
     }

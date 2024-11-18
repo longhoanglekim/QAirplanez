@@ -1,23 +1,21 @@
 package com.web.airplane.demo.configs;
 
 import org.springframework.security.authentication.AuthenticationProvider;
-import com.web.airplane.demo.repositories.UserJPARepository;
+import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class ApplicationConfiguration {
-    private final UserJPARepository userRepository;
+    private final UserRepository userRepository;
     private final UserDetailsServiceImpl accountService;
 
-    public ApplicationConfiguration(UserJPARepository userRepository, UserDetailsServiceImpl accountService) {
+    public ApplicationConfiguration(UserRepository userRepository, UserDetailsServiceImpl accountService) {
         this.userRepository = userRepository;
         this.accountService = accountService;
     }
