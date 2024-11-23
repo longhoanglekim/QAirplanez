@@ -27,4 +27,5 @@ public class Country {
     @OneToMany(mappedBy = "country")
     List<Airport> airportList = new ArrayList<>();
 
+
 }
