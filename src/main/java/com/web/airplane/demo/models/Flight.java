@@ -19,7 +19,7 @@ import java.util.List;
 public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flightId;
+    private Long id;
     private String flightNumber;
     @ManyToOne
     private Airport departureAirport;

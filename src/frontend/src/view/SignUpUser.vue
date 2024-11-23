@@ -21,8 +21,8 @@
           <input type="email" v-model="email" id="email" required /><label
             class="lb-tit"
             for=""
-            >Email</label
-          >
+        >Email</label
+        >
         </div>
         <div class="form-group">
           <input type="text" v-model="phoneNumber" id="phone" required />
@@ -34,10 +34,10 @@
         </div>
         <div class="form-group">
           <input
-            type="password"
-            v-model="retypePassword"
-            id="rePassword"
-            required
+              type="password"
+              v-model="retypePassword"
+              id="rePassword"
+              required
           />
           <label class="lb-tit" for="">Nhập lại mật khẩu</label>
         </div>
@@ -49,12 +49,11 @@
   </div></div>
 </template>
 
-
-<script>
+<script scoped>
 export default {
-    name: 'SignUpUser',
-    components: {
-    },
+  name: 'SignUpUser',
+  components: {
+  },
   data() {
     return {
       firstname : '',
@@ -111,7 +110,7 @@ export default {
   box-sizing: border-box;
   --cl-border: black;
   transition: all 0.3s ease-in-out;
-  
+
 }
 
 #container {
@@ -160,7 +159,7 @@ h3 {
   left: 10px;
   border: none;
   border-bottom: 1px solid var(--cl-border);
-  
+
 }
 
 .form-group > input {

@@ -2,6 +2,7 @@ package com.web.airplane.demo.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,17 +21,23 @@ public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotBlank
-    private int airportId;
+    private int id;
     @NotBlank
     private String airportCode;
     @NotBlank
     private String airportName;
     @NotBlank
     private String city;
-    @NotBlank
-    private String country;
+    @NotNull
+    @ManyToOne
+    private Country country;
 
 
-    @OneToMany(mappedBy = "departureAirport")
-    List<Flight> flights = new ArrayList<>();
+    @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flight> departingFlights = new ArrayList<>();
+
+    @OneToMany(mappedBy = "destinationAirport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Flight> arrivingFlights = new ArrayList<>();
+
+
 }

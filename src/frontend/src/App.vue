@@ -50,6 +50,4 @@ footer {
   padding-top: 1px;
 
 }
-
-
 </style>
