@@ -1,9 +1,7 @@
 <template>
-    <div>
-        <div class="button-containerr">
-            <button>Đăng nhập</button>
-            <button>Đăng ký</button>
-        </div>
+    <div class="button-container">
+        <button @click="toLogin">Đăng nhập</button>
+        <button @click="toRegister">Đăng ký</button>
     </div>
     <PageNavBar/>
 </template>
@@ -17,21 +15,38 @@
         },
         data() {
         return{};
+        }, 
+        methods: {
+            toLogin() {
+                this.$router.push('/login');
+            },
+            toRegister() {
+                this.$router.push('/signup');
+            }
+        }
+
     }
-}
     
 </script>
 
 <style scoped>
-    button {
+    .button-container {
+        position: relative;
+        display: block;
+        border: 1px solid black;
+        background: red;
+    }
+    .button-container button {
         position: absolute;
-        right: 0px;
+        right: 0rem;
+        width: 16rem;
+        height: 2rem;
     }
 
-    .button-container:nth-child(1) {
-        top: 0px;
+    .button-container button:nth-child(1) {
+        top: 0rem;
     }
-    .button-container:nth-child(2) {
-        top: 50px;
+    .button-container button:nth-child(2) {
+        top: 2rem;
     }
 </style>

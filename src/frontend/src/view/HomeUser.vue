@@ -1,9 +1,9 @@
 <script>
-
+import FlightSearch from '@/components/FlightSearch.vue';
 export default {
     name: 'HomeUser',
     components: {
-
+      FlightSearch
     }
 }
 </script>
@@ -12,9 +12,9 @@ export default {
   <div class="container">
     Home User
   </div>
+  <div>
+    <FlightSearch/>
+  </div>
 </template>
 <style scoped>
-  .container {
-    background-image: url('../assets/home/bg-home.png');
-  }
 </style>

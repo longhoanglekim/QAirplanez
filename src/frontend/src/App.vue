@@ -31,15 +31,16 @@ body, html {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-//display: flex;
-//justify-content: center;
-//align-items: center;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
 }
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
   text-align: center;
 }
 footer {
@@ -47,5 +48,6 @@ footer {
   background-color: rgb(255, 242, 242);
   margin-top: 0;
   padding-top: 1px;
+
 }
 </style>
