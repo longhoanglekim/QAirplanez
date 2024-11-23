@@ -50,9 +50,11 @@
       </div>
 
       <!-- Ngày về (chỉ hiển thị khi chọn vé khứ hồi) -->
-      <div v-if="form.ticketType === 'round-trip'" class="form-group">
-        <label for="returnDate">Ngày về</label>
-        <input type="date" v-model="form.returnDate" id="returnDate" required />
+      <div  class="form-group">
+        <div v-if="form.ticketType === 'round-trip'">
+          <label for="returnDate">Ngày về</label>
+          <input type="date"  v-model="form.returnDate" id="returnDate" required />
+        </div>
       </div>
 
       <div class="form-group" id="ticketD">
