@@ -2,6 +2,7 @@ package com.web.airplane.demo.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,9 @@ public class Passenger {
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String fareClass;
+    @NotNull
+    @ManyToOne
+    private TicketClass ticketClass;
 
     @NotBlank
     private String bankName;
@@ -37,7 +39,7 @@ public class Passenger {
     @NotBlank
     private long cardNumber;
 
-    @NotBlank
+    @NotNull
     @ManyToOne
     private Flight flight;
 

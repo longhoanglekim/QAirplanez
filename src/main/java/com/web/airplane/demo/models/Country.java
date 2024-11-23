@@ -1,6 +1,7 @@
 package com.web.airplane.demo.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,21 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "aircrafts")
+@Table(name = "countries")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Aircraft {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String manufacturer;
-    private String model;
-    private Integer numberOfSeats;
 
+    @NotBlank
+    private String description;
 
-    @OneToMany(mappedBy = "aircraft")
-    private List<Flight> flights = new ArrayList<>();
+    @OneToMany(mappedBy = "country")
+    List<Airport> airportList = new ArrayList<>();
+
 
 }
