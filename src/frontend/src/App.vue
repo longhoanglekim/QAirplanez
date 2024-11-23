@@ -31,9 +31,9 @@ body, html {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
+//display: flex;
+//justify-content: center;
+//align-items: center;
 }
 
 #app {

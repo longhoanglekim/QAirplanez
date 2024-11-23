@@ -18,7 +18,7 @@ import java.util.List;
 public class Aircraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long aircraftId;
+    private Long id;
     private String manufacturer;
     private String model;
     private Integer numberOfSeats;
