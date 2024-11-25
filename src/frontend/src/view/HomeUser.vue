@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div>
     Home User
   </div>
   <div>

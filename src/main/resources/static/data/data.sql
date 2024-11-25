@@ -277,23 +277,26 @@ UNLOCK TABLES;
 -- Table structure for table ticket_classes
 --
 CREATE TABLE ticket_classes (
-                                  id bigint NOT NULL AUTO_INCREMENT,
-                                  class_name varchar(255) NOT NULL,
-                                  description varchar(255) DEFAULT NULL,
-                                  price_multiplier decimal(5,2) NOT NULL DEFAULT 1.00,
-                                  PRIMARY KEY (id)
+                                id bigint NOT NULL AUTO_INCREMENT,
+                                class_name varchar(255) NOT NULL,
+                                description varchar(255) DEFAULT NULL,
+                                price_multiplier decimal(5,2) NOT NULL DEFAULT 1.00,
+                                hand_baggage_weight decimal(5,2) DEFAULT NULL,
+                                hand_baggage_count int DEFAULT NULL,
+                                checked_baggage_weight decimal(5,2) DEFAULT NULL,
+                                checked_baggage_count int DEFAULT NULL,
+                                PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Dumping data for table ticket_classes
 --
 
-/*!40000 ALTER TABLE ticket_classes DISABLE KEYS */;
-/*!40000 ALTER TABLE ticket_classes ENABLE KEYS */;
-INSERT INTO ticket_classes (id, class_name, description, price_multiplier) VALUES
-                                                                                         (1, 'Economy', 'Basic ticket class with limited amenities', 1.00),
-                                                                                         (2, 'Business', 'Enhanced comfort with additional services', 1.50),
-                                                                                         (3, 'First', 'Premium class with luxury amenities', 2.00);
-
+INSERT INTO ticket_classes (id, class_name, description, price_multiplier, hand_baggage_weight, hand_baggage_count, checked_baggage_weight, checked_baggage_count)
+VALUES
+    (1, 'Economy', 'Basic ticket class with limited amenities', 1.00, 7.00, 1, 20.00, 1),
+    (2, 'Business', 'Enhanced comfort with additional services', 1.50, 6.00, 2, 40.00, 1),
+    (3, 'First', 'Premium class with luxury amenities', 2.00, 15.00, 2, 40.00, 3);
 
 
 
