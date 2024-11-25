@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -69,7 +70,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        // Skip filter for any public URL in the list
-        return path.startsWith("/api/auth/"); // Add any other public paths as needed
+        List<String> publicPaths = Arrays.asList("/api/auth/", "/api/ticket_class/");
+        return publicPaths.stream().anyMatch(path::startsWith);
     }
+
 }
