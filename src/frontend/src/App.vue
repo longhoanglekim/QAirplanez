@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1 class="text-center text-red">Alo</h1>
-  </div>
+  <h1>aa</h1>
   <div id="app">
     <header><PageHeader/></header>
     <PageNavBar/>
@@ -44,7 +42,6 @@ body, html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #2c3e50;
   text-align: center;
 }
 footer {
