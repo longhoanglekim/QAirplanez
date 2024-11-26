@@ -46,6 +46,10 @@ public class Flight {
     @ManyToOne
     Aircraft aircraft;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime cancelDueTime;
+
     @OneToMany(mappedBy = "flight")
     List<Passenger> passengers = new ArrayList<>();
 

@@ -249,6 +249,7 @@ CREATE TABLE flights (
                            aircraft_id bigint DEFAULT NULL,
                            departure_airport_id int DEFAULT NULL,
                            destination_airport_id int DEFAULT NULL,
+                           cancel_due_time  datetime(6) DEFAULT NULL,
                            PRIMARY KEY (id),
                            KEY FKlref405f4r8lfgiu9gbwbdtgv (aircraft_id),
                            KEY FK1oo8ervoj8230wtvebwrqu2tf (departure_airport_id),
@@ -267,9 +268,9 @@ LOCK TABLES flights WRITE;
 /*!40000 ALTER TABLE flights DISABLE KEYS */;
 /*!40000 ALTER TABLE flights ENABLE KEYS */;
 INSERT INTO flights VALUES
-                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2),
-                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3),
-                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1);
+                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2, '2023-06-01 08:30'),
+                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3, '2023-06-02 18:30'),
+                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1, '2023-06-03 14:30');
 UNLOCK TABLES;
 
 
