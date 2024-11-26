@@ -267,9 +267,9 @@ LOCK TABLES flights WRITE;
 /*!40000 ALTER TABLE flights DISABLE KEYS */;
 /*!40000 ALTER TABLE flights ENABLE KEYS */;
 INSERT INTO flights VALUES
-                          (1, '2023-12-01 08:30:00.000000', '2023-12-01 06:00:00.000000', '2023-12-01 08:00:00.000000', '2023-12-01 06:00:00.000000', 'VN123', 1, 1, 2),
-                          (2, '2023-12-02 18:30:00.000000', '2023-12-02 16:00:00.000000', '2023-12-02 18:00:00.000000', '2023-12-02 16:00:00.000000', 'TG456', 2, 2, 3),
-                          (3, '2023-12-03 14:30:00.000000', '2023-12-03 12:00:00.000000', '2023-12-03 14:00:00.000000', '2023-12-03 12:00:00.000000', 'JL789', 3, 3, 1);
+                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2),
+                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3),
+                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1);
 UNLOCK TABLES;
 
 
@@ -277,23 +277,26 @@ UNLOCK TABLES;
 -- Table structure for table ticket_classes
 --
 CREATE TABLE ticket_classes (
-                                  id bigint NOT NULL AUTO_INCREMENT,
-                                  class_name varchar(255) NOT NULL,
-                                  description varchar(255) DEFAULT NULL,
-                                  price_multiplier decimal(5,2) NOT NULL DEFAULT 1.00,
-                                  PRIMARY KEY (id)
+                                id bigint NOT NULL AUTO_INCREMENT,
+                                class_name varchar(255) NOT NULL,
+                                description varchar(255) DEFAULT NULL,
+                                price_multiplier decimal(5,2) NOT NULL DEFAULT 1.00,
+                                hand_baggage_weight decimal(5,2) DEFAULT NULL,
+                                hand_baggage_count int DEFAULT NULL,
+                                checked_baggage_weight decimal(5,2) DEFAULT NULL,
+                                checked_baggage_count int DEFAULT NULL,
+                                PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Dumping data for table ticket_classes
 --
 
-/*!40000 ALTER TABLE ticket_classes DISABLE KEYS */;
-/*!40000 ALTER TABLE ticket_classes ENABLE KEYS */;
-INSERT INTO ticket_classes (id, class_name, description, price_multiplier) VALUES
-                                                                                         (1, 'Economy', 'Basic ticket class with limited amenities', 1.00),
-                                                                                         (2, 'Business', 'Enhanced comfort with additional services', 1.50),
-                                                                                         (3, 'First', 'Premium class with luxury amenities', 2.00);
-
+INSERT INTO ticket_classes (id, class_name, description, price_multiplier, hand_baggage_weight, hand_baggage_count, checked_baggage_weight, checked_baggage_count)
+VALUES
+    (1, 'Economy', 'Basic ticket class with limited amenities', 1.00, 7.00, 1, 20.00, 1),
+    (2, 'Business', 'Enhanced comfort with additional services', 1.50, 6.00, 2, 40.00, 1),
+    (3, 'First', 'Premium class with luxury amenities', 2.00, 15.00, 2, 40.00, 3);
 
 
 
@@ -330,7 +333,7 @@ LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
 INSERT INTO passengers VALUES
-                             (1, 'Bank A', 1234567890123456, 'alice.p@example.com', 1, 'Alice', 'Johnson', 'P1234567', '0123456789', 1),
+                             (1, 'Bank A', 1234567890123456, 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
                              (2, 'Bank B', 2345678901234567, 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
                              (3, 'Bank C', 3456789012345678, 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
 UNLOCK TABLES;

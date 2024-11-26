@@ -16,7 +16,7 @@
         @click="selectTicketClass('business')">Vé Hạng Thương Gia</button>
     </div>
 
-    <div v-if="selectedClass" class="baggage-info">
+    <div v-if="selectedClass && baggageInfo[selectedClass]"  class="baggage-info">
       <h3>Thông tin hành lý cho vé {{ selectedClass === 'economy' ? 'Phổ Thông' : 'Hạng Thương Gia' }}</h3>
       <table>
         <thead>
@@ -28,11 +28,11 @@
         <tbody>
           <tr>
             <td>Hành lý xách tay</td>
-            <td>{{ baggageInfo[selectedClass].handBaggage }}</td>
+            <td>{{ baggageInfo[selectedClass].handBaggage || 'Đang tải...'}}</td>
           </tr>
           <tr>
             <td>Hành lý ký gửi</td>
-            <td>{{ baggageInfo[selectedClass].checkedBaggage }}</td>
+            <td>{{ baggageInfo[selectedClass].checkedBaggage || 'Đang tải' }}</td>
           </tr>
         </tbody>
       </table>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+
+
 export default {
   props: {
     departure: {
@@ -64,22 +66,35 @@ export default {
     return {
       selectedClass: '', // Lưu loại vé đã chọn
       baggageInfo: {
-        economy: {
-          handBaggage: '1 xách tay tối đa 7kg',
-          checkedBaggage: '20kg'
-        },
-        business: {
-          handBaggage: '2 xách tay tối đa 12kg',
-          checkedBaggage: '40kg'
-        }
+        economy: null,
+        business: null
       }
     };
   },
   methods: {
     selectTicketClass(classType) {
-      if (this.selectedClass != classType) this.selectedClass = classType;
+      if (this.selectedClass !== classType) this.selectedClass = classType;
       else this.selectedClass = '';
+    },
+    async fetchBaggageInfo(classType) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/ticket_class/${classType}`);
+        if (!response.ok) {
+          throw new Error(`Lỗi khi lấy dữ liệu: ${response.statusText}`);
+        }
+        const data = await response.json();
+        this.baggageInfo[classType] = {
+          handBaggage: `${data.handBaggageCount} xách tay tối đa ${data.handBaggageWeight}kg`,
+          checkedBaggage: `${data.checkedBaggageCount} kiện ký gửi, tổng trọng lượng ${data.checkedBaggageWeight}kg`
+        };
+      } catch (error) {
+        console.error('Lỗi:', error);
+      }
     }
+  },
+  mounted() {
+    this.fetchBaggageInfo('economy');
+    this.fetchBaggageInfo('business');
   }
 };
 </script>
