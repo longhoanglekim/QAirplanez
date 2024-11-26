@@ -22,22 +22,22 @@ public class Passenger {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
+
     private String phoneNumber;
-    @NotBlank
+
     private String passportNumber;
-    @NotBlank
+
     private String email;
 
     @NotNull
     @ManyToOne
     private TicketClass ticketClass;
 
-    @NotBlank
+
     private String bankName;
 
     @NotBlank
-    private long cardNumber;
+    private String seatCode;
 
     @NotNull
     @ManyToOne

@@ -249,6 +249,7 @@ CREATE TABLE flights (
                            aircraft_id bigint DEFAULT NULL,
                            departure_airport_id int DEFAULT NULL,
                            destination_airport_id int DEFAULT NULL,
+                           cancel_due_time  datetime(6) DEFAULT NULL,
                            PRIMARY KEY (id),
                            KEY FKlref405f4r8lfgiu9gbwbdtgv (aircraft_id),
                            KEY FK1oo8ervoj8230wtvebwrqu2tf (departure_airport_id),
@@ -267,9 +268,9 @@ LOCK TABLES flights WRITE;
 /*!40000 ALTER TABLE flights DISABLE KEYS */;
 /*!40000 ALTER TABLE flights ENABLE KEYS */;
 INSERT INTO flights VALUES
-                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2),
-                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3),
-                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1);
+                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2, '2023-06-01 08:30'),
+                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3, '2023-06-02 18:30'),
+                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1, '2023-06-03 14:30');
 UNLOCK TABLES;
 
 
@@ -310,7 +311,7 @@ DROP TABLE IF EXISTS passengers;
 CREATE TABLE passengers (
                               passenger_id bigint NOT NULL AUTO_INCREMENT,
                               bank_name varchar(255) NOT NULL,
-                              card_number bigint NOT NULL,
+                              seat_Code varchar(255) NOT NULL,
                               email varchar(255) NOT NULL,
                               ticket_class_id bigint not null ,
                               first_name varchar(255) NOT NULL,
@@ -333,7 +334,7 @@ LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
 INSERT INTO passengers VALUES
-                             (1, 'Bank A', 1234567890123456, 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
-                             (2, 'Bank B', 2345678901234567, 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
-                             (3, 'Bank C', 3456789012345678, 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
+                             (1, 'Bank A', '1B', 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
+                             (2, 'Bank B', '2B', 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
+                             (3, 'Bank C', '3E', 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
 UNLOCK TABLES;

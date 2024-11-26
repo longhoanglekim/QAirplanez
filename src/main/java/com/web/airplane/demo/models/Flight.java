@@ -46,7 +46,11 @@ public class Flight {
     @ManyToOne
     Aircraft aircraft;
 
-    @OneToMany(mappedBy = "flight")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime cancelDueTime;
+
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
 
     public Flight(String flightNumber, Airport departureAirport, Airport destinationAirport,
