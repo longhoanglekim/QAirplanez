@@ -14,11 +14,12 @@ export default {
   <div>
     <FlightSearch/>
   </div>
+  <div>aaa</div>
 </template>
-<style>
+<style scoped>
 .img-container {
-  height: 150px;
   color: #333366;
-
+  height: 200px;
+  float: top;
 }
 </style>
