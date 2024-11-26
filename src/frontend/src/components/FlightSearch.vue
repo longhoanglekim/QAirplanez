@@ -2,8 +2,8 @@
 <template>
   <div class="container">
     <div class="button-container">
-      <button @click="changeContent('searchFlight')">Tìm chuyến bay</button>
-      <button @click="changeContent('searchTicket')">Tra cứu vé</button>
+      <button @click="changeContent('searchFlight')" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
+      <button @click="changeContent('searchTicket')" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
     </div>
     <div class="flight-search-form">
       <form @submit.prevent="submitForm" v-if="this.content == 'searchFlight' ">
@@ -224,6 +224,13 @@ export default {
 
 .button-container button {
   flex: 1 1 calc(50%);
+  border: none;
+}
+
+.chosen {
+  background: lightblue;
+  outline: none;
+  
 }
 
 .flight-search-form {
@@ -346,7 +353,5 @@ button.search:disabled {
   h2 {
     font-size: 1.125rem; /* 18px = 1.125rem */
   }
-
-  
 }
 </style>
