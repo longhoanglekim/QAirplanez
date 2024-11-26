@@ -1,104 +1,121 @@
 <!-- FlightSearchForm.vue -->
 <template>
-  <div class="flight-search-form">
-    <h2>Tìm Vé Máy Bay</h2>
-
-    <form @submit.prevent="submitForm">
-      <!-- Loại vé -->
-      <div class="form-group">
-        <label for="ticketType">Loại vé</label>
-        <select v-model="form.ticketType" id="ticketType" required>
-          <option value="one-way">Một chiều</option>
-          <option value="round-trip">Khứ hồi</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="fromCity">Điểm đi</label>
-        <select
-          v-model="form.fromCity"
-          id="fromCity"
-          required
-          placeholder="Điểm đi"
-        >
-          <option value="">Chọn địa điểm</option>
-          <option value="HN">HN</option>
-          <option value="SG">SG</option>
-          <option value="DN">DN</option>
-        </select>
-      </div>
-
-      <!-- Điểm đến -->
-      <div class="form-group">
-        <label for="toCity">Điểm đến</label>
-        <select
-          v-model="form.toCity"
-          id="toCity"
-          required
-          placeholder="Điểm đi"
-        >
-          <option value="">Chọn địa điểm</option>
-          <option value="HN">HN</option>
-          <option value="SG">SG</option>
-          <option value="DN">DN</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="departureDate">Ngày đi</label>
-        <input type="date" v-model="form.departureDate" id="departureDate" required />
-      </div>
-
-      <!-- Ngày về (chỉ hiển thị khi chọn vé khứ hồi) -->
-      <div  class="form-group">
-        <div v-if="form.ticketType === 'round-trip'">
-          <label for="returnDate">Ngày về</label>
-          <input type="date"  v-model="form.returnDate" id="returnDate" required />
+  <div class="container">
+    <div class="button-container">
+      <button @click="changeContent('searchFlight')">Tìm chuyến bay</button>
+      <button @click="changeContent('searchTicket')">Tra cứu vé</button>
+    </div>
+    <div class="flight-search-form">
+      <form @submit.prevent="submitForm" v-if="this.content == 'searchFlight' ">
+        <!-- Loại vé -->
+        <div class="form-group">
+          <label for="ticketType">Loại vé</label>
+          <select v-model="form.ticketType" id="ticketType" required>
+            <option value="one-way">Một chiều</option>
+            <option value="round-trip">Khứ hồi</option>
+          </select>
         </div>
-      </div>
 
-      <div class="form-group" id="ticketD">
-        <label for="ticketDetails">Số vé</label>
-        <input 
-          type="text" 
-          id="ticketDetails" 
-          :value="ticketSummary"
-          @click="toggleTicketModal" 
-          readonly 
-          placeholder="Nhấn để chỉnh sửa số vé"
-        />
-        <div v-if="isModalVisible" class="ticket-modal">
-          <div class="modal-content">
-            <label for="adults">Số vé người lớn</label>
-            <input 
-              type="number" 
-              id="adults" 
-              v-model="form.adults" 
-              min="1"
-            />
-            <label for="children">Số vé trẻ em</label>
-            <input 
-              type="number" 
-              id="children" 
-              v-model="form.children" 
-              min="0" 
-              :max="form.adults"
-            />
-            <button type="button" @click="closeModal">Xong</button>
+        <div class="form-group">
+          <label for="fromCity">Điểm đi</label>
+          <select
+            v-model="form.fromCity"
+            id="fromCity"
+            required
+            placeholder="Điểm đi"
+          >
+            <option value="">Chọn địa điểm</option>
+            <option value="HN">HN</option>
+            <option value="SG">SG</option>
+            <option value="DN">DN</option>
+          </select>
+        </div>
+
+        <!-- Điểm đến -->
+        <div class="form-group">
+          <label for="toCity">Điểm đến</label>
+          <select
+            v-model="form.toCity"
+            id="toCity"
+            required
+            placeholder="Điểm đi"
+          >
+            <option value="">Chọn địa điểm</option>
+            <option value="HN">HN</option>
+            <option value="SG">SG</option>
+            <option value="DN">DN</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="departureDate">Ngày đi</label>
+          <input type="date" v-model="form.departureDate" id="departureDate" required />
+        </div>
+
+        <!-- Ngày về (chỉ hiển thị khi chọn vé khứ hồi) -->
+        <div  class="form-group">
+          <div v-if="form.ticketType === 'round-trip'">
+            <label for="returnDate">Ngày về</label>
+            <input type="date"  v-model="form.returnDate" id="returnDate" required />
           </div>
         </div>
-      </div>
 
-      <!-- Thông báo lỗi -->
-      <div v-if="error" class="error-message">
-        <p>{{ error }}</p>
-      </div>
+        <div class="form-group" id="ticketD">
+          <label for="ticketDetails">Số vé</label>
+          <input 
+            type="text" 
+            id="ticketDetails" 
+            :value="ticketSummary"
+            @click="toggleTicketModal" 
+            readonly 
+            placeholder="Nhấn để chỉnh sửa số vé"
+          />
+          <div v-if="isModalVisible" class="ticket-modal">
+            <div class="modal-content">
+              <label for="adults">Số vé người lớn</label>
+              <input 
+                type="number" 
+                id="adults" 
+                v-model="form.adults" 
+                min="1"
+              />
+              <label for="children">Số vé trẻ em</label>
+              <input 
+                type="number" 
+                id="children" 
+                v-model="form.children" 
+                min="0" 
+                :max="form.adults"
+              />
+              <button type="button" @click="closeModal">Xong</button>
+            </div>
+          </div>
+        </div>
 
-      <!-- Nút tìm kiếm -->
-      <div class="form-submit">
-        <button type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
-      </div>
-    </form>
+        <!-- Thông báo lỗi -->
+        <div v-if="error" class="error-message">
+          <p>{{ error }}</p>
+        </div>
+
+        <!-- Nút tìm kiếm -->
+        <div class="form-submit">
+          <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
+        </div>
+      </form>
+      <form @submit.prevent="submitFormTicket" v-if="this.content == 'searchTicket'">
+        <div class="form-group">
+          <label for="seatCode">Mã số ngồi</label>
+          <input type="text" v-model="form.seatCode" id="seatCode">
+        </div>
+        <div class="form-group">
+          <label for="firstName">Họ</label>
+          <input type="text" v-model="form.firstName" id="firstName">
+        </div>
+        <div class="form-submit">
+          <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -115,20 +132,31 @@ export default {
         adults: 1,             // Số vé người lớn
         children: 0            // Số vé trẻ em
       },
+      form2: {
+        firstName:'',
+        seatCode:''
+      },
       error: '',
-      isModalVisible: false
+      isModalVisible: false,
+      content: ''
     };
   },
   computed: {
     isSubmitDisabled() {
-      // Kiểm tra các điều kiện để vô hiệu hóa nút tìm kiếm
-      return this.form.adults <= 0 || this.form.children >= this.form.adults || !this.form.fromCity || !this.form.toCity || !this.form.departureDate || (this.form.ticketType === 'round-trip' && !this.form.returnDate);
+      if (this.content == "searchFlight")
+       return this.form.adults <= 0 || this.form.children >= this.form.adults 
+      || !this.form.fromCity || !this.form.toCity || !this.form.departureDate 
+      || (this.form.ticketType === 'round-trip' && !this.form.returnDate);
+      return !this.form2.seatCode || !this.form2.firstName;
     },
     ticketSummary() {
       return `${this.form.adults} người lớn, ${this.form.children} trẻ em`;
     }
   },
   methods: {
+    changeContent(newContent) {
+      this.content = newContent;
+    },
     toggleTicketModal() {
       this.isModalVisible = !this.isModalVisible;
     },
@@ -177,25 +205,31 @@ export default {
 
 <style scoped>
 /* Cấu trúc tổng thể */
-.flight-search-form {
+.container {
   width: 100%;
   max-width: 45rem;
   margin: 0 auto;
-  padding: 1.25rem; /* 20px = 1.25rem */
+  padding-bottom: 1.25rem;
   background-color: #f9f9f9;
   border-radius: 0.5rem; /* 8px = 0.5rem */
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* 4px 12px */
 }
 
-h2 {
-  text-align: center;
-  color: #333;
-  font-family: "Arial", sans-serif;
-  font-size: 1.5rem; /* 24px = 1.5rem */
-  margin-bottom: 1.25rem; /* 20px = 1.25rem */
+.button-container {
+  display: flex;
+  height: 3rem;
+  width: 100%;
+  background: darkblue;
 }
 
-/* Tạo bố cục nằm ngang trên máy tính */
+.button-container button {
+  flex: 1 1 calc(50%);
+}
+
+.flight-search-form {
+  margin: 1rem;
+}
+
 .form-group {
   margin-bottom: 1rem; /* 15px = 1rem */
 }
@@ -238,8 +272,8 @@ select {
   box-sizing: border-box;
 }
 
-/* Nút tìm kiếm */
-button {
+
+button.search {
   width: 36%;
   padding: 0.75rem; /* 12px = 0.75rem */
   background-color: #007bff;
@@ -251,11 +285,11 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+button.search:hover {
   background-color: #0056b3;
 }
 
-button:disabled {
+button.search:disabled {
   background-color: #ddd;
   cursor: not-allowed;
 }
