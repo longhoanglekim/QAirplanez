@@ -1,42 +1,41 @@
 <template>
-    <div class="header">
-      <a class="logo"><p>
-        <img src="@/assets/home/logo.jpg" alt="Background Image">
-      </p></a>
-      <nav class="navBar">
-        <ul class="navMenu">
-          <li class="navItem">
-            <a href="#">Khám phá</a>
-            <div>
-              <ul>
-                <li><a href="">Hello 1</a></li>
-                <li><a href=""> Hello 2</a></li>
-                <li><a href="">Hello 3</a></li>
-              </ul>
+     <div class="container">
+        <nav class="menu">
+            <ul class="main-menu">
+                <li class="active"><i class="fa fa-home"></i>Home</li>
+                <li class="with-submenu">
+                    <i class="fa fa-briefcase"></i>Portfolio <i class="fa fa-caret-down"></i>
+                    <ul class="submenu">
+                        <li>React</li>
+                        <li>JavaScript</li>
+                        <li>CSS</li>
+                        <li>Animation</li>
+                    </ul>
+                </li>
+                <li><i class="fa fa-user"></i>About</li>
+                <li><i class="fa fa-search"></i>Search</li>
+            </ul>
+        </nav>
+        <article>
+            <h1>Home</h1>
+            <div class="content">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, et!
+                    Veniam, cum. Necessitatibus consectetur, alias facere, cum omnis officia
+                    ad architecto dolore rerum voluptatum fuga. Provident, voluptate voluptas? Dolor, blanditiis.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, et!
+                    Veniam, cum. Necessitatibus consectetur, alias facere, cum omnis officia
+                    ad architecto dolore rerum voluptatum fuga. Provident, voluptate voluptas? Dolor, blanditiis.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, et!
+                    Veniam, cum. Necessitatibus consectetur, alias facere, cum omnis officia
+                    ad architecto dolore rerum voluptatum fuga. Provident, voluptate voluptas? Dolor, blanditiis.
+                </p>
             </div>
-          </li>
-          <li class="navItem"><a href="#">Đặt vé</a></li>
-          <li class="navItem"><a href="#">Thông tin hành trình
-            <div>
-              <ul>
-                <li><a href="">Hello 1</a></li>
-                <li><a href=""> Hello 2</a></li>
-                <li><a href="">Hello 3</a></li>
-              </ul>
-            </div>
-          </a></li>
-          <li class="navItem"><a href="#">QAirline Club
-            <div>
-              <ul>
-                <li><a href="">Hello 1</a></li>
-                <li><a href=""> Hello 2</a></li>
-                <li><a href="">Hello 3</a></li>
-              </ul>
-            </div>
-          </a></li>
-        </ul>
-      </nav>
-      <div class="ref-links">Something</div>
+        </article>
     </div>
 </template>
 
@@ -46,114 +45,163 @@ export default {
 }
 </script>
 <style scoped>
-  * {
-    color: white;
-    box-sizing: content-box;
-  }
+@import url('https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap');
 
-  li {
-    list-style-type:none;
-  }
-  a {color:inherit;}
-  .header {
-    background-color: #0b1224;
-    width: 100%;
-    display : flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    gap : 20px;
-    margin-bottom: 20px;
-    padding-bottom: 5px;
-    padding-top : 5px;
-  }
-  .navBar > ul {
-    display : flex;
-    gap : 20px;
-    position: relative;
-  }
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lexend Deca', sans-serif;
+    color: #878787;
 
-  .navMenu {
-    position: relative;
-  }
+    --menu-item-size: 50px;
+    --green-color: #329680;
+    --blue-color: #099c95;
+    --dark-green-color: #175b52;
+    --white-color: #FFF;
+    --gray-color: #EDEDED;
+    --container-width: 700px;
+    --container-height: 400px;
+    --line-offset: calc((100% - var(--container-height))/ 2 + var(--menu-item-size) + 0.6em);
+}
 
-  .navItem {
+
+.container {
+    width: var(--container-width);
+    height: var(--container-height);
+    margin-left: -350px;
+    margin-top: -200px;
+    top: 50%;
+    left: 50%;
     position: absolute;
-    padding-bottom: 20px;
-    border-radius: 15px 15px 0px 0px;
-    text-align: center;
-    background: transparent;
-    transition: all 0.3s ease-in-out;
-    width: 150px; 
-    justify-content: center; 
-    align-items: center;
-    top: -10px;
-  }
+    z-index: 1;
+}
 
-  .navItem:nth-child(1) { left: -400px; }
-  .navItem:nth-child(2) { left: -200px; } /* Thay đổi vị trí ngang */
-  .navItem:nth-child(3) { left: 0px; }
-  .navItem:nth-child(4) { left: 200px; }
+.main-menu {
+    display: flex;
+    list-style: none;
+    margin: auto 0;
+    padding: 0.6em 0 0 0;
+}
 
-  .navItem > a {
-    font-size : 18px;
-    font-weight: 500;
-    text-decoration: none ;
-  }
+.main-menu > li {
+    box-sizing: border-box;
+    height: var(--menu-item-size);
+    width: calc(3.5 * var(--menu-item-size));  
+    line-height: var(--menu-item-size);
+    padding: 0 2em;
+    margin: 1px;
+    transition: 0.5s linear all;
+    background: var(--green-color);
+    color: var(--dark-green-color);
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
 
-  .navItem:hover {
-    background: #0b1224;
-    color: darkcyan;
-    transition: all 0.3s ease-in-out;
-  }
+.main-menu > li:not(.with-submenu) {
+    clip-path: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+    shape-outside: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+}
 
-  .navItem:hover > div {
-    background: #0b1224;
-    color: darkcyan;
-    transition: all 0.3s ease-in-out;
-  }
+.main-menu > li:nth-child(2) {
+    transform: translateX(-5%);
+}
 
-  .navItem a {
-    color: inherit;
-  }
-  .navItem a::before {
-    content : '';
-    top : 100%;
-    position : absolute;
-    left : 0;
-    width : 100%;
-  
-  }
+.main-menu > li:nth-child(3) {
+    transform: translateX(-10%)
+}
 
-  .navItem > div {
+.main-menu > li:nth-child(4) {
+    transform: translateX(-15%)
+}
+
+.main-menu i {
+    margin-right: 5px;
+}
+
+.main-menu > li:hover:not(.active) {
+    background: linear-gradient(to right, var(--green-color), var(--blue-color));
+    color: var(--white-color);
+}
+
+.main-menu > li:active:not(.active),
+.main-menu > li:active:not(.with-submenu){
+    background: var(--blue-color);
+    color: var(--white-color);
+}
+
+.main-menu > li:hover i:not(li.active) {
+    color: #175c58;
+}
+
+.main-menu .active {
+    color: var(--white-color);
+    background: var(--blue-color);
+    cursor: default;
+    text-shadow: 1px 1px 1px var(--dark-green-color);
+    font-size: 18px;
+}
+
+article {
+   background: var(--gray-color);
+   padding: 1em;
+   border-radius: 0 0 5px 5px;
+   box-shadow: 5px 5px 5px #CCC;
+   position: relative;
+   z-index: -1;
+}
+
+h1 {
+    font-size: 115%;
+    margin: 1em 2em;
+    padding: 0;
+    position: relative;
+    color: #777;
+}
+
+.content {
+    padding: 0 0 0 3em;
+    font-size: 16px;
+}
+
+.submenu {
     display: none;
     position: absolute;
-    left: 0px;
-    top: 100%;
-    /* right: 0px; */
-    padding: 10px;
-    border-radius: 0px 10px 10px 10px;
-  }
+    z-index: 10;
+    list-style: none;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    min-width: calc(3.5 * var(--menu-item-size) - 5%);
+    box-shadow: 5px 5px 5px #CCC;
+}
 
-  .navItem:hover >  div {
+.with-submenu {
+    position: relative;
+    display: inline-block;
+    clip-path: polygon(10% 0%, 0% 100%, 0% 500%, 95% 500%, 95% 100%, 100% 50%, 95% 0%);
+    shape-outside: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+}
+
+.with-submenu:hover .submenu {
     display: block;
-  }
+}
 
-  .logo {
-    width : 25%;
-  }
-  .ref-links {
-    width : 25%;
-  }
-  img {
-    width : 50px;
-    height : 50px;
-  }
+.submenu > li {
+    background: #dedede;
+    border-bottom: 1px solid var(--gray-color); 
+    color: #777;
+    padding: 1.2em 1em;
+    transition: 0.3s all linear;
+    display: block;
+    line-height: 0%;
+}
 
+.submenu > li:hover {
+    background: var(--gray-color)
+}
 
-  @media screen and (max-width: 800px) {
-    .navBar > ul {
-      display: block;
-    }
-  }
+.submenu > li:active {
+    background: var(--white-color);
+}
 </style>

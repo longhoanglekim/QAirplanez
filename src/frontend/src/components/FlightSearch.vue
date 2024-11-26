@@ -111,6 +111,9 @@
           <label for="firstName">Họ</label>
           <input type="text" v-model="form.firstName" id="firstName">
         </div>
+        <div v-if="error" class="error-message">
+          <p>{{ error }}</p>
+        </div>
         <div class="form-submit">
           <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
         </div>
@@ -164,10 +167,12 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-
     toSearch() {
       // Chuyển hướng sang trang kết quả tìm kiếm và truyền các tham số tìm kiếm qua URL
       this.$router.push('/booking/avaibility/0');
+    },
+    toTicket() {
+      this.$router.push('booking/information/0')
     },
     submitForm() {
       // Kiểm tra và xử lý dữ liệu form khi người dùng nhấn nút tìm kiếm
@@ -194,10 +199,13 @@ export default {
 
       this.error = ''; // Reset lỗi nếu tất cả điều kiện hợp lệ
 
-      // Ở đây, bạn có thể gọi API hoặc thực hiện thao tác tìm kiếm vé
       console.log('Tìm vé máy bay với các thông tin:', this.form);
-      // Gửi thông tin tìm vé đến server hoặc xử lý logic tiếp theo ở đây
+      
       this.toSearch();
+    },
+    submitFormTicket() {
+      this.error = '';
+      this.toTicket();
     }
   }
 };

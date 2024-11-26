@@ -9,17 +9,18 @@ export default {
 </script>
 
 <template>
-  <div class="img-container">
+  <div id="img">
   </div>
   <div>
     <FlightSearch/>
   </div>
-  <div>aaa</div>
+  
 </template>
 <style scoped>
-.img-container {
+#img {
   color: #333366;
   height: 200px;
   float: top;
+  border: 1px solid white;
 }
 </style>

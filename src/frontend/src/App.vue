@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <h1 class="text-center text-red">Alo</h1>
+  </div>
   <div id="app">
     <header><PageHeader/></header>
     <PageNavBar/>
@@ -26,7 +29,6 @@ export default {
 </script>
 
 <style>
-
 body, html {
   margin: 0;
   padding: 0;
@@ -51,38 +53,5 @@ footer {
   margin-top: 0;
   padding-top: 1px;
 }
-.d-input {
-  background: transparent;
-  outline: none;
-  font-size: inherit;
-  left: 10px;
-  border: none;
-  padding: 10px 5px;
-  border-radius: 0.5rem;
-  width: 100%;
-}
 
-.d-input:focus,
-.d-input:hover, .d-input:valid {
-  border: 1px solid var(--cl-border);
-}
-
-.d-input:focus {
-  background: white;
-}
-
-.lb-tit {
-  background: transparent;
-  position: absolute;
-  left: 10px;
-  pointer-events: none;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-:is(.d-input:focus, .d-input:valid) + .lb-tit {
-  top: -1rem;
-  font-size: 14px;
-  font-weight: bold;
-}
 </style>
