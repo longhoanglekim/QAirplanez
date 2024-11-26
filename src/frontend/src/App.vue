@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <header><PageHeader/></header>
+    <PageNavBar/>
     <router-view></router-view>
     <footer><PageFooter/></footer>
   </div>
@@ -11,10 +12,11 @@
 
 import PageHeader from "@/components/PageHeader.vue";
 import PageFooter from "@/components/PageFooter.vue";
+import PageNavBar from "./components/PageNavBar.vue";
 
 export default {
   name: 'App',
-  components: {PageFooter, PageHeader},
+  components: {PageFooter, PageHeader, PageNavBar},
 
   data() {
     return {

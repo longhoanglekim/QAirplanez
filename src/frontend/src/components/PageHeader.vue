@@ -3,16 +3,11 @@
         <button @click="toLogin">Đăng nhập</button>
         <button @click="toRegister">Đăng ký</button>
     </div>
-    <PageNavBar/>
 </template>
 
 <script>
-    import PageNavBar from './PageNavBar.vue';
     export default {
         name: 'PageHeader',
-        components: {
-            PageNavBar
-        },
         data() {
         return{};
         }, 

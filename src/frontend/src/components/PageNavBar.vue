@@ -5,7 +5,7 @@
       </p></a>
       <nav class="navBar">
         <ul class="navMenu">
-          <li>
+          <li class="navItem">
             <a href="#">Khám phá</a>
             <div>
               <ul>
@@ -15,8 +15,8 @@
               </ul>
             </div>
           </li>
-          <li><a href="#">Đặt vé</a></li>
-          <li><a href="#">Thông tin hành trình
+          <li class="navItem"><a href="#">Đặt vé</a></li>
+          <li class="navItem"><a href="#">Thông tin hành trình
             <div>
               <ul>
                 <li><a href="">Hello 1</a></li>
@@ -25,7 +25,7 @@
               </ul>
             </div>
           </a></li>
-          <li><a href="#">QAirline Club
+          <li class="navItem"><a href="#">QAirline Club
             <div>
               <ul>
                 <li><a href="">Hello 1</a></li>
@@ -46,11 +46,17 @@ export default {
 }
 </script>
 <style scoped>
+  * {
+    color: white;
+    box-sizing: content-box;
+  }
+
   li {
     list-style-type:none;
   }
   a {color:inherit;}
   .header {
+    background-color: #0b1224;
     width: 100%;
     display : flex;
     justify-content: space-between;
@@ -58,7 +64,6 @@ export default {
     flex-direction: row;
     gap : 20px;
     margin-bottom: 20px;
-    background : transparent;
     padding-bottom: 5px;
     padding-top : 5px;
   }
@@ -68,48 +73,50 @@ export default {
     position: relative;
   }
 
-  .navMenu > li {
+  .navMenu {
+    position: relative;
+  }
+
+  .navItem {
     position: absolute;
-    padding: 10px;
+    padding-bottom: 20px;
     border-radius: 15px 15px 0px 0px;
     text-align: center;
     background: transparent;
-    color: white;
     transition: all 0.3s ease-in-out;
-    width: 100px; 
-    height: 35px; 
-    justify-content: center; /* Căn giữa theo chiều ngang */
-            align-items: center; /* Căn giữa theo chiều dọc */
+    width: 150px; 
+    justify-content: center; 
+    align-items: center;
+    top: -10px;
   }
 
-  .navMenu > li:nth-child(1) { left: -300px; top: 0; }
-  .navMenu > li:nth-child(2) { left: -150px; top: 0; } /* Thay đổi vị trí ngang */
-  .navMenu > li:nth-child(3) { left: 0px; top: 0; }
-  .navMenu > li:nth-child(4) { left: 150px; top: 0; }
+  .navItem:nth-child(1) { left: -400px; }
+  .navItem:nth-child(2) { left: -200px; } /* Thay đổi vị trí ngang */
+  .navItem:nth-child(3) { left: 0px; }
+  .navItem:nth-child(4) { left: 200px; }
 
-  .navMenu > li > a {
+  .navItem > a {
     font-size : 18px;
-    color : #fff;
     font-weight: 500;
     text-decoration: none ;
   }
 
-  .navMenu > li:hover {
-    background: white;
+  .navItem:hover {
+    background: #0b1224;
     color: darkcyan;
     transition: all 0.3s ease-in-out;
   }
 
-  .navMenu > li:hover > div {
-    background: white;
+  .navItem:hover > div {
+    background: #0b1224;
     color: darkcyan;
     transition: all 0.3s ease-in-out;
   }
 
-  .navMenu > li > a {
+  .navItem a {
     color: inherit;
   }
-  .navMenu > li > a::before {
+  .navItem a::before {
     content : '';
     top : 100%;
     position : absolute;
@@ -118,7 +125,7 @@ export default {
   
   }
 
-  .navMenu > li > div {
+  .navItem > div {
     display: none;
     position: absolute;
     left: 0px;
@@ -128,7 +135,7 @@ export default {
     border-radius: 0px 10px 10px 10px;
   }
 
-  .navMenu> li:hover >  div {
+  .navItem:hover >  div {
     display: block;
   }
 
@@ -142,6 +149,7 @@ export default {
     width : 50px;
     height : 50px;
   }
+
 
   @media screen and (max-width: 800px) {
     .navBar > ul {
