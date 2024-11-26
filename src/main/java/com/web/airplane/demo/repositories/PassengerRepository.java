@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     public List<Passenger> findAllByEmail(String email);
+    Passenger findByPassengerId(long id);
 }

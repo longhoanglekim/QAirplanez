@@ -311,7 +311,7 @@ DROP TABLE IF EXISTS passengers;
 CREATE TABLE passengers (
                               passenger_id bigint NOT NULL AUTO_INCREMENT,
                               bank_name varchar(255) NOT NULL,
-                              card_number bigint NOT NULL,
+                              seat_Code varchar(255) NOT NULL,
                               email varchar(255) NOT NULL,
                               ticket_class_id bigint not null ,
                               first_name varchar(255) NOT NULL,
@@ -334,7 +334,7 @@ LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
 INSERT INTO passengers VALUES
-                             (1, 'Bank A', 1234567890123456, 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
-                             (2, 'Bank B', 2345678901234567, 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
-                             (3, 'Bank C', 3456789012345678, 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
+                             (1, 'Bank A', '1B', 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
+                             (2, 'Bank B', '2B', 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
+                             (3, 'Bank C', '3E', 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
 UNLOCK TABLES;
