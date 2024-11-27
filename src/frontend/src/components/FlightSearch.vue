@@ -1,6 +1,6 @@
 <!-- FlightSearchForm.vue -->
 <template>
-<div class="container w-1/2  p-4 rounded-lg absolute left-1/4 -bottom-1/4">
+<div class="container w-5/6 md:w-1/2  p-4 rounded-lg place-self-center">
     <div class="button-container rounded-full">
         <button @click="changeContent('searchFlight')" class="rounded-full" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
         <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="form-group" id="ticketD">
-                <label for="ticketDetails">Số vé</label>
+                <label for="ticketDetails">Số vé (Tối đa 10 vé)</label>
                 <input type="text" id="ticketDetails" :value="ticketSummary" @click="toggleTicketModal" readonly placeholder="Nhấn để chỉnh sửa số vé" />
                 <div v-if="isModalVisible" class="ticket-modal">
                     <div class="modal-content">
@@ -194,7 +194,8 @@ export default {
 /* Cấu trúc tổng thể */
 /* 4px 12px */
 .container {
-    background-image: linear-gradient( 68.6deg,  rgba(79,183,131,1) 14.4%, rgba(254,235,151,1) 92.7% );;
+    background-color: whitesmoke;
+    transform: translateY(-10rem);
 }
 
 .button-container {

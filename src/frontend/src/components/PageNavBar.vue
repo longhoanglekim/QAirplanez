@@ -1,10 +1,10 @@
 <template>
-<header class="fixed w-full z-50 transition-all duration-300 bg-blue" :class="{ 'bg-black bg-opacity-80': isScrolled || mobileMenuOpen }">
+<header  class="fixed w-full z-50 transition-all duration-300 bg-blue bg-black/40 md:bg-black/10" :class="{'md:bg-black/40' : isScrolled}">
     <div class="container mx-auto pt-1 flex justify-between items-center">
         <!-- Logo -->
         <div class="logo">
             <a href="/home" class="text-white text-2xl font-bold">
-                <img src="/path-to-logo.png" alt="logo" class="h-10">
+                <img src="@/assets/home/logo5122.png" alt="logo" class="h-10">
             </a>
         </div>
 
@@ -12,7 +12,7 @@
         <nav class="hidden lg:flex items-center space-x-8">
             <!-- các item to-->
             <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer py-2 ">
-                <div class="flex items-center justify-between px-4 hover:bg-blue-700 text-white">
+                <div class="flex items-center justify-between rounded-full m-1 py-1 px-4 hover:bg-blue-700 text-white">
                     <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
                         {{ item.label }}
                         <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +22,7 @@
                 </div>
 
                 <!-- các item nhỏ -->
-                <div v-if="item.submenu" class="group-hover:visible invisible absolute z-50 p-0.5 flex w-full flex-col bg-white rounded text-gray-800 shadow-xl text-left w-48">
+                <div v-if="item.submenu" class="group-hover:visible invisible absolute z-50 p-0.5 flex w-full flex-col bg-white rounded text-gray-800 shadow-xl text-left w-52">
                     <a v-for="(subitem, subindex) in item.submenu" :key="subindex" :href="subitem.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-gray-100 transition-colors">
                         {{ subitem.label }}
                     </a>
@@ -40,13 +40,23 @@
             </button>
 
             <!-- Các phần còn lại của header right actions -->
-            <div class="hidden lg:flex items-center space-x-2">
+            <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
                 <a href="/signup" class="block text-md px-4 py-2 rounded ml-2 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng ký
                 </a>
                 <a href="/login" class="block text-md px-4 ml-2 py-2 rounded font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng nhập
                 </a>
+            </div>
+
+            <div v-if="isLoggedIn()" class="group relative cursor-pointer p-2">
+                <img class="w-8 h-8 rounded-full" src="@/assets/login/avt.jpeg" alt="Rounded avatar">
+    
+                <div class="group-hover:visible invisible absolute right-0 z-50 p-0.5 bg-white rounded text-gray-800 shadow-xl text-left w-48">
+                    <a v-for="(item, index) in profileItems" :key="index" :href="item.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-gray-100 transition-colors w-48">
+                        {{ item.label }}
+                    </a>
+                </div>
             </div>
 
             <!-- Mobile Menu Toggle -->
@@ -61,7 +71,7 @@
         </div>
     </div>
     <!-- Mobile Menu Overlay -->
-    <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black bg-opacity-90 lg:hidden z-40 w-2/3">
+    <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black/50 lg:hidden z-40 w-1/2">
         <div class="container mx-auto px-4 py-8">
             <div v-for="(item, index) in menuItems" :key="index" class="mb-6">
                 <div @click="toggleMobileSubmenu(index)" class="text-white text-2xl font-bold uppercase flex justify-between items-center">
@@ -81,6 +91,8 @@
             </div>
         </div>
     </div>
+    
+
 </header>
 </template>
 
@@ -92,6 +104,18 @@ export default {
             mobileMenuOpen: false,
             dropdownTimers: {}, // Lưu trữ các timer cho từng dropdown
             openMobileSubmenus: [],
+            profileItems: [{
+                label: 'Thong tin ca nhan',
+                link: '/profile'
+            }, {
+                label: 'Cai dat',
+                link: '/setting'
+            }, {
+                label: 'Dang xuat',
+                link: '/logout'
+            }
+
+            ],
             menuItems: [{
                     label: 'Trang chủ',
                     link: '/home'
@@ -177,13 +201,17 @@ export default {
     beforeUnmount() {
         window.removeEventListener('scroll', this.handleScroll)
     },
+
     methods: {
+        isLoggedIn() {
+            return true;
+        },
         handleScroll() {
             this.isScrolled = window.scrollY > 50
         },
         toggleSearch() {
             // Implement search functionality
-            alert('Search functionality to be implemented')
+            alert('chua co tinh nang nay')
         },
         toggleMobileMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen

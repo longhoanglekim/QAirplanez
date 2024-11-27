@@ -1,6 +1,6 @@
 <template>
-  <div class="container relative">
-    <div id="img">
+  <div class="container w-full">
+    <div id="img" class="bg-cover bg-center"> 
     </div>
     <FlightSearch/>
   </div>
