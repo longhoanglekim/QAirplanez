@@ -1,9 +1,9 @@
 <!-- FlightSearchForm.vue -->
 <template>
-<div class="container">
-    <div class="button-container">
-        <button @click="changeContent('searchFlight')" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
-        <button @click="changeContent('searchTicket')" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
+<div class="container w-3/5 place-self-center ">
+    <div class="button-container rounded-full">
+        <button @click="changeContent('searchFlight')" class="rounded-full" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
+        <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
     </div>
     <div class="flight-search-form">
         <form @submit.prevent="submitForm" v-if="this.content == 'searchFlight' ">
@@ -113,7 +113,7 @@ export default {
             },
             error: '',
             isModalVisible: false,
-            content: ''
+            content: 'searchFlight'
         };
     },
     computed: {
@@ -130,7 +130,8 @@ export default {
     },
     methods: {
         changeContent(newContent) {
-            this.content = newContent;
+            if (this.content != newContent) this.content = newContent;
+            else this.content ='';
         },
         toggleTicketModal() {
             this.isModalVisible = !this.isModalVisible;
@@ -185,34 +186,29 @@ export default {
 
 <style scoped>
 /* Cấu trúc tổng thể */
-.container {
-    width: 100%;
-    max-width: 45rem;
-    margin: 0 auto;
-    padding-bottom: 1.25rem;
-    background-color: #f9f9f9;
-    border-radius: 0.5rem;
-    /* 8px = 0.5rem */
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-    /* 4px 12px */
-}
+/* 4px 12px */
+
 
 .button-container {
     display: flex;
     height: 3rem;
     width: 100%;
-    background: darkblue;
+    background: rgb(112, 164, 184);
+    background: rgba(135, 206, 235, 0.5);
+    
 }
 
 .button-container button {
+    color: white;
     flex: 1 1 calc(50%);
     border: none;
+    
 }
 
-.chosen {
-    background: lightblue;
+.button-container .chosen {
+    background: skyblue;
+    opacity: 1;
     outline: none;
-
 }
 
 .flight-search-form {

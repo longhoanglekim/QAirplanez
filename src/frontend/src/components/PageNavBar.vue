@@ -1,10 +1,10 @@
 <template>
-<header class="fixed w-full z-50 transition-all duration-300" :class="{ 'bg-black bg-opacity-80': isScrolled || mobileMenuOpen }">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+<header class="fixed w-full z-50 transition-all duration-300 bg-blue" :class="{ 'bg-black bg-opacity-80': isScrolled || mobileMenuOpen }">
+    <div class="container mx-auto pt-1 flex justify-between items-center">
         <!-- Logo -->
         <div class="logo">
-            <a href="/" class="text-white text-2xl font-bold">
-                <img src="/path-to-logo.png" alt="Aovis Logo" class="h-10">
+            <a href="/home" class="text-white text-2xl font-bold">
+                <img src="/path-to-logo.png" alt="logo" class="h-10">
             </a>
         </div>
 
@@ -12,17 +12,17 @@
         <nav class="hidden lg:flex items-center space-x-8">
             <!-- các item to-->
             <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer py-2 ">
-                <div class="flex items-center justify-between space-x-5  px-4">
-                    <a :href="item.link" class="text-white text-base font-medium uppercase tracking-wider hover:text-blue-900 transition-colors duration-300">
+                <div class="flex items-center justify-between px-4 hover:bg-blue-700 text-white">
+                    <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
                         {{ item.label }}
-                        <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 text-white group-hover:text-blue-900 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </a>
                 </div>
 
                 <!-- các item nhỏ -->
-                <div v-if="item.submenu" class="invisible absolute z-50 p-0.5 flex w-full flex-col bg-white rounded text-gray-800 shadow-xl group-hover:visible text-left">
+                <div v-if="item.submenu" class="group-hover:visible invisible absolute z-50 p-0.5 flex w-full flex-col bg-white rounded text-gray-800 shadow-xl text-left w-48">
                     <a v-for="(subitem, subindex) in item.submenu" :key="subindex" :href="subitem.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-gray-100 transition-colors">
                         {{ subitem.label }}
                     </a>
@@ -41,14 +41,16 @@
 
             <!-- Các phần còn lại của header right actions -->
             <div class="hidden lg:flex items-center space-x-2">
-                <svg class="w-6 h-6 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 5.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span class="text-white text-base">+1 (234) 567-8910</span>
+                <a href="/signup" class="block text-md px-4 py-2 rounded ml-2 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                    Đăng ký
+                </a>
+                <a href="/login" class="block text-md px-4 ml-2 py-2 rounded font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                    Đăng nhập
+                </a>
             </div>
 
             <!-- Mobile Menu Toggle -->
-            <button @click="toggleMobileMenu" class="lg:hidden text-white hover:text-blue-900 transition-colors">
+            <button @click="toggleMobileMenu" class="lg:hidden text-white hover:text-blue-900 transition-colors bg-black rounded">
                 <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -58,11 +60,30 @@
             </button>
         </div>
     </div>
+    <!-- Mobile Menu Overlay -->
+    <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black bg-opacity-90 lg:hidden z-40 w-2/3">
+        <div class="container mx-auto px-4 py-8">
+            <div v-for="(item, index) in menuItems" :key="index" class="mb-6">
+                <div @click="toggleMobileSubmenu(index)" class="text-white text-2xl font-bold uppercase flex justify-between items-center">
+                    <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
+                        {{ item.label }}
+                    </a>
+                    <svg v-if="item.submenu" class="w-6 h-6 transform" :class="{'rotate-180': openMobileSubmenus.includes(index)}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+
+                <div v-if="item.submenu && openMobileSubmenus.includes(index)" class="mt-4 space-y-3">
+                    <a v-for="(subitem, subindex) in item.submenu" :key="subindex" :href="subitem.link" class="block text-white text-xl hover:text-yellow-500 transition-colors">
+                        {{ subitem.label }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
 </template>
 
-  
-  
 <script>
 export default {
     data() {
@@ -72,7 +93,7 @@ export default {
             dropdownTimers: {}, // Lưu trữ các timer cho từng dropdown
             openMobileSubmenus: [],
             menuItems: [{
-                    label: 'Trang chu',
+                    label: 'Trang chủ',
                     link: '/home'
                 },
                 {
@@ -150,22 +171,37 @@ export default {
             ]
         }
     },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
+    },
     methods: {
+        handleScroll() {
+            this.isScrolled = window.scrollY > 50
+        },
         toggleSearch() {
-            // Placeholder cho chức năng tìm kiếm
-            alert('Chức năng tìm kiếm sẽ được thêm vào');
+            // Implement search functionality
+            alert('Search functionality to be implemented')
         },
         toggleMobileMenu() {
-            this.mobileMenuOpen = !this.mobileMenuOpen;
-            this.openMobileSubmenus = []; // Đặt lại submenu mobile
+            this.mobileMenuOpen = !this.mobileMenuOpen
+            this.openMobileSubmenus = [] // Reset open submenus
+        },
+        toggleMobileSubmenu(index) {
+            if (this.openMobileSubmenus.includes(index)) {
+                this.openMobileSubmenus = this.openMobileSubmenus.filter(i => i !== index)
+            } else {
+                this.openMobileSubmenus.push(index)
+            }
         }
     }
 }
 </script>
-  
-  
+
 <style scoped>
- *{
+* {
     font-family: 'Poppins', 'Roboto', sans-serif;
- }
-  </style>
+}
+</style>
