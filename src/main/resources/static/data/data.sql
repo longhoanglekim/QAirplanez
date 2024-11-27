@@ -224,9 +224,8 @@ LOCK TABLES aircrafts WRITE;
 /*!40000 ALTER TABLE aircrafts DISABLE KEYS */;
 /*!40000 ALTER TABLE aircrafts ENABLE KEYS */;
 INSERT INTO aircrafts VALUES
-                            (1, 'Boeing', '737', 200),
-                            (2, 'Airbus', 'A320', 180),
-                            (3, 'Boeing', '777', 350);
+                            (1, 'Boeing', '737', 240),
+                            (2, 'Airbus', 'A320', 180);
 UNLOCK TABLES;
 
 
@@ -250,6 +249,9 @@ CREATE TABLE flights (
                            departure_airport_id int DEFAULT NULL,
                            destination_airport_id int DEFAULT NULL,
                            cancel_due_time  datetime(6) DEFAULT NULL,
+                           economy_seats INT NOT NULL,
+                           business_seats INT NOT NULL,
+                           first_seats INT NOT NULL,
                            PRIMARY KEY (id),
                            KEY FKlref405f4r8lfgiu9gbwbdtgv (aircraft_id),
                            KEY FK1oo8ervoj8230wtvebwrqu2tf (departure_airport_id),
@@ -268,9 +270,8 @@ LOCK TABLES flights WRITE;
 /*!40000 ALTER TABLE flights DISABLE KEYS */;
 /*!40000 ALTER TABLE flights ENABLE KEYS */;
 INSERT INTO flights VALUES
-                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2, '2023-06-01 08:30'),
-                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3, '2023-06-02 18:30'),
-                        (3, '2023-12-03 14:30', '2023-12-03 12:00', '2023-12-03 14:00', '2023-12-03 12:00', 'JL789', 3, 3, 1, '2023-06-03 14:30');
+                        (1, '2023-12-01 08:30', '2023-12-01 06:00', '2023-12-01 08:00', '2023-12-01 06:00', 'VN123', 1, 1, 2, '2023-06-01 08:30', 168, 48, 24),
+                        (2, '2023-12-02 18:30', '2023-12-02 16:00', '2023-12-02 18:00', '2023-12-02 16:00', 'TG456', 2, 2, 3, '2023-06-02 18:30', 126, 36, 18);
 UNLOCK TABLES;
 
 
@@ -309,20 +310,24 @@ DROP TABLE IF EXISTS passengers;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE passengers (
-                              passenger_id bigint NOT NULL AUTO_INCREMENT,
-                              bank_name varchar(255) NOT NULL,
-                              seat_Code varchar(255) NOT NULL,
-                              email varchar(255) NOT NULL,
-                              ticket_class_id bigint not null ,
-                              first_name varchar(255) NOT NULL,
-                              last_name varchar(255) NOT NULL,
-                              passport_number varchar(255) NOT NULL,
-                              phone_number varchar(255) NOT NULL,
-                              flight_id bigint NOT NULL,
-                              PRIMARY KEY (passenger_id),
-                              KEY FK5rwljsnya2tdu14sy99r39k1b (flight_id),
-                              CONSTRAINT FK5rwljsnya2tdu14sy99r39k1b FOREIGN KEY (flight_id) REFERENCES flights (id),
-                              CONSTRAINT FK_ticket_class FOREIGN KEY (ticket_class_id) REFERENCES ticket_classes (id)
+                            passenger_id bigint NOT NULL AUTO_INCREMENT,
+                            bank_name varchar(255),
+                            row int NOT NULL,                  -- Thêm cột row
+                            seat_position varchar(1) NOT NULL, -- Thêm cột seat_position (A, B, C, D,...)
+                            email varchar(255),
+                            ticket_class_id bigint NOT NULL,
+                            first_name varchar(255) NOT NULL,
+                            last_name varchar(255) NOT NULL,
+                            passport_number varchar(255),
+                            phone_number varchar(255),
+                            is_adult boolean,
+                            flight_id bigint NOT NULL,
+                            user_id bigint NOT NULL,
+                            PRIMARY KEY (passenger_id),
+                            KEY FK5rwljsnya2tdu14sy99r39k1b (flight_id),
+                            CONSTRAINT FK_user foreign key (user_id) references users(id),
+                            CONSTRAINT FK5rwljsnya2tdu14sy99r39k1b FOREIGN KEY (flight_id) REFERENCES flights (id),
+                            CONSTRAINT FK_ticket_class FOREIGN KEY (ticket_class_id) REFERENCES ticket_classes (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -333,8 +338,8 @@ CREATE TABLE passengers (
 LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
-INSERT INTO passengers VALUES
-                             (1, 'Bank A', '1B', 'test1@gmail.com', 1, 'John', 'Smith', 'P1234567', '0345675123', 1),
-                             (2, 'Bank B', '2B', 'bob.s@example.com', 2, 'Bob', 'Smith', 'P2345678', '0987654321', 2),
-                             (3, 'Bank C', '3E', 'carol.w@example.com', 3, 'Carol', 'Williams', 'P3456789', '1122334455', 3);
+INSERT INTO passengers (passenger_id, bank_name, row, seat_position, email, ticket_class_id, first_name, last_name, passport_number, phone_number, is_adult, flight_id, user_id)
+VALUES
+    (1, 'Bank A', 1, 'A', 'test1@gmail.com', 3, 'John', 'Smith', 'P1234567', '0345675123', true, 1, 1);
+
 UNLOCK TABLES;

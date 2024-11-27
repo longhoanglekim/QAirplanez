@@ -2,6 +2,7 @@ package com.web.airplane.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,13 @@ public class Flight {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime cancelDueTime;
+
+    @NotBlank
+    private int economySeats;
+    @NotBlank
+    private int businessSeats;
+    @NotBlank
+    private int firstSeats;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();

@@ -1,6 +1,8 @@
 package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.FlightInfo;
+import com.web.airplane.demo.dtos.PassengerInfo;
+import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.models.User;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -53,6 +56,45 @@ public class UserController {
     }
 
 
+
+    @Transactional
+    @PostMapping("/bookFlight")
+    public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
+                                        HttpServletRequest request,
+                                        List<PassengerInfo> passengerInfoList) {
+        try {
+
+            Flight flight = flightRepository.findByFlightNumber(flightNumber);
+            if (flight == null) {
+                return ResponseEntity.badRequest().body("Flight not found.");
+            }
+
+            int numberOfSeat = flight.getAircraft().getNumberOfSeats();
+            int bookedSeats = flight.getPassengers().size();
+            int requestedSeats = passengerInfoList.size();
+
+            if (numberOfSeat - (bookedSeats + requestedSeats) < 0) {
+                throw new SeatUnavailableException("There are only " + (numberOfSeat - bookedSeats) + " available seats.");
+            }
+            //Todo : Xét ngoại lệ với từng hạng ghế
+
+
+            // Todo : Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay
+
+            flightRepository.save(flight);  // Lưu lại chuyến bay với hành khách đã được đặt
+
+            return ResponseEntity.ok("Booking successful!");
+
+        } catch (SeatUnavailableException e) {
+            // Xử lý exception nếu không đủ ghế
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            // Xử lý các lỗi khác (nếu có)
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
+    }
+
+    @Transactional
     @PostMapping("/cancel")
     public ResponseEntity<?> cancelFlight(HttpServletRequest request,
                                           @RequestParam("passenger_id") long passengerId,
