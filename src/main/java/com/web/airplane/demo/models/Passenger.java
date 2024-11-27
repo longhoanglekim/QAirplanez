@@ -35,12 +35,20 @@ public class Passenger {
 
 
     private String bankName;
+    private boolean isAdult;
+
+    @NotNull
+    private Integer row;
 
     @NotBlank
-    private String seatCode;
+    private String seatPosition;
 
     @NotNull
     @ManyToOne
     private Flight flight;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
