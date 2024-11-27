@@ -1,6 +1,6 @@
 <!-- FlightSearchForm.vue -->
 <template>
-<div class="container w-3/5 place-self-center ">
+<div class="container w-1/2  p-4 rounded-lg absolute left-1/4 -bottom-1/4">
     <div class="button-container rounded-full">
         <button @click="changeContent('searchFlight')" class="rounded-full" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
         <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
@@ -56,9 +56,9 @@
                 <div v-if="isModalVisible" class="ticket-modal">
                     <div class="modal-content">
                         <label for="adults">Số vé người lớn</label>
-                        <input type="number" id="adults" v-model="form.adults" min="1" />
+                        <input type="number" id="adults" v-model="form.adults" min="1" :max="maxAdults"/>
                         <label for="children">Số vé trẻ em</label>
-                        <input type="number" id="children" v-model="form.children" min="0" :max="form.adults" />
+                        <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren" />
                         <button type="button" @click="closeModal">Xong</button>
                     </div>
                 </div>
@@ -117,6 +117,13 @@ export default {
         };
     },
     computed: {
+        maxAdults() {
+            return 9 - this.form.children;
+        },
+            // Max number of children allowed to maintain the sum under 10
+        maxChildren() {
+            return Math.min(10 - this.form.adults, this.form.adults);
+        },
         isSubmitDisabled() {
             if (this.content == "searchFlight")
                 return this.form.adults <= 0 || this.form.children >= this.form.adults ||
@@ -131,7 +138,6 @@ export default {
     methods: {
         changeContent(newContent) {
             if (this.content != newContent) this.content = newContent;
-            else this.content ='';
         },
         toggleTicketModal() {
             this.isModalVisible = !this.isModalVisible;
@@ -187,26 +193,26 @@ export default {
 <style scoped>
 /* Cấu trúc tổng thể */
 /* 4px 12px */
-
+.container {
+    background-image: linear-gradient( 68.6deg,  rgba(79,183,131,1) 14.4%, rgba(254,235,151,1) 92.7% );;
+}
 
 .button-container {
     display: flex;
     height: 3rem;
-    width: 100%;
-    background: rgb(112, 164, 184);
-    background: rgba(135, 206, 235, 0.5);
-    
+    width: 100%;    
 }
 
 .button-container button {
     color: white;
     flex: 1 1 calc(50%);
     border: none;
-    
+    background: skyblue;
 }
 
 .button-container .chosen {
-    background: skyblue;
+    
+    background-color: #007bff;
     opacity: 1;
     outline: none;
 }
