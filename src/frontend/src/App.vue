@@ -1,12 +1,10 @@
 <template>
-<h1 class="text-2xl font-bold underline">2xl</h1>
-<h1 class="text-3xl font-bold underline">3xl</h1>
 <div id="app">
     <header>
         <PageHeader />
     </header>
     <PageNavBar />
-    <router-view></router-view>
+    <router-view class="block"></router-view>
     <footer>
         <PageFooter />
     </footer>

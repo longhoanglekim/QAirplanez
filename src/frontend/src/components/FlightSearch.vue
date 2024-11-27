@@ -77,11 +77,11 @@
         <form @submit.prevent="submitFormTicket" v-if="this.content == 'searchTicket'">
             <div class="form-group">
                 <label for="seatCode">Mã số ngồi</label>
-                <input type="text" v-model="form.seatCode" id="seatCode">
+                <input type="text" v-model="form2.seatCode" id="seatCode">
             </div>
             <div class="form-group">
                 <label for="firstName">Họ</label>
-                <input type="text" v-model="form.firstName" id="firstName">
+                <input type="text" v-model="form2.firstName" id="firstName">
             </div>
             <div v-if="error" class="error-message">
                 <p>{{ error }}</p>
