@@ -60,15 +60,13 @@ public class UserController {
         return userService.getCurrentUser(request);
     }
 
-
-
     @Transactional
     @PostMapping("/bookFlight")
     public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
                                         HttpServletRequest request,
                                         @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
-
+            log.debug("Tim chuyen bay");
             Flight flight = flightRepository.findByFlightNumber(flightNumber);
             if (flight == null) {
                 return ResponseEntity.badRequest().body("Flight not found.");
@@ -82,6 +80,7 @@ public class UserController {
                 throw new SeatUnavailableException("There are only " + (numberOfSeat - bookedSeats) + " available seats.");
             }
             //Todo : Xét ngoại lệ với từng hạng ghế
+            log.debug("Xet ngoai le tung hang ghe");
             int numberReqFirstSeat = 0;
             int numberReqBusinessSeat = 0;
             int numberReqEconomySeat = 0;
@@ -92,24 +91,30 @@ public class UserController {
                     numberReqBusinessSeat++;
                 } else numberReqEconomySeat++;
             }
+            log.debug("Xet first class");
             if (flightService.getAvailableFirstSeats(flight) - numberReqFirstSeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for first class!");
             }
+            log.debug("Xet business class");
             if (flightService.getAvailableBusinessSeats(flight) - numberReqBusinessSeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for business class!");
             }
+            log.debug("Xet economy class");
             if (flightService.getAvailableEconomySeats(flight) - numberReqEconomySeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for economy class!");
             }
 
             // Todo : Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay
+            log.debug("Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay");
             for (PassengerInfo passengerInfo : passengerInfoList) {
+                log.debug("THEM KHACH HANG");
                 Passenger passenger = new Passenger();
                 passenger.setFirstName(passengerInfo.getFirstName());
                 passenger.setLastName(passengerInfo.getLastName());
                 passenger.setAdult(true);
                 log.debug("Nhap :" + passengerInfo.isAdult());
                 log.debug("Ra :" + passenger.isAdult());
+                log.debug("Set cho ngoi");
                 passenger.setFlight(flight);
                 if (passengerInfo.getTicketClassCode().equals("First")) {
                     passenger.setTicketClass(ticketClassRepository.findById(3L).get());
@@ -127,6 +132,7 @@ public class UserController {
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 }
+                log.debug("Them vao database");
                 passenger.setUser(getCurrentUser(request));
                 passengerRepository.save(passenger);
                 flight.getPassengers().add(passenger);

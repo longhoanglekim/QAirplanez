@@ -16,6 +16,7 @@
           <component :is="item.icon" class="mr-2" /> {{ item.label }}
         </button>
       </nav>
+      <button></button>
     </div>
 
     <!-- Main Content -->
