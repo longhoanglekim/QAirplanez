@@ -12,6 +12,5 @@ public class PassengerInfo {
     private String firstName;
     private String lastName;
     private String ticketClassCode;
-    private String flightNumber;
     private boolean isAdult;
 }
