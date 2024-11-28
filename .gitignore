@@ -31,6 +31,7 @@ target/
 out/
 *.db
 *.h2.db
+*.properties
 
 =======
 HELP.md

@@ -22,25 +22,33 @@ public class Passenger {
     private String firstName;
     @NotBlank
     private String lastName;
-    @NotBlank
+
     private String phoneNumber;
-    @NotBlank
+
     private String passportNumber;
-    @NotBlank
+
     private String email;
 
     @NotNull
     @ManyToOne
     private TicketClass ticketClass;
 
-    @NotBlank
+
     private String bankName;
+    private boolean isAdult;
+
+    @NotNull
+    private Integer row;
 
     @NotBlank
-    private long cardNumber;
+    private String seatPosition;
 
     @NotNull
     @ManyToOne
     private Flight flight;
 
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
