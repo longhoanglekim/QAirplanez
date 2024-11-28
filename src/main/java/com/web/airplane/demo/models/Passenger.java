@@ -38,7 +38,7 @@ public class Passenger {
     private boolean isAdult;
 
     @NotNull
-    private Integer row;
+    private Integer seatRow;
 
     @NotBlank
     private String seatPosition;

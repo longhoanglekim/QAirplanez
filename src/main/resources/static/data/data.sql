@@ -20,10 +20,10 @@ DROP TABLE IF EXISTS roles;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE roles (
-                         id bigint NOT NULL AUTO_INCREMENT,
-                         name varchar(255) NOT NULL,
-                         PRIMARY KEY (id),
-                         UNIQUE KEY UKofx66keruapi6vyqpv6f2or37 (name)
+                       id bigint NOT NULL AUTO_INCREMENT,
+                       name varchar(255) NOT NULL,
+                       PRIMARY KEY (id),
+                       UNIQUE KEY UKofx66keruapi6vyqpv6f2or37 (name)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -67,15 +67,15 @@ DROP TABLE IF EXISTS users;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE users (
-                         id bigint NOT NULL AUTO_INCREMENT,
-                         birthdate datetime(6) NOT NULL,
-                         email varchar(255) NOT NULL,
-                         firstname varchar(255) NOT NULL,
-                         lastname varchar(255) NOT NULL,
-                         password varchar(255) NOT NULL,
-                         phone_number varchar(255) DEFAULT NULL,
-                         PRIMARY KEY (id),
-                         UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email)
+                       id bigint NOT NULL AUTO_INCREMENT,
+                       birthdate datetime(6) NOT NULL,
+                       email varchar(255) NOT NULL,
+                       firstname varchar(255) NOT NULL,
+                       lastname varchar(255) NOT NULL,
+                       password varchar(255) NOT NULL,
+                       phone_number varchar(255) DEFAULT NULL,
+                       PRIMARY KEY (id),
+                       UNIQUE KEY UK6dotkott2kjsp8vw4d0m25fb7 (email)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -107,12 +107,12 @@ DROP TABLE IF EXISTS user_roles;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE user_roles (
-                              user_id bigint NOT NULL,
-                              role_id bigint NOT NULL,
-                              PRIMARY KEY (user_id,role_id),
-                              KEY FKh8ciramu9cc9q3qcqiv4ue8a6 (role_id),
-                              CONSTRAINT FKh8ciramu9cc9q3qcqiv4ue8a6 FOREIGN KEY (role_id) REFERENCES roles (id),
-                              CONSTRAINT FKhfh9dx7w3ubf1co1vdev94g3f FOREIGN KEY (user_id) REFERENCES users (id)
+                            user_id bigint NOT NULL,
+                            role_id bigint NOT NULL,
+                            PRIMARY KEY (user_id,role_id),
+                            KEY FKh8ciramu9cc9q3qcqiv4ue8a6 (role_id),
+                            CONSTRAINT FKh8ciramu9cc9q3qcqiv4ue8a6 FOREIGN KEY (role_id) REFERENCES roles (id),
+                            CONSTRAINT FKhfh9dx7w3ubf1co1vdev94g3f FOREIGN KEY (user_id) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -135,10 +135,10 @@ DROP TABLE IF EXISTS countries;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE countries (
-                             id bigint NOT NULL AUTO_INCREMENT,
-                             country_name varchar(255) NOT NULL,
-                             description varchar(255) NOT NULL,
-                             PRIMARY KEY (id)
+                           id bigint NOT NULL AUTO_INCREMENT,
+                           country_name varchar(255) NOT NULL,
+                           description varchar(255) NOT NULL,
+                           PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -152,9 +152,9 @@ LOCK TABLES countries WRITE;
 
 /*!40000 ALTER TABLE countries DISABLE KEYS */;
 INSERT INTO countries VALUES
-                            (1, 'Vietnam', 'Vietnam description'),
-                            (2, 'Thailand', 'Thailand description'),
-                            (3, 'Japan', 'Japan description');
+                          (1, 'Vietnam', 'Vietnam description'),
+                          (2, 'Thailand', 'Thailand description'),
+                          (3, 'Japan', 'Japan description');
 
 /*!40000 ALTER TABLE countries ENABLE KEYS */;
 UNLOCK TABLES;
@@ -177,14 +177,14 @@ DROP TABLE IF EXISTS airports;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE airports (
-                            id int NOT NULL AUTO_INCREMENT,
-                            airport_code varchar(255) NOT NULL,
-                            airport_name varchar(255) NOT NULL,
-                            city varchar(255) NOT NULL,
-                            country_id bigint NOT NULL,
-                            PRIMARY KEY (id),
-                            KEY FKimj7pril60webr05larg3wge7 (country_id),
-                            CONSTRAINT FKimj7pril60webr05larg3wge7 FOREIGN KEY (country_id) REFERENCES countries (id)
+                          id int NOT NULL AUTO_INCREMENT,
+                          airport_code varchar(255) NOT NULL,
+                          airport_name varchar(255) NOT NULL,
+                          city varchar(255) NOT NULL,
+                          country_id bigint NOT NULL,
+                          PRIMARY KEY (id),
+                          KEY FKimj7pril60webr05larg3wge7 (country_id),
+                          CONSTRAINT FKimj7pril60webr05larg3wge7 FOREIGN KEY (country_id) REFERENCES countries (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -192,9 +192,9 @@ CREATE TABLE airports (
 -- Dumping data for table airports
 --
 INSERT INTO airports VALUES
-                           (1, 'HAN', 'Noi Bai International Airport', 'Hanoi', 1),
-                           (2, 'BKK', 'Suvarnabhumi Airport', 'Bangkok', 2),
-                           (3, 'NRT', 'Narita International Airport', 'Tokyo', 3);
+                         (1, 'HAN', 'Noi Bai International Airport', 'Hanoi', 1),
+                         (2, 'BKK', 'Suvarnabhumi Airport', 'Bangkok', 2),
+                         (3, 'NRT', 'Narita International Airport', 'Tokyo', 3);
 LOCK TABLES airports WRITE;
 /*!40000 ALTER TABLE airports DISABLE KEYS */;
 /*!40000 ALTER TABLE airports ENABLE KEYS */;
@@ -208,11 +208,11 @@ DROP TABLE IF EXISTS aircrafts;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE aircrafts (
-                             id bigint NOT NULL AUTO_INCREMENT,
-                             manufacturer varchar(255) DEFAULT NULL,
-                             model varchar(255) DEFAULT NULL,
-                             number_of_seats int DEFAULT NULL,
-                             PRIMARY KEY (id)
+                           id bigint NOT NULL AUTO_INCREMENT,
+                           manufacturer varchar(255) DEFAULT NULL,
+                           model varchar(255) DEFAULT NULL,
+                           number_of_seats int DEFAULT NULL,
+                           PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,8 +224,8 @@ LOCK TABLES aircrafts WRITE;
 /*!40000 ALTER TABLE aircrafts DISABLE KEYS */;
 /*!40000 ALTER TABLE aircrafts ENABLE KEYS */;
 INSERT INTO aircrafts VALUES
-                            (1, 'Boeing', '737', 240),
-                            (2, 'Airbus', 'A320', 180);
+                          (1, 'Boeing', '737', 240),
+                          (2, 'Airbus', 'A320', 180);
 UNLOCK TABLES;
 
 
@@ -239,26 +239,26 @@ DROP TABLE IF EXISTS flights;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE flights (
-                           id bigint NOT NULL AUTO_INCREMENT,
-                           actual_arrival_time datetime(6) DEFAULT NULL,
-                           actual_departure_time datetime(6) DEFAULT NULL,
-                           expected_arrival_time datetime(6) DEFAULT NULL,
-                           expected_departure_time datetime(6) DEFAULT NULL,
-                           flight_number varchar(255) DEFAULT NULL,
-                           aircraft_id bigint DEFAULT NULL,
-                           departure_airport_id int DEFAULT NULL,
-                           destination_airport_id int DEFAULT NULL,
-                           cancel_due_time  datetime(6) DEFAULT NULL,
-                           economy_seats INT NOT NULL,
-                           business_seats INT NOT NULL,
-                           first_seats INT NOT NULL,
-                           PRIMARY KEY (id),
-                           KEY FKlref405f4r8lfgiu9gbwbdtgv (aircraft_id),
-                           KEY FK1oo8ervoj8230wtvebwrqu2tf (departure_airport_id),
-                           KEY FKny1g2v5rad7ben4t7vq8yjlyr (destination_airport_id),
-                           CONSTRAINT FK1oo8ervoj8230wtvebwrqu2tf FOREIGN KEY (departure_airport_id) REFERENCES airports (id),
-                           CONSTRAINT FKlref405f4r8lfgiu9gbwbdtgv FOREIGN KEY (aircraft_id) REFERENCES aircrafts (id),
-                           CONSTRAINT FKny1g2v5rad7ben4t7vq8yjlyr FOREIGN KEY (destination_airport_id) REFERENCES airports (id)
+                         id bigint NOT NULL AUTO_INCREMENT,
+                         actual_arrival_time datetime(6) DEFAULT NULL,
+                         actual_departure_time datetime(6) DEFAULT NULL,
+                         expected_arrival_time datetime(6) DEFAULT NULL,
+                         expected_departure_time datetime(6) DEFAULT NULL,
+                         flight_number varchar(255) DEFAULT NULL,
+                         aircraft_id bigint DEFAULT NULL,
+                         departure_airport_id int DEFAULT NULL,
+                         destination_airport_id int DEFAULT NULL,
+                         cancel_due_time  datetime(6) DEFAULT NULL,
+                         economy_seats INT NOT NULL,
+                         business_seats INT NOT NULL,
+                         first_seats INT NOT NULL,
+                         PRIMARY KEY (id),
+                         KEY FKlref405f4r8lfgiu9gbwbdtgv (aircraft_id),
+                         KEY FK1oo8ervoj8230wtvebwrqu2tf (departure_airport_id),
+                         KEY FKny1g2v5rad7ben4t7vq8yjlyr (destination_airport_id),
+                         CONSTRAINT FK1oo8ervoj8230wtvebwrqu2tf FOREIGN KEY (departure_airport_id) REFERENCES airports (id),
+                         CONSTRAINT FKlref405f4r8lfgiu9gbwbdtgv FOREIGN KEY (aircraft_id) REFERENCES aircrafts (id),
+                         CONSTRAINT FKny1g2v5rad7ben4t7vq8yjlyr FOREIGN KEY (destination_airport_id) REFERENCES airports (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -312,8 +312,8 @@ DROP TABLE IF EXISTS passengers;
 CREATE TABLE passengers (
                             passenger_id bigint NOT NULL AUTO_INCREMENT,
                             bank_name varchar(255),
-                            row int NOT NULL,                  -- Thêm cột row
-                            seat_position varchar(1) NOT NULL, -- Thêm cột seat_position (A, B, C, D,...)
+                            seat_row int NOT NULL,
+                            seat_position varchar(1) NOT NULL,
                             email varchar(255),
                             ticket_class_id bigint NOT NULL,
                             first_name varchar(255) NOT NULL,
@@ -338,7 +338,7 @@ CREATE TABLE passengers (
 LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
-INSERT INTO passengers (passenger_id, bank_name, row, seat_position, email, ticket_class_id, first_name, last_name, passport_number, phone_number, is_adult, flight_id, user_id)
+INSERT INTO passengers (passenger_id, bank_name, seat_row, seat_position, email, ticket_class_id, first_name, last_name, passport_number, phone_number, is_adult, flight_id, user_id)
 VALUES
     (1, 'Bank A', 1, 'A', 'test1@gmail.com', 3, 'John', 'Smith', 'P1234567', '0345675123', true, 1, 1);
 
