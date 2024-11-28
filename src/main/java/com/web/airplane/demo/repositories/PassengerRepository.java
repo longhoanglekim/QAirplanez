@@ -13,11 +13,11 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     public List<Passenger> findAllByEmail(String email);
     Passenger findByPassengerId(long id);
     @Query("SELECT p FROM Passenger p WHERE p.seatRow <= :maxRow AND p.flight = :flight " +
-            "ORDER BY p.seatRow DESC, p.seatPosition DESC")
+            "ORDER BY p.seatRow DESC, p.seatPosition DESC limit 1")
     Optional<Passenger> findPassengerWithMaxRowLessThanOrEqual(@Param("maxRow") Integer maxRow, @Param("flight") Flight flight);
 
     @Query("SELECT p FROM Passenger p WHERE p.seatRow >= :minRow AND p.seatRow <= :maxRow AND p.flight = :flight " +
-            "ORDER BY p.seatRow DESC, p.seatPosition DESC")
+            "ORDER BY p.seatRow DESC, p.seatPosition DESC limit 1")
     Optional<Passenger> findPassengerWithMaxRowInRange(
             @Param("minRow") Integer minRow,
             @Param("maxRow") Integer maxRow,
