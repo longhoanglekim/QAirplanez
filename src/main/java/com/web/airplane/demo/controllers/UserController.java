@@ -8,11 +8,13 @@ import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
+import com.web.airplane.demo.repositories.TicketClassRepository;
 import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.FlightService;
 import com.web.airplane.demo.services.UserService;
 import com.web.airplane.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +26,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
     private final UserRepository userRepository;
+    @Autowired
+    private TicketClassRepository ticketClassRepository;
     private final UserService userService;
     @Autowired
     private FlightService flightService;
@@ -61,7 +66,7 @@ public class UserController {
     @PostMapping("/bookFlight")
     public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
                                         HttpServletRequest request,
-                                        List<PassengerInfo> passengerInfoList) {
+                                        @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
 
             Flight flight = flightRepository.findByFlightNumber(flightNumber);
@@ -69,7 +74,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Flight not found.");
             }
 
-            int numberOfSeat = flight.getAircraft().getNumberOfSeats();
+            int numberOfSeat = flight.getFirstSeats() + flight.getEconomySeats() + flight.getBusinessSeats();
             int bookedSeats = flight.getPassengers().size();
             int requestedSeats = passengerInfoList.size();
 
@@ -77,10 +82,55 @@ public class UserController {
                 throw new SeatUnavailableException("There are only " + (numberOfSeat - bookedSeats) + " available seats.");
             }
             //Todo : Xét ngoại lệ với từng hạng ghế
-
+            int numberReqFirstSeat = 0;
+            int numberReqBusinessSeat = 0;
+            int numberReqEconomySeat = 0;
+            for (PassengerInfo passengerInfo : passengerInfoList) {
+                if (passengerInfo.getTicketClassCode().equals("First")) {
+                    numberReqFirstSeat++;
+                } else if (passengerInfo.getTicketClassCode().equals("Business")) {
+                    numberReqBusinessSeat++;
+                } else numberReqEconomySeat++;
+            }
+            if (flightService.getAvailableFirstSeats(flight) - numberReqFirstSeat < 0) {
+                throw new SeatUnavailableException("There're not enough seats for first class!");
+            }
+            if (flightService.getAvailableBusinessSeats(flight) - numberReqBusinessSeat < 0) {
+                throw new SeatUnavailableException("There're not enough seats for business class!");
+            }
+            if (flightService.getAvailableEconomySeats(flight) - numberReqEconomySeat < 0) {
+                throw new SeatUnavailableException("There're not enough seats for economy class!");
+            }
 
             // Todo : Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay
-
+            for (PassengerInfo passengerInfo : passengerInfoList) {
+                Passenger passenger = new Passenger();
+                passenger.setFirstName(passengerInfo.getFirstName());
+                passenger.setLastName(passengerInfo.getLastName());
+                passenger.setAdult(true);
+                log.debug("Nhap :" + passengerInfo.isAdult());
+                log.debug("Ra :" + passenger.isAdult());
+                passenger.setFlight(flight);
+                if (passengerInfo.getTicketClassCode().equals("First")) {
+                    passenger.setTicketClass(ticketClassRepository.findById(3L).get());
+                    String seatCode = flightService.getNextFirstSeat(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else if (passengerInfo.getTicketClassCode().equals("Business")) {
+                    passenger.setTicketClass(ticketClassRepository.findById(2L).get());
+                    String seatCode = flightService.getNextBusinessSeat(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setTicketClass(ticketClassRepository.findById(1L).get());
+                    String seatCode = flightService.getNextEconomySeat(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                }
+                passenger.setUser(getCurrentUser(request));
+                passengerRepository.save(passenger);
+                flight.getPassengers().add(passenger);
+            }
             flightRepository.save(flight);  // Lưu lại chuyến bay với hành khách đã được đặt
 
             return ResponseEntity.ok("Booking successful!");

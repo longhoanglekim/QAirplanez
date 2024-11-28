@@ -1,8 +1,8 @@
 package com.web.airplane.demo.services;
 
 import com.web.airplane.demo.dtos.FlightInfo;
-import com.web.airplane.demo.models.Aircraft;
-import com.web.airplane.demo.models.Airport;
+import com.web.airplane.demo.exceptions.SeatUnavailableException;
+
 import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.AircraftRepository;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -59,7 +58,7 @@ public class FlightService {
         return flightInfo;
     }
 
-    public String getNextFirstSeat(Flight flight) {
+    public String getNextFirstSeat(Flight flight) throws SeatUnavailableException {
 
         Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowLessThanOrEqual(getMaxFirstRows(flight), flight);
 
@@ -70,16 +69,16 @@ public class FlightService {
             // Kiểm tra seat position của hành khách
             String currentSeat = passenger.getSeatPosition();
             char seatChar = currentSeat.charAt(0);  // Lấy ký tự ghế (A, B, C, ...)
-            int currentRow = passenger.getRow();  // Lấy số hàng hiện tại
+            int currentRow = passenger.getSeatRow();  // Lấy số hàng hiện tại
 
             // Nếu ghế là "F", tăng số hàng (row) lên 1
             if (seatChar == 'F') {
                 currentRow++;  // Tăng số hàng lên 1
                 // Kiểm tra nếu row vượt quá giới hạn cho hạng ghế đầu tiên (max row cho hạng ghế F)
                 if (currentRow > getMaxFirstRows(flight)) {
-                    return null;  // Nếu row vượt quá giới hạn, trả về null
+                    throw new SeatUnavailableException("There are not enough seats for first class!");
                 }
-                return "F" + currentRow;  // Trả về ghế F với số hàng đã tăng
+                return "A" + currentRow;  // Trả về ghế F với số hàng đã tăng
             } else {
                 // Nếu ghế không phải là "F", tiếp tục tăng ghế theo bảng chữ cái
                 seatChar = (char) (seatChar + 1);
@@ -95,7 +94,18 @@ public class FlightService {
         return "A1";
     }
 
-    public String getNextBusinessSeat(Flight flight) {
+    public int getAvailableFirstSeats(Flight flight) {
+        Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowLessThanOrEqual(getMaxFirstRows(flight), flight);
+        if (optPassenger.isPresent()) {
+            Passenger passenger = optPassenger.get();
+            String currentSeat = passenger.getSeatPosition();
+            int currentRow = passenger.getSeatRow();
+            return (int) (currentSeat.charAt(0) - 'F') + (getMaxFirstRows(flight) - currentRow) * 6;
+        }
+        return flight.getFirstSeats();
+    }
+
+    public String getNextBusinessSeat(Flight flight) throws SeatUnavailableException {
 
         Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowInRange(getMaxFirstRows(flight) + 1,
                 getMaxBusinessRows(flight), flight);
@@ -107,16 +117,16 @@ public class FlightService {
             // Kiểm tra seat position của hành khách
             String currentSeat = passenger.getSeatPosition();
             char seatChar = currentSeat.charAt(0);  // Lấy ký tự ghế (A, B, C, ...)
-            int currentRow = passenger.getRow();  // Lấy số hàng hiện tại
+            int currentRow = passenger.getSeatRow();  // Lấy số hàng hiện tại
 
             // Nếu ghế là "F", tăng số hàng (row) lên 1
             if (seatChar == 'F') {
                 currentRow++;  // Tăng số hàng lên 1
                 // Kiểm tra nếu row vượt quá giới hạn cho hạng ghế đầu tiên (max row cho hạng ghế F)
                 if (currentRow > getMaxBusinessRows(flight)) {
-                    return null;  // Nếu row vượt quá giới hạn, trả về null
+                    throw new SeatUnavailableException("There are not enough seats for business class!");
                 }
-                return "F" + currentRow;  // Trả về ghế F với số hàng đã tăng
+                return "A" + currentRow;  // Trả về ghế F với số hàng đã tăng
             } else {
                 // Nếu ghế không phải là "F", tiếp tục tăng ghế theo bảng chữ cái
                 seatChar = (char) (seatChar + 1);
@@ -132,7 +142,19 @@ public class FlightService {
         return "A" + (getMaxFirstRows(flight) + 1);
     }
 
-    public String getNextEconomySeat(Flight flight) {
+    public int getAvailableBusinessSeats(Flight flight) {
+        Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowInRange(getMaxFirstRows(flight) + 1,
+                getMaxBusinessRows(flight), flight);
+        if (optPassenger.isPresent()) {
+            Passenger passenger = optPassenger.get();
+            String currentSeat = passenger.getSeatPosition();
+            int currentRow = passenger.getSeatRow();
+            return (int) (currentSeat.charAt(0) - 'F') + (getMaxBusinessRows(flight) - currentRow) * 6;
+        }
+        return getMaxBusinessRows(flight);
+    }
+
+    public String getNextEconomySeat(Flight flight) throws SeatUnavailableException {
 
         Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowInRange(getMaxBusinessRows(flight) + 1,
                 getMaxEconomyRows(flight), flight);
@@ -144,16 +166,16 @@ public class FlightService {
             // Kiểm tra seat position của hành khách
             String currentSeat = passenger.getSeatPosition();
             char seatChar = currentSeat.charAt(0);  // Lấy ký tự ghế (A, B, C, ...)
-            int currentRow = passenger.getRow();  // Lấy số hàng hiện tại
+            int currentRow = passenger.getSeatRow();  // Lấy số hàng hiện tại
 
             // Nếu ghế là "F", tăng số hàng (row) lên 1
             if (seatChar == 'F') {
                 currentRow++;  // Tăng số hàng lên 1
                 // Kiểm tra nếu row vượt quá giới hạn cho hạng ghế đầu tiên (max row cho hạng ghế F)
                 if (currentRow > getMaxBusinessRows(flight)) {
-                    return null;  // Nếu row vượt quá giới hạn, trả về null
+                    throw new SeatUnavailableException("There are not enough seats for economy class!");
                 }
-                return "F" + currentRow;  // Trả về ghế F với số hàng đã tăng
+                return "A" + currentRow;  // Trả về ghế F với số hàng đã tăng
             } else {
                 // Nếu ghế không phải là "F", tiếp tục tăng ghế theo bảng chữ cái
                 seatChar = (char) (seatChar + 1);
@@ -168,6 +190,18 @@ public class FlightService {
 
 
         return "A" + (getMaxBusinessRows(flight) + 1);
+    }
+
+    public int getAvailableEconomySeats(Flight flight) {
+        Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowInRange(getMaxBusinessRows(flight) + 1,
+                getMaxEconomyRows(flight), flight);
+        if (optPassenger.isPresent()) {
+            Passenger passenger = optPassenger.get();
+            String currentSeat = passenger.getSeatPosition();
+            int currentRow = passenger.getSeatRow();
+            return (int) (currentSeat.charAt(0) - 'F') + (getMaxEconomyRows(flight) - currentRow) * 6;
+        }
+        return getMaxEconomyRows(flight);
     }
 
 
