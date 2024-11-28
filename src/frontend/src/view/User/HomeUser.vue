@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import FlightSearch from '@/components/FlightSearch.vue';
+import FlightSearch from '@/components/User/FlightSearch.vue';
 export default {
   watch: {
   },

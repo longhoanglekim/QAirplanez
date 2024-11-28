@@ -1,5 +1,5 @@
 <template>
-<header  class="fixed w-full z-50 transition-all duration-300 bg-blue bg-black/40 md:bg-black/10" :class="{'md:bg-black/40' : isScrolled}">
+<header  class="fixed w-full z-50 transition-all duration-300 bg-black/40 md:bg-black/10" :class="{'md:bg-black/40 top-0': isScrolled}">
     <div class="container mx-auto pt-1 flex justify-between items-center">
         <!-- Logo -->
         <div class="logo">
@@ -41,10 +41,10 @@
 
             <!-- Các phần còn lại của header right actions -->
             <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
-                <a href="/signup" class="block text-md px-4 py-2 rounded ml-2 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                <a href="/signup" class="block text-md px-4 py-2 rounded-full w-32 ml-2 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng ký
                 </a>
-                <a href="/login" class="block text-md px-4 ml-2 py-2 rounded font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                <a href="/login" class="block text-md px-4 ml-2 py-2 rounded-full w-32 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng nhập
                 </a>
             </div>
@@ -204,7 +204,7 @@ export default {
 
     methods: {
         isLoggedIn() {
-            return true;
+            return false;
         },
         handleScroll() {
             this.isScrolled = window.scrollY > 50

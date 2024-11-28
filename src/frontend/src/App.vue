@@ -1,20 +1,21 @@
 <template>
 <div id="app">
-    <header>
+    <header v-if="!isAdminRoute">
         <PageHeader />
+        <PageNavBar />
     </header>
-    <PageNavBar />
+
     <router-view class="block"></router-view>
-    <footer>
+    <footer v-if="!isAdminRoute">
         <PageFooter />
     </footer>
 </div>
 </template>
 
 <script>
-import PageHeader from "@/components/PageHeader.vue";
-import PageFooter from "@/components/PageFooter.vue";
-import PageNavBar from "./components/PageNavBar.vue";
+import PageHeader from "@/components/User/PageHeader.vue";
+import PageFooter from "@/components/User/PageFooter.vue";
+import PageNavBar from "./components/User/PageNavBar.vue";
 
 export default {
     name: 'App',
@@ -22,6 +23,11 @@ export default {
         PageFooter,
         PageHeader,
         PageNavBar
+    },
+    computed: {
+        isAdminRoute() {
+            return this.$route.meta.requiresAuth;
+        }
     },
 
     data() {
