@@ -12,5 +12,5 @@ public class PassengerInfo {
     private String firstName;
     private String lastName;
     private String ticketClassCode;
-    private boolean isAdult;
+    private Boolean isAdult;
 }

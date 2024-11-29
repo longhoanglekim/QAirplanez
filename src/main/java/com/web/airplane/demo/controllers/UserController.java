@@ -14,13 +14,16 @@ import com.web.airplane.demo.services.FlightService;
 import com.web.airplane.demo.services.UserService;
 import com.web.airplane.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,8 +116,8 @@ public class UserController {
                 Passenger passenger = new Passenger();
                 passenger.setFirstName(passengerInfo.getFirstName());
                 passenger.setLastName(passengerInfo.getLastName());
-                passenger.setAdult(true);
-                log.debug("Nhap :" + passengerInfo.isAdult());
+                passenger.setAdult(passengerInfo.getIsAdult());
+                log.debug("Nhap :" + passengerInfo.getIsAdult());
                 log.debug("Ra :" + passenger.isAdult());
                 log.debug("Set cho ngoi");
                 passenger.setFlight(flight);
@@ -168,6 +171,11 @@ public class UserController {
         if (passenger == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Passenger not found");
         }
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if (flight.getCancelDueTime().isBefore(localDateTime)) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Booking is too late to cancel.");
+        }
+
 
         // Remove the passenger from the flight's list of passengers
         flight.getPassengers().remove(passenger);
@@ -177,4 +185,33 @@ public class UserController {
 
         return ResponseEntity.ok().body("Passenger has been removed from the flight and deleted");
     }
+
+    @GetMapping("/public/checkLogged")
+    public ResponseEntity<?> hasLoggedIn(HttpServletRequest request) {
+        // Lấy người dùng hiện tại
+        User currentUser = getCurrentUser(request);
+
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("User not logged in");
+        }
+
+        // Trả về thông tin người dùng (ví dụ: tên người dùng)
+        return ResponseEntity.ok("User is logged in: " + currentUser.getUsername());
+    }
+
+    import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+            logoutHandler.logout(request, response, null);
+            return ResponseEntity.ok("Logout successful");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during logout :" + e.getMessage());
+        }
+    }
+
+
 }
