@@ -4,9 +4,11 @@ import SignUpUser from "@/view/User/SignUpUser.vue";
 import HomeUser from "@/view/User/HomeUser.vue";
 import SearchResult from "@/view/User/SearchResult.vue";
 import HomeAdmin from "@/view/Admin/HomeAdmin.vue";
-import LoginAdmin from "@/view/Admin/Login.vue";
+import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
 import ExploreUser from "@/view/User/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
+
+
 
 const routes = [
     {
@@ -47,15 +49,16 @@ const routes = [
         name : 'Admin',
         children: [
             { 
-                path: '', name: 'login', component: LoginAdmin 
+                path: 'login', name: 'LoginAdmin', component: LoginAdmin 
             },
             {
-                path: 'dashboard', name: 'dashboard', component: HomeAdmin
+                path: 'dashboard', name: 'dashboard', component: HomeAdmin, meta: {
+                    requiresAuth: true
+                }
             }
           ],
         meta: {
-            requiresAuth: true,
-            is_admin : true
+            isAdminRoute : true
           }
     }
     , {
@@ -73,5 +76,34 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+// function isLoggedInAdmin() {
+//     return false;
+// }
+
+// function isLoggedInUser() {
+//     return false;
+// }
+
+// router.beforeEach((to, from, next) => {
+    
+//     if (to.path.startsWith('/admin')) {
+//       if (!isLoggedInAdmin()) {
+//         if (to.path != '/admin/login') next('/admin/login'); 
+//         else next()
+//       } else {
+//         if (to.path == '/admin/login') next('/admin/dashboard');
+//         else next(); 
+//       }
+//     } else if (to.matched.some((record) => record.meta.requiresAuth)) {
+//       if (!isLoggedInUser()) {
+//         next('/login');
+//       } else {
+//         next();
+//       }
+//     } else {
+//       next(); 
+//     }
+//   });
 
 export default router;

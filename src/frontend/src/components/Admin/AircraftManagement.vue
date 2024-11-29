@@ -20,6 +20,14 @@
             </button>
         </div>
 
+        <div class="mb-4">
+            <select v-if="selectedAircraft.length > 0" v-model="bulkAction" @change="handleBulkAction" class="p-2 border rounded">
+                <option value="" disabled>Chọn hành động cho máy bay đã chọn</option>
+                <option value="edit">Chỉnh sửa</option>
+                <option value="delete">Xóa</option>
+            </select>
+        </div>
+
         <!-- Modal chỉnh sửa (giữ nguyên) -->
         <div v-if="editingAircraft" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg w-1/2">
@@ -48,6 +56,13 @@
         <!-- Modal thêm máy bay -->
         <div v-if="newAircraft" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white p-6 rounded-lg w-1/2">
+                <div class="block">
+                        <button>hanh dong</button>
+                        <button @click="startEdit(plane)" class="bg-blue-500 text-white h rounded">
+                            Sửa
+                        </button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold border border-red-500 rounded">Xóa</button>
+                    </div>
                 <h3 class="text-lg font-bold mb-4">Thêm Máy Bay Mới</h3>
                 <div class="space-y-4">
                     <label for="">Mã máy bay</label>
@@ -66,34 +81,41 @@
                         <button @click="cancelAdd" class="bg-gray-500 text-white p-2 rounded">Hủy</button>
                         <button @click="addAircraft" class="bg-green-500 text-white p-2 rounded">Thêm</button>
                     </div>
+                    
                 </div>
             </div>
         </div>
+
 
         <!-- Bảng máy bay -->
         <table id="data-tbl" class="w-full border">
             <thead>
                 <tr>
-                    <th v-for="col in columns" :key="col.key" @click="updateSort(col.key)" class="border p-2 cursor-pointer hover:bg-gray-100">
+                    <th class="border p-2">
+                        <input type="checkbox" v-model="allSelected" @change="toggleSelectAll" />
+                    </th>
+                    <th v-for="col in columns" :key="col.key" @click="updateSort(col.key)" class="border p-2 cursor-pointer bg-blue-300 hover:bg-blue-500">
                         {{ col.label }}
                         <span v-if="sortBy === col.key">
                             {{ sortOrder === 'asc' ? '▲' : '▼' }}
                         </span>
                     </th>
-                    <th class="border p-2">Hành Động</th>
+                    
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="plane in filteredAndSortedAircraft" :key="plane.id">
+                    <td class="border p-2">
+                        <input type="checkbox" v-model="selectedAircraft" :value="plane.id" />
+                    </td>
                     <td class="border p-2">{{ plane.id }}</td>
                     <td class="border p-2">{{ plane.model }}</td>
                     <td class="border p-2">{{ plane.capacity }}</td>
-                    <td class="border p-2">{{ plane.status }}</td>
-                    <td class="border p-2">
-                        <button @click="startEdit(plane)" class="bg-blue-500 text-white p-1 rounded">
-                            Chỉnh Sửa
-                        </button>
-                    </td>
+                    <td class="border p-2 font-semibold leading-tight rounded-sm">
+                        <span class="py-2 px-3" :class="{'text-green-700 bg-green-100 ': plane.status == 'Hoat dong'
+                                        , 'text-amber-500 bg-amber-100 ' : plane.status == 'Bao duong'
+                                        , 'text-red-500 bg-red-100' : plane.status == 'Sua chua'
+                                                    }">{{ plane.status }}</span></td>
                 </tr>
             </tbody>
         </table>
@@ -118,6 +140,9 @@ const sortBy = ref('')
 const sortOrder = ref('asc')
 const editingAircraft = ref(null)
 const newAircraft = ref(null)
+const selectedAircraft = ref([]) // List of selected aircraft ids
+const allSelected = ref(false) // To manage the "Select All" checkbox
+const bulkAction = ref('') // Track bulk action selected (edit or delete)
 
 // Hàm tìm kiếm
 const filteredAndSortedAircraft = computed(() => {
@@ -150,6 +175,14 @@ const updateSort = (key) => {
 
 const toggleSortOrder = () => {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+}
+
+const toggleSelectAll = () => {
+    if (allSelected.value) {
+        selectedAircraft.value = filteredAndSortedAircraft.value.map(plane => plane.id)
+    } else {
+        selectedAircraft.value = []
+    }
 }
 
 // Các hàm chỉnh sửa
@@ -212,5 +245,63 @@ const addAircraft = () => {
     }
 }
 
+const handleBulkAction = () => {
+    if (bulkAction.value === 'edit') {
+        console.log('abc')
+    } else if (bulkAction.value === 'delete') {
+        console.log('def')
+    }
+}
 
 </script>
+
+<style scoped>
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    margin: 1rem;
+}
+tr:hover td {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+thead {
+    th {
+        background-color: #0069d9;
+    }
+}
+
+tbody {
+    tr {
+        &:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+    }
+    td {
+        position: relative;
+        &:hover {
+            &:before {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: -9999px;
+                bottom: -9999px;
+                background-color: rgba(0, 123, 255, 0.1);
+                z-index: -1;
+            }
+        }
+    }
+}
+
+</style>

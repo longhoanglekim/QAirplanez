@@ -26,7 +26,7 @@ export default {
     },
     computed: {
         isAdminRoute() {
-            return this.$route.meta.requiresAuth;
+            return this.$route.meta.isAdminRoute;
         }
     },
 
@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 body,
 html {
     margin: 0;
