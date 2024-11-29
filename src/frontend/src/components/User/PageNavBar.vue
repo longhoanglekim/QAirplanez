@@ -121,8 +121,8 @@ export default {
                     link: '/home'
                 },
                 {
-                    label: 'Pages',
-                    link: '/pages',
+                    label: 'Kham pha',
+                    link: '/explore',
                     submenu: [{
                             label: 'About',
                             link: '/about'
@@ -207,7 +207,7 @@ export default {
             return false;
         },
         handleScroll() {
-            this.isScrolled = window.scrollY > 50
+            this.isScrolled = window.scrollY > 30
         },
         toggleSearch() {
             // Implement search functionality

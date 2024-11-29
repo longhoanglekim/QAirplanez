@@ -4,7 +4,9 @@ export const aircraft = [
     { id: 'AB003', model: 'Boeing MH370', capacity: 220, status: 'Hoat dong' }, 
     { id: 'AB004', model: 'Airbus B240', capacity: 220, status: 'Hoat dong' }, 
     { id: 'AB005', model: 'Airbus C320', capacity: 220, status: 'Hoat dong' }, 
-    { id: 'AB006', model: 'Boeing M300', capacity: 220, status: 'Hoat dong' }
+    { id: 'AB006', model: 'Boeing M300', capacity: 220, status: 'Sua chua' },
+    { id: 'AB007', model: 'Boeing M300', capacity: 220, status: 'Sua chua' },
+    { id: 'AB008', model: 'Boeing M300', capacity: 220, status: 'Sua chua' }
   ]
   
   export const flights = [
