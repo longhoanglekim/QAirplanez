@@ -95,12 +95,14 @@ public class FlightService {
     }
 
     public int getAvailableFirstSeats(Flight flight) {
+        log.debug("Bat dau ham");
         Optional<Passenger> optPassenger = passengerRepository.findPassengerWithMaxRowLessThanOrEqual(getMaxFirstRows(flight), flight);
         if (optPassenger.isPresent()) {
+            log.debug("Co khach hang");
             Passenger passenger = optPassenger.get();
-            String currentSeat = passenger.getSeatPosition();
+            String currentSeat = passenger.getSeatPosition(); //A B C
             int currentRow = passenger.getSeatRow();
-            return (int) (currentSeat.charAt(0) - 'F') + (getMaxFirstRows(flight) - currentRow) * 6;
+            return (int) ('F' - currentSeat.charAt(0)) + (getMaxFirstRows(flight) - currentRow) * 6;
         }
         return flight.getFirstSeats();
     }
@@ -149,7 +151,7 @@ public class FlightService {
             Passenger passenger = optPassenger.get();
             String currentSeat = passenger.getSeatPosition();
             int currentRow = passenger.getSeatRow();
-            return (int) (currentSeat.charAt(0) - 'F') + (getMaxBusinessRows(flight) - currentRow) * 6;
+            return (int) ('F' - currentSeat.charAt(0)) + (getMaxBusinessRows(flight) - currentRow) * 6;
         }
         return getMaxBusinessRows(flight);
     }
@@ -199,7 +201,7 @@ public class FlightService {
             Passenger passenger = optPassenger.get();
             String currentSeat = passenger.getSeatPosition();
             int currentRow = passenger.getSeatRow();
-            return (int) (currentSeat.charAt(0) - 'F') + (getMaxEconomyRows(flight) - currentRow) * 6;
+            return (int) ('F' - currentSeat.charAt(0)) + (getMaxEconomyRows(flight) - currentRow) * 6;
         }
         return getMaxEconomyRows(flight);
     }

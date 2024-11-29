@@ -212,6 +212,7 @@ CREATE TABLE aircrafts (
                            manufacturer varchar(255) DEFAULT NULL,
                            model varchar(255) DEFAULT NULL,
                            number_of_seats int DEFAULT NULL,
+                           is_active boolean default false,
                            PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -224,8 +225,8 @@ LOCK TABLES aircrafts WRITE;
 /*!40000 ALTER TABLE aircrafts DISABLE KEYS */;
 /*!40000 ALTER TABLE aircrafts ENABLE KEYS */;
 INSERT INTO aircrafts VALUES
-                          (1, 'Boeing', '737', 240),
-                          (2, 'Airbus', 'A320', 180);
+                          (1, 'Boeing', '737', 240, true),
+                          (2, 'Airbus', 'A320', 180, true);
 UNLOCK TABLES;
 
 

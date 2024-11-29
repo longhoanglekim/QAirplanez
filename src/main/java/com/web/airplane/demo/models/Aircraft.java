@@ -22,7 +22,7 @@ public class Aircraft {
     private String manufacturer;
     private String model;
     private Integer numberOfSeats;
-
+    private boolean isActive;
 
     @OneToMany(mappedBy = "aircraft")
     private List<Flight> flights = new ArrayList<>();
