@@ -1,44 +1,34 @@
 package com.web.airplane.demo.controllers;
 
+
 import com.web.airplane.demo.dtos.AircraftInfo;
-import com.web.airplane.demo.dtos.LoginDTO;
-import com.web.airplane.demo.dtos.LoginResponse;
-import com.web.airplane.demo.dtos.RegisterDTO;
-import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
 import com.web.airplane.demo.models.Aircraft;
-import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.AircraftRepository;
-import com.web.airplane.demo.repositories.UserRepository;
-import com.web.airplane.demo.services.AuthenticationService;
-import com.web.airplane.demo.services.JwtService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/aircraft")
-@Slf4j
 public class AircraftController {
-    private AircraftRepository aircraftRepository;
-    public AircraftController(AircraftRepository __aircraftRepository) {
-        this.aircraftRepository = __aircraftRepository;
-    } 
 
-    @PostMapping("/addAircraft")
-    public ResponseEntity<?> addAircraft(@RequestBody AircraftInfo aircraftAdded) {
-        Aircraft newAircraft = new Aircraft();
-        newAircraft.setManufacturer(aircraftAdded.getManufacturer());
-        newAircraft.setModel(aircraftAdded.getModel());
-        newAircraft.setNumberOfSeats(aircraftAdded.getNumberOfSeats());
+    private final AircraftRepository aircraftRepository;
 
-        return ResponseEntity.ok().body(newAircraft);
+    public AircraftController(AircraftRepository aircraftRepository) {
+        this.aircraftRepository = aircraftRepository;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/admin/addAircraft")
+    public ResponseEntity<?> addAircraft(AircraftInfo aircraftInfo) {
+        Aircraft aircraft = new Aircraft();
+        aircraft.setActive(aircraftInfo.getIsActive());
+        aircraft.setModel(aircraftInfo.getModel());
+        aircraft.setManufacturer(aircraft.getManufacturer());
+        aircraft.setFlights(null);
+        aircraft.setNumberOfSeats(aircraftInfo.getNumberOfSeats());
+        return ResponseEntity.ok(aircraft);
     }
 }

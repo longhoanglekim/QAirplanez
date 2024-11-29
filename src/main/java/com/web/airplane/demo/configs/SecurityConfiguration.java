@@ -39,8 +39,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/api/auth/**","api/ticket_class/**",
-                                "/api/flight/public/**", "/test/**", "/api/aircraft/**").permitAll()
+                        .requestMatchers("/api/auth/**","/api/ticket_class/**",
+                                "/api/flight/public/**", "/test/**", "/api/user/public/**").permitAll()
                         .anyRequest().authenticated())
 
                 .sessionManagement(session -> session
