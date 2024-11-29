@@ -5,6 +5,8 @@ import HomeUser from "@/view/User/HomeUser.vue";
 import SearchResult from "@/view/User/SearchResult.vue";
 import HomeAdmin from "@/view/Admin/HomeAdmin.vue";
 import LoginAdmin from "@/view/Admin/Login.vue";
+import ExploreUser from "@/view/User/ExploreUser.vue";
+import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 
 const routes = [
     {
@@ -56,7 +58,16 @@ const routes = [
             is_admin : true
           }
     }
-
+    , {
+        path : '/explore',
+        name: 'Explore',
+        component: ExploreUser
+    }, {
+        path: '/explore/:destination',
+        name: 'Destination',
+        component: DestinationDetail,
+        props: true,
+    },
 ];
 const router = createRouter({
     history: createWebHistory(),

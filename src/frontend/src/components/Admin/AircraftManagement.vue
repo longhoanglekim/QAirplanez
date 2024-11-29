@@ -184,7 +184,8 @@ const cancelAdd = () => {
 }
 
 const addAircraftToServer = () => {
-    var res = fetch("http://localhost:8080/api/")
+  // eslint-disable-next-line
+  var res = fetch("http://localhost:8080/api/")
 }
 
 const addAircraft = () => {
