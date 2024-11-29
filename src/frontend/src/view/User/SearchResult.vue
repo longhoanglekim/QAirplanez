@@ -14,7 +14,7 @@
   </template>
   
   <script>
-  import TicketCard from '@/components/TicketCard.vue';
+  import TicketCard from '@/components/User/TicketCard.vue';
   
   export default {
     components: {

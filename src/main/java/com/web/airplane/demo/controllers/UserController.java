@@ -63,8 +63,6 @@ public class UserController {
         return userService.getCurrentUser(request);
     }
 
-
-
     @Transactional
     @PostMapping("/bookFlight")
     public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,

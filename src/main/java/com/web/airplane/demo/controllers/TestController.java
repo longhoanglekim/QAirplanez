@@ -14,10 +14,11 @@ public class TestController {
     private FlightService flightService;
     @Autowired
     private FlightRepository flightRepository;
-    @PostMapping("/string")
+    @GetMapping("/string")
     public ResponseEntity<?> getMessage() throws SeatUnavailableException {
         String string = flightService.getNextEconomySeat(flightRepository.findById(1L).get());
         return ResponseEntity.ok().body(string);
 
     }
+    
 }
