@@ -5,7 +5,7 @@
         <PageNavBar />
     </header>
 
-    <router-view class="block"></router-view>
+    <router-view></router-view>
     <footer v-if="!isAdminRoute">
         <PageFooter />
     </footer>
@@ -15,7 +15,7 @@
 <script>
 import PageHeader from "@/components/User/PageHeader.vue";
 import PageFooter from "@/components/User/PageFooter.vue";
-import PageNavBar from "./components/User/PageNavBar.vue";
+import PageNavBar from "@/components/User/PageNavBar.vue";
 
 export default {
     name: 'App',

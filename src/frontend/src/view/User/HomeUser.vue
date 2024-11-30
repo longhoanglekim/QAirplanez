@@ -1,8 +1,9 @@
 <template>
-  <div class="container w-full">
+  <div class="container w-full bg-white">
     <div id="img" class="bg-cover bg-center"> 
     </div>
     <FlightSearch/>
+    <div>&nbsp;</div>
   </div>
   
 </template>

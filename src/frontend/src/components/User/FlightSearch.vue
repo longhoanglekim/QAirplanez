@@ -1,6 +1,5 @@
-<!-- FlightSearchForm.vue -->
 <template>
-<div class="container w-5/6 md:w-1/2  p-4 rounded-lg place-self-center">
+<div class="container w-5/6 md:w-1/2  p-4 rounded-lg place-self-center bg-slate-200 m-4">
     <div class="button-container rounded-full">
         <button @click="changeContent('searchFlight')" class="rounded-full" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
         <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
@@ -191,10 +190,9 @@ export default {
 </script>
 
 <style scoped>
-/* Cấu trúc tổng thể */
-/* 4px 12px */
+
 .container {
-    background-color: whitesmoke;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.271);
 }
 
 .button-container {
@@ -298,7 +296,6 @@ button.search:disabled {
 
 /* Thông báo lỗi */
 .error-message {
-    background-color: #ffdddd;
     color: #d8000c;
     padding: 0.6rem;
     /* 10px = 0.625rem */
@@ -317,7 +314,6 @@ button.search:disabled {
 
 #ticketD .ticket-modal {
     position: absolute;
-    background: antiquewhite;
     padding: 0.2rem;
 }
 

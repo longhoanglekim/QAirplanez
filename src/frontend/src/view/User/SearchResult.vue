@@ -1,12 +1,22 @@
 <template>
-<div class="container mx-auto px-4 py-6 ">
-    <div class="mt-16 place-items-center">
-      <FlightSearch v-if="showingSearchBox" class="mb-8"/>
-      <CircleChevronDown v-if="!showingSearchBox" @click="toggleSearchBox" class="cursor-pointer animate-bounce hover:text-blue-500 scale-125"/>
-      <CircleChevronUp v-if="showingSearchBox" @click="toggleSearchBox" class="cursor-pointer animate-bounce hover:text-blue-500 scale-125"/>
+<div class="img bg-cover bg-center p-4 mb-2 border-b-4 border-indigo-500">
+  <div class=" search-result  text-emerald-950 bg-white text-xl font-bold uppercase text-center p-5 shadow-lg rounded-lg w-72 mx-auto m-20">
+    Kết quả tìm kiếm
+  </div>
+</div>
+
+<div class="container mx-auto px-4 pb-6 relative rounded-bl-lg rounded-br-lg " >
+    <div class="place-items-center ab">
+      <CircleChevronDown :class="{'rotate-180' : showingSearchBox}" @click="toggleSearchBox" class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 "/>
+    </div>
+    <div v-if="showingSearchBox"  class="animate-fade-down animate-once place-items-center z-30">
+      &nbsp;
+      <FlightSearch />
+      &nbsp;
+      
     </div>
     <!-- Phần tiêu đề và lọc (giữ nguyên như cũ) -->
-    <div class="mb-6 bg-white shadow-md rounded-lg p-4">
+    <div class="mb-6 bg-white shadow-md rounded-lg p-4 z-20">
       <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <div class="flex items-center space-x-4">
           <div class="flex items-center">
@@ -52,7 +62,7 @@
     </div>
 
     <!-- Danh sách vé -->
-    <div v-if="filteredAndSortedTickets.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div v-if="filteredAndSortedTickets.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 z-10">
         <div v-for="(ticket, index) in filteredAndSortedTickets" :key="index" class="transform transition duration-300 hover:scale-105">
             <div class="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-blue-500/50">
                 <!-- Phần header vé (giữ nguyên) -->
@@ -165,7 +175,7 @@
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
-import { CircleChevronDown, CircleChevronUp } from 'lucide-vue-next'
+import { CircleChevronDown } from 'lucide-vue-next'
 import { ref } from 'vue';
 
 const showingSearchBox = ref(false)
@@ -177,7 +187,7 @@ const toggleSearchBox = () => {
 <script>
 export default {
   components: { FlightSearch ,
-    CircleChevronDown, CircleChevronUp
+    CircleChevronDown,
   },
     data() {
         return {
@@ -313,3 +323,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.img {
+  background-image: url("../../assets/destination/3.jpg");
+}
+</style>
