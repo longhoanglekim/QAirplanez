@@ -1,6 +1,7 @@
 <template>
     
-<div class="sticky">aaaa</div>
+<div></div>
+
 </template>
 
 <script>

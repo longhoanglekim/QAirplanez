@@ -1,9 +1,9 @@
 <template>
-<header  class="fixed w-full z-50 transition-all duration-300 bg-black/40 md:bg-black/10" :class="{'md:bg-black/40 top-0': isScrolled}">
+<header  class="fixed w-full z-50 md:bg-black/40 top-0 transition-all duration-300 bg-black/40 md:bg-black/10" >
     <div class="container mx-auto pt-1 flex justify-between items-center">
         <!-- Logo -->
         <div class="logo">
-            <a href="/home" class="text-white text-2xl font-bold">
+            <a href="/home" class="text-slate-500 text-2xl font-bold">
                 <img src="@/assets/home/logo5122.png" alt="logo" class="h-10">
             </a>
         </div>
@@ -11,7 +11,7 @@
         <!-- desktop Navigation chirnh ở script phía dưới-->
         <nav class="hidden lg:flex items-center space-x-8">
             <!-- các item to-->
-            <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer py-2 ">
+            <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer py-2">
                 <div class="flex items-center justify-between rounded-full m-1 py-1 px-4 hover:bg-blue-700 text-white">
                     <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
                         {{ item.label }}
@@ -22,8 +22,8 @@
                 </div>
 
                 <!-- các item nhỏ -->
-                <div v-if="item.submenu" class="group-hover:visible invisible absolute z-50 p-0.5 flex w-full flex-col bg-white rounded text-gray-800 shadow-xl text-left w-52">
-                    <a v-for="(subitem, subindex) in item.submenu" :key="subindex" :href="subitem.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-gray-100 transition-colors">
+                <div v-if="item.submenu" class="group-hover:visible invisible absolute z-50 p-0.5 flex flex-col bg-white rounded text-gray-800 shadow-xl text-left w-52">
+                    <a v-for="(subitem, subindex) in item.submenu" :key="subindex" :href="subitem.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-slate-100 transition-colors">
                         {{ subitem.label }}
                     </a>
                 </div>

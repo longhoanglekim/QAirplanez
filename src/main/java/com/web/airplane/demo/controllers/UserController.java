@@ -198,7 +198,6 @@ public class UserController {
         return ResponseEntity.ok("User is logged in: " + currentUser.getUsername());
     }
 
-    import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {

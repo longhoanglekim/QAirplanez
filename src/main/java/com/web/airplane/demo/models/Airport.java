@@ -31,7 +31,11 @@ public class Airport {
     @NotNull
     @ManyToOne
     private Country country;
+    @NotNull
+    private String imageLink;
 
+    @NotNull
+    private String description;
 
     @OneToMany(mappedBy = "departureAirport", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Flight> departingFlights = new ArrayList<>();
