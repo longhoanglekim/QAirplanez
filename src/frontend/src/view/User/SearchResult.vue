@@ -2,8 +2,8 @@
 <div class="container mx-auto px-4 py-6 ">
     <div class="mt-16 place-items-center">
       <FlightSearch v-if="showingSearchBox" class="mb-8"/>
-      <CircleChevronDown v-if="!showingSearchBox" @click="toggleSearchBox" class="animate-bounce w-6 h-6"/>
-      <CircleChevronUp v-if="showingSearchBox" @click="toggleSearchBox" class="animate-bounce w-6 h-6"/>
+      <CircleChevronDown v-if="!showingSearchBox" @click="toggleSearchBox" class="cursor-pointer animate-bounce hover:text-blue-500 scale-125"/>
+      <CircleChevronUp v-if="showingSearchBox" @click="toggleSearchBox" class="cursor-pointer animate-bounce hover:text-blue-500 scale-125"/>
     </div>
     <!-- Phần tiêu đề và lọc (giữ nguyên như cũ) -->
     <div class="mb-6 bg-white shadow-md rounded-lg p-4">
