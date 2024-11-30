@@ -183,6 +183,8 @@ CREATE TABLE airports (
                           city varchar(255) NOT NULL,
                           country_id bigint NOT NULL,
                           PRIMARY KEY (id),
+                          image_link varchar(255) not null,
+                          description varchar(255) not null,
                           KEY FKimj7pril60webr05larg3wge7 (country_id),
                           CONSTRAINT FKimj7pril60webr05larg3wge7 FOREIGN KEY (country_id) REFERENCES countries (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -191,10 +193,11 @@ CREATE TABLE airports (
 --
 -- Dumping data for table airports
 --
-INSERT INTO airports VALUES
-                         (1, 'HAN', 'Noi Bai International Airport', 'Hanoi', 1),
-                         (2, 'BKK', 'Suvarnabhumi Airport', 'Bangkok', 2),
-                         (3, 'NRT', 'Narita International Airport', 'Tokyo', 3);
+INSERT INTO airports (id, airport_code, airport_name, city, country_id, image_link, description) VALUES
+                                                                                                     (1, 'DAN', 'Đà Nẵng International Airport', 'Đà Nẵng', 1, "https://drive.google.com/file/d/1DjQHk5gkHmLdhRcoppW1cuBFzbVnPXgG/view?usp=drive_link", "Đến với Đà Nẵng để mê mẩn trước những bãi cát trắng, đắm mình giữa làn nước xanh dưới cái nắng vàng ươm."),
+                                                                                                     (2, 'HAN', 'Noi Bai International Airport', 'Hà Nội', 1, "https://drive.google.com/file/d/1spNCS12dOiSu4Cdin7EXuXNE3g7E6I56/view?usp=drive_link", "Khám phá thủ đô với vẻ đẹp cổ kính và những di tích lịch sử độc đáo."),
+                                                                                                     (3, 'BKK', 'Suvarnabhumi Airport', 'Bangkok', 2, "https://drive.google.com/file/d/1I78JlI3TNHkJn3s8vBtgVaPU8SYtZp8T/view?usp=drive_link", "Khám phá thành phố sôi động với các ngôi chùa và món ăn đường phố tuyệt vời.");
+
 LOCK TABLES airports WRITE;
 /*!40000 ALTER TABLE airports DISABLE KEYS */;
 /*!40000 ALTER TABLE airports ENABLE KEYS */;

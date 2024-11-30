@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/ticket_class/**",
-                                "/api/flight/public/**", "/test/**", "/api/user/public/**").permitAll()
+                                "/api/flight/public/**", "/test/**", "/api/user/public/**",
+                                "/api/airport/public/**").permitAll()
                         .anyRequest().authenticated())
 
                 .sessionManagement(session -> session
