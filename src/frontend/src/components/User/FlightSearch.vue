@@ -195,7 +195,6 @@ export default {
 /* 4px 12px */
 .container {
     background-color: whitesmoke;
-    transform: translateY(-10rem);
 }
 
 .button-container {
