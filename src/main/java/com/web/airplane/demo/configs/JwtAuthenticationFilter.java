@@ -72,7 +72,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         List<String> publicPaths = Arrays.asList("/api/auth/", "/api/ticket_class/", "/api/flight/public/",
                 "/test/");
-        return path.contains("/favicon.ico") || path.contains("/public/") || publicPaths.stream().anyMatch(path::startsWith);
+
+        return path.contains("/public/") || path.contains("/favicon.ico")
+        || publicPaths.stream().anyMatch(path::startsWith);
     }
 
 }

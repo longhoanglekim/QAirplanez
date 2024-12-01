@@ -63,8 +63,6 @@ public class UserController {
         return userService.getCurrentUser(request);
     }
 
-
-
     @Transactional
     @PostMapping("/bookFlight")
     public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String flightNumber,
@@ -200,7 +198,6 @@ public class UserController {
         // Trả về thông tin người dùng (ví dụ: tên người dùng)
         return ResponseEntity.ok("User is logged in: " + currentUser.getUsername());
     }
-
 
 
     @PostMapping("/logout")

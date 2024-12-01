@@ -4,11 +4,11 @@
     <form @submit.prevent="login">
       <h3>Đăng nhập</h3>
       <div class="form-group">
-        <input type="text" v-model="username" id="username" required />
+        <input class="d-input" type="text" v-model="username" id="username" required />
         <label class="lb-tit">Email hoặc số điện thoại</label>
       </div>
       <div class="form-group">
-        <input type="password" v-model="password" id="password" required />
+        <input class="d-input" type="password" v-model="password" id="password" required />
         <label class="lb-tit">Mật khẩu</label>
       </div>
       <button type="submit">Đăng nhập</button> <!-- Giữ button như bình thường -->
@@ -85,7 +85,7 @@ export default {
 #container {
   height: 150vh;
   width: 100vw;
-  background-image: url('../assets/login/bg-login.jpg');
+  background-image: url('@/assets/login/bg-login.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -115,21 +115,29 @@ h3 {
   display: flex;
 }
 
-.form-group input {
+.d-input {
+  height: 2.5rem;
+  padding: 0 0.7rem;
+}
+
+.d-input {
   background: transparent;
-  height: 24px;
   outline: none;
   font-size: inherit;
   left: 10px;
   border: none;
   padding: 10px 5px;
-  border-bottom: 1px solid var(--cl-border);
+  border-radius: 0.5rem;
   width: 100%;
 }
 
-.form-group input:focus,
-.form-group input:hover {
-  border-bottom: 2px solid var(--cl-border);
+.d-input:focus,
+.d-input:hover, .d-input:valid {
+  border: 1px solid var(--cl-border);
+}
+
+.d-input:focus {
+  background: white;
 }
 
 .lb-tit {
@@ -141,17 +149,11 @@ h3 {
   transform: translateY(-50%);
 }
 
-.form-group input:focus + .lb-tit {
-  top: -10px;
+:is(.d-input:focus, .d-input:valid) + .lb-tit {
+  top: -1rem;
   font-size: 14px;
   font-weight: bold;
-  
 }
-
-.form-group input:valid + .lb-tit {
-  top: -10px;
-}
-
 
 @media screen and (max-width: 768px) {
   .form-group {
