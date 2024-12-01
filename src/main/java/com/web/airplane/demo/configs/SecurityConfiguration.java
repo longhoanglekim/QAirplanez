@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/ticket_class/**",
                                 "/api/flight/public/**", "/test/**", "/api/user/public/**",
-                                "/api/airport/public/**").permitAll()
+                                "/api/airport/public/**", "/favicon.ico").permitAll()
                         .anyRequest().authenticated())
 
                 .sessionManagement(session -> session
