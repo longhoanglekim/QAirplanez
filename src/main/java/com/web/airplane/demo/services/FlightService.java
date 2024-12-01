@@ -52,8 +52,6 @@ public class FlightService {
         flightInfo.setDestinationAirportCode(flight.getDestinationAirport().getAirportCode());
         flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
         flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
-        flightInfo.setActualArrivalTime(flight.getActualArrivalTime());
-        flightInfo.setActualDepartureTime(flight.getActualDepartureTime());
         flightInfo.setCancelDueTime(flight.getCancelDueTime());
         return flightInfo;
     }
@@ -102,7 +100,7 @@ public class FlightService {
             Passenger passenger = optPassenger.get();
             String currentSeat = passenger.getSeatPosition(); //A B C
             int currentRow = passenger.getSeatRow();
-            return (int) ('F' - currentSeat.charAt(0)) + (getMaxFirstRows(flight) - currentRow) * 6;
+            return ('F' - currentSeat.charAt(0)) + (getMaxFirstRows(flight) - currentRow) * 6;
         }
         return flight.getFirstSeats();
     }
@@ -151,7 +149,7 @@ public class FlightService {
             Passenger passenger = optPassenger.get();
             String currentSeat = passenger.getSeatPosition();
             int currentRow = passenger.getSeatRow();
-            return (int) ('F' - currentSeat.charAt(0)) + (getMaxBusinessRows(flight) - currentRow) * 6;
+            return ('F' - currentSeat.charAt(0)) + (getMaxBusinessRows(flight) - currentRow) * 6;
         }
         return getMaxBusinessRows(flight);
     }
@@ -201,7 +199,7 @@ public class FlightService {
             Passenger passenger = optPassenger.get();
             String currentSeat = passenger.getSeatPosition();
             int currentRow = passenger.getSeatRow();
-            return (int) ('F' - currentSeat.charAt(0)) + (getMaxEconomyRows(flight) - currentRow) * 6;
+            return ('F' - currentSeat.charAt(0)) + (getMaxEconomyRows(flight) - currentRow) * 6;
         }
         return getMaxEconomyRows(flight);
     }
