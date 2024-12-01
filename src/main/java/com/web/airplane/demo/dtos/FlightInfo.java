@@ -25,11 +25,9 @@ public class FlightInfo {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime actualDepartureTime;
+    private LocalDateTime expectedReturnTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime actualArrivalTime;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
