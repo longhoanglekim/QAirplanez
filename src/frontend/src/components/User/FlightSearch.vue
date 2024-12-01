@@ -5,7 +5,7 @@
         <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
     </div>
     <div class="flight-search-form">
-        <form @submit.prevent="submitForm" v-if="this.content == 'searchFlight' ">
+        <form @submit.prevent="submitForm" v-if="content == 'searchFlight' ">
             <!-- Loại vé -->
             <div class="form-group">
                 <label for="ticketType">Loại vé</label>
@@ -55,7 +55,7 @@
                 <div v-if="isModalVisible" class="ticket-modal">
                     <div class="modal-content">
                         <label for="adults">Số vé người lớn</label>
-                        <input type="number" id="adults" v-model="form.adults" min="1" :max="maxAdults"/>
+                        <input type="number" id="adults" v-model="form.adults" :min="1 < form.children ? form.children:1" :max="maxAdults"/>
                         <label for="children">Số vé trẻ em</label>
                         <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren" />
                         <button type="button" @click="closeModal">Xong</button>
@@ -73,7 +73,7 @@
                 <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
             </div>
         </form>
-        <form @submit.prevent="submitFormTicket" v-if="this.content == 'searchTicket'">
+        <form @submit.prevent="submitFormTicket" v-if="content == 'searchTicket'">
             <div class="form-group">
                 <label for="seatCode">Mã số ngồi</label>
                 <input type="text" v-model="form2.seatCode" id="seatCode">
@@ -93,100 +93,100 @@
 </div>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            form: {
-                ticketType: 'round-trip', // Loại vé (1 chiều hoặc khứ hồi)
-                fromCity: '', // Điểm đi
-                toCity: '', // Điểm đến
-                departureDate: '', // Ngày đi
-                returnDate: '', // Ngày về (chỉ khi chọn vé khứ hồi)
-                adults: 1, // Số vé người lớn
-                children: 0 // Số vé trẻ em
-            },
-            form2: {
-                firstName: '',
-                seatCode: ''
-            },
-            error: '',
-            isModalVisible: false,
-            content: 'searchFlight'
-        };
-    },
-    computed: {
-        maxAdults() {
-            return 9 - this.form.children;
-        },
-            // Max number of children allowed to maintain the sum under 10
-        maxChildren() {
-            return Math.min(10 - this.form.adults, this.form.adults);
-        },
-        isSubmitDisabled() {
-            if (this.content == "searchFlight")
-                return this.form.adults <= 0 || this.form.children >= this.form.adults ||
-                    !this.form.fromCity || !this.form.toCity || !this.form.departureDate ||
-                    (this.form.ticketType === 'round-trip' && !this.form.returnDate);
-            return !this.form2.seatCode || !this.form2.firstName;
-        },
-        ticketSummary() {
-            return `${this.form.adults} người lớn, ${this.form.children} trẻ em`;
-        }
-    },
-    methods: {
-        changeContent(newContent) {
-            if (this.content != newContent) this.content = newContent;
-        },
-        toggleTicketModal() {
-            this.isModalVisible = !this.isModalVisible;
-        },
-        // Đóng modal khi người dùng xong việc
-        closeModal() {
-            this.isModalVisible = false;
-        },
-        toSearch() {
-            // Chuyển hướng sang trang kết quả tìm kiếm và truyền các tham số tìm kiếm qua URL
-            this.$router.push('/booking/avaibility/0');
-        },
-        toTicket() {
-            this.$router.push('booking/information/0')
-        },
-        submitForm() {
-            // Kiểm tra và xử lý dữ liệu form khi người dùng nhấn nút tìm kiếm
-            if (this.form.adults <= 0) {
-                this.error = 'Số vé người lớn phải lớn hơn 0.';
-                return;
-            }
-            if (this.form.children >= this.form.adults) {
-                this.error = 'Số vé trẻ em phải nhỏ hơn số vé người lớn.';
-                return;
-            }
-            if (!this.form.fromCity || !this.form.toCity) {
-                this.error = 'Điểm đi và điểm đến không thể để trống.';
-                return;
-            }
-            if (!this.form.departureDate) {
-                this.error = 'Ngày đi không thể để trống.';
-                return;
-            }
-            if (this.form.ticketType === 'round-trip' && !this.form.returnDate) {
-                this.error = 'Ngày về không thể để trống khi chọn vé khứ hồi.';
-                return;
-            }
+<script setup>
+import { ref, computed,defineEmits} from 'vue'
+import { searchFlightStore} from '@/store/searchFlight';
 
-            this.error = ''; // Reset lỗi nếu tất cả điều kiện hợp lệ
+const searchFStore = searchFlightStore();
 
-            console.log('Tìm vé máy bay với các thông tin:', this.form);
+// Reactive state for flight search form
+const form = ref({...searchFStore.getOldForm()})
 
-            this.toSearch();
-        },
-        submitFormTicket() {
-            this.error = '';
-            this.toTicket();
-        }
-    }
-};
+// Reactive state for ticket search form
+const form2 = ref({
+  firstName: '',
+  seatCode: ''
+})
+
+const error = ref('')
+const isModalVisible = ref(false)
+const content = ref('searchFlight')
+
+// Computed properties
+const maxAdults = computed(() => 9 - form.value.children)
+const maxChildren = computed(() => Math.min(10 - form.value.adults, form.value.adults))
+
+const isSubmitDisabled = computed(() => {
+  if (content.value === 'searchFlight') {
+    return form.value.adults <= 0 || 
+           form.value.children > form.value.adults ||
+           form.value.adults + form.value.children > 9 ||
+           !form.value.fromCity || 
+           !form.value.toCity || 
+           !form.value.departureDate ||
+           (form.value.ticketType === 'round-trip' && !form.value.returnDate)
+  }
+  return !form2.value.seatCode || !form2.value.firstName
+})
+
+const ticketSummary = computed(() => 
+  `${form.value.adults} người lớn, ${form.value.children} trẻ em`
+)
+
+// Methods
+function changeContent(newContent) {
+  if (content.value !== newContent) {
+    content.value = newContent
+  }
+}
+
+function toggleTicketModal() {
+  isModalVisible.value = !isModalVisible.value
+}
+
+function closeModal() {
+  isModalVisible.value = false
+}
+
+function submitForm() {
+  // Validation checks
+  if (form.value.adults <= 0) {
+    error.value = 'Số vé người lớn phải lớn hơn 0.'
+    return
+  }
+  if (form.value.children >= form.value.adults) {
+    error.value = 'Số vé trẻ em phải nhỏ hơn số vé người lớn.'
+    return
+  }
+  if (!form.value.fromCity || !form.value.toCity) {
+    error.value = 'Điểm đi và điểm đến không thể để trống.'
+    return
+  }
+  if (!form.value.departureDate) {
+    error.value = 'Ngày đi không thể để trống.'
+    return
+  }
+  if (form.value.ticketType === 'round-trip' && !form.value.returnDate) {
+    error.value = 'Ngày về không thể để trống khi chọn vé khứ hồi.'
+    return
+  }
+
+  error.value = ''
+  searchFStore.saveForm(form.value)
+  
+  // Emit event for parent component
+  emit('search-flight')
+}
+
+function submitFormTicket() {
+  error.value = ''
+  
+  // Emit event for parent component
+  emit('search-ticket', form2.value)
+}
+
+// Use defineEmits to define emitted events
+const emit = defineEmits(['search-flight', 'search-ticket'])
 </script>
 
 <style scoped>

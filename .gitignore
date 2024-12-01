@@ -71,4 +71,4 @@ build/
 .vscode/
 
 
-*.properties
+application.properties

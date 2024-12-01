@@ -43,8 +43,8 @@
         </div>
         <button>Xác nhận</button>
       </form>
-    <p @click="this.$route.push('/login')">
-      Đã có tài khoản? <router-link to="/login">Đăng nhập</router-link>
+    <p class="mt-5"> 
+      Đã có tài khoản? <router-link to="/login" class="text-indigo-500">Đăng nhập</router-link>
     </p>
   </div></div>
 </template>
@@ -115,7 +115,7 @@ export default {
 
 #container {
   height: 150vh;
-  width: 100vw;
+  width: 100%;
   background-image: url('@/assets/login/bg-login.jpg');
   background-size: cover;
   background-position: center;
@@ -228,12 +228,4 @@ button {
 button:hover {
   background-color: #0056b3;
 }
-
-p {
-  margin-top: 1rem;
-  color: #007bff;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 </style>
