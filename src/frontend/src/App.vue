@@ -1,12 +1,12 @@
 <template>
 <div id="app">
-    <header v-if="!isAdminRoute">
+    <header v-if="!isAdminRoute && !isTest">
         <PageHeader />
         <PageNavBar />
     </header>
 
     <router-view></router-view>
-    <footer v-if="!isAdminRoute">
+    <footer v-if="!isAdminRoute && !isTest">
         <PageFooter />
     </footer>
 </div>
@@ -27,6 +27,9 @@ export default {
     computed: {
         isAdminRoute() {
             return this.$route.meta.isAdminRoute;
+        },
+        isTest() {
+            return this.$route.meta.test;
         }
     },
 

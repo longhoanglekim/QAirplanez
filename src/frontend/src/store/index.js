@@ -1,1 +1,1 @@
-import vuex from vuex
+export * from "./account"

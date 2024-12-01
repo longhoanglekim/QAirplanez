@@ -2,18 +2,26 @@ import {createRouter, createWebHistory} from "vue-router";
 import LoginUser from "@/view/User/LoginUser.vue";
 import SignUpUser from "@/view/User/SignUpUser.vue";
 import HomeUser from "@/view/User/HomeUser.vue";
-import SearchResult from "@/view/User/SearchResult.vue";
+import SearchFlightResult from "@/view/User/SearchFlightResult.vue";
 import HomeAdmin from "@/view/Admin/HomeAdmin.vue";
 import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
 import ExploreUser from "@/view/User/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
-
+import TestComponent from "@/view/Test/TestComponent.vue";
 
 
 const routes = [
     {
+        path: '/test',
+        component: TestComponent,
+        meta: {
+            test: true
+        }
+    },
+    {
         path: '/',
-        redirect : '/home'
+        redirect : '/home',
+        props: true
     },
     {
         path : '/home',
@@ -39,8 +47,8 @@ const routes = [
           }
     }, {
         path : '/booking/avaibility/0',
-        name : 'SearchResult',
-        component : SearchResult,
+        name : 'SearchFlightResult',
+        component : SearchFlightResult,
         meta: {
             guest: true
           }
@@ -74,7 +82,15 @@ const routes = [
 ];
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes, 
+    scrollBehavior(to, from, savedPosition) {
+        // Đảm bảo trang cuộn lên đầu mỗi lần thay đổi route
+        if (savedPosition) {
+          return savedPosition;
+        } else {
+          return { top:0, left:0 }; // Cuộn lên đầu trang
+        }
+      }
 });
 
 // function isLoggedInAdmin() {

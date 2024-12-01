@@ -2,24 +2,25 @@
   <div class="container w-full bg-white">
     <div id="img" class="bg-cover bg-center"> 
     </div>
-    <FlightSearch/>
+    <FlightSearch @search-flight="searchFlight" @search-ticket="searchTicket"/>
     <div>&nbsp;</div>
   </div>
-  
 </template>
 
-<script>
+<script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue';
-export default {
-  watch: {
-  },
-    name: 'HomeUser',
-    components: {
-      FlightSearch
-    }
-}
 </script>
 
+<script>
+export default {
+  methods: {
+    searchFlight() {
+      this.$router.push('/booking/avaibility/0')
+    }
+  },
+  name: 'HomeUser'
+}
+</script>
 
 
 <style scoped>

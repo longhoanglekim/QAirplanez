@@ -131,7 +131,7 @@
                     <div class="bg-blue-50 p-3 rounded-lg mb-4">
                         <div class="flex justify-between items-center">
                             <div>
-                                <p class="text-gray-600 text-xs">Giá từ</p>
+                                <p class="text-gray-600 text-xs">Giá</p>
                                 <p class="font-bold text-lg text-blue-600">
                                     {{ calculateTicketPrice(ticket) }}
                                 </p>
