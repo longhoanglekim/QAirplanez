@@ -94,8 +94,8 @@
 </template>
 
 <script setup>
-import { ref, computed, defineEmits} from 'vue'
-import { searchFlightStore } from '@/store/searchFlight';
+import { ref, computed,defineEmits} from 'vue'
+import { searchFlightStore} from '@/store/searchFlight';
 
 const searchFStore = searchFlightStore();
 

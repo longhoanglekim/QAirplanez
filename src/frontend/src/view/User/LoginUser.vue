@@ -13,15 +13,15 @@
       </div>
       <button type="submit">Đăng nhập</button> <!-- Giữ button như bình thường -->
     </form>
-    <p @click="goToSignup">
-      Chưa có tài khoản? <router-link to="/signup">Đăng ký</router-link>
+    <p class="mt-5">
+      Chưa có tài khoản? <router-link to="/signup" class="text-indigo-500">Đăng ký</router-link>
     </p>
     </div>
   </div>
 </template>
 
 <script>
-
+import { userStore } from '@/store';
 
 export default {
   name: 'LoginUser',
@@ -50,6 +50,12 @@ export default {
           const data = await response.json();
           console.log("Token:", data.token);
 
+          userStore.saveUser({
+            email: this.username,
+            password: this.password,
+            role: 'user'
+          })
+
           localStorage.setItem('token', data.token);
           this.$router.push({ path: '/home' });
         }
@@ -65,9 +71,6 @@ export default {
         console.error("Error:", error.message); // Log lỗi nếu có ngoại lệ xảy ra
       }
     },
-    goToSignup() {
-      this.$router.push('/signup');
-    }
   },
   mounted() {
     document.title = 'My login page';
@@ -186,10 +189,4 @@ button:hover {
   background-color: #0056b3;
 }
 
-p {
-  margin-top: 1rem;
-  color: #007bff;
-  cursor: pointer;
-  text-decoration: underline;
-}
 </style>

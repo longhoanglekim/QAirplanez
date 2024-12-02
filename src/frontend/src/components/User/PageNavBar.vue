@@ -1,5 +1,5 @@
 <template>
-<header  class="fixed w-full z-50 md:bg-black/40 top-0 transition-all duration-300 bg-black/40 md:bg-black/10" >
+<header  class="bg-white/50 fixed w-full z-50 top-0 transition-all duration-300" >
     <div class="container mx-auto pt-1 flex justify-between items-center">
         <!-- Logo -->
         <div class="logo">
@@ -11,9 +11,9 @@
         <!-- desktop Navigation chirnh ở script phía dưới-->
         <nav class="hidden lg:flex items-center space-x-8">
             <!-- các item to-->
-            <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer py-2">
-                <div class="flex items-center justify-between rounded-full m-1 py-1 px-4 hover:bg-blue-700 text-white">
-                    <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
+            <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer">
+                <div class="flex items-center justify-between rounded-full hover:text-orange-600 m-1 py-2 px-4 hover:bg-white text-slate-800">
+                    <a :href="item.link" class=" text-md tracking-wider font-bold   ">
                         {{ item.label }}
                         <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -229,7 +229,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-    font-family: 'Poppins', 'Roboto', sans-serif;
-}
+
+
 </style>

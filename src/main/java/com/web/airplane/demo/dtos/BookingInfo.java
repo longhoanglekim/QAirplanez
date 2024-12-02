@@ -19,9 +19,18 @@ public class BookingInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expectedDepartureTime;
 
+    private LocalDateTime expectedArrivalTime;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expectedReturnTime;
+
+
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime cancelDueTime;
+
     private String aircraftCode;
 
 

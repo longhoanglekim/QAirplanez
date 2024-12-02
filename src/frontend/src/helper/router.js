@@ -8,6 +8,7 @@ import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
 import ExploreUser from "@/view/User/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
+import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
 
 
 const routes = [
@@ -53,6 +54,14 @@ const routes = [
             guest: true
           }
     }, {
+        path: '/booking/done/0',
+        name: 'SearchSeatResult',
+        component : SearchSeatResult,
+        meta: {
+            guest: true
+        }
+    },
+    {
         path :'/admin',
         name : 'Admin',
         children: [
