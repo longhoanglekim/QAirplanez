@@ -60,6 +60,7 @@
                 :key="index" 
                 :ticket="ticket"
                 :ticket-classes="ticketClasses"
+                @selected="userSelectTicket"
             />
         </div>
     
@@ -197,6 +198,9 @@ export default {
         },
         toggleFilterModal() {
             this.showFilterModal = !this.showFilterModal
+        },
+        userSelectTicket(selectedTicket) {
+            console.log(selectedTicket)
         }
     }
 }
@@ -204,6 +208,6 @@ export default {
 
 <style scoped>
 .img {
-    background-image: url("../../assets/destination/3.jpg");
+    background-image: url("../../../assets/destination/3.jpg");
 }
 </style>

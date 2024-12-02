@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { userStore } from '@/store';
+import { profileStore } from '@/store';
 
 export default {
   name: 'LoginUser',
@@ -50,7 +50,7 @@ export default {
           const data = await response.json();
           console.log("Token:", data.token);
 
-          userStore.saveUser({
+          profileStore.saveUser({
             email: this.username,
             password: this.password,
             role: 'user'

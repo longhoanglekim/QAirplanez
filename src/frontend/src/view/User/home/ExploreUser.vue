@@ -96,7 +96,6 @@
 
 export default {
   computed: {
-
   },
   data() {
     return {
@@ -108,12 +107,12 @@ export default {
       showSuggestions: false,
       slideInterval: null,
       destinations: [
-        { appName: "Italy", title: 'Italy', image: require("../../assets/destination/1.png") },
-        { appName: "Brazil", title: 'Brazil', image: require("../../assets/destination/2.png") },
-        { appName: "America", title: 'America', image: require("../../assets/destination/3.png") },
-        { appName:"Japan", title: 'Japan', image: require("../../assets/destination/4.png") },
-        { appName: "France", title: 'France', image: require("../../assets/destination/5.png") },
-        { appName: "Australia", title: 'Australia', image: require("../../assets/destination/6.png") },
+        { appName: "Italy", title: 'Italy', image: require("@/assets/destination/1.png") },
+        { appName: "Brazil", title: 'Brazil', image: require("@/assets/destination/2.png") },
+        { appName: "America", title: 'America', image: require("@/assets/destination/3.png") },
+        { appName:"Japan", title: 'Japan', image: require("@/assets/destination/4.png") },
+        { appName: "France", title: 'France', image: require("@/assets/destination/5.png") },
+        { appName: "Australia", title: 'Australia', image: require("@/assets/destination/6.png") },
       ],
       displayedDestinations: [],
     };
