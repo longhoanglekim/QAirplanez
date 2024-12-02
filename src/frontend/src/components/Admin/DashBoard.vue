@@ -1,6 +1,6 @@
 <template>
   <div @click="console.log('isdashboard')" class="grid grid-cols-2 gap-4">
-    <div class= "bg-blue-100 p-4 rounded mx-4">
+    <div class="bg-blue-100 p-4 rounded">
       <h3 class="font-bold">Máy Bay</h3>
       <p>Tổng số: {{ aircraft.length }}</p>
       <p>Đang hoạt động: {{ activeAircraft }}</p>

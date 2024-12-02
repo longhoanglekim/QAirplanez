@@ -1,10 +1,10 @@
 <template>
-    <div class="bg-orange-200 px-10 py-9">
+    <div>
         <h2 class="text-xl font-bold mb-4">Quản Lý Máy Bay</h2>
 
         <!-- Thanh tìm kiếm và sắp xếp -->
         <div class="flex flex-col md:flex-row mb-4">
-            <input v-model="searchTerm" placeholder="Tìm kiếm máy bay..." class="block md:flex-1 p-2 border rounded active: " />
+            <input v-model="searchTerm" placeholder="Tìm kiếm máy bay..." class="block md:flex-1 p-2 border rounded" />
             <select v-model="sortBy" class="p-2 border rounded">
                 <option value="">Sắp xếp theo</option>
                 <option value="id">Mã Máy Bay</option>
@@ -254,3 +254,4 @@ const handleBulkAction = () => {
 }
 
 </script>
+

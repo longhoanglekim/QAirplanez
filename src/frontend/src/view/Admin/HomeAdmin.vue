@@ -1,8 +1,8 @@
 <template>
 <div class="flex h-screen ">
     <!-- Navbar start -->
-    <nav id="navbar" class="fixed top-0 z-30  w-full flex flex-row justify-start bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 sm:justify-between ">
-      <button id="btnSidebarToggler" @click="toggleSidebar" type="button" class=" text-2xl text-white hover:text-gray-200 ">
+    <nav id="navbar" class="fixed top-0 z-30  w-full flex flex-row justify-start bg-gray-700 p-3 sm:justify-between">
+      <button id="btnSidebarToggler" @click="toggleSidebar" type="button" class=" text-2xl text-white hover:text-gray-200">
         <align-justify v-if="!sideBarIsOpening" class="z-50 stroke-4 hover:stroke-blue-500"/>
       </button>
       <ul class="breadcrumb hidden flex-row flex-grow sm:justify-center items-center  text-lg text-white sm:flex">
@@ -67,6 +67,7 @@ const sideBarIsOpening = ref(true)
 const toggleSidebar = () => {
   sideBarIsOpening.value = !sideBarIsOpening.value
 }
+
 const menuItems = [{
         key: 'dashboard',
         label: 'Tổng Quan',
