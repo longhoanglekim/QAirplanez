@@ -38,7 +38,7 @@
                         <option value="duration">Thời gian ngắn nhất</option>
                         <option value="departure">Giờ khởi hành</option>
                     </select>
-                    
+
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                             <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
@@ -64,18 +64,22 @@
 </div>
 </template>
 
-    
-    
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/User/ticket/FlightTicket.vue'
-import { useRouter } from 'vue-router';
-import { searchFlightStore } from '@/store/searchFlight';
-import { ticketStore } from '@/store/ticket';
+import {
+    useRouter
+} from 'vue-router';
+import {
+    searchFlightStore
+} from '@/store/searchFlight';
+import {
+    ticketStore
+} from '@/store/ticket';
 import {
     ChevronDown,
     MoveRight,
-     
+
 } from 'lucide-vue-next'
 import {
     ref
@@ -90,18 +94,13 @@ const toggleSearchBox = () => {
 }
 const storeSearchFlight = searchFlightStore();
 const userSelectTicket = (selectedTicket) => {
-    selectedTicket.adults = storeSearchFlight.getOldForm().adults
-    selectedTicket.children = storeSearchFlight.getOldForm().children
-    storeTicket.saveDepartureTicket(selectedTicket)
-    console.log(storeTicket.selectedDeparture)
-    const nextPage = storeSearchFlight.getOldForm().ticketType === 'one-way'
-        ? '/booking/infomation/0'
-        : '/booking/avaibility/1';
+    storeTicket.saveArrivalTicket(selectedTicket)
+    const nextPage = '/booking/infomation/0'
     router.push(nextPage)
 }
 
-const departureCode = storeSearchFlight.getLastSearch().fromCity
-const arrivalCode = storeSearchFlight.getLastSearch().toCity
+const departureCode = storeSearchFlight.getLastSearch().toCity
+const arrivalCode = storeSearchFlight.getLastSearch().fromCity
 </script>
 
 <script>
@@ -215,7 +214,8 @@ export default {
     }
 }
 </script>
-
+    
+    
 <style scoped>
 .img {
     background-image: url("../../../assets/destination/3.jpg");

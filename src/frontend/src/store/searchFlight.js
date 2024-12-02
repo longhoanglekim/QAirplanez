@@ -48,17 +48,6 @@ export const searchFlightStore = defineStore('searchFlight', () => {
         return lastSearch.value;
     };
 
-    const reverseSearch = () => {
-        let temp = lastSearch.value.fromCity;
-        lastSearch.value.fromCity = lastSearch.value.toCity;
-        lastSearch.value.toCity = temp;
-        lastSearch.value.departureDate = form.value.returnDate;
-        sessionStorage.setItem('lastFromCity', lastSearch.value.fromCity);
-        sessionStorage.setItem('lastToCity', lastSearch.value.toCity);
-        sessionStorage.setItem('lastDepartureDate', lastSearch.value.departureDate);
-        return lastSearch.value;
-    };
-
     const deleteForm = () => {
         form.value = {
             ticketType: 'round-trip',
@@ -90,6 +79,5 @@ export const searchFlightStore = defineStore('searchFlight', () => {
         getOldForm, 
         deleteForm, 
         getLastSearch, 
-        reverseSearch
     };
 });

@@ -8,9 +8,11 @@ import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
 import ExploreUser from "@/view/User/home/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
-import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
 import ProfileUser from "@/view/User/ProfileUser.vue";
 import ChangePassword from "@/components/User/profileUser/ChangePassword.vue";
+import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
+import InformationForm from "@/view/User/bookTicket/InformationForm.vue";
+import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
 
 
 const routes = [
@@ -56,14 +58,27 @@ const routes = [
             guest: true
           }
     }, {
-        path: '/booking/done/0',
-        name: 'SearchSeatResult',
-        component : SearchSeatResult,
+        path : '/booking/avaibility/1',
+        name : 'SearchFlightArrival',
+        component : SearchFlightArrival,
+        meta: {
+            guest: true
+          }
+    }, {
+        path: '/booking/infomation/0',
+        name: 'InformationForm',
+        component : InformationForm,
         meta: {
             guest: true
         }
-    },
-    {
+    }, {
+        path: '/booking/done/0',
+        name: 'SearchSeatResult',
+        component: SearchSeatResult,
+        meta: {
+            guest: true
+        }
+    }, {
         path :'/admin',
         name : 'Admin',
         children: [
