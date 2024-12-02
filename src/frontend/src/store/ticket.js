@@ -1,4 +1,7 @@
-export const ticket = () => {
+import { defineStore } from "pinia"
+import { ref } from "vue"
+
+export const ticketStore = defineStore('ticketStore', () => {
     const selected = ref({
         arrivalCode: '',
         arrivalDate: '',
@@ -17,4 +20,4 @@ export const ticket = () => {
 
 
     return {selected, saveTicket}
-}
+})

@@ -1,51 +1,55 @@
 <template>
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <div class="flex justify-between items-center">
-        <div>
-          <h1 class="text-xl font-semibold">HAN</h1>
-          <p class="text-sm text-gray-500">00:25</p>
-        </div>
-        <div class="flex items-center space-x-4">
-          <div class="text-gray-500 text-sm">18 hrs 30 mins</div>
-          <div class="text-gray-500 text-sm">1 connection</div>
-        </div>
-        <div>
-          <h1 class="text-xl font-semibold">HAM</h1>
-          <p class="text-sm text-gray-500">12:55</p>
-        </div>
-      </div>
-      <div class="grid grid-cols-3 mt-6">
-        <!-- Hạng Kinh Tế -->
-        <div class="border rounded-lg p-4 text-center">
-          <h2 class="text-lg font-semibold text-green-600">Economy</h2>
-          <p class="text-sm text-gray-500">from VND</p>
-          <p class="text-2xl font-bold">22,938,000</p>
-          <p class="text-sm text-green-600">Lowest price</p>
-        </div>
-        <!-- Hạng Thương Gia -->
-        <div class="border rounded-lg p-4 text-center">
-          <h2 class="text-lg font-semibold text-blue-600">Business</h2>
-          <p class="text-sm text-gray-500">from VND</p>
-          <p class="text-2xl font-bold">120,410,000</p>
-        </div>
-        <!-- Hạng Nhất -->
-        <div class="border rounded-lg p-4 text-center">
-          <h2 class="text-lg font-semibold text-red-600">First</h2>
-          <p class="text-sm text-gray-500">from VND</p>
-          <p class="text-2xl font-bold">185,188,000</p>
-          <p class="text-sm text-gray-500 italic">Partially available</p>
-        </div>
+  <div class="min-h-screen bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <h1 class="text-2xl font-bold text-gray-800 mb-4">Chức năng cho khách hàng</h1>
+      <ul class="list-disc pl-6 text-gray-700 space-y-2">
+        <li>
+          Xem thông tin chung và thông tin về các chuyến bay.
+        </li>
+        <li>
+          Tìm chuyến bay.
+        </li>
+        <li>
+          Đặt vé (không yêu cầu tích hợp thanh toán online).
+        </li>
+        <li>
+          Hủy vé trong thời gian còn hạn được hủy.
+        </li>
+        <li>
+          Theo dõi thông tin về các chuyến bay đã đặt.
+        </li>
+      </ul>
+      <div class="mt-6">
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          @click="bookFlight"
+        >
+          Đặt vé ngay
+        </button>
+        <button
+          class="bg-red-500 text-white px-4 py-2 rounded ml-4 hover:bg-red-600"
+          @click="cancelFlight"
+        >
+          Hủy vé
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "FlightCard",
-  };
-  </script>
-  
-  <style>
-  /* Bạn có thể thêm các style tùy chỉnh tại đây nếu cần */
-  </style>
-  
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    bookFlight() {
+      alert("Chức năng đặt vé đang được phát triển!");
+    },
+    cancelFlight() {
+      alert("Chức năng hủy vé đang được phát triển!");
+    },
+  },
+};
+</script>
+
+<style>
+/* Thêm bất kỳ cấu hình CSS tùy chỉnh nếu cần */
+</style>

@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import PageHeader from "@/components/User/PageHeader.vue";
-import PageFooter from "@/components/User/PageFooter.vue";
-import PageNavBar from "@/components/User/PageNavBar.vue";
+import PageHeader from "@/components/User/general/PageHeader.vue";
+import PageFooter from "@/components/User/general/PageFooter.vue";
+import PageNavBar from "@/components/User/general/PageNavBar.vue";
 
 export default {
     name: 'App',
