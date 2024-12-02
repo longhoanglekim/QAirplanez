@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookingInfo {
+public class FlightInfo {
     private String flightNumber;
     private String departureAirportCode;
     private String destinationAirportCode;
@@ -19,6 +19,8 @@ public class BookingInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expectedDepartureTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime expectedArrivalTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -30,7 +32,6 @@ public class BookingInfo {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime cancelDueTime;
-
     private String aircraftCode;
 
 

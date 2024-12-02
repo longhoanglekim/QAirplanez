@@ -53,7 +53,7 @@ public class FlightController {
                     flightInfo.getExpectedArrivalTime(),
                     flightInfo.getFlightNumber(),
                     aircraft
-                    );
+            );
 
             if (isFlightExist) {
                 // Trả về lỗi nếu có chuyến bay trùng
@@ -83,11 +83,14 @@ public class FlightController {
      *      expected destination time
      * @return list of flightInfo
      */
+    @GetMapping("/public/findFlight")
 
     public List<List<FlightInfo>> findFlight(@RequestBody FlightInfo flightInfo) {
         // Find and filter outbound flights
-        List<Flight> departFlights = findAndFilterFlights(flightInfo.getDepartureAirportCode(), flightInfo.getDestinationAirportCode(), flightInfo);
-        List<Flight> returnFlights = findAndFilterFlights(flightInfo.getDestinationAirportCode(), flightInfo.getDepartureAirportCode(), flightInfo);
+        List<Flight> departFlights = new ArrayList<>();
+        departFlights = findAndFilterFlights(flightInfo.getDepartureAirportCode(), flightInfo.getDestinationAirportCode(), flightInfo);
+        List<Flight> returnFlights = new ArrayList<>();
+        returnFlights = findAndFilterFlights(flightInfo.getDestinationAirportCode(), flightInfo.getDepartureAirportCode(), flightInfo);
         if (departFlights.isEmpty() && returnFlights.isEmpty()) {
             log.debug("Khong tim thay chuyen bay phu hop");
             return List.of();
@@ -97,13 +100,18 @@ public class FlightController {
         for (Flight flight : departFlights) {
             departFlightInfoList.add(flightService.getFlightInfo(flight));
         }
-        List<FlightInfo> returnFlightInfoList = new ArrayList<>();
-        for (Flight flight : returnFlights) {
-            returnFlightInfoList.add(flightService.getFlightInfo(flight));
-        }
         List<List<FlightInfo>> foundFlights = new ArrayList<>();
         foundFlights.add(departFlightInfoList);
-        foundFlights.add(returnFlightInfoList);
+        List<FlightInfo> returnFlightInfoList = new ArrayList<>();
+        if (returnFlights != null) {
+            for (Flight flight : returnFlights) {
+                returnFlightInfoList.add(flightService.getFlightInfo(flight));
+            }
+            foundFlights.add(returnFlightInfoList);
+        }
+
+
+
         return foundFlights;
     }
 
@@ -112,11 +120,12 @@ public class FlightController {
         log.debug("Tìm chuyến bay từ " + departureAirportCode + " đến " + destinationAirportCode);
 
         // Step 1: Find all flights between the two airports
-        List<Flight> flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
+        List<Flight> flights = new ArrayList<>();
+        flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
-        if (flights.isEmpty()) return null;
+        if (flights.isEmpty()) return new ArrayList<>();
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
             if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
