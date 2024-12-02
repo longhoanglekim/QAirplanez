@@ -173,7 +173,10 @@ function submitForm() {
 
   error.value = ''
   searchFStore.saveForm(form.value)
-  
+
+  console.log('FlightSearch.vue')
+  console.log(searchFStore.getOldForm())
+  console.log(searchFStore.getLastSearch())
   // Emit event for parent component
   emit('search-flight')
 }
