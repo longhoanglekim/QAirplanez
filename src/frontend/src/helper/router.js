@@ -9,6 +9,8 @@ import ExploreUser from "@/view/User/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
+import ProfileUser from "@/view/User/ProfileUser.vue";
+import ChangePassword from "@/components/User/profileUser/ChangePassword.vue";
 
 
 const routes = [
@@ -87,6 +89,14 @@ const routes = [
         name: 'Destination',
         component: DestinationDetail,
         props: true,
+    }, {
+        path: '/user',
+        name: 'Profile',
+        component: ProfileUser,
+    }, {
+        path: '/password/change',
+        name: 'ChangePassword',
+        component: ChangePassword,
     },
 ];
 const router = createRouter({
