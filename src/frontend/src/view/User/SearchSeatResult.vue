@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import BookedTicket from '@/components/User/ticket/BookedTicket.vue';
+import BookedTicket from '@/components/composable/ticket/BookedTicket.vue';
 import { ref } from 'vue';
 
 const passengers = ref([

@@ -68,7 +68,7 @@
     
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
-import FlightTicket from '@/components/User/ticket/FlightTicket.vue'
+import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
 import { useRouter } from 'vue-router';
 import { searchFlightStore } from '@/store/searchFlight';
 import { ticketStore } from '@/store/ticket';
