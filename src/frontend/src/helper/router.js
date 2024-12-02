@@ -1,11 +1,11 @@
 import {createRouter, createWebHistory} from "vue-router";
 import LoginUser from "@/view/User/LoginUser.vue";
 import SignUpUser from "@/view/User/SignUpUser.vue";
-import HomeUser from "@/view/User/HomeUser.vue";
-import SearchFlightResult from "@/view/User/SearchFlightResult.vue";
+import HomeUser from "@/view/User/home/HomeUser.vue";
+import SearchFlightResult from "@/view/User/bookTicket/SearchFlightResult.vue";
 import HomeAdmin from "@/view/Admin/HomeAdmin.vue";
 import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
-import ExploreUser from "@/view/User/ExploreUser.vue";
+import ExploreUser from "@/view/User/home/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
