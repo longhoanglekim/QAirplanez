@@ -1,26 +1,32 @@
 <template>
 <form @submit.prevent="handleSubmit" class="max-w-4xl grid md:grid-cols-2 gap-5 p-5" novalidate>
     <div class="relative z-0 w-full mb-5">
-        <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
-                'capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
+
+          <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
+                'relative text-black capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}, {'text-red-600' : formData.firstName}
               ]"
-              @blur="validFirstName" />
-        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
+                 @blur="validFirstName" />
+          <EthernetPort class="absolute right-0 top-5 text-gray-500"/>
+
+          <label class="absolute duration-300 top-3 -z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
             Họ<span class="text-red-500">*</span>:
-        </label>
-        <span v-if="errors.firstName" class="text-sm text-red-600">
+          </label>
+          <span v-if="errors.firstName" class="text-sm text-red-600">
             {{ errorsData.firstName }}
         </span>
+
+
     </div>
 
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.lastName" name="lastName" placeholder=" " :class="[
-                'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                'relative text-black  pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
                 errors.lastName ? 'border-red-500' : 'border-gray-200' , {'text-red-600': errors.firstName}
               ]" 
               @blur="validLastName" />
-        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
+      <EthernetPort class="absolute right-0 top-5 text-gray-500"/>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
             Tên đệm và tên<span class="text-red-500">*</span>:
         </label>
         <span v-if="errors.lastName" class="text-sm text-red-600">
@@ -30,10 +36,11 @@
 
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.phone" name="phone" placeholder=" " :class="[
-                'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.phone ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
+                'relative text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                errors.phone ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.lastName} ,{'text-red-600' : formData.lastName}
               ]" @blur="validPhone" />
-        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.phone}">
+      <Phone class="absolute right-0 top-5 text-gray-500"/>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.phone}">
             Số điện thoại:<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.phone" class="text-sm text-red-600">
@@ -43,10 +50,11 @@
 
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.cccd" name="cccd" placeholder=" " :class="[
-                'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
+                'text-black  pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.cccd}, {'text-red-600' : formData.cccd}
               ]" @blur="validCccd" />
-        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
+      <IdCard class="absolute right-0 top-5 text-gray-500"/>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
             CCCD/CMND:<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.cccd" class="text-sm text-red-600">
@@ -56,10 +64,11 @@
 
     <div class="relative z-0 w-full mb-5">
         <input type="email" v-model="formData.email" name="email" placeholder=" " :class="[
-                'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.email ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
+                'text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                errors.email ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.email}, {'text-red-600' : formData.email}
               ]" @blur="validEmail" />
-        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.email}">
+        <Mail class="absolute right-0 top-5 text-gray-500"/>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.email}">
             Email<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.email" class="text-sm text-red-600">
@@ -79,7 +88,6 @@ import {
     reactive,
     defineEmits
 } from 'vue'
-
 const formData = reactive({
     firstName: '',
     lastName: '',
@@ -106,20 +114,20 @@ const errorsData = reactive({
 
 const validFirstName = () => {
     errors.firstName = false
-    if (formData.firstName == null || formData.firstName == '') {
+    if (formData.firstName == null || formData.firstName === '') {
         errorsData.firstName = 'Vui lòng điền họ'
         errors.firstName = true
-    } else if (!/^[A-Za-z]+$/.test(formData.firstName)) {
+    } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.firstName)) {
         errorsData.firstName = 'Vui lòng điền họ hợp lệ'
         errors.firstName = true
     }
 }
 const validLastName = () => {
     errors.lastName = false
-    if (formData.lastName == null || formData.lastName == '') {
+    if (formData.lastName == null || formData.lastName === '') {
         errorsData.lastName = 'Vui lòng điền tên'
         errors.lastName = true
-    } else if (!/^[A-Za-z]+$/.test(errorsData.lastName)) {
+    } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
         errorsData.lastName = 'Vui lòng điền tên hợp lệ'
         errors.lastName = true
     }
@@ -138,17 +146,17 @@ const validCccd = () => {
     }
 }
 const validEmail = () => {
-    errors.email = false
-    if (formData.email == null || formData.email == '') {
-        errorsData.email = 'Vui lòng điền email'
-        errors.email = true
-    } else {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(errorsData.email)) {
-            errorsData.email = 'Vui lòng điền số điện thoại hợp lệ'
-            errors.email = true
-        }
+  errors.email = false;
+  if (formData.email == null || formData.email === '') {
+    errorsData.email = 'Vui lòng điền email';  // Thông báo lỗi nếu không có email
+    errors.email = true;
+  } else {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      errorsData.email = 'Vui lòng điền email hợp lệ';  // Thông báo lỗi nếu email không hợp lệ
+      errors.email = true;
     }
+  }
 }
 
 const validPhone = () => {
@@ -186,8 +194,21 @@ const handleSubmit = () => {
     }
 }
 </script>
-    
-    
+<script>
+import {EthernetPort} from "lucide-vue-next";
+import {Phone} from "lucide-vue-next";
+import { IdCard } from 'lucide-vue-next';
+import { Mail } from 'lucide-vue-next';
+export default {
+  components: {
+    EthernetPort,
+    Phone,
+    IdCard,
+    Mail
+  }
+}
+</script>
+
 <style scoped>
 .origin-0 {
     transform-origin: 0%;
