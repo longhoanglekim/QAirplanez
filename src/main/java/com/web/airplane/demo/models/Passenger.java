@@ -47,6 +47,8 @@ public class Passenger {
     @ManyToOne
     private Flight flight;
 
+    private String identification;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")

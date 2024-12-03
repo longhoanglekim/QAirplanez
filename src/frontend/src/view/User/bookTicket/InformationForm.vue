@@ -14,7 +14,7 @@
                 <child-passenger-form></child-passenger-form>
             </div>
             <div class="my-20">
-                <button class="bg-white p-5 rounded-xl">Xác nhận thông tin</button>
+                <button class="p-5 rounded-xl bg-orange-500 hover:scale-105 custom">Xác nhận thông tin</button>
             </div>
         </main>
         <footer class="my-10"></footer>

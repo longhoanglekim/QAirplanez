@@ -41,10 +41,10 @@
 
             <!-- Các phần còn lại của header right actions -->
             <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
-                <a href="/signup" class="block text-md px-4 py-2 rounded-full w-32 ml-2 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                <a href="/signup" class="block text-md px-4 py-2 rounded-full w-32 ml-2 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng ký
                 </a>
-                <a href="/login" class="block text-md px-4 ml-2 py-2 rounded-full w-32 font-bold text-white mt-4 hover:bg-blue-700 lg:mt-0">
+                <a href="/login" class="block text-md px-4 ml-2 py-2 rounded-full w-32 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
                     Đăng nhập
                 </a>
             </div>
