@@ -176,7 +176,7 @@ function submitForm() {
 
   console.log('FlightSearch.vue')
   console.log(searchFStore.getOldForm())
-  console.log(searchFStore.getLastSearch())
+
   // Emit event for parent component
   emit('search-flight')
 }

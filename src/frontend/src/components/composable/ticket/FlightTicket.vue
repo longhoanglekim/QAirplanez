@@ -1,8 +1,10 @@
+
 <template>
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg " >
+     <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg " >
         <!-- Header with Flight Number -->
         <div class="flex justify-between items-center mb-4">
-            <div class="text-sm text-gray-500">
+  
+             <div class=" transform w-16 h-10 text-sm text-gray-500">
                 Flight No: 
                 <span class="font-semibold text-red-600">{{ ticket.flightNumber }}</span>
             </div>
@@ -16,8 +18,8 @@
                 <h1 class="text-xl font-semibold">{{ ticket.departureAirport }}</h1>
                 <p class="text-2xl font-bold text-gray-600">{{ ticket.departureTime }}</p>
             </div>
-            <div class="flex items-center space-x-4">
-                <div class="text-gray-500 text-sm">{{ calculateFlightDuration }} mins</div>
+            <div class="flex items-center space-x-4 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
+                <div class="text-gray-500 text-sm text">{{ calculateFlightDuration }} mins</div>
             </div>
             <div class="text-right">
                 <h1 class="text-xl font-semibold">{{ ticket.arrivalAirport }}</h1>
@@ -29,7 +31,7 @@
             <div 
                 v-for="(ticketClass, index) in ticketClasses" 
                 :key="index" 
-                class="border rounded-lg p-2 text-center cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+                class="border rounded-lg p-2 text-center cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg relative"
                 :class="{
                     'border-green-600 hover:bg-green-50': ticketClass.value === 'economy', 
                     'bg-green-50' : localTicket.selectedClass === 'economy' && ticketClass.value === 'economy',
@@ -43,6 +45,11 @@
                 @mouseenter="hoveredClass = ticketClass.value"
                 @mouseleave="hoveredClass = null"
             >
+                <Plane
+                    v-if="localTicket.selectedClass === ticketClass.value" 
+                    class="text-red-500 absolute w-10 h-10 top-0 left-10 transition-all duration-300 ease-in-out"
+                    :class="{'hidden': !localTicket.selectedClass}"
+                />
                 <h2 
                     class="text-lg font-semibold mb-2 transition-colors duration-300" 
                     :class="{
@@ -97,9 +104,15 @@
         </button>
     </div>
 </template>
-
+<script setup>
+import { Plane } from 'lucide-vue-next';
+</script>
 <script>
 export default {
+    component: {
+        Plane
+
+    },
     props: {
         ticket: {
             type: Object,
@@ -117,6 +130,7 @@ export default {
         }
     },
     methods: {
+        
         selectTicketClass(classValue) {
             this.localTicket.selectedClass = this.localTicket.selectedClass === classValue ? null : classValue
         },

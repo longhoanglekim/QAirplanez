@@ -4,10 +4,12 @@ import { ref } from "vue"
 export const ticketStore = defineStore('ticketStore', () => {
     const selectedDeparture = ref({
         arrivalCode: '',
+        arrivalName:'',
         arrivalDate: '',
         arrivalTime: '',
         basePrice: '',
         departureCode: '',
+        departureName: '',
         departureDate: '',
         departureTime: '',
         flightNumber: '',
@@ -22,10 +24,12 @@ export const ticketStore = defineStore('ticketStore', () => {
 
     const selectedArrival = ref({
         arrivalCode: '',
+        arrivalName:'',
         arrivalDate: '',
         arrivalTime: '',
         basePrice: '',
         departureCode: '',
+        departureName: '',
         departureDate: '',
         departureTime: '',
         flightNumber: '',
@@ -38,5 +42,12 @@ export const ticketStore = defineStore('ticketStore', () => {
         selectedArrival.value = {...selectedTicket}
     }
 
-    return {saveDepartureTicket, saveArrivalTicket, selectedArrival, selectedDeparture}
+    const getSelectedArrival = () => {
+        return selectedArrival.value
+    }
+    const getSelectedDeparture = () => {
+        return selectedArrival.value
+    }
+
+    return {saveDepartureTicket, saveArrivalTicket, getSelectedArrival, getSelectedDeparture}
 })

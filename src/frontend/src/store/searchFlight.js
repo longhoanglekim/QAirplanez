@@ -12,13 +12,6 @@ export const searchFlightStore = defineStore('searchFlight', () => {
         children: Number(sessionStorage.getItem('children')) || 0
     });
 
-    const lastSearch = ref({
-        fromCity: sessionStorage.getItem('lastFromCity') || '',
-        toCity: sessionStorage.getItem('lastToCity') || '',
-        departureDate: sessionStorage.getItem('lastDepartureDate') || '',
-        numOfTicket: sessionStorage.getItem('lastNumOfTicket') || ''
-    });
-
     const saveForm = (submittedForm) => {
         form.value = {...submittedForm};
         Object.keys(submittedForm).forEach(key => {
@@ -28,24 +21,10 @@ export const searchFlightStore = defineStore('searchFlight', () => {
                     : submittedForm[key]
             );
         });
-        lastSearch.value = {
-            fromCity: submittedForm.fromCity,
-            toCity: submittedForm.toCity,
-            departureDate: submittedForm.departureDate,
-            numOfTicket: submittedForm.adults + submittedForm.children
-        };
-        sessionStorage.setItem('lastFromCity', lastSearch.value.fromCity);
-        sessionStorage.setItem('lastToCity', lastSearch.value.toCity);
-        sessionStorage.setItem('lastDepartureDate', lastSearch.value.departureDate);
-        sessionStorage.setItem('lastNumOfTicket', lastSearch.value.numOfTicket.toString());
     };
 
     const getOldForm = () => {
         return form.value;
-    };
-
-    const getLastSearch = () => {
-        return lastSearch.value;
     };
 
     const deleteForm = () => {
@@ -58,26 +37,16 @@ export const searchFlightStore = defineStore('searchFlight', () => {
             adults: 1,
             children: 0
         };
-        lastSearch.value = {
-            fromCity: '',
-            toCity: '',
-            departureDate: '',
-            numOfTicket: ''
-        };
         const keysToRemove = [
             'ticketType', 'fromCity', 'toCity', 'departureDate', 'returnDate', 
-            'adults', 'children', 'lastFromCity', 'lastToCity', 
-            'lastDepartureDate', 'lastNumOfTicket'
+            'adults', 'children'
         ];
         keysToRemove.forEach(key => sessionStorage.removeItem(key));
     };
 
     return {
-        form,
-        lastSearch,
         saveForm, 
         getOldForm, 
         deleteForm, 
-        getLastSearch, 
     };
 });

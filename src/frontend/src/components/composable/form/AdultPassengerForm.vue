@@ -1,11 +1,12 @@
 <template>
-<form @submit.prevent="handleSubmit" class="max-w-2xl grid md:grid-cols-2 gap-5 p-5" novalidate>
+<form @submit.prevent="handleSubmit" class="max-w-4xl grid md:grid-cols-2 gap-5 p-5" novalidate>
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
                 'capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.firstName ? 'border-red-500' : 'border-gray-200'
-              ]" @blur="validFirstName" />
-        <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
+                errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
+              ]"
+              @blur="validFirstName" />
+        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
             Họ<span class="text-red-500">*</span>:
         </label>
         <span v-if="errors.firstName" class="text-sm text-red-600">
@@ -16,9 +17,10 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.lastName" name="lastName" placeholder=" " :class="[
                 'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.lastName ? 'border-red-500' : 'border-gray-200'
-              ]" @blur="validLastName" />
-        <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
+                errors.lastName ? 'border-red-500' : 'border-gray-200' , {'text-red-600': errors.firstName}
+              ]" 
+              @blur="validLastName" />
+        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
             Tên đệm và tên<span class="text-red-500">*</span>:
         </label>
         <span v-if="errors.lastName" class="text-sm text-red-600">
@@ -29,9 +31,9 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.phone" name="phone" placeholder=" " :class="[
                 'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.phone ? 'border-red-500' : 'border-gray-200'
+                errors.phone ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
               ]" @blur="validPhone" />
-        <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.phone}">
+        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.phone}">
             Số điện thoại:<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.phone" class="text-sm text-red-600">
@@ -42,9 +44,9 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.cccd" name="cccd" placeholder=" " :class="[
                 'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.cccd ? 'border-red-500' : 'border-gray-200'
+                errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
               ]" @blur="validCccd" />
-        <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
+        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
             CCCD/CMND:<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.cccd" class="text-sm text-red-600">
@@ -55,9 +57,9 @@
     <div class="relative z-0 w-full mb-5">
         <input type="email" v-model="formData.email" name="email" placeholder=" " :class="[
                 'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                errors.email ? 'border-red-500' : 'border-gray-200'
+                errors.email ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
               ]" @blur="validEmail" />
-        <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.email}">
+        <label class="absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.email}">
             Email<span class="text-red-500">*</span>
         </label>
         <span v-if="errors.email" class="text-sm text-red-600">
@@ -187,10 +189,6 @@ const handleSubmit = () => {
     
     
 <style scoped>
-.-z-1 {
-    z-index: -1;
-}
-
 .origin-0 {
     transform-origin: 0%;
 }
