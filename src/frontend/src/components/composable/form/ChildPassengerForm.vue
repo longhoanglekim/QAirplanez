@@ -2,9 +2,10 @@
 <form @submit.prevent="handleSubmit" class=" grid md:grid-cols-2 gap-5 p-5" novalidate>
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
-                    'capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
-                  ]" @blur="validFirstName" />
+                        'relative text-black capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                        errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName }, {'text-red-600' : formData.firstName}
+                      ]" @blur="validFirstName" />
+        <EthernetPort class="absolute right-0 top-5 text-gray-500" />
         <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
             Họ<span class="text-red-500">*</span>:
         </label>
@@ -15,9 +16,10 @@
 
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.lastName" name="lastName" placeholder=" " :class="[
-                    'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.lastName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
-                  ]" @blur="validLastName" />
+                        'relative text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                        errors.lastName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.lastName}, {'text-red-600' : formData.lastName}
+                      ]" @blur="validLastName" />
+        <EthernetPort class="absolute right-0 top-5 text-gray-500" />
         <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
             Tên đệm và tên<span class="text-red-500">*</span>:
         </label>
@@ -28,6 +30,8 @@
 </form>
 </template>
 
+    
+    
 <script setup>
 import {
     ref,
@@ -95,11 +99,19 @@ const handleSubmit = () => {
     }
 }
 </script>
-        
+<script>
+    import {
+        EthernetPort
+    } from "lucide-vue-next";
+    export default {
+        components: {
+            EthernetPort
+        }
+    }
+</script>
         
     
 <style scoped>
-
 .origin-0 {
     transform-origin: 0%;
 }
