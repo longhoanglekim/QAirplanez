@@ -50,6 +50,9 @@
     </div>
 
     <!-- Danh sách vé -->
+    <div class="sticky top-20 z-50 max-w-sm">
+        <selecting-ticket></selecting-ticket>
+    </div>
     <div v-if="filteredAndSortedTickets.length > 0" class="z-10 space-y-4">
         <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index" :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
     </div>
@@ -69,6 +72,7 @@
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
+import SelectingTicket from '@/components/composable/ticket/SelectingTicket.vue';
 import { useRouter } from 'vue-router';
 import { searchFlightStore } from '@/store/searchFlight';
 import { ticketStore } from '@/store/ticket';
@@ -93,15 +97,14 @@ const userSelectTicket = (selectedTicket) => {
     selectedTicket.adults = storeSearchFlight.getOldForm().adults
     selectedTicket.children = storeSearchFlight.getOldForm().children
     storeTicket.saveDepartureTicket(selectedTicket)
-    console.log(storeTicket.selectedDeparture)
     const nextPage = storeSearchFlight.getOldForm().ticketType === 'one-way'
         ? '/booking/infomation/0'
         : '/booking/avaibility/1';
     router.push(nextPage)
 }
 
-const departureCode = storeSearchFlight.getLastSearch().fromCity
-const arrivalCode = storeSearchFlight.getLastSearch().toCity
+const departureCode = storeSearchFlight.getOldForm().fromCity
+const arrivalCode = storeSearchFlight.getOldForm().toCity
 </script>
 
 <script>

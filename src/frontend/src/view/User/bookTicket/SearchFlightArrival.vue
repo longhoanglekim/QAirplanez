@@ -99,8 +99,8 @@ const userSelectTicket = (selectedTicket) => {
     router.push(nextPage)
 }
 
-const departureCode = storeSearchFlight.getLastSearch().toCity
-const arrivalCode = storeSearchFlight.getLastSearch().fromCity
+const departureCode = storeSearchFlight.getOldForm().toCity
+const arrivalCode = storeSearchFlight.getOldForm().fromCity
 </script>
 
 <script>
