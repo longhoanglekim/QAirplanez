@@ -12,7 +12,7 @@
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" @click="toggleSearchBox" class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
         </button>
     </div>
-    <div v-if="showingSearchBox" class="animate-fade-down animate-once place-items-center z-30">
+    <div v-if="showingSearchBox" class="relative animate-fade-down animate-once place-items-center z-30">
         &nbsp;
         <FlightSearch />
         &nbsp;

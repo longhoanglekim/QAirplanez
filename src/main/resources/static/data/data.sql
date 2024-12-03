@@ -325,6 +325,7 @@ CREATE TABLE passengers (
                             passport_number varchar(255),
                             phone_number varchar(255),
                             is_adult boolean,
+                            identification varchar(255),
                             flight_id bigint NOT NULL,
                             user_id bigint NOT NULL,
                             PRIMARY KEY (passenger_id),
@@ -342,8 +343,8 @@ CREATE TABLE passengers (
 LOCK TABLES passengers WRITE;
 /*!40000 ALTER TABLE passengers DISABLE KEYS */;
 /*!40000 ALTER TABLE passengers ENABLE KEYS */;
-INSERT INTO passengers (passenger_id, bank_name, seat_row, seat_position, email, ticket_class_id, first_name, last_name, passport_number, phone_number, is_adult, flight_id, user_id)
+INSERT INTO passengers (passenger_id, bank_name, seat_row, seat_position, email, ticket_class_id, first_name, last_name, passport_number, phone_number, is_adult, flight_id, user_id, identification)
 VALUES
-    (1, 'Bank A', 1, 'A', 'test1@gmail.com', 3, 'John', 'Smith', 'P1234567', '0345675123', true, 1, 1);
+    (1, 'Bank A', 1, 'A', 'test1@gmail.com', 3, 'John', 'Smith', 'P1234567', '0345675123', true, 1, 1, "0304000233");
 
 UNLOCK TABLES;
