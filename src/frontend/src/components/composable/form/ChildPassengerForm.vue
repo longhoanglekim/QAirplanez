@@ -1,9 +1,9 @@
 <template>
-<form @submit.prevent="handleSubmit" class="max-w-2xl grid md:grid-cols-2 gap-5 p-5" novalidate>
+<form @submit.prevent="handleSubmit" class=" grid md:grid-cols-2 gap-5 p-5" novalidate>
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
                     'capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.firstName ? 'border-red-500' : 'border-gray-200'
+                    errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
                   ]" @blur="validFirstName" />
         <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.firstName}">
             Họ<span class="text-red-500">*</span>:
@@ -16,7 +16,7 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.lastName" name="lastName" placeholder=" " :class="[
                     'pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.lastName ? 'border-red-500' : 'border-gray-200'
+                    errors.lastName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
                   ]" @blur="validLastName" />
         <label class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.lastName}">
             Tên đệm và tên<span class="text-red-500">*</span>:
@@ -99,9 +99,6 @@ const handleSubmit = () => {
         
     
 <style scoped>
-.-z-1 {
-    z-index: -1;
-}
 
 .origin-0 {
     transform-origin: 0%;

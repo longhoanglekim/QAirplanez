@@ -54,7 +54,8 @@
         <selecting-ticket></selecting-ticket>
     </div>
     <div v-if="filteredAndSortedTickets.length > 0" class="z-10 space-y-4">
-        <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index" :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
+        <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index" 
+        :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
     </div>
 
     <div v-else class="text-center py-16 bg-white rounded-lg shadow-md">

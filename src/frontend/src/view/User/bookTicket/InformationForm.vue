@@ -1,16 +1,23 @@
 <template>
-    <div class="container mt-20 justify-center">
-        <header class="flex items-center justify-center">
+    <div class="container justify-center bg-orange-50">
+        <header class="flex items-center justify-center mb-10 pt-20">
             <BookingProgressBar :current-stage="2" />
         </header>
-        <main class="flex flex-col items-center justify-center">
-            <div v-for="i in adults" :key="i">
+        <main class="space-y-4">
+
+            <div class="custom w-full max-w-4xl place-self-center rounded-lg bg-white m-8" v-for="i in adults" :key="i">
+                <h1 class="text-left p-5 font-bold">Người lớn {{ i }}</h1>
                 <adult-passenger-form></adult-passenger-form>
             </div>
-            <div v-for="i in children" :key="i">
+            <div class="custom w-full max-w-4xl place-self-center rounded-lg bg-white m-8" v-for="i in children" :key="i">
+                <h1 class="text-left p-5 font-bold">Trẻ em {{ i }}</h1>
                 <child-passenger-form></child-passenger-form>
             </div>
+            <div class="my-20">
+                <button class="bg-white p-5 rounded-xl">Xác nhận thông tin</button>
+            </div>
         </main>
+        <footer class="my-10"></footer>
     </div>
     
 </template>
@@ -33,6 +40,8 @@ const children = submittedForm.value.children
 
 
 <style scoped>
-
+.custom {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3), 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
 
 </style>
