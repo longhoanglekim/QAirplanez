@@ -11,7 +11,6 @@ import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.services.FlightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -84,35 +83,22 @@ public class FlightController {
      * @return list of flightInfo
      */
     @PostMapping("/public/findFlight")
-
-    public List<List<FlightInfo>> findFlight(@RequestBody FlightInfo flightInfo) {
+    @GetMapping("/public/findFlight")
+    public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
         // Find and filter outbound flights
-        List<Flight> departFlights = new ArrayList<>();
-        departFlights = findAndFilterFlights(flightInfo.getDepartureAirportCode(), flightInfo.getDestinationAirportCode(), flightInfo);
-        List<Flight> returnFlights = new ArrayList<>();
-        returnFlights = findAndFilterFlights(flightInfo.getDestinationAirportCode(), flightInfo.getDepartureAirportCode(), flightInfo);
-        if (departFlights.isEmpty() && returnFlights.isEmpty()) {
+        List<Flight> flights = new ArrayList<>();
+        flights = findAndFilterFlights(flightInfo.getDepartureAirportCode(), flightInfo.getDestinationAirportCode(), flightInfo);
+
+        if (flights.isEmpty()) {
             log.debug("Khong tim thay chuyen bay phu hop");
             return List.of();
         }
 
-        List<FlightInfo> departFlightInfoList = new ArrayList<>();
-        for (Flight flight : departFlights) {
-            departFlightInfoList.add(flightService.getFlightInfo(flight));
+        List<FlightInfo> flightInfoList = new ArrayList<>();
+        for (Flight flight : flights) {
+            flightInfoList.add(flightService.getFlightInfo(flight));
         }
-        List<List<FlightInfo>> foundFlights = new ArrayList<>();
-        foundFlights.add(departFlightInfoList);
-        List<FlightInfo> returnFlightInfoList = new ArrayList<>();
-        if (returnFlights != null) {
-            for (Flight flight : returnFlights) {
-                returnFlightInfoList.add(flightService.getFlightInfo(flight));
-            }
-            foundFlights.add(returnFlightInfoList);
-        }
-
-
-
-        return foundFlights;
+        return flightInfoList;
     }
 
 
@@ -135,6 +121,15 @@ public class FlightController {
                 filteredFlights.add(flight);
                 log.debug("Tim thay may bay");
             }
+//            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
+//                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
+//                filteredFlights.add(flight);
+//                log.debug("Tim thay may bay");
+//            }
+                if (flight .getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()) {
+                    filteredFlights.add(flight);
+                    log.debug("Tim thay may bay");
+                }
         }
 
         return filteredFlights;

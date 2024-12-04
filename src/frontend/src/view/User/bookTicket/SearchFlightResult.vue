@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="container mx-auto px-4 pb-6 relative rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
+<div class="container mx-auto px-4 pb-6 rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
     <div class="place-items-center mb-2">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
@@ -14,8 +14,7 @@
     </div>
     <div v-if="showingSearchBox" class="relative animate-fade-down animate-once place-items-center z-30">
         &nbsp;
-        <FlightSearch />
-        &nbsp;
+        <FlightSearch/>
     </div>
 
     <!-- Phần tiêu đề và lọc -->
@@ -49,10 +48,7 @@
         </div>
     </div>
 
-    <!-- Danh sách vé -->
-    <div class="sticky top-20 z-50 max-w-sm">
-        <selecting-ticket></selecting-ticket>
-    </div>
+
     <div v-if="filteredAndSortedTickets.length > 0" class="z-10 space-y-4">
         <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index" 
         :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
@@ -65,7 +61,14 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
+  <!-- Danh sách vé -->
+
 </div>
+  <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
+    <selecting-ticket departure-time="08:30 AM"
+                      arrival-time="10:45 AM"
+                      price="$250.00"></selecting-ticket>
+  </div>
 </template>
 
     
