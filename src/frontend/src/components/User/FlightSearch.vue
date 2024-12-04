@@ -19,9 +19,9 @@
                 <label for="fromCity">Điểm đi</label>
                 <select v-model="form.fromCity" id="fromCity" required placeholder="Điểm đi">
                     <option value="">Chọn địa điểm</option>
-                    <option value="HN">HN</option>
-                    <option value="SG">SG</option>
-                    <option value="DN">DN</option>
+                    <option value="HAN">HN</option>
+                    <option value="SGN">SG</option>
+                    <option value="CXR">CXR</option>
                 </select>
             </div>
 
@@ -30,9 +30,9 @@
                 <label for="toCity">Điểm đến</label>
                 <select v-model="form.toCity" id="toCity" required placeholder="Điểm đi">
                     <option value="">Chọn địa điểm</option>
-                    <option value="HN">HN</option>
-                    <option value="SG">SG</option>
-                    <option value="DN">DN</option>
+                    <option value="HAN">HN</option>
+                    <option value="SGN">SG</option>
+                    <option value="CXR">CXR</option>
                 </select>
             </div>
 
@@ -96,6 +96,8 @@
 <script setup>
 import { ref, computed,defineEmits} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
+import useListDepartureFlightStore from '@/store/listDepartureFlight';
+import useListArrivalFlightStore from '@/store/listArrivalFlight';
 
 const searchFStore = searchFlightStore();
 
@@ -148,7 +150,7 @@ function closeModal() {
   isModalVisible.value = false
 }
 
-function submitForm() {
+async function submitForm() {
   // Validation checks
   if (form.value.adults <= 0) {
     error.value = 'Số vé người lớn phải lớn hơn 0.'
@@ -177,9 +179,36 @@ function submitForm() {
   console.log('FlightSearch.vue')
   console.log(searchFStore.getOldForm())
 
+  //send request to server
+  const req = JSON.stringify({
+    departureAirportCode: searchFStore.getOldForm().fromCity,
+    destinationAirportCode: searchFStore.getOldForm().toCity,
+    expectedDepartureTime: searchFStore.getOldForm().departureDate + ' 00:00',
+    expectedArrivalTime: searchFStore.getOldForm().returnDate + ' 00:00'
+  })
+  console.log('request: ' + req)
+  await fetch('http://localhost:8080/api/flight/public/findFlight', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: req
+    })
+    .then(response => response.json())
+    .then(data => {
+    useListDepartureFlightStore().saveFlights(data[0])
+    useListArrivalFlightStore().saveFlights(data[1])
+  })
+  .catch(error => {
+    console.error('Lỗi:', error);
+  });
+
   // Emit event for parent component
   emit('search-flight')
 }
+
+//receive response
+
 
 function submitFormTicket() {
   error.value = ''

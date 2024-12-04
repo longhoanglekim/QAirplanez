@@ -83,7 +83,7 @@ public class FlightController {
      *      expected destination time
      * @return list of flightInfo
      */
-    @GetMapping("/public/findFlight")
+    @PostMapping("/public/findFlight")
 
     public List<List<FlightInfo>> findFlight(@RequestBody FlightInfo flightInfo) {
         // Find and filter outbound flights
@@ -121,13 +121,15 @@ public class FlightController {
 
         // Step 1: Find all flights between the two airports
         List<Flight> flights = new ArrayList<>();
-        flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
+        flights = (ArrayList<Flight>) flightRepository.findAllByDepartureAirportAndDestinationAirport(
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
+        log.debug("he");
         if (flights.isEmpty()) return new ArrayList<>();
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
+            log.debug("hehe");
             if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
                     isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
                 filteredFlights.add(flight);
