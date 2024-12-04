@@ -2,8 +2,7 @@
 <template>
      <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg " >
         <!-- Header with Flight Number -->
-        <div class="flex justify-between items-center mb-4">
-  
+        <div class="relative flex justify-between items-center mb-4">
              <div class=" transform w-16 h-10 text-sm text-gray-500">
                 Flight No: 
                 <span class="font-semibold text-red-600">{{ ticket.flightNumber }}</span>
@@ -106,12 +105,12 @@
 </template>
 <script setup>
 import { Plane } from 'lucide-vue-next';
+
 </script>
 <script>
 export default {
     component: {
         Plane
-
     },
     props: {
         ticket: {
