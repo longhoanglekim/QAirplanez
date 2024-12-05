@@ -16,6 +16,8 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
             "ORDER BY p.seatRow DESC, p.seatPosition DESC limit 1")
     Optional<Passenger> findPassengerWithMaxRowLessThanOrEqual(@Param("maxRow") Integer maxRow, @Param("flight") Flight flight);
 
+    boolean existsPassengerByBookingCode(String code);
+
     @Query("SELECT p FROM Passenger p WHERE p.seatRow >= :minRow AND p.seatRow <= :maxRow AND p.flight = :flight " +
             "ORDER BY p.seatRow DESC, p.seatPosition DESC limit 1")
     Optional<Passenger> findPassengerWithMaxRowInRange(
