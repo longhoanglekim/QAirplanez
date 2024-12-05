@@ -5,17 +5,17 @@
     </div>
 </div>
 
-<div class="container mx-auto px-4 pb-6 relative rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
+<div class="container mx-auto px-4 pb-6 rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
     <div class="place-items-center mb-2">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" @click="toggleSearchBox" class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
         </button>
     </div>
-    <div v-if="showingSearchBox" class="animate-fade-down animate-once place-items-center z-30">
+    <div class="transition-all duration-500 ease-in-out relative place-items-center z-30"
+          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
         &nbsp;
-        <FlightSearch />
-        &nbsp;
+        <FlightSearch/>
     </div>
 
     <!-- Phần tiêu đề và lọc -->
@@ -61,12 +61,19 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
+
+    <button @click="test">aaaa</button>
+
+</div>
+<div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
+    <selecting-ticket departure-time="08:30 AM" arrival-time="10:45 AM" price="$250.00"></selecting-ticket>
 </div>
 </template>
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
+import SelectingTicket from '@/components/composable/ticket/SelectingTicket.vue';
 import {
     useRouter
 } from 'vue-router';
@@ -81,141 +88,139 @@ import {
     MoveRight,
 
 } from 'lucide-vue-next'
+
 import {
-    ref
-} from 'vue';
+    ref,
+    computed,
+    onMounted
+} from 'vue'
 
 const router = useRouter()
 
 const storeTicket = ticketStore();
+const storeSearchFlight = searchFlightStore();
+// Ticket classes definition
+const ticketClasses = [{
+        value: 'economy',
+        label: 'Economy',
+        priceMultiplier: 1,
+        baggageInfo: {
+            carryon: 7,
+            checkedbaggage: 20
+        }
+    },
+    {
+        value: 'business',
+        label: 'Business',
+        priceMultiplier: 2.5,
+        baggageInfo: {
+            carryon: 10,
+            checkedbaggage: 30
+        }
+    },
+    {
+        value: 'first',
+        label: 'First Class',
+        priceMultiplier: 4,
+        baggageInfo: {
+            carryon: 12,
+            checkedbaggage: 40
+        }
+    }
+]
+
+// Reactive state
+const sortOption = ref('price')
+const tickets = ref([])
+
 const showingSearchBox = ref(false)
 const toggleSearchBox = () => {
     showingSearchBox.value = !showingSearchBox.value
 }
-const storeSearchFlight = searchFlightStore();
-const userSelectTicket = (selectedTicket) => {
+
+const userSelectTicket = async (selectedTicket) => {
+    //luu ve vao store
+    //TO DO
+    selectedTicket.adults = storeSearchFlight.getOldForm().adults
+    selectedTicket.children = storeSearchFlight.getOldForm().children
     storeTicket.saveArrivalTicket(selectedTicket)
-    const nextPage = '/booking/infomation/0'
-    router.push(nextPage)
+    router.push('/booking/infomation/0')
+    // const nextPage = storeSearchFlight.getOldForm().ticketType === 'one-way'
+    //     ? '/booking/infomation/0'
+    //     : '/booking/avaibility/1';
+    // router.push(nextPage)
 }
 
-const departureCode = storeSearchFlight.getOldForm().toCity
-const arrivalCode = storeSearchFlight.getOldForm().fromCity
-</script>
+const departureCode = ref(storeSearchFlight.getOldForm().toCity)
+const arrivalCode = ref(storeSearchFlight.getOldForm().fromCity)
 
-<script>
-export default {
-    components: {
-        FlightSearch,
-        ChevronDown,
-        FlightTicket
-    },
-    data() {
-        return {
-            sortOption: 'price',
-            showFilterModal: false,
-            ticketClasses: [{
-                    value: 'economy',
-                    label: 'Economy',
-                    priceMultiplier: 1,
-                    baggageInfo: {
-                        carryon: 7,
-                        checkedbaggage: 20
-                    }
-                },
-                {
-                    value: 'business',
-                    label: 'Business',
-                    priceMultiplier: 2.5,
-                    baggageInfo: {
-                        carryon: 10,
-                        checkedbaggage: 30
-                    }
-                },
-                {
-                    value: 'first',
-                    label: 'First Class',
-                    priceMultiplier: 4,
-                    baggageInfo: {
-                        carryon: 12,
-                        checkedbaggage: 40
-                    }
-                }
-            ],
-            tickets: [{
-                    departureCode: 'HAN',
-                    arrivalCode: 'SGN',
-                    flightNumber: 'VN123',
-                    departureTime: '10:30',
-                    departureDate: '15 Dec 2024',
-                    arrivalTime: '12:45',
-                    arrivalDate: '15 Dec 2024',
-                    basePrice: 250000,
-                    selectedClass: null
-                },
-                {
-                    departureCode: 'HAN',
-                    arrivalCode: 'SGN',
-                    flightNumber: 'VN456',
-                    departureTime: '14:15',
-                    departureDate: '15 Dec 2024',
-                    arrivalTime: '16:30',
-                    arrivalDate: '15 Dec 2024',
-                    basePrice: 300000,
-                    selectedClass: null
-                },
-                {
-                    departureCode: 'HAN',
-                    arrivalCode: 'SGN',
-                    flightNumber: 'VN789',
-                    departureTime: '20:00',
-                    departureDate: '15 Dec 2024',
-                    arrivalTime: '22:15',
-                    arrivalDate: '15 Dec 2024',
-                    basePrice: 220000,
-                    selectedClass: null
-                }
-            ]
-        }
-    },
-    computed: {
-        filteredAndSortedTickets() {
-            let result = [...this.tickets]
+// Methods
+const calculateFlightDuration = (ticket) => {
+    const departureMinutes = convertTimeToMinutes(ticket.departureTime)
+    const arrivalMinutes = convertTimeToMinutes(ticket.arrivalTime)
+    return arrivalMinutes - departureMinutes
+}
 
-            // Sắp xếp
-            switch (this.sortOption) {
-                case 'price':
-                    result.sort((a, b) => a.basePrice - b.basePrice)
-                    break
-                case 'duration':
-                    result.sort((a, b) => this.calculateFlightDuration(a) - this.calculateFlightDuration(b))
-                    break
-                case 'departure':
-                    result.sort((a, b) => this.convertTimeToMinutes(a.departureTime) - this.convertTimeToMinutes(b.departureTime))
-                    break
-            }
+const convertTimeToMinutes = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number)
+    return hours * 60 + minutes
+}
 
-            return result
-        }
-    },
-    methods: {
-        calculateFlightDuration(ticket) {
-            const departureMinutes = this.convertTimeToMinutes(ticket.departureTime)
-            const arrivalMinutes = this.convertTimeToMinutes(ticket.arrivalTime)
-            return arrivalMinutes - departureMinutes
-        },
-        convertTimeToMinutes(timeString) {
-            const [hours, minutes] = timeString.split(':').map(Number)
-            return hours * 60 + minutes
-        },
-        toggleFilterModal() {
-            this.showFilterModal = !this.showFilterModal
-        }
+const getListTicket = async (departureDate) => {
+    const req = JSON.stringify({
+        departureCode: departureCode.value,
+        arrivalCode: arrivalCode.value,
+        expectedDepartureTime: departureDate + ' 00:00',
+        expectedArrivalTime: null,
+        numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children
+    })
+
+    await fetch('http://localhost:8080/api/flight/public/findFlight', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: req
+        })
+        .then(response => response.json())
+        .then(data => {
+            tickets.value = data.map(flight => ({
+                ...flight,
+                basePrice: 250000,
+                selectedClass: null
+            }))
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+        });
+}
+
+// Computed property
+const filteredAndSortedTickets = computed(() => {
+    let result = [...tickets.value]
+
+    // Sorting
+    switch (sortOption.value) {
+        case 'price':
+            result.sort((a, b) => a.basePrice - b.basePrice)
+            break
+        case 'duration':
+            result.sort((a, b) => calculateFlightDuration(a) - calculateFlightDuration(b))
+            break
+        case 'departure':
+            result.sort((a, b) => convertTimeToMinutes(a.departureTime) - convertTimeToMinutes(b.departureTime))
+            break
     }
-}
+
+    return result
+})
+
+// Lifecycle hook
+onMounted(() => {
+    getListTicket(storeSearchFlight.getOldForm().returnDate)
+})
 </script>
-    
-    
+
 <style scoped>
 .img {
     background-image: url("../../../assets/destination/3.jpg");

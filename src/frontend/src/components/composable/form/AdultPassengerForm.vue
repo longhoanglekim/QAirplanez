@@ -79,7 +79,8 @@
 import {
     ref,
     reactive,
-    defineEmits
+    defineEmits,
+    defineExpose
 } from 'vue'
 const formData = reactive({
     firstName: '',
@@ -167,12 +168,11 @@ const submitted = ref(false)
 const emit = defineEmits(['submit'])
 
 const validateForm = () => {
-    errors.firstName = !formData.firstName.trim()
-    errors.name = !formData.fullName.trim()
-    errors.phone = !formData.phone.trim()
-    errors.email = !formData.email.trim() ||
-        !/\S+@\S+\.\S+/.test(formData.email)
-
+    validCccd()
+    validEmail()
+    validFirstName()
+    validLastName()
+    validPhone()
     return !(errors.firstName || errors.name || errors.phone || errors.email)
 }
 
@@ -186,6 +186,15 @@ const handleSubmit = () => {
         submitted.value = false // Reset after successful submission
     }
 }
+
+const getPassengerData = () => {
+    return formData
+}
+
+defineExpose({
+  getPassengerData,
+  validateForm
+})
 </script>
 <script>
     import {

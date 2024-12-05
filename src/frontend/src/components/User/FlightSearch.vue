@@ -96,7 +96,6 @@
 <script setup>
 import { ref, computed,defineEmits} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
-import useListDepartureFlightStore from '@/store/listDepartureFlight';
 
 const searchFStore = searchFlightStore();
 
@@ -175,34 +174,10 @@ async function submitForm() {
   error.value = ''
   searchFStore.saveForm(form.value)
 
-  //send request to server
-  const req = JSON.stringify({
-    departureCode: searchFStore.getOldForm().fromCity,
-    arrivalCode: searchFStore.getOldForm().toCity,
-    expectedDepartureTime: searchFStore.getOldForm().departureDate + ' 00:00',
-    expectedArrivalTime: searchFStore.getOldForm().returnDate + ' 00:00'
-  })
-  console.log('request: ' + req)
-  await fetch('http://localhost:8080/api/flight/public/findFlight', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: req
-    })
-    .then(response => response.json())
-    .then(data => {
-    useListDepartureFlightStore().saveFlights(data)
-  })
-  .catch(error => {
-    console.error('Lỗi:', error);
-  });
-
   // Emit event for parent component
   emit('search-flight')
 }
 
-//receive response
 
 
 function submitFormTicket() {

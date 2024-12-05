@@ -135,7 +135,10 @@ export default {
         },
         selectTicket() {
             //console.log(this.localTicket)
-            this.$emit('selected', this.localTicket)
+            this.$emit('selected', {
+                ...this.localTicket,
+                price: this.calculateClassPrice(this.localTicket.selectedClass)
+            })
         },
         getBaggageInfo(classType) {
             const ticketClass = this.ticketClasses.find(cls => cls.value === classType)
