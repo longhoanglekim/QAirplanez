@@ -97,7 +97,6 @@
 import { ref, computed,defineEmits} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
 import useListDepartureFlightStore from '@/store/listDepartureFlight';
-import useListArrivalFlightStore from '@/store/listArrivalFlight';
 
 const searchFStore = searchFlightStore();
 
@@ -176,13 +175,10 @@ async function submitForm() {
   error.value = ''
   searchFStore.saveForm(form.value)
 
-  console.log('FlightSearch.vue')
-  console.log(searchFStore.getOldForm())
-
   //send request to server
   const req = JSON.stringify({
-    departureAirportCode: searchFStore.getOldForm().fromCity,
-    destinationAirportCode: searchFStore.getOldForm().toCity,
+    departureCode: searchFStore.getOldForm().fromCity,
+    arrivalCode: searchFStore.getOldForm().toCity,
     expectedDepartureTime: searchFStore.getOldForm().departureDate + ' 00:00',
     expectedArrivalTime: searchFStore.getOldForm().returnDate + ' 00:00'
   })
@@ -196,8 +192,7 @@ async function submitForm() {
     })
     .then(response => response.json())
     .then(data => {
-    useListDepartureFlightStore().saveFlights(data[0])
-    useListArrivalFlightStore().saveFlights(data[1])
+    useListDepartureFlightStore().saveFlights(data)
   })
   .catch(error => {
     console.error('Lỗi:', error);

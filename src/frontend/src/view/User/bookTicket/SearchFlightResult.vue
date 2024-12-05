@@ -48,7 +48,7 @@
         </div>
     </div>
 
-
+    <!-- Danh sách vé -->
     <div v-if="filteredAndSortedTickets.length > 0" class="z-10 space-y-4">
         <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index" 
         :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
@@ -61,7 +61,8 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
-  <!-- Danh sách vé -->
+    
+    <button @click="test">aaaa</button>
 
 </div>
   <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
@@ -89,7 +90,6 @@ import {
     ref
 } from 'vue';
 import useListDepartureFlightStore from '@/store/listDepartureFlight';
-import { flights } from '@/assets/data';
 
 const router = useRouter()
 
@@ -188,6 +188,9 @@ export default {
             ]
         }
     },
+    mounted() {
+        this.getListTicket()
+    },
     computed: {
         filteredAndSortedTickets() {
             let result = [...this.tickets]
@@ -221,19 +224,14 @@ export default {
         toggleFilterModal() {
             this.showFilterModal = !this.showFilterModal
         },
-        getListTicket() {
+        async getListTicket() {
             const listFlight = useListDepartureFlightStore().getFlights()
-            if (typeof(listFlight) != Array || listFlight.length == 0) return []
-            const ticket = [];
+            if (!Array.isArray(listFlight)|| listFlight.length == 0) return
+            const res = [];
             for (let flight in listFlight) {
-                ticket.add({
-                    departureCode: flight.departureAirportCode,
-                    arrivalCode: flight,
-                    flightNumber: 'VN123',
-                    departureTime: '10:30',
-                    departureDate: '15 Dec 2024',
-                    arrivalTime: '12:45',
-                    arrivalDate: '15 Dec 2024',
+                console.log(listFlight[flight])
+                res.push({
+                    ...listFlight[flight],
                     basePrice: 250000,
                     selectedClass: null
                 })
@@ -250,6 +248,7 @@ export default {
                 "manufacture": "Airbus"
                 */
             }
+            this.tickets = res
         }
     }
 }
