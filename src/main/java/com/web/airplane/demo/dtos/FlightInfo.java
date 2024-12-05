@@ -28,7 +28,9 @@ public class FlightInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime cancelDueTime;
     private String aircraftCode;
-
+    private boolean isAvailableFirstSeats;
+    private boolean isAvailableBusinessSeats;
+    private boolean isAvailableEconomySeats;
 
     public String getManufacture() {
         if (aircraftCode != null && !aircraftCode.isEmpty()) {

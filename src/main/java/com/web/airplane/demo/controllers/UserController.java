@@ -13,6 +13,7 @@ import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.BookingCodeService;
 import com.web.airplane.demo.services.FlightService;
 import com.web.airplane.demo.services.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -77,12 +78,11 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Flight not found.");
             }
 
-            int numberOfSeat = flight.getFirstSeats() + flight.getEconomySeats() + flight.getBusinessSeats();
-            int bookedSeats = flight.getPassengers().size();
-            int requestedSeats = passengerInfoList.size();
 
-            if (numberOfSeat - (bookedSeats + requestedSeats) < 0) {
-                throw new SeatUnavailableException("There are only " + (numberOfSeat - bookedSeats) + " available seats.");
+            int bookedSeats = flight.getPassengers().size();
+
+            if (flight.getFirstAvailableSeats() == 0 && flight.getBusinessAvailableSeats() == 0 && flight.getEconomyAvailableSeats() == 0) {
+                throw new SeatUnavailableException("There are only " + (flight.getAircraft().getNumberOfSeats() - bookedSeats) + " available seats.");
             }
             //Todo : Xét ngoại lệ với từng hạng ghế
             log.debug("Xet ngoai le tung hang ghe");
@@ -97,15 +97,15 @@ public class UserController {
                 } else numberReqEconomySeat++;
             }
             log.debug("Xet first class");
-            if (flightService.getAvailableFirstSeats(flight) - numberReqFirstSeat < 0) {
+            if (flight.getFirstAvailableSeats() - numberReqFirstSeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for first class!");
             }
             log.debug("Xet business class");
-            if (flightService.getAvailableBusinessSeats(flight) - numberReqBusinessSeat < 0) {
+            if (flight.getBusinessAvailableSeats() - numberReqBusinessSeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for business class!");
             }
             log.debug("Xet economy class");
-            if (flightService.getAvailableEconomySeats(flight) - numberReqEconomySeat < 0) {
+            if (flight.getEconomyAvailableSeats() - numberReqEconomySeat < 0) {
                 throw new SeatUnavailableException("There're not enough seats for economy class!");
             }
 
@@ -132,34 +132,57 @@ public class UserController {
             Passenger passenger = new Passenger();
             passenger.setFirstName(passengerInfo.getFirstName());
             passenger.setLastName(passengerInfo.getLastName());
-            passenger.setAdult(passengerInfo.getIsAdult());
+            passenger.setBirthdate(passengerInfo.getBirthdate());
             log.debug("Set cho ngoi");
             passenger.setFlight(flight);
             if (passengerInfo.getTicketClassCode().equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
-                String seatCode = flightService.getNextFirstSeat(flight);
-                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
+                    log.debug("Chon ghe first");
+                    String seatCode = flightService.getFirstSeatForAutoBooking(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(passengerInfo.getSeatRow());
+                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                }
+                flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
                 stringBuilder.append(bookingCodeService.generateBookingCode());
                 passenger.setBookingCode(stringBuilder.toString());
             } else if (passengerInfo.getTicketClassCode().equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
-                String seatCode = flightService.getNextBusinessSeat(flight);
-                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                if (passengerInfo.getSeatPosition() == null && passenger.getSeatRow() == null) {
+                    log.debug("Chon ghe bus");
+                    String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(passengerInfo.getSeatRow());
+                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                }
+                flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
                 stringBuilder.append(bookingCodeService.generateBookingCode());
                 passenger.setBookingCode(stringBuilder.toString());
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
-                String seatCode = flightService.getNextEconomySeat(flight);
-                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                if (passengerInfo.getSeatPosition() == null && passenger.getSeatRow() == null) {
+                    log.debug("Chon ghe economy");
+                    String seatCode = flightService.getEconomySeatForAutoBooking(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(passengerInfo.getSeatRow());
+                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                }
+                flight.setEconomyAvailableSeats(flight.getBusinessAvailableSeats() - 1);
                 stringBuilder.append(bookingCodeService.generateBookingCode());
                 passenger.setBookingCode(stringBuilder.toString());
             }
             log.debug("Them vao database");
             passenger.setUser(getCurrentUser(request));
+            log.debug("Set booking code");
             passenger.setBookingCode(bookingCodeService.generateBookingCode());
+            log.debug("Them Passenger");
             passengerRepository.save(passenger);
             flight.getPassengers().add(passenger);
 
@@ -216,6 +239,13 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
+            // Xóa JWT token khỏi cookie
+            Cookie cookie = new Cookie("jwtToken", null);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, null);
             return ResponseEntity.ok("Logout successful");
