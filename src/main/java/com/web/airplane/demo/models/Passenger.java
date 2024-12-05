@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name="passengers")
 @Getter
@@ -35,7 +37,7 @@ public class Passenger {
 
 
     private String bankName;
-    private boolean isAdult;
+    private LocalDate birthdate;
 
     @NotNull
     private Integer seatRow;
