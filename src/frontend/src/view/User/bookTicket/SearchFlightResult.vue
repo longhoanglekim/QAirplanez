@@ -88,6 +88,8 @@ import {
 import {
     ref
 } from 'vue';
+import useListDepartureFlightStore from '@/store/listDepartureFlight';
+import { flights } from '@/assets/data';
 
 const router = useRouter()
 
@@ -218,6 +220,36 @@ export default {
         },
         toggleFilterModal() {
             this.showFilterModal = !this.showFilterModal
+        },
+        getListTicket() {
+            const listFlight = useListDepartureFlightStore().getFlights()
+            if (typeof(listFlight) != Array || listFlight.length == 0) return []
+            const ticket = [];
+            for (let flight in listFlight) {
+                ticket.add({
+                    departureCode: flight.departureAirportCode,
+                    arrivalCode: flight,
+                    flightNumber: 'VN123',
+                    departureTime: '10:30',
+                    departureDate: '15 Dec 2024',
+                    arrivalTime: '12:45',
+                    arrivalDate: '15 Dec 2024',
+                    basePrice: 250000,
+                    selectedClass: null
+                })
+                /*
+                "flightNumber": "VN504",
+                "departureAirportCode": "HAN",
+                "destinationAirportCode": "CXR",
+                "expectedDepartureTime": "2024-12-25 14:45",
+                "expectedArrivalTime": "2024-12-25 21:00",
+                "expectedReturnTime": null,
+                "cancelDueTime": "2024-12-25 13:00",
+                "aircraftCode": "Airbus-A380",
+                "model": "A380",
+                "manufacture": "Airbus"
+                */
+            }
         }
     }
 }

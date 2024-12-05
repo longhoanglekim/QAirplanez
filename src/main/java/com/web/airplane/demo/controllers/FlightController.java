@@ -11,7 +11,6 @@ import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.services.FlightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,6 +82,7 @@ public class FlightController {
      *      expected destination time
      * @return list of flightInfo
      */
+    @PostMapping("/public/findFlight")
     @GetMapping("/public/findFlight")
     public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
         // Find and filter outbound flights
@@ -107,13 +107,20 @@ public class FlightController {
 
         // Step 1: Find all flights between the two airports
         List<Flight> flights = new ArrayList<>();
-        flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
+        flights = (ArrayList<Flight>) flightRepository.findAllByDepartureAirportAndDestinationAirport(
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
+        log.debug("he");
         if (flights.isEmpty()) return new ArrayList<>();
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
+            log.debug("hehe");
+            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
+                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
+                filteredFlights.add(flight);
+                log.debug("Tim thay may bay");
+            }
 //            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
 //                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
 //                filteredFlights.add(flight);
