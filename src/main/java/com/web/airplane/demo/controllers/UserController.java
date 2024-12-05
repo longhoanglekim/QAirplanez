@@ -10,9 +10,9 @@ import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
 import com.web.airplane.demo.repositories.TicketClassRepository;
 import com.web.airplane.demo.repositories.UserRepository;
+import com.web.airplane.demo.services.BookingCodeService;
 import com.web.airplane.demo.services.FlightService;
 import com.web.airplane.demo.services.UserService;
-import com.web.airplane.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +41,12 @@ public class UserController {
     private FlightRepository flightRepository;
     @Autowired
     private PassengerRepository passengerRepository;
+    private final BookingCodeService bookingCodeService;
 
-    public UserController(UserRepository userRepository, UserService userService) {
+    public UserController(UserRepository userRepository, UserService userService, BookingCodeService bookingCodeService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.bookingCodeService = bookingCodeService;
     }
 
     @GetMapping("/flights")
@@ -65,8 +67,7 @@ public class UserController {
 
     @Transactional
     @PostMapping("/bookFlight")
-    public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String flightNumber,
-                                        @RequestParam(value = "return_flight_number", required = false)
+    public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
                                         HttpServletRequest request,
                                         @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
@@ -109,41 +110,10 @@ public class UserController {
             }
 
             // Todo : Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay
-            log.debug("Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay");
-            for (PassengerInfo passengerInfo : passengerInfoList) {
-                log.debug("THEM KHACH HANG");
-                Passenger passenger = new Passenger();
-                passenger.setFirstName(passengerInfo.getFirstName());
-                passenger.setLastName(passengerInfo.getLastName());
-                passenger.setAdult(passengerInfo.getIsAdult());
-                log.debug("Nhap :" + passengerInfo.getIsAdult());
-                log.debug("Ra :" + passenger.isAdult());
-                log.debug("Set cho ngoi");
-                passenger.setFlight(flight);
-                if (passengerInfo.getTicketClassCode().equals("First")) {
-                    passenger.setTicketClass(ticketClassRepository.findById(3L).get());
-                    String seatCode = flightService.getNextFirstSeat(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                } else if (passengerInfo.getTicketClassCode().equals("Business")) {
-                    passenger.setTicketClass(ticketClassRepository.findById(2L).get());
-                    String seatCode = flightService.getNextBusinessSeat(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                } else {
-                    passenger.setTicketClass(ticketClassRepository.findById(1L).get());
-                    String seatCode = flightService.getNextEconomySeat(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                }
-                log.debug("Them vao database");
-                passenger.setUser(getCurrentUser(request));
-                passengerRepository.save(passenger);
-                flight.getPassengers().add(passenger);
-            }
+            String genBookingCode = bookingProcess(request, passengerInfoList, flight);
             flightRepository.save(flight);  // Lưu lại chuyến bay với hành khách đã được đặt
 
-            return ResponseEntity.ok("Booking successful!");
+            return ResponseEntity.ok(genBookingCode);
 
         } catch (SeatUnavailableException e) {
             // Xử lý exception nếu không đủ ghế
@@ -152,6 +122,49 @@ public class UserController {
             // Xử lý các lỗi khác (nếu có)
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
+    }
+
+    private String bookingProcess(HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
+        log.debug("Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (PassengerInfo passengerInfo : passengerInfoList) {
+            log.debug("THEM KHACH HANG");
+            Passenger passenger = new Passenger();
+            passenger.setFirstName(passengerInfo.getFirstName());
+            passenger.setLastName(passengerInfo.getLastName());
+            passenger.setAdult(passengerInfo.getIsAdult());
+            log.debug("Set cho ngoi");
+            passenger.setFlight(flight);
+            if (passengerInfo.getTicketClassCode().equals("First")) {
+                passenger.setTicketClass(ticketClassRepository.findById(3L).get());
+                String seatCode = flightService.getNextFirstSeat(flight);
+                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                stringBuilder.append(bookingCodeService.generateBookingCode());
+                passenger.setBookingCode(stringBuilder.toString());
+            } else if (passengerInfo.getTicketClassCode().equals("Business")) {
+                passenger.setTicketClass(ticketClassRepository.findById(2L).get());
+                String seatCode = flightService.getNextBusinessSeat(flight);
+                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                stringBuilder.append(bookingCodeService.generateBookingCode());
+                passenger.setBookingCode(stringBuilder.toString());
+            } else {
+                passenger.setTicketClass(ticketClassRepository.findById(1L).get());
+                String seatCode = flightService.getNextEconomySeat(flight);
+                passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                stringBuilder.append(bookingCodeService.generateBookingCode());
+                passenger.setBookingCode(stringBuilder.toString());
+            }
+            log.debug("Them vao database");
+            passenger.setUser(getCurrentUser(request));
+            passenger.setBookingCode(bookingCodeService.generateBookingCode());
+            passengerRepository.save(passenger);
+            flight.getPassengers().add(passenger);
+
+        }
+        return stringBuilder.toString();
     }
 
     @Transactional

@@ -49,6 +49,8 @@ public class Passenger {
 
     private String identification;
 
+    private String bookingCode;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")

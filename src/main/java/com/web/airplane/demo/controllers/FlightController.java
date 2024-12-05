@@ -121,7 +121,8 @@ public class FlightController {
 //                log.debug("Tim thay may bay");
 //            }
 
-            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()) {
+            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth() &&
+                flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()) {
                 filteredFlights.add(flight);
                 log.debug("Tim thay may bay");
             }
