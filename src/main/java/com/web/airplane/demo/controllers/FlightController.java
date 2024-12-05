@@ -1,6 +1,7 @@
 package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.FlightInfo;
+import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Aircraft;
 import com.web.airplane.demo.models.Airport;
 import com.web.airplane.demo.models.Flight;
@@ -84,6 +85,7 @@ public class FlightController {
      */
     @PostMapping("/public/findFlight")
     public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
+
         // Find and filter outbound flights
         List<Flight> flights = new ArrayList<>();
         flights = findAndFilterFlights(flightInfo.getDepartureCode(), flightInfo.getArrivalCode(), flightInfo);
@@ -95,7 +97,18 @@ public class FlightController {
 
         List<FlightInfo> flightInfoList = new ArrayList<>();
         for (Flight flight : flights) {
-            flightInfoList.add(flightService.getFlightInfo(flight));
+            FlightInfo tempFlightInfo = flightService.getFlightInfo(flight);
+
+
+            log.debug((flight.getFirstAvailableSeats()) + " " + flight.getEconomyAvailableSeats() 
+            + " " + flight.getBusinessAvailableSeats() + " " + flightInfo.getNumOfTicketRequest());
+            
+            tempFlightInfo.setAvailableFirstSeats((flight.getFirstAvailableSeats() - flightInfo.getNumOfTicketRequest() >= 0));
+            tempFlightInfo.setAvailableEconomySeats((flight.getEconomyAvailableSeats() - flightInfo.getNumOfTicketRequest() >= 0));
+            tempFlightInfo.setAvailableBusinessSeats((flight.getBusinessAvailableSeats() - flightInfo.getNumOfTicketRequest() >= 0));
+            if(tempFlightInfo.isAvailableBusinessSeats() 
+            || tempFlightInfo.isAvailableEconomySeats() 
+            || tempFlightInfo.isAvailableFirstSeats()) flightInfoList.add(tempFlightInfo);
         }
         return flightInfoList;
     }
@@ -121,8 +134,9 @@ public class FlightController {
 //                log.debug("Tim thay may bay");
 //            }
 
-            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth() &&
-                flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()) {
+            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth() 
+            && flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
+            ) {
                 filteredFlights.add(flight);
                 log.debug("Tim thay may bay");
             }
