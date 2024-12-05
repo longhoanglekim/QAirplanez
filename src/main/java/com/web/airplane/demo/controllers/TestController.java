@@ -16,7 +16,7 @@ public class TestController {
     private FlightRepository flightRepository;
     @GetMapping("/string")
     public ResponseEntity<?> getMessage() throws SeatUnavailableException {
-        String string = flightService.getNextEconomySeat(flightRepository.findById(1L).get());
+        String string = "abc";
         return ResponseEntity.ok().body(string);
 
     }
