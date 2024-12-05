@@ -67,8 +67,7 @@ public class UserController {
 
     @Transactional
     @PostMapping("/bookFlight")
-    public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String flightNumber,
-                                        @RequestParam(value = "return_flight_number", required = false)
+    public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
                                         HttpServletRequest request,
                                         @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
