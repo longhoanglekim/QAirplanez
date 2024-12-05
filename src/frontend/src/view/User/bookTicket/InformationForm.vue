@@ -1,7 +1,7 @@
 <template>
 <div class="container justify-center bg-orange-50">
     <header class="flex items-center justify-center mb-10 pt-20">
-        <BookingProgressBar :current-stage="2" />
+        <BookingProgressBar :current-stage="1" />
     </header>
     <main class="space-y-4">
         <div class="custom w-full max-w-4xl place-self-center rounded-lg bg-white m-8" v-for="i in adults" :key="i">
