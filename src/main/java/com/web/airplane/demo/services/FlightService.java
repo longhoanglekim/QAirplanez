@@ -32,9 +32,9 @@ public class FlightService {
         // Tạo đối tượng Flight với các thông tin cần thiết
         Flight flight = new Flight();
         flight.setFlightNumber(flightInfo.getFlightNumber());
-        flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureAirportCode()));
-        log.debug("Departure airport " + flightInfo.getDepartureAirportCode() +":" + airportRepository.findByAirportCode(flightInfo.getDepartureAirportCode()));
-        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getDestinationAirportCode()));
+        flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
+        log.debug("Departure airport " + flightInfo.getDepartureCode() +":" + airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
+        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
         flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
         flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
         flight.setAircraft(aircraftRepository.findByManufacturerAndModel(flightInfo.getManufacture(), flightInfo.getModel()));
@@ -48,8 +48,8 @@ public class FlightService {
         FlightInfo flightInfo = new FlightInfo();
         flightInfo.setFlightNumber(flight.getFlightNumber());
         flightInfo.setAircraftCode(flight.getAircraft().getManufacturer() + "-" + flight.getAircraft().getModel());
-        flightInfo.setDepartureAirportCode(flight.getDepartureAirport().getAirportCode());
-        flightInfo.setDestinationAirportCode(flight.getDestinationAirport().getAirportCode());
+        flightInfo.setDepartureCode(flight.getDepartureAirport().getAirportCode());
+        flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
         flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
         flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
         flightInfo.setCancelDueTime(flight.getCancelDueTime());

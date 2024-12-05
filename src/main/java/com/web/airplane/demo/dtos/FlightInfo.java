@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FlightInfo {
     private String flightNumber;
-    private String departureAirportCode;
-    private String destinationAirportCode;
+    private String departureCode;
+    private String arrivalCode;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -49,5 +49,25 @@ public class FlightInfo {
             }
         }
         return null;  // Trả về null nếu aircraftCode không hợp lệ
+    }
+
+    public String getDepartureDate() {
+        return expectedDepartureTime.getDayOfMonth() + " tháng "
+        + expectedDepartureTime.getMonthValue() + " năm "
+        + expectedDepartureTime.getYear();
+    }
+
+    public String getDepartureTime() {
+        return String.format("%02d:%02d", expectedDepartureTime.getHour(), expectedDepartureTime.getMinute());
+    }
+
+    public String getArrivalDate() {
+        return expectedArrivalTime.getDayOfMonth() + " "
+        + expectedArrivalTime.getMonthValue() + " "
+        + expectedArrivalTime.getYear();
+    }
+
+    public String getArrivalTime() {
+        return String.format("%02d:%02d", expectedArrivalTime.getHour(), expectedArrivalTime.getMinute());
     }
 }

@@ -83,11 +83,10 @@ public class FlightController {
      * @return list of flightInfo
      */
     @PostMapping("/public/findFlight")
-    @GetMapping("/public/findFlight")
     public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
         // Find and filter outbound flights
         List<Flight> flights = new ArrayList<>();
-        flights = findAndFilterFlights(flightInfo.getDepartureAirportCode(), flightInfo.getDestinationAirportCode(), flightInfo);
+        flights = findAndFilterFlights(flightInfo.getDepartureCode(), flightInfo.getArrivalCode(), flightInfo);
 
         if (flights.isEmpty()) {
             log.debug("Khong tim thay chuyen bay phu hop");
@@ -116,20 +115,16 @@ public class FlightController {
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
             log.debug("hehe");
-            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
-                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
-                filteredFlights.add(flight);
-                log.debug("Tim thay may bay");
-            }
 //            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
 //                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
 //                filteredFlights.add(flight);
 //                log.debug("Tim thay may bay");
 //            }
-                if (flight .getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()) {
-                    filteredFlights.add(flight);
-                    log.debug("Tim thay may bay");
-                }
+
+            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()) {
+                filteredFlights.add(flight);
+                log.debug("Tim thay may bay");
+            }
         }
 
         return filteredFlights;
