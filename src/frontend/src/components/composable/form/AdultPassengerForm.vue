@@ -4,7 +4,7 @@
 
         <input type="text" v-model="formData.firstName" name="firstName" placeholder=" " :class="[
                     'relative text-black capitalize pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}, {'text-red-600' : formData.firstName}
+                    errors.firstName ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.firstName}
                   ]" @blur="validFirstName" />
         <EthernetPort class="absolute right-0 top-5 text-gray-500" />
 
@@ -34,7 +34,7 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.phone" name="phone" placeholder=" " :class="[
                     'relative text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.phone ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.lastName} ,{'text-red-600' : formData.lastName}
+                    errors.phone ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.lastName}
                   ]" @blur="validPhone" />
         <Phone class="absolute right-0 top-5 text-gray-500" />
         <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.phone}">
@@ -48,7 +48,7 @@
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.cccd" name="cccd" placeholder=" " :class="[
                     'text-black  pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.cccd}, {'text-red-600' : formData.cccd}
+                    errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.cccd}
                   ]" @blur="validCccd" />
         <IdCard class="absolute right-0 top-5 text-gray-500" />
         <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
@@ -62,7 +62,7 @@
     <div class="relative z-0 w-full mb-5">
         <input type="email" v-model="formData.email" name="email" placeholder=" " :class="[
                     'text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
-                    errors.email ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.email}, {'text-red-600' : formData.email}
+                    errors.email ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.email}
                   ]" @blur="validEmail" />
         <Mail class="absolute right-0 top-5 text-gray-500" />
         <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.email}">
@@ -131,10 +131,10 @@ const validCccd = () => {
     if (formData.cccd == null || formData.cccd == '') {
         errorsData.cccd = 'Vui lòng điền số CCCD/CMND'
         errors.cccd = true
-    } else if (errorsData.cccd.length !== 9 && errorsData.cccd.length !== 12) {
+    } else if (formData.cccd.length !== 9 && formData.cccd.length !== 12) {
         errorsData.cccd = "Căn cước công dân hoặc chứng minh nhân dân phải có 9 hoặc 12 ký tự.";
         errors.cccd = true
-    } else if (!/^\d+$/.test(errorsData.cccd)) {
+    } else if (!/^[0-9]*$/.test(errorsData.cccd)) {
         errorsData.cccd = 'Vui lòng điền số CCCD/CMND hợp lệ'
         errors.cccd = true
     }

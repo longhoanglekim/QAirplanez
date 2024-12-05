@@ -19,6 +19,7 @@
                 Xác nhận thông tin
             </button>
         </div>
+        <ErrorModal v-model="error"/>
     </main>
     <footer class="my-10"></footer>
 </div>
@@ -29,12 +30,14 @@
 <script setup>
 import AdultPassengerForm from '@/components/composable/form/AdultPassengerForm.vue';
 import ChildPassengerForm from '@/components/composable/form/ChildPassengerForm.vue';
+import ErrorModal from '@/components/composable/ErrorModal.vue';
 import { searchFlightStore } from '@/store/searchFlight';
 import {
     ref
 } from 'vue'
+import { useRouter } from 'vue-router';
 
-
+const route = useRouter()
 
 const storeForm = searchFlightStore()
 // Reactive variables
@@ -42,6 +45,8 @@ const adults = ref(storeForm.getOldForm().adults)
 const children = ref(storeForm.getOldForm().children)
 const adultForms = ref([])
 const childForms = ref([])
+
+const error = ref(false)
 
 const sendPassengerInformation = async () => {
     // Validate tất cả các form
@@ -51,6 +56,7 @@ const sendPassengerInformation = async () => {
     // Nếu không hợp lệ, dừng lại và thông báo
     if (!adultFormsValid || !childFormsValid) {
         console.error('Vui lòng kiểm tra lại thông tin')
+        error.value = true
         return
     }
 
@@ -66,7 +72,7 @@ const sendPassengerInformation = async () => {
         children: childPassengers
     }
     console.log(passengerData)
-
+    route.push('/booking/information/2')
     // Gửi dữ liệu lên server
     //await submitPassengerData(passengerData)
 }

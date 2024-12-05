@@ -12,9 +12,8 @@
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" @click="toggleSearchBox" class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
         </button>
     </div>
-    <div class="transition-all duration-500 ease-in-out relative place-items-center z-30"
+    <div class="transition-all duration-500 ease-in-out relative place-items-center"
           :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
-        &nbsp;
         <FlightSearch/>
     </div>
 
@@ -144,11 +143,7 @@ const userSelectTicket = async (selectedTicket) => {
     selectedTicket.adults = storeSearchFlight.getOldForm().adults
     selectedTicket.children = storeSearchFlight.getOldForm().children
     storeTicket.saveArrivalTicket(selectedTicket)
-    router.push('/booking/infomation/0')
-    // const nextPage = storeSearchFlight.getOldForm().ticketType === 'one-way'
-    //     ? '/booking/infomation/0'
-    //     : '/booking/avaibility/1';
-    // router.push(nextPage)
+    router.push('/booking/information/1')
 }
 
 const departureCode = ref(storeSearchFlight.getOldForm().toCity)

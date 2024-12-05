@@ -13,6 +13,8 @@ import ChangePassword from "@/components/User/profileUser/ChangePassword.vue";
 import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
 import InformationForm from "@/view/User/bookTicket/InformationForm.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
+import SubService from "@/view/User/bookTicket/SubService.vue"
+import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue"
 
 
 const routes = [
@@ -65,13 +67,27 @@ const routes = [
             guest: true
           }
     }, {
-        path: '/booking/infomation/0',
+        path: '/booking/information/1',
         name: 'InformationForm',
         component : InformationForm,
         meta: {
             guest: true
         }
     }, {
+        path: '/booking/information/2',
+        name: 'SubService',
+        component : SubService,
+        meta: {
+            guest: true
+        }
+    }, {
+        path: '/booking/information/3',
+        name: 'SuccessBooking',
+        component : SuccessBooking,
+        meta: {
+            guest: true
+        }
+    },{
         path: '/booking/done/0',
         name: 'SearchSeatResult',
         component: SearchSeatResult,

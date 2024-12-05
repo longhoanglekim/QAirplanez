@@ -6,17 +6,16 @@
 </div>
 
 <div class="container mx-auto px-4 pb-6 rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
-    <div class="place-items-center mb-2">
+    <div class="place-items-center">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" 
             @click="toggleSearchBox" 
-            class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
+            class="ease-in-out duration-300 cursor-pointer hover:text-blue-500" />
         </button>
     </div>
-    <div class="transition-all duration-500 ease-in-out relative place-items-center z-30"
+    <div class="transition-all duration-500 ease-in-out relative place-items-center"
           :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
-        &nbsp;
         <FlightSearch/>
     </div>
 
@@ -146,7 +145,7 @@ const userSelectTicket = async (selectedTicket) => {
 
     //xu li round-trip vs one-way
     if (storeSearchFlight.getOldForm().ticketType === 'one-way') {
-        router.push('/booking/infomation/0')
+        router.push('/booking/information/0')
     } 
     router.push('/booking/avaibility/1')
     
@@ -179,7 +178,7 @@ const getListTicket = async (departureDate) => {
     arrivalCode: arrivalCode.value,
     expectedDepartureTime: departureDate + ' 00:00',
     expectedArrivalTime: null,
-    numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children
+    numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
   })
 
   await fetch('http://localhost:8080/api/flight/public/findFlight', {

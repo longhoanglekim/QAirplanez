@@ -14,6 +14,7 @@ public class FlightInfo {
     private String flightNumber;
     private String departureCode;
     private String arrivalCode;
+    private int numOfTicketRequest;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
