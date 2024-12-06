@@ -15,12 +15,12 @@
         </button>
     </div>
     <div class="transition-all duration-500 ease-in-out relative place-items-center"
-          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
+          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4 ': 'max-h-0 opacity-0 p-0 pointer-events-none'">
         <FlightSearch @search-flight="handleReSearch"/>
     </div>
 
     <!-- Phần tiêu đề và lọc -->
-    <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 z-20 mx-auto">
+    <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 mx-auto z-10">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center">
@@ -63,9 +63,6 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
-    
-    <button @click="test">aaaa</button>
-
 </div>
   <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
     <selecting-ticket departure-time="08:30 AM"
@@ -146,7 +143,8 @@ const userSelectTicket = async (selectedTicket) => {
 
     //xu li round-trip vs one-way
     if (storeSearchFlight.getOldForm().ticketType === 'one-way') {
-        router.push('/booking/information/0')
+        router.push('/booking/information/1')
+        return;
     } 
     router.push('/booking/avaibility/1')
     
