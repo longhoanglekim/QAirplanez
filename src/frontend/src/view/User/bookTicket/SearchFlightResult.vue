@@ -14,7 +14,7 @@
             class="ease-in-out duration-300 cursor-pointer hover:text-blue-500" />
         </button>
     </div>
-    <div class="transition-all duration-500 ease-in-out relative place-items-center"
+    <div class="transition-all duration-500 ease-in-out relative place-items-center -z-10"
           :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
         <FlightSearch @search-flight="handleReSearch"/>
     </div>
@@ -147,6 +147,7 @@ const userSelectTicket = async (selectedTicket) => {
     //xu li round-trip vs one-way
     if (storeSearchFlight.getOldForm().ticketType === 'one-way') {
         router.push('/booking/information/0')
+        return;
     } 
     router.push('/booking/avaibility/1')
     
