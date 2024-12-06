@@ -14,13 +14,13 @@
             class="ease-in-out duration-300 cursor-pointer hover:text-blue-500" />
         </button>
     </div>
-    <div class="transition-all duration-500 ease-in-out relative place-items-center -z-10"
-          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
+    <div class="transition-all duration-500 ease-in-out relative place-items-center"
+          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4 ': 'max-h-0 opacity-0 p-0 pointer-events-none'">
         <FlightSearch @search-flight="handleReSearch"/>
     </div>
 
     <!-- Phần tiêu đề và lọc -->
-    <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 z-20 mx-auto">
+    <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 mx-auto z-10">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center">
