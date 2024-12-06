@@ -60,9 +60,6 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
-
-    <button @click="test">aaaa</button>
-
 </div>
 <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
     <selecting-ticket departure-time="08:30 AM" arrival-time="10:45 AM" price="$250.00"></selecting-ticket>
@@ -211,7 +208,7 @@ const filteredAndSortedTickets = computed(() => {
 })
 
 const handleReSearch = () => {
-    router.push('/booking/avaibility/0')
+    router.push('/booking/avaibility/1')
 }
 
 // Lifecycle hook

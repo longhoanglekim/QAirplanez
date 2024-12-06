@@ -63,9 +63,6 @@
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
-    
-    <button @click="test">aaaa</button>
-
 </div>
   <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
     <selecting-ticket departure-time="08:30 AM"
@@ -146,7 +143,7 @@ const userSelectTicket = async (selectedTicket) => {
 
     //xu li round-trip vs one-way
     if (storeSearchFlight.getOldForm().ticketType === 'one-way') {
-        router.push('/booking/information/0')
+        router.push('/booking/information/1')
         return;
     } 
     router.push('/booking/avaibility/1')
