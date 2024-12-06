@@ -16,7 +16,7 @@
     </div>
     <div class="transition-all duration-500 ease-in-out relative place-items-center"
           :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
-        <FlightSearch/>
+        <FlightSearch @search-flight="handleReSearch"/>
     </div>
 
     <!-- Phần tiêu đề và lọc -->
@@ -137,6 +137,7 @@ const toggleSearchBox = () => {
 }
 
 
+
 const userSelectTicket = async (selectedTicket) => {
     //luu ve vao store
     selectedTicket.adults = storeSearchFlight.getOldForm().adults
@@ -220,6 +221,10 @@ const filteredAndSortedTickets = computed(() => {
 
   return result
 })
+
+const handleReSearch = () => {
+  getListTicket(storeSearchFlight.getOldForm().departureDate)
+}
 
 // Lifecycle hook
 onMounted(() => {
