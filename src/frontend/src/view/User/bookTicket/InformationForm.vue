@@ -30,6 +30,7 @@
 <script setup>
 import AdultPassengerForm from '@/components/composable/form/AdultPassengerForm.vue';
 import ChildPassengerForm from '@/components/composable/form/ChildPassengerForm.vue';
+import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import ErrorModal from '@/components/composable/ErrorModal.vue';
 import { searchFlightStore } from '@/store/searchFlight';
 import {
