@@ -71,5 +71,5 @@ build/
 .vscode/
 
 
-application.properties
+**/application.properties
 src/frontend/router.js
