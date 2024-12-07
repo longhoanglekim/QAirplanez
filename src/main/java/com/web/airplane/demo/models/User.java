@@ -38,7 +38,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true)
     private String email;
-
+    private String identification;
+    private String nationality;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> avatarList;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

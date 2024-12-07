@@ -20,17 +20,7 @@ public class JwtUtil {
             for (Cookie cookie : cookies) {
                 if ("jwtToken".equals(cookie.getName())) {
                     log.debug("Found jwtToken cookie in request to URI: " + request.getRequestURI());
-
-                    // Lấy giá trị token từ cookie
-                    String token = cookie.getValue();
-
-                    // Kiểm tra xem token có hết hạn chưa
-                    if (jwtService.isTokenValid(token)) {
-                        log.debug("JWT token has expired.");
-                        return null; // Token đã hết hạn, trả về null
-                    }
-
-                    return token;
+                    return cookie.getValue();
                 }
             }
         }

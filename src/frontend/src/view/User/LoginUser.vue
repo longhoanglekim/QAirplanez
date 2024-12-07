@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { profileStore } from '@/store';
+
 
 export default {
   name: 'LoginUser',
@@ -49,12 +49,6 @@ export default {
         if (response.ok) {
           const data = await response.json();
           console.log("Token:", data.token);
-
-          profileStore.saveUser({
-            email: this.username,
-            password: this.password,
-            role: 'user'
-          })
 
           localStorage.setItem('token', data.token);
           this.$router.push({ path: '/home' });

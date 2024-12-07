@@ -204,7 +204,7 @@ export default {
 
     methods: {
         isLoggedIn() {
-            return false;
+          return (localStorage.getItem('token') != null);
         },
         handleScroll() {
             this.isScrolled = window.scrollY > 30
