@@ -6,15 +6,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 public class JwtService {
     @Value("${security.jwt.secret-key}")
@@ -49,23 +52,37 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
-        return Jwts
+        // Sử dụng Instant để đảm bảo tính đồng nhất về thời gian
+        Instant now = Instant.now();
+        Instant expTime = now.plusMillis(expiration);
+
+        // In log để kiểm tra thời gian hiện tại và thời gian hết hạn
+        log.debug("Current time: " + now);
+        log.debug("Expiration time: " + expTime);
+
+        String jwt = Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setIssuedAt(Date.from(now)) // setIssuedAt cần Date, không phải Instant
+                .setExpiration(Date.from(expTime)) // setExpiration cần Date
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+        log.debug(extractExpiration(jwt).toString());
+        return jwt;
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
-        return !extractExpiration(token).before(new Date());
+        Instant tokenExpiration = extractExpiration(token).toInstant();
+        Instant currentTime = Instant.now(); // UTC time
+        log.debug("Current Time check expired :" + currentTime);
+        log.debug("Expiration Time check expired :" + tokenExpiration);
+        return tokenExpiration.isBefore(currentTime);
     }
 
     private Date extractExpiration(String token) {
@@ -85,9 +102,4 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-    public boolean isTokenValid(String token) {
-        return isTokenExpired(token);
-    }
-
 }

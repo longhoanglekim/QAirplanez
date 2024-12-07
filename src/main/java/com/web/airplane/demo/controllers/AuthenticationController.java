@@ -48,14 +48,11 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
         try {
             User authenticatedUser = authenticationService.authenticate(loginUserDto);
+
             String jwtToken = jwtService.generateToken(authenticatedUser);
-            Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(60 * 60 * 24);
-            response.addCookie(jwtCookie);
+
             LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+
             return ResponseEntity.ok(loginResponse);
         } catch (BadCredentialsException e) {
             LoginResponse error = new LoginResponse().setError("Sai tài khoản hoặc mật khẩu");

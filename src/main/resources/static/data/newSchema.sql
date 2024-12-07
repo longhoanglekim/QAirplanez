@@ -27,11 +27,13 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
                          `id` bigint NOT NULL AUTO_INCREMENT,
                          `birthdate` datetime(6) NOT NULL,
-                         `email` varchar(255) NOT NULL,
+                         `email` varchar(255) unique NOT NULL,
                          `firstname` varchar(255) NOT NULL,
                          `lastname` varchar(255) NOT NULL,
                          `password` varchar(255) NOT NULL,
-                         `phone_number` varchar(255) DEFAULT NULL,
+                         `phone_number` varchar(255) unique DEFAULT NULL,
+                         `identification` varchar(255) unique ,
+                         `nationality` varchar(255) ,
                          PRIMARY KEY (`id`),
                          UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -43,11 +45,25 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'1999-12-24 07:00:00.000000','test1@gmail.com','John','Smith','$2a$10$F5xpEalHUfjZcLh0Sf5Mu.5MKT0eZWXloxGOscbs3M5kyBcErAQlO','0345675123'),
-                           (2,'2009-10-28 07:00:00.000000','trannhanhot@gmail.com','Trần Nhả','Nhớt','$2a$10$ksjN/QcVi7yWQn1UcMMj7OYNoiIleO/4esqxP4C3tqavangTQm2MK','01234546396');
+INSERT INTO `users` VALUES (1,'1999-12-24 07:00:00.000000','test1@gmail.com','John','Smith','$2a$10$F5xpEalHUfjZcLh0Sf5Mu.5MKT0eZWXloxGOscbs3M5kyBcErAQlO','0345675123', '020203000123','Vietnam'),
+                           (2,'2009-10-28 07:00:00.000000','trannhanhot@gmail.com','Trần Nhả','Nhớt','$2a$10$ksjN/QcVi7yWQn1UcMMj7OYNoiIleO/4esqxP4C3tqavangTQm2MK','01234546396', '020403000123','Vietnam');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
+--
+-- Table structure for table `images`
+--
+
+CREATE TABLE images (
+                        id BIGINT NOT NULL AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL,
+                        type VARCHAR(255) NOT NULL,
+                        uploadDate DATE,
+                        imageData LONGBLOB,
+                        user_id BIGINT,
+                        PRIMARY KEY (id),
+                        FOREIGN KEY (user_id) REFERENCES users(id)
+);
 --
 -- Table structure for table `roles`
 --
