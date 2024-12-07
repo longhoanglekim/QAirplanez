@@ -63,8 +63,8 @@ public class UserService {
     }
 
     public User getCurrentUser(HttpServletRequest request) {
-        String token = JwtUtil.getToken(request);
-        if (token == null) return null;
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
         String username =  jwtService.extractUsername(token);
         if (username.contains("@")) {
             return userRepository.findByEmail(username);

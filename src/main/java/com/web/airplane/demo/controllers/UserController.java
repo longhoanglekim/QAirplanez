@@ -4,14 +4,13 @@ import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Flight;
+import com.web.airplane.demo.models.Image;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.models.User;
-import com.web.airplane.demo.repositories.FlightRepository;
-import com.web.airplane.demo.repositories.PassengerRepository;
-import com.web.airplane.demo.repositories.TicketClassRepository;
-import com.web.airplane.demo.repositories.UserRepository;
+import com.web.airplane.demo.repositories.*;
 import com.web.airplane.demo.services.BookingCodeService;
 import com.web.airplane.demo.services.FlightService;
+import com.web.airplane.demo.services.ImageService;
 import com.web.airplane.demo.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ import java.util.List;
 @RequestMapping("/api/user")
 @Slf4j
 public class UserController {
+    @Autowired
+    private ImageRepository imageRepository;
     private final UserRepository userRepository;
     @Autowired
     private TicketClassRepository ticketClassRepository;
@@ -43,6 +46,8 @@ public class UserController {
     @Autowired
     private PassengerRepository passengerRepository;
     private final BookingCodeService bookingCodeService;
+    @Autowired
+    private ImageService imageService;
 
     public UserController(UserRepository userRepository, UserService userService, BookingCodeService bookingCodeService) {
         this.userRepository = userRepository;
@@ -253,6 +258,33 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during logout :" + e.getMessage());
         }
     }
+
+    @PostMapping("/setAvatar")
+    @Transactional
+    public ResponseEntity<?> setAvatar(@RequestParam("image")MultipartFile file, HttpServletRequest request) {
+        Image image = null;
+        log.debug("Set avatar");
+        try {
+            log.debug("Bắt đâu set ảnh");
+            image = imageService.storeImage(file);
+            if (image != null) {
+                log.debug("Thêm vào database");
+                User user = getCurrentUser(request);
+                user.getAvatarList().add(image);
+                image.setUser(user);
+                imageRepository.save(image);
+                userRepository.save(user);
+
+                return ResponseEntity.ok("Set Avatar thanh cong");
+            }
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(image);
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 
 
 }

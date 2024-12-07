@@ -43,14 +43,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String token = JwtUtil.getToken(request);
-        log.debug("token is :" + token);
-        // Kiểm tra token và trả về lỗi nếu không hợp lệ hoặc vắng mặt
-        if (token == null || !jwtService.isTokenValid(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        final String authHeader = request.getHeader("Authorization");
+
+        log.debug(authHeader);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
         }
-
+        String token = authHeader.substring(7);
+        log.debug("Token being validated: " + token);
         // Nếu token hợp lệ, xác thực và tiếp tục request
         String username = jwtService.extractUsername(token);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

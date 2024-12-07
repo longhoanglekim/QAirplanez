@@ -85,6 +85,7 @@ public class FlightController {
      */
     @PostMapping("/public/findFlight")
     public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
+        log.debug("Find flight");
 
         // Find and filter outbound flights
         List<Flight> flights = new ArrayList<>();
