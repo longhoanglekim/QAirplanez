@@ -19,15 +19,22 @@
     </nav>
     <!-- Navbar end -->
     <!-- Sidebar -->
-    <div v-if="sideBarIsOpening" class="z-40 fixed h-full text-white p-4 bg-black/50" >
-        <h1 class="text-2xl font-bold mb-6 flex"><span>Quản Lý Hãng Bay</span><X @click="toggleSidebar" class="incline w-8 h-8"/> </h1>
-
-        <nav>
-            <button v-for="item in menuItems" :key="item.key" @click="changeSection(item.key)" :class="[
-            'flex items-center w-full p-3',
-            activeSection === item.key ? 'bg-blue-600' : 'hover:bg-gray-700'
+    <div class="z-40 w-64 h-full text-white p-4 bg-slate-600 transition-all duration-300 ease-in-out"
+        :class="sideBarIsOpening ? 'max-w-screen opacity-100 p-0' : 'max-w-0 opacity-0 p-0 -z-0'" >
+        <h1 class="text-2xl font-bold mb-6 flex relative">
+            <span>QAirline</span>
+            <X @click="toggleSidebar" class="absolute right-0 w-8 h-8 border-2 border-white"/> 
+        </h1>
+        <nav class="space-y-4">
+            <button class="rounded-lg "
+            v-for="item in menuItems" :key="item.key" @click="changeSection(item.key)" :class="[
+            'flex items-center w-full p-0',
+            activeSection === item.key ? 'bg-gray-700' : 'bg-white/10 hover:bg-gray-700'
           ]">
-                <component :is="item.icon" class="mr-2" /> {{ item.label }}
+                <div class="flex items-center p-4 w-full rounded-lg hover:translate-x-1 hover:-translate-y-1 hover:bg-red-800" 
+                    :class="[activeSection === item.key ? 'bg-orange-600  translate-x-1 -translate-y-1' : ' hover:bg-gray-700']">
+                    <component :is="item.icon" class="mr-2" /> {{ item.label }}
+                </div>
             </button>
         </nav>
         <button id="btnSidebarToggler" @click="toggleSidebar" type="button" class="place-self-center my-16 text-2xl text-white hover:text-gray-200">
@@ -36,7 +43,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 p-16 bg-amber-50 overflow-y-auto">
+    <div class="flex-1 p-16 bg-amber-50 overflow-y-auto transition-all duration-300">
         <component :is="currentComponent" />
     </div>
 </div>
@@ -53,13 +60,15 @@ import {
     Users,
     CalendarCheck,
     ArrowLeftFromLine ,
-    AlignJustify,X
+    AlignJustify,
+    X,
+    Newspaper
 } from 'lucide-vue-next'
 import DashBoard from '@/components/Admin/DashBoard.vue'
-import AircraftManagement from '@/components/Admin/AircraftManagement.vue'
-import FlightManagement from '@/components/Admin/FlightManagement.vue'
-import PassengerManagement from '@/components/Admin/PassengerManagement.vue'
-
+import AircraftManagement from '@/components/Admin/Aircraft/AircraftManagement.vue'
+import FlightManagement from '@/components/Admin/Flight/FlightManagement.vue'
+import PassengerManagement from '@/components/Admin/Passenger/PassengerManagement.vue'
+import NewsManagement from '@/components/Admin/News/NewsManagement.vue'
 const activeSection = ref('dashboard')
 
 const changeSection = (section) => {
@@ -75,6 +84,11 @@ const menuItems = [{
         key: 'dashboard',
         label: 'Tổng Quan',
         icon: LayoutDashboard
+    },
+    {
+        key: 'news',
+        label: 'Trang tin',
+        icon: Newspaper
     },
     {
         key: 'aircraft',
@@ -98,7 +112,8 @@ const currentComponent = computed(() => {
         'dashboard': DashBoard,
         'aircraft': AircraftManagement,
         'flights': FlightManagement,
-        'passengers': PassengerManagement
+        'passengers': PassengerManagement,
+        'news': NewsManagement
     }
     return componentMap[activeSection.value]
 })
