@@ -54,10 +54,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { aircraft } from '../../../assets/data';
+import {computed, ref} from 'vue';
+import { aircraft } from '@/assets/data';
 
 const activeCount = computed(() => {
+  console.log(aircraft[0].length);
     return aircraft.filter(plane => plane.status === 'Active').length;
 });
 

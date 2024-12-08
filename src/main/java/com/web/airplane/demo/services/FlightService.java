@@ -52,6 +52,7 @@ public class FlightService {
         flightInfo.setAvailableFirstSeats(flight.getFirstAvailableSeats() > 0);
         flightInfo.setAvailableBusinessSeats(flight.getBusinessAvailableSeats() > 0);
         flightInfo.setAvailableEconomySeats(flight.getEconomyAvailableSeats() > 0);
+        flightInfo.setStatus(flight.getStatus());
         return flightInfo;
     }
 

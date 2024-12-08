@@ -46,17 +46,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
 
         log.debug(authHeader);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null ) {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = authHeader.substring(7);
-        log.debug("Token being validated: " + token);
+
+        log.debug("Token being validated: " + authHeader);
         // Nếu token hợp lệ, xác thực và tiếp tục request
-        String username = jwtService.extractUsername(token);
+        String username = jwtService.extractUsername(authHeader);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(token, userDetails)) {
+            if (jwtService.isTokenValid(authHeader, userDetails)) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
