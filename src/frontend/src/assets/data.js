@@ -1,40 +1,53 @@
-export const aircraft = [
-    { id: 'AB001', model: 'Boeing 737', capacity: 180, status: 'Hoat dong' },
-    { id: 'AB002', model: 'Airbus A320', capacity: 220, status: 'Bao duong' }, 
-    { id: 'AB003', model: 'Boeing MH370', capacity: 220, status: 'Hoat dong' }, 
-    { id: 'AB004', model: 'Airbus B240', capacity: 220, status: 'Hoat dong' }, 
-    { id: 'AB005', model: 'Airbus C320', capacity: 220, status: 'Hoat dong' }, 
-    { id: 'AB006', model: 'Boeing M300', capacity: 220, status: 'Sua chua' },
-    { id: 'AB007', model: 'Boeing M300', capacity: 220, status: 'Sua chua' },
-    { id: 'AB008', model: 'Boeing M300', capacity: 220, status: 'Sua chua' }
-  ]
-  
-  export const flights = [
-    { 
-        id: 'FL001', 
-        origin: 'Hà Nội', 
-        destination: 'Hồ Chí Minh', 
-        aircraft: 'AB001', 
-        departureTime: '2024-06-15T10:00:00',
-        status: 'Scheduled' 
-    }, 
-    { 
-        id: 'FL002', 
-        origin: 'Hà Nội', 
-        destination: 'Hồ Chí Minh', 
-        aircraft: 'AB001', 
-        departureTime: '2024-06-15T10:00:00',
-        status: 'Scheduled' 
-    }, 
-    { 
-        id: 'FL003', 
-        origin: 'Hà Nội', 
-        destination: 'Hồ Chí Minh', 
-        aircraft: 'AB001', 
-        departureTime: '2024-06-15T10:00:00',
-        status: 'Scheduled' 
+let aircraft = [];
+const fetchAircraftData = async () => {
+    try {
+        const  response = await fetch('http://localhost:8080/api/aircraft/admin/aircraftList', {
+            method : 'Get',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization:localStorage.getItem('token'),
+                'Accept': 'application/json',
+            }
+        });
+        if (response.ok) {
+            aircraft = await response.json();
+        }
+    } catch(error) {
+        console.log(error);
     }
-  ]
+}
+fetchAircraftData().then(r => console.log(r));
+export {aircraft};
+
+let flights = [];
+
+const fetchFlightsData = async () => {
+    try {
+
+        const response = await fetch('http://localhost:8080/api/flight/admin/flightList', {
+            method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization:localStorage.getItem('token'),
+                'Accept': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            flights = await response.json();
+        } else {
+            console.error('Lỗi khi lấy dữ liệu chuyến bay từ API');
+        }
+    } catch (error) {
+        console.error('Có lỗi xảy ra khi fetch dữ liệu:', error);
+    }
+};
+
+// Gọi hàm fetchFlightsData để lấy dữ liệu chuyến bay từ API
+fetchFlightsData().then(r => console.log(r));
+
+// Export flights để sử dụng ở các module khác
+export { flights };
   
   export const passengers = [
     { 

@@ -6,25 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "aircrafts")
+@Table(name = "news")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Aircraft {
+public class News {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String manufacturer;
-    private String model;
-    private Integer numberOfSeats;
-    private String status;
+    private Long index;
+    private String title;
+    private Date postingDate;
+    private String content;
 
-    @OneToMany(mappedBy = "aircraft")
-    private List<Flight> flights = new ArrayList<>();
-
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> imageList;
 }

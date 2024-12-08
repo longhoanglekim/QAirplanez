@@ -37,6 +37,19 @@ public class FlightController {
         this.aircraftRepository = aircraftRepository;
     }
 
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/flightList")
+    public List<FlightInfo> getFlightList() {
+        List<Flight> flights = flightRepository.findAll();
+        List<FlightInfo> flightInfoList = new ArrayList<>();
+        for (Flight flight : flights) {
+            FlightInfo newFlightInfo = flightService.getFlightInfo(flight);
+            flightInfoList.add(newFlightInfo);
+        }
+        return flightInfoList;
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/passengers")
     public List<Passenger> getAllPassengers(@RequestParam("flight_id") long flightId) {
@@ -47,24 +60,24 @@ public class FlightController {
     @PostMapping("/admin/addFlight")
     public ResponseEntity<?> addFlight(@RequestBody FlightInfo flightInfo) {
         try {
-            Aircraft aircraft =  aircraftRepository.findByManufacturerAndModel(flightInfo.getManufacture(), flightInfo.getModel());
-            // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
-            boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
-                    flightInfo.getExpectedArrivalTime(),
-                    flightInfo.getFlightNumber(),
-                    aircraft
-            );
 
-            if (isFlightExist) {
-                // Trả về lỗi nếu có chuyến bay trùng
-                return ResponseEntity.badRequest().body("Flight with the same flight number, aircraft code, and expected departure time already exists.");
-            }
+                Aircraft aircraft = aircraftRepository.findByManufacturerAndModel(flightInfo.getManufacture(), flightInfo.getModel());
+                // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
+                boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
+                        flightInfo.getExpectedArrivalTime(),
+                        flightInfo.getFlightNumber(),
+                        aircraft
+                );
 
-            // Nếu không có chuyến bay trùng, tiến hành thêm chuyến bay mới
-            Flight flight = flightService.createFlight(flightInfo);
-            // Lưu chuyến bay mới vào cơ sở dữ liệu
-            flightRepository.save(flight);
+                if (isFlightExist) {
+                    // Trả về lỗi nếu có chuyến bay trùng
+                    return ResponseEntity.badRequest().body("Flight with the same flight number, aircraft code, and expected departure time already exists.");
+                }
 
+                // Nếu không có chuyến bay trùng, tiến hành thêm chuyến bay mới
+                Flight flight = flightService.createFlight(flightInfo);
+                // Lưu chuyến bay mới vào cơ sở dữ liệu
+                flightRepository.save(flight);
             // Trả về phản hồi thành công
             return ResponseEntity.ok("Flight added successfully.");
         } catch (Exception e) {

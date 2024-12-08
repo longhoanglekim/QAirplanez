@@ -1,15 +1,17 @@
 # QAirplanez
 
 ## Database
-### Link database : src/main/resources/static/data/data.sql
-### Change your passwords to your own ones.
+### Link database:
+- `src/main/resources/static/data/data.sql`
 
-### Sample user account : 
-#### email : test1@gmail.com
-#### phone number : 0345675123
-#### password : test1
+#### Change your passwords to your own ones.
 
-### Sample admin account :
-#### email : trannhanhot@gmail.com
-#### phone number : 01234546396
-#### password : darangcom
+### Sample user account:
+- **Email**: test1@gmail.com
+- **Phone number**: 0345675123
+- **Password**: test1
+
+### Sample admin account:
+- **Email**: trannhanhot@gmail.com
+- **Phone number**: 01234546396
+- **Password**: darangcom

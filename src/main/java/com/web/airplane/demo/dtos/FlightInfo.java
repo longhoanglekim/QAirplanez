@@ -32,6 +32,7 @@ public class FlightInfo {
     private boolean isAvailableFirstSeats;
     private boolean isAvailableBusinessSeats;
     private boolean isAvailableEconomySeats;
+    private String status;
 
     public String getManufacture() {
         if (aircraftCode != null && !aircraftCode.isEmpty()) {

@@ -16,7 +16,7 @@ import FlightSearch from '@/components/User/FlightSearch.vue';
 export default {
   methods: {
     searchFlight() {
-      this.$router.push('/booking/avaibility/0')
+      this.$router.push('/booking/availability/0')
     }
   },
   name: 'HomeUser'

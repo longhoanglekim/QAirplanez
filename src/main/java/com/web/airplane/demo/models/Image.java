@@ -26,4 +26,8 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "news_id")
+    private News news;
 }

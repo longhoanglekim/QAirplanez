@@ -58,6 +58,7 @@ public class Flight {
     private int businessAvailableSeats;
     @NotNull
     private int firstAvailableSeats;
+    private String status;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
