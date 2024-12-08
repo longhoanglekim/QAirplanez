@@ -9,12 +9,12 @@ import ExploreUser from "@/view/User/home/ExploreUser.vue";
 import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
 import ProfileUser from "@/view/User/ProfileUser.vue";
-import ChangePassword from "@/components/User/profileUser/ChangePassword.vue";
 import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
 import InformationForm from "@/view/User/bookTicket/InformationForm.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
-import SubService from "@/view/User/bookTicket/SubService.vue"
-import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue"
+import MyProfile from "@/components/User/profileUser/Profile.vue";
+import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
+import MyBookings from "@/components/User/profileUser/Bookings.vue";
 
 
 const routes = [
@@ -67,27 +67,13 @@ const routes = [
             guest: true
           }
     }, {
-        path: '/booking/information/1',
+        path: '/booking/infomation/0',
         name: 'InformationForm',
         component : InformationForm,
         meta: {
             guest: true
         }
     }, {
-        path: '/booking/information/2',
-        name: 'SubService',
-        component : SubService,
-        meta: {
-            guest: true
-        }
-    }, {
-        path: '/booking/information/3',
-        name: 'SuccessBooking',
-        component : SuccessBooking,
-        meta: {
-            guest: true
-        }
-    },{
         path: '/booking/done/0',
         name: 'SearchSeatResult',
         component: SearchSeatResult,
@@ -98,8 +84,8 @@ const routes = [
         path :'/admin',
         name : 'Admin',
         children: [
-            { 
-                path: 'login', name: 'LoginAdmin', component: LoginAdmin 
+            {
+                path: 'login', name: 'LoginAdmin', component: LoginAdmin
             },
             {
                 path: 'dashboard', name: 'dashboard', component: HomeAdmin, meta: {
@@ -123,11 +109,21 @@ const routes = [
     }, {
         path: '/user',
         name: 'Profile',
+        children: [{
+                path: 'dashboard',
+                name: MyDashboard,
+                component: MyDashboard,
+            },{
+                path: 'bookings',
+                name: MyBookings,
+                component: MyBookings,
+            },{
+                path: 'profile',
+                name: MyProfile,
+                component: MyProfile,
+        }
+        ],
         component: ProfileUser,
-    }, {
-        path: '/password/change',
-        name: 'ChangePassword',
-        component: ChangePassword,
     },
 ];
 const router = createRouter({
