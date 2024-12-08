@@ -71,4 +71,8 @@ public class UserService {
         }
         return userRepository.findByPhoneNumber(username);
     }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
 }

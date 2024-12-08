@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: "ChangePassword",
   data() {
@@ -15,94 +16,68 @@ export default {
         this.error = "Mật khẩu mới không khớp!";
         return;
       }
-      console.log("Mật khẩu mới đã được lưu:", this.newPassword);
-
-      this.$router.push({ name: "MyProfile" });
+      alert("Mật khẩu đã được lưu!");
+      this.$emit("close");
     },
   },
 };
 </script>
 
 <template>
-  <div class="change-password-container">
-    <h1>Đổi mật khẩu</h1>
-    <div class="form">
+  <div>
+    <h1 class="text-xl font-bold mb-4 text-orange-500">Đổi mật khẩu</h1>
+    <div class="space-y-4">
       <!-- Mật khẩu hiện tại -->
-      <div class="form-group">
-        <label for="current-password">Mật khẩu hiện tại</label>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Mật khẩu hiện tại
+        </label>
         <input
             type="password"
-            id="current-password"
             v-model="currentPassword"
+            class="w-full px-4 py-2 border border-orange-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500"
         />
       </div>
-
       <!-- Mật khẩu mới -->
-      <div class="form-group">
-        <label for="new-password">Mật khẩu mới</label>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Mật khẩu mới
+        </label>
         <input
             type="password"
-            id="new-password"
             v-model="newPassword"
+            class="w-full px-4 py-2 border border-orange-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500"
         />
       </div>
-
       <!-- Nhập lại mật khẩu mới -->
-      <div class="form-group">
-        <label for="confirm-new-password">Nhập lại mật khẩu mới</label>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Nhập lại mật khẩu mới
+        </label>
         <input
             type="password"
-            id="confirm-new-password"
             v-model="confirmNewPassword"
+            class="w-full px-4 py-2 border border-orange-300 rounded-lg shadow-sm focus:ring-orange-500 focus:border-orange-500"
         />
       </div>
-
-      <!-- Thông báo lỗi -->
-      <div v-if="error" class="error">{{ error }}</div>
-
-      <!-- Nút hành động -->
-      <div class="actions">
-        <button @click="$router.push({ name: 'MyProfile' })">Hủy</button>
-        <button @click="savePassword">Lưu</button>
-      </div>
+    </div>
+    <!-- Nút hành động -->
+    <div class="flex justify-end space-x-4 mt-6">
+      <button
+          @click="$emit('close')"
+          class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+      >
+        Hủy
+      </button>
+      <button
+          @click="savePassword"
+          class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+      >
+        Lưu
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.change-password-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.error {
-  color: red;
-  margin-bottom: 1rem;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-}
 </style>
