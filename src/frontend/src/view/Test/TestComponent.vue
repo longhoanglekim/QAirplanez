@@ -1,18 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>
-
-  </div>
-</template>
-
-<script setup>
-
-</script>
-
-<style lang="scss" scoped>
-
-</style>
-=======
   <div class="flex justify-center items-center h-screen bg-gray-100">
     <div class="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg">
       <h2 class="text-2xl font-semibold text-center mb-4">Upload Avatar</h2>
@@ -88,4 +74,3 @@ export default {
 <style scoped>
 /* Optional: Add custom styling if needed */
 </style>
->>>>>>> b157bdff30b3a973148760f8bf1ea81045339bd6

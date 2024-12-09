@@ -20,6 +20,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(nullable = false)
     private String firstname;
     @Column(nullable = false)
@@ -56,7 +57,6 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
-
     // Implementing methods of UserDetails interface
 
     @Override
