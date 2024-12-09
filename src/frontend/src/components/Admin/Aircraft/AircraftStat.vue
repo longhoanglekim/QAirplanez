@@ -54,11 +54,13 @@
 </template>
 
 <script setup>
+
 import { computed, ref } from 'vue';
 import { aircraft } from '../../../assets/data';
 
 const activeCount = computed(() => {
     return aircraft.filter(plane => plane.status === 'Hoat dong').length;
+
 });
 
 const maintenanceCount = computed(() => {

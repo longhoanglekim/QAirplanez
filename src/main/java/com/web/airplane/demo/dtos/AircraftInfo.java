@@ -11,5 +11,5 @@ public class AircraftInfo {
     private String manufacturer;
     private String model;
     private Integer numberOfSeats;
-    private Boolean isActive;
+    private String status;
 }

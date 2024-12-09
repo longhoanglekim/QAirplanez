@@ -8,27 +8,27 @@
           <h3 class="text-lg font-bold mb-4">Chỉnh Sửa Chuyến Bay</h3>
           <div class="space-y-4">
             <input 
-              v-model="editingFlight.id" 
+              v-model="editingFlight.flightNumber"
               placeholder="Mã Chuyến Bay" 
               class="w-full p-2 border rounded"
             />
             <input 
-              v-model="editingFlight.origin" 
+              v-model="editingFlight.departureCode"
               placeholder="Điểm Đi" 
               class="w-full p-2 border rounded"
             />
             <input 
-              v-model="editingFlight.destination" 
+              v-model="editingFlight.arrivalCode"
               placeholder="Điểm Đến" 
               class="w-full p-2 border rounded"
             />
             <input 
-              v-model="editingFlight.aircraft" 
+              v-model="editingFlight.aircraftCode"
               placeholder="Máy Bay" 
               class="w-full p-2 border rounded"
             />
             <input 
-              v-model="editingFlight.departureTime" 
+              v-model="editingFlight.expectedDepartureTime"
               type="datetime-local" 
               class="w-full p-2 border rounded"
             />
@@ -68,12 +68,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="flight in flights" :key="flight.id">
-            <td class="border p-2">{{ flight.id }}</td>
-            <td class="border p-2">{{ flight.origin }}</td>
-            <td class="border p-2">{{ flight.destination }}</td>
-            <td class="border p-2">{{ flight.aircraft }}</td>
-            <td class="border p-2">{{ formatDateTime(flight.departureTime) }}</td>
+          <tr v-for="flight in flights" :key="flight.flightNumber">
+            <td class="border p-2">{{ flight.flightNumber }}</td>
+            <td class="border p-2">{{ flight.departureCode }}</td>
+            <td class="border p-2">{{ flight. arrivalCode }}</td>
+            <td class="border p-2">{{ flight.aircraftCode }}</td>
+            <td class="border p-2">{{ formatDateTime(flight.expectedDepartureTime) }}</td>
             <td class="border p-2">{{ flight.status }}</td>
             <td class="border p-2">
               <button 
