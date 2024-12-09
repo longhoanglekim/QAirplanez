@@ -15,6 +15,8 @@ import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
 import MyProfile from "@/components/User/profileUser/Profile.vue";
 import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
+import SubService from "@/view/User/bookTicket/SubService.vue";
+import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
 
 
 const routes = [
