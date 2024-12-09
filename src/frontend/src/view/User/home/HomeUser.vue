@@ -9,6 +9,7 @@
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue';
+import {searchTicket} from "@/store/searchTicket";
 
 </script>
 
