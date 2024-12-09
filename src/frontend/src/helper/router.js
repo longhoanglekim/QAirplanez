@@ -15,6 +15,8 @@ import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
 import MyProfile from "@/components/User/profileUser/Profile.vue";
 import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
+import SubService from "@/view/User/bookTicket/SubService.vue";
+import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
 
 
 const routes = [
@@ -67,9 +69,23 @@ const routes = [
             guest: true
           }
     }, {
-        path: '/booking/infomation/0',
+        path: '/booking/infomation/1',
         name: 'InformationForm',
         component : InformationForm,
+        meta: {
+            guest: true
+        }
+    }, {
+        path: '/booking/information/2',
+        name: 'SubService',
+        component : SubService,
+        meta: {
+            guest: true
+        }
+    }, {
+        path: '/booking/information/3',
+        name: 'SuccessBooking',
+        component : SuccessBooking,
         meta: {
             guest: true
         }
