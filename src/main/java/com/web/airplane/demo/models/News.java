@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -22,7 +22,9 @@ public class News {
     private Long id;
     private Long index;
     private String title;
-    private Date postingDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime editDate;
+    private String author;
     private String content;
 
     @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
