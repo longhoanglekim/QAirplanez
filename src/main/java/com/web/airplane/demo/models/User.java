@@ -33,7 +33,6 @@ public class User implements UserDetails {
 
 
     @Column(nullable = false)
-    @Size(min = 8)
     private String password;
 
     @Column

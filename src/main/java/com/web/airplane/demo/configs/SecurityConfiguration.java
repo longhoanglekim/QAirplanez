@@ -50,15 +50,13 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .exceptionHandling(exceptions -> exceptions.accessDeniedPage("/access-denied"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/flight/admin_flight/**").hasRole("ADMIN_FLIGHT")
+                        .requestMatchers("api/flight/admin/**", "/test/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/test/admin_flight/**", "/api/flight/admin_flight/**").hasRole("ADMIN_FLIGHT")
                         .requestMatchers("/api/auth/**","/api/ticket_class/**",
                                 "/api/flight/public/**", "/test/string/**", "/api/user/public/**",
                                 "/api/airport/public/**", "/favicon.ico").permitAll()
-                        .requestMatchers("api/flight/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/test/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/test/admin_flight/**").hasRole("ADMIN_FLIGHT")
-                        .anyRequest().authenticated())
 
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

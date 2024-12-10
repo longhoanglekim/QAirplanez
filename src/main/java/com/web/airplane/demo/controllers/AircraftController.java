@@ -32,8 +32,8 @@ public class AircraftController {
         this.aircraftRepository = aircraftRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/admin/addAircraft")
+
+    @PostMapping("/admin_aircraft/addAircraft")
     public ResponseEntity<?> addAircraft(AircraftInfo aircraftInfo) {
         try {
 
@@ -52,8 +52,7 @@ public class AircraftController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/aircraftList")
+    @GetMapping("/admin_aircraft/aircraftList")
     public List<AircraftInfo> getAircraftList() {
         List<Aircraft> aircraftList = aircraftRepository.findAll();
         List<AircraftInfo> aircraftInfoList = new ArrayList<>();

@@ -38,8 +38,8 @@ public class FlightController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/flightList")
+
+    @GetMapping("/admin_flight/flightList")
     public List<FlightInfo> getFlightList() {
         List<Flight> flights = flightRepository.findAll();
         List<FlightInfo> flightInfoList = new ArrayList<>();

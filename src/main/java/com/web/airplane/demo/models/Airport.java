@@ -3,6 +3,8 @@ package com.web.airplane.demo.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,8 @@ public class Airport {
     @NotBlank
     private int id;
     @NotBlank
+    @Size(min = 3, max = 3, message = "Mã sân bay chỉ có thể có 3 kí tự")
+    @Pattern(regexp = "^[A-Z]+$", message = "Mã sân bay phải viết hoa tất cả các ký tự.")
     private String airportCode;
     @NotBlank
     private String airportName;

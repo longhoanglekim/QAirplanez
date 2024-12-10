@@ -2,6 +2,7 @@ package com.web.airplane.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -52,12 +53,18 @@ public class Flight {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime cancelDueTime;
 
-    @NotNull
+    @NotNull(message = "Số ghế hạng phổ thông không được null")
+    @Min(value = 0, message = "Số ghế hạng phổ thông phải lớn hơn hoặc bằng 0")
     private int economyAvailableSeats;
-    @NotNull
+
+    @NotNull(message = "Số ghế hạng thương gia không được null")
+    @Min(value = 0, message = "Số ghế hạng thương gia phải lớn hơn hoặc bằng 0")
     private int businessAvailableSeats;
-    @NotNull
+
+    @NotNull(message = "Số ghế hạng nhất không được null")
+    @Min(value = 0, message = "Số ghế hạng nhất phải lớn hơn hoặc bằng 0")
     private int firstAvailableSeats;
+
     private String status;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)

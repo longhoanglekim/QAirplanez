@@ -74,7 +74,7 @@ CREATE TABLE `users` (
 
 
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'1999-12-24 07:00:00.000000','test1@gmail.com','John','Smith','$2a$10$F5xpEalHUfjZcLh0Sf5Mu.5MKT0eZWXloxGOscbs3M5kyBcErAQlO','0345675123', '020203000123','Vietnam'),
+INSERT INTO `users` VALUES (1,'2004-10-20 07:00:00.000000','quyenluong@gmail.com','John','Smith','$2a$10$tkTCCEd6MYfqxq1IQDZPduT8HgU1H3/CbquVCg2Vcsi.p3bsZPLxS','0345675123', '020203000123','Vietnam'),
                            (2,'2009-10-28 07:00:00.000000','trannhanhot@gmail.com','Trần Nhả','Nhớt','$2a$10$ksjN/QcVi7yWQn1UcMMj7OYNoiIleO/4esqxP4C3tqavangTQm2MK','01234546396', '020403000123','Vietnam'),
                            (3,'2003-12-17 07:00:00.000000','adminflight@gmail.com','Hoàng','Long','$2a$10$BE0z27bNdJV1R72GCw9FxupWSFGFGDrb0sfx/s1beULqK5tl2FDYK','0123567486', '020403000121','Vietnam');  /* password : adminflight */
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
