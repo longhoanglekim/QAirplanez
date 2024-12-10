@@ -23,8 +23,12 @@ let flights = [];
 
 const fetchFlightsData = async () => {
     try {
+<<<<<<< HEAD
 
         const response = await fetch('http://localhost:8080/api/flight/admin_flight/flightList', {
+=======
+        const response = await fetch('http://localhost:8080/api/flight/admin/flightList', {
+>>>>>>> 10d85ad4843bd3ca0631d7c2e04f2d5c7905c1a7
             method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
             headers: {
                 'Content-Type': 'application/json',
