@@ -208,7 +208,7 @@ const filteredAndSortedTickets = computed(() => {
 })
 
 const handleReSearch = () => {
-    router.push('/booking/avaibility/1')
+    router.push('/booking/availability/1')
 }
 
 // Lifecycle hook

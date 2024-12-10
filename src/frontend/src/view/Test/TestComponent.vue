@@ -1,23 +1,30 @@
 <template>
-  <div class="flex justify-center items-center h-screen bg-gray-100">
-    <div class="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg">
-      <h2 class="text-2xl font-semibold text-center mb-4">Upload Avatar</h2>
-
-      <form enctype="multipart/form-data" @submit.prevent="uploadImage">
+  <div class="h-screen bg-cover bg-center flex items-center justify-center" :style="{ backgroundImage: 'url(/path/to/your-image.jpg)' }">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+      <h2 class="text-2xl font-semibold text-center text-blue-600 mb-6">Đăng Nhập</h2>
+      <form @submit.prevent="handleSubmit">
         <div class="mb-4">
-          <input type="file" @change="handleFileChange" class="w-full p-2 border rounded-md" accept="image/*" />
+          <label for="username" class="block text-gray-700">Tên đăng nhập</label>
+          <input 
+            type="text" 
+            id="username" 
+            v-model="username" 
+            required 
+            class="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
         </div>
-
-        <button
-            type="submit"
-            :disabled="!selectedImage"
-            class="w-full py-2 px-4 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
-        >
-          Upload Image
+        <div class="mb-6">
+          <label for="password" class="block text-gray-700">Mật khẩu</label>
+          <input 
+            type="password" 
+            id="password" 
+            v-model="password" 
+            required 
+            class="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" />
+        </div>
+        <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          Đăng Nhập
         </button>
       </form>
-
-      <p v-if="uploadStatus" class="mt-4 text-center" :class="statusClass">{{ uploadStatus }}</p>
     </div>
   </div>
 </template>
@@ -26,51 +33,20 @@
 export default {
   data() {
     return {
-      selectedImage: null,
-      uploadStatus: '',
-      statusClass: ''
+      username: '',
+      password: ''
     };
   },
   methods: {
-    handleFileChange(event) {
-      this.selectedImage = event.target.files[0];
-    },
-
-    async uploadImage() {
-      if (!this.selectedImage) {
-        this.uploadStatus = 'Please select an image';
-        this.statusClass = 'text-red-500';
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('image', this.selectedImage);
-
-      try {
-        const response = await fetch('http://localhost:8080/api/user/setAvatar', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('Upload failed');
-        }
-
-        const data = await response.json(); // Giả sử API trả về thông báo dạng JSON
-        this.uploadStatus = data.message || 'Set Avatar thành công';
-        this.statusClass = 'text-green-500';
-      } catch (error) {
-        this.uploadStatus = error.message || 'Upload failed';
-        this.statusClass = 'text-red-500';
-      }
+    handleSubmit() {
+      console.log('Tên đăng nhập:', this.username);
+      console.log('Mật khẩu:', this.password);
+      
     }
   }
-};
+}
 </script>
 
 <style scoped>
-/* Optional: Add custom styling if needed */
+/* Bạn có thể thêm các kiểu CSS tùy chỉnh nếu cần */
 </style>
