@@ -41,7 +41,7 @@ export default {
     handleSubmit() {
       console.log('Tên đăng nhập:', this.username);
       console.log('Mật khẩu:', this.password);
-      // Xử lý đăng nhập ở đây
+      
     }
   }
 }

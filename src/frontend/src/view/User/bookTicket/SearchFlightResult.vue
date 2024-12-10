@@ -146,7 +146,7 @@ const userSelectTicket = async (selectedTicket) => {
         router.push('/booking/information/1')
         return;
     } 
-    router.push('/booking/avaibility/1')
+    router.push('/booking/availability/1')
     
 
     // const nextPage = storeSearchFlight.getOldForm().ticketType === 'one-way'
