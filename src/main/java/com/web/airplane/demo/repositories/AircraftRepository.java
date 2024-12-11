@@ -3,6 +3,11 @@ package com.web.airplane.demo.repositories;
 import com.web.airplane.demo.models.Aircraft;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface AircraftRepository extends JpaRepository<Aircraft, Long> {
-    Aircraft findByManufacturerAndModel(String manufacture, String model);
+    Optional<Aircraft> findTopByOrderBySerialNumberDesc();
+    Aircraft findBySerialNumber(String number);
+
+
 }

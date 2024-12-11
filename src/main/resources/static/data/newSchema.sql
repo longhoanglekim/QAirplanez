@@ -138,6 +138,7 @@ CREATE TABLE `aircrafts` (
                              `model` varchar(255) DEFAULT NULL,
                              `number_of_seats` int DEFAULT NULL,
                              `status` varchar(255) NOT NULL,
+                             `serial_number` varchar(255) unique not null,
                              PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -148,22 +149,23 @@ CREATE TABLE `aircrafts` (
 
 
 /*!40000 ALTER TABLE `aircrafts` DISABLE KEYS */;
-INSERT INTO `aircrafts` VALUES (1,'Boeing','737',240,'Active'),
-                               (2,'Airbus','A320',180,'Maintenance'),
-                               (3,'Boeing','737-800',160, 'Inactive'),
-                               (4,'Boeing','787-9 Dreamliner',296,' Active'),
-                               (5,'Boeing','777-200LR',317, 'Active'),
-                               (6,'Boeing','747-8',410, 'Active'),
-                               (7,'Airbus','A320',180, 'Inactive'),
-                               (8,'Airbus','A350-900',315, 'Maintenance'),
-                               (9,'Airbus','A380',500, 'Active'),
-                               (10,'Airbus','A321',220,'Active'),
-                               (11,'Embraer','E175',88,'Active'),
-                               (12,'Embraer','E195',120,'Active'),
-                               (13,'Bombardier','CRJ200',50,'Active'),
-                               (14,'Bombardier','Q400',78, 'Maintenance'),
-                               (15,'ATR', 'BE', 160 ,'Maintenance'),
-                               (16,'ATR','AE',50,'Inactive');
+INSERT INTO `aircrafts` (`id`, `manufacturer`, `model`, `number_of_seats`, `status`, `serial_number`) VALUES
+                                                                                                        (1, 'Boeing', '737', 240, 'Active', 'B00001'),
+                                                                                                        (2, 'Airbus', 'A320', 180, 'Maintenance', 'A00001'),
+                                                                                                        (3, 'Boeing', '737-800', 160, 'Inactive', 'B00002'),
+                                                                                                        (4, 'Boeing', '787-9 Dreamliner', 296, 'Active', 'B00003'),
+                                                                                                        (5, 'Boeing', '777-200LR', 317, 'Active', 'B00004'),
+                                                                                                        (6, 'Boeing', '747-8', 410, 'Active', 'B00005'),
+                                                                                                        (7, 'Airbus', 'A320', 180, 'Inactive', 'A00002'),
+                                                                                                        (8, 'Airbus', 'A350-900', 315, 'Maintenance', 'A00003'),
+                                                                                                        (9, 'Airbus', 'A380', 500, 'Active', 'A00004'),
+                                                                                                        (10, 'Airbus', 'A321', 220, 'Active', 'A00005'),
+                                                                                                        (11, 'Embraer', 'E175', 88, 'Active', 'E00001'),
+                                                                                                        (12, 'Embraer', 'E195', 120, 'Active', 'E00002'),
+                                                                                                        (13, 'Bombardier', 'CRJ200', 50, 'Active', 'B00006'),
+                                                                                                        (14, 'Bombardier', 'Q400', 78, 'Maintenance', 'B00007'),
+                                                                                                        (15, 'ATR', 'BE', 160, 'Maintenance', 'A00006'),
+                                                                                                        (16, 'ATR', 'AE', 50, 'Inactive', 'A00007');
 
 
 --

@@ -33,7 +33,7 @@ public class FlightService {
         flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
         flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
         flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
-        flight.setAircraft(aircraftRepository.findByManufacturerAndModel(flightInfo.getManufacture(), flightInfo.getModel()));
+        flight.setAircraft(aircraftRepository.findByTailNumber(flightInfo.getTailNumber()));
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
 
         // Lưu vào cơ sở dữ liệu
@@ -53,6 +53,7 @@ public class FlightService {
         flightInfo.setAvailableBusinessSeats(flight.getBusinessAvailableSeats() > 0);
         flightInfo.setAvailableEconomySeats(flight.getEconomyAvailableSeats() > 0);
         flightInfo.setStatus(flight.getStatus());
+        flightInfo.setTailNumber(flight.getAircraft().getTailNumber());
         return flightInfo;
     }
 
