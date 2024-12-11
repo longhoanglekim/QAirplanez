@@ -6,28 +6,28 @@
                 <div class="space-y-4">
                     <div class="flex flex-col">
                         <label class="mb-1">Nhà sản xuất</label>
-                        <input 
-                            v-model="editedAircraft.manufacturer" 
-                            placeholder="Nhà sản xuất" 
+                        <input
+                            v-model="editedAircraft.manufacturer"
+                            placeholder="Nhà sản xuất"
                             class="w-full p-2 border rounded"
                         />
                     </div>
 
                     <div class="flex flex-col">
                         <label class="mb-1">Model</label>
-                        <input 
-                            v-model="editedAircraft.model" 
-                            placeholder="Model máy bay" 
+                        <input
+                            v-model="editedAircraft.model"
+                            placeholder="Model máy bay"
                             class="w-full p-2 border rounded"
                         />
                     </div>
 
                     <div class="flex flex-col">
                         <label class="mb-1">Số ghế</label>
-                        <input 
-                            v-model.number="editedAircraft.numberOfSeats" 
-                            type="number" 
-                            placeholder="Số ghế" 
+                        <input
+                            v-model.number="editedAircraft.numberOfSeats"
+                            type="number"
+                            placeholder="Số ghế"
                             class="w-full p-2 border rounded"
                             min="1"
                         />

@@ -4,9 +4,9 @@
 
     <div class="mb-4">
         <div class="flex items-center bg-white rounded-lg border p-2 max-w-md">
-            <input 
-                type="text" 
-                placeholder="Tìm kiếm theo tên máy bay..." 
+            <input
+                type="text"
+                placeholder="Tìm kiếm theo tên máy bay..."
                 class="flex-1 outline-none px-2"
                 v-model="searchQuery"
             />
@@ -25,7 +25,7 @@
     <AircraftStat />
     <AddAircraftModal :isModalOpen="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="saveAircraft" />
     <EditAircraftModal :isModalOpen="isModalOpen && isEditing" @close="closeModal" @save="saveAircraft" />
-    
+
     <!-- Bảng máy bay -->
     <table class="w-full border rounded-xl bg-white p-0 ">
         <thead class="rounded-t-xl bg-gray-200">
@@ -85,8 +85,8 @@
 </div>
 </template>
 
-  
-  
+
+
 <script setup>
 import {
     ref,
@@ -131,10 +131,10 @@ const toggleDropdown = (plane) => {
 onMounted(() => {
   const closeDropdown = (event) => {
     const actionButtons = document.querySelectorAll('button')
-    const isClickInsideDropdown = Array.from(actionButtons).some(button => 
+    const isClickInsideDropdown = Array.from(actionButtons).some(button =>
       button.contains(event.target)
     )
-    
+
     if (!isClickInsideDropdown) {
       openDropdownId.value = null
     }
