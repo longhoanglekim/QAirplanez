@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
         <h3 class="text-lg font-bold mb-4">Thống Kê Trạng Thái Máy Bay</h3>
         
         <div class="grid grid-cols-3 gap-4">
@@ -32,7 +33,9 @@
     <div class="mt-8">
         <h4 class="text-lg font-semibold mb-4">Biểu Đồ Phân Bố Trạng Thái Tàu Bay</h4>
         <div class="w-full h-64 relative">
-            <canvas ref="pieChart"></canvas>
+            <canvas ref="pieChart">
+
+            </canvas>
         </div>
         
         <!-- Legend -->
@@ -48,6 +51,7 @@
             <div class="flex items-center">
                 <div class="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
                 <span>Không Hoạt Động</span>
+            </div>
             </div>
         </div>
     </div>

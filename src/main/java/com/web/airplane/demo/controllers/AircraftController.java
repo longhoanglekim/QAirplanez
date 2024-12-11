@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,5 +63,36 @@ public class AircraftController {
             aircraftInfoList.add(newAircraftInfo);
         }
         return aircraftInfoList;
+    }
+
+    //Chua test
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/admin/editAircraft")
+    public ResponseEntity<?> editAircraft(@RequestBody AircraftInfo aircraftInfo) {
+        try {
+            // find tau bay
+            Aircraft aircraft = aircraftRepository.findByManufacturerAndModel(
+                aircraftInfo.getManufacturer(), 
+                aircraftInfo.getModel()
+            );
+            
+            if (aircraft == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // thay doi thong tin
+            aircraft.setStatus(aircraftInfo.getStatus());
+            aircraft.setModel(aircraftInfo.getModel());
+            aircraft.setManufacturer(aircraftInfo.getManufacturer());
+            aircraft.setNumberOfSeats(aircraftInfo.getNumberOfSeats());
+
+            // luu lai
+            aircraftRepository.save(aircraft);
+
+            return ResponseEntity.ok(aircraftService.getAircraftInfo(aircraft));
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

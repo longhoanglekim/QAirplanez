@@ -58,8 +58,6 @@ public class AuthenticationController {
             LoginResponse error = new LoginResponse().setError("Sai tài khoản hoặc mật khẩu");
             return ResponseEntity.status(401).body(error);
         }
-
-
     }
 
 

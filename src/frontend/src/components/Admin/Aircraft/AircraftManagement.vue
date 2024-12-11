@@ -23,30 +23,9 @@
     </div>
 
     <AircraftStat />
-
-    <!-- Modal thêm/chỉnh sửa máy bay -->
-    <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-lg w-1/2">
-            <h3 class="text-lg font-bold mb-4">{{ isEditing ? 'Chỉnh Sửa' : 'Thêm' }} Máy Bay</h3>
-            <div class="space-y-4">
-                <input v-model="currentAircraft.id" placeholder="Mã Máy Bay" class="w-full p-2 border rounded" :disabled="isEditing" />
-                <input v-model="currentAircraft.model" placeholder="Mô Hình" class="w-full p-2 border rounded" />
-                <input v-model.number="currentAircraft.capacity" type="number" placeholder="Sức Chứa" class="w-full p-2 border rounded" />
-                <select v-model="currentAircraft.status" class="w-full p-2 border rounded">
-                    <option>Active</option>
-                    <option>Maintenance</option>
-                    <option>Inactive</option>
-                </select>
-                <div class="flex justify-end space-x-2">
-                    <button @click="closeModal" class="bg-gray-500 text-white p-2 rounded">Hủy</button>
-                    <button @click="saveAircraft" class="bg-blue-500 text-white p-2 rounded">Lưu</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <AddAircraftModal :isModalOpen="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="saveAircraft" />
+    <EditAircraftModal :isModalOpen="isModalOpen && isEditing" @close="closeModal" @save="saveAircraft" />
     
-
     <!-- Bảng máy bay -->
     <table class="w-full border rounded-xl bg-white p-0 ">
         <thead class="rounded-t-xl bg-gray-200">

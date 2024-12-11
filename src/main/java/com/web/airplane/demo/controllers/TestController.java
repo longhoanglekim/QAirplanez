@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.web.airplane.demo.models.News;
+import com.web.airplane.demo.services.NewsService;
+import com.web.airplane.demo.dtos.News.AddNewsDTO;
+import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 @RestController
@@ -19,6 +23,8 @@ public class TestController {
     private FlightService flightService;
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private NewsService newsService;
     @GetMapping("/string")
     public ResponseEntity<?> getMessage() throws SeatUnavailableException {
         TimeZone tz = TimeZone.getDefault();
@@ -39,4 +45,12 @@ public class TestController {
         return "Admin Flight";
     }
     
+    @PostMapping("/createNews")
+    public ResponseEntity<News> createNews(@RequestBody AddNewsDTO news) {
+        News newNews = new News();
+        newNews.setTitle(news.getTitle());
+        newNews.setContent(news.getContent());
+        newNews.setCreatedDate(LocalDateTime.now());
+        return ResponseEntity.ok((newNews));
+    }
 }
