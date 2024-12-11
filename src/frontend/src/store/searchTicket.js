@@ -13,12 +13,12 @@ export const searchTicket = defineStore('searchFlight', () => {
         return form.value
     }
 
-    const deleteForm = () => {
-        form.value = {
-            seatCode: '',
-            firstName: ''
-        }
-    }
+    // const deleteForm = () => {
+    //     form.value = {
+    //         seatCode: '',
+    //         firstName: ''
+    //     }
+    // }
 
     return {
         saveForm, getOldForm

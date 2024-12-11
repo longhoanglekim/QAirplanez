@@ -10,6 +10,7 @@ import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.repositories.AirportRepository;
 import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.services.FlightService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.MediaSize;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,8 @@ public class FlightController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/flightList")
+
+    @GetMapping("/admin_flight/flightList")
     public List<FlightInfo> getFlightList() {
         List<Flight> flights = flightRepository.findAll();
         List<FlightInfo> flightInfoList = new ArrayList<>();
@@ -61,7 +63,7 @@ public class FlightController {
     public ResponseEntity<?> addFlight(@RequestBody FlightInfo flightInfo) {
         try {
 
-                Aircraft aircraft = aircraftRepository.findByManufacturerAndModel(flightInfo.getManufacture(), flightInfo.getModel());
+                Aircraft aircraft = aircraftRepository.findBySerialNumber(flightInfo.getTailNumber());
                 // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
                 boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
                         flightInfo.getExpectedArrivalTime(),
@@ -83,6 +85,21 @@ public class FlightController {
         } catch (Exception e) {
             // Trả về lỗi nếu có bất kỳ vấn đề nào xảy ra
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the flight.");
+        }
+    }
+
+    @DeleteMapping("/admin_flight/deleteFlight")
+    @Transactional
+    public ResponseEntity<?> deleteFlight(@RequestParam(name = "flight_number") String flightNumber ) {
+        try {
+            Flight flight = flightRepository.findByFlightNumber(flightNumber);
+            Aircraft aircraft = flight.getAircraft();
+            aircraft.getFlights().remove(flight);
+            flightRepository.delete(flight);
+            return ResponseEntity.ok().body("Xoá chuyến bay thành công");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

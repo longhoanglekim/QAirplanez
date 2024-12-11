@@ -7,16 +7,12 @@ import com.web.airplane.demo.models.Aircraft;
 
 import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.services.AircraftService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +30,12 @@ public class AircraftController {
         this.aircraftRepository = aircraftRepository;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/admin/addAircraft")
+
+    @PostMapping("/admin_aircraft/addAircraft")
     public ResponseEntity<?> addAircraft(AircraftInfo aircraftInfo) {
         try {
 
-                Aircraft aircraft = new Aircraft();
-                aircraft.setStatus(aircraft.getStatus());
-                aircraft.setModel(aircraftInfo.getModel());
-                aircraft.setManufacturer(aircraft.getManufacturer());
-                aircraft.setFlights(null);
-                aircraft.setNumberOfSeats(aircraftInfo.getNumberOfSeats());
-                aircraftRepository.save(aircraft);
-
+            aircraftService.createAircraft(aircraftInfo);
             return ResponseEntity.ok(aircraftInfo);
         } catch (Exception e) {
             log.debug(e.getMessage());
@@ -54,8 +43,7 @@ public class AircraftController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/aircraftList")
+    @GetMapping("/admin_aircraft/aircraftList")
     public List<AircraftInfo> getAircraftList() {
         List<Aircraft> aircraftList = aircraftRepository.findAll();
         List<AircraftInfo> aircraftInfoList = new ArrayList<>();
@@ -66,16 +54,11 @@ public class AircraftController {
         return aircraftInfoList;
     }
 
-    //Chua test
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/admin/editAircraft")
+    @PutMapping("/admin_aircraft/editAircraft")
     public ResponseEntity<?> editAircraft(@RequestBody AircraftInfo aircraftInfo) {
         try {
             // find tau bay
-            Aircraft aircraft = aircraftRepository.findByManufacturerAndModel(
-                aircraftInfo.getManufacturer(), 
-                aircraftInfo.getModel()
-            );
+            Aircraft aircraft = aircraftRepository.findBySerialNumber(aircraftInfo.getSerialNumber());
             
             if (aircraft == null) {
                 return ResponseEntity.notFound().build();
@@ -91,6 +74,18 @@ public class AircraftController {
             aircraftRepository.save(aircraft);
 
             return ResponseEntity.ok(aircraftService.getAircraftInfo(aircraft));
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/admin_aircraft/delete_aircraft")
+    @Transactional
+    public ResponseEntity<?> deleteAircraft(@RequestParam(name = "serial_number") String serialNumber) {
+        try {
+            aircraftRepository.delete(aircraftRepository.findBySerialNumber(serialNumber));
+            return ResponseEntity.ok().body("Xoá thành công");
         } catch (Exception e) {
             log.debug(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());

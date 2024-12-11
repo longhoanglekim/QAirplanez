@@ -12,4 +12,5 @@ public class AircraftInfo {
     private String model;
     private Integer numberOfSeats;
     private String status;
+    private String serialNumber;
 }

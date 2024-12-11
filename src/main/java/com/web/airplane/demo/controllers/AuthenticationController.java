@@ -8,8 +8,9 @@ import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.AuthenticationService;
 import com.web.airplane.demo.services.JwtService;
-import jakarta.servlet.http.Cookie;
+
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @Slf4j
 public class AuthenticationController {
-    private final UserRepository userRepository;
+
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     @Autowired
     public AuthenticationController(UserRepository userRepository, AuthenticationService authenticationService, JwtService jwtService) {
-        this.userRepository = userRepository;
         this.authenticationService = authenticationService;
         this.jwtService = jwtService;
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO registerAccountDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerAccountDto) {
         // register new account with encoded password
 
         User newAccount;
@@ -45,7 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
+    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
         try {
             User authenticatedUser = authenticationService.authenticate(loginUserDto);
 

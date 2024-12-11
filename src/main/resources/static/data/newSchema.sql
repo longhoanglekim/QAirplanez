@@ -17,6 +17,35 @@ USE `qairlinez`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `roles` (
+                         `id` bigint NOT NULL AUTO_INCREMENT,
+                         `name` varchar(255) NOT NULL,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `UKofx66keruapi6vyqpv6f2or37` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (2,'ROLE_ADMIN'),(1,'ROLE_USER'),
+                           (3, 'ROLE_ADMIN_FLIGHT'), (4, 'ROLE_ADMIN_AIRCRAFT'),
+                           (5, 'ROLE_ADMIN_AIRPORT'), (6, 'ROLE_ADMIN_NEWS'),
+                           (7, 'ROLE_ADMIN_PASSENGER');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+
+
 --
 -- Table structure for table `users`
 --
@@ -43,55 +72,15 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-LOCK TABLES `users` WRITE;
+
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'1999-12-24 07:00:00.000000','test1@gmail.com','John','Smith','$2a$10$F5xpEalHUfjZcLh0Sf5Mu.5MKT0eZWXloxGOscbs3M5kyBcErAQlO','0345675123', '020203000123','Vietnam'),
-                           (2,'2009-10-28 07:00:00.000000','trannhanhot@gmail.com','Trần Nhả','Nhớt','$2a$10$ksjN/QcVi7yWQn1UcMMj7OYNoiIleO/4esqxP4C3tqavangTQm2MK','01234546396', '020403000123','Vietnam');
+INSERT INTO `users` VALUES (1,'2004-10-20 07:00:00.000000','quyenluong@gmail.com','John','Smith','$2a$10$tkTCCEd6MYfqxq1IQDZPduT8HgU1H3/CbquVCg2Vcsi.p3bsZPLxS','0345675123', '020203000123','Vietnam'),
+                           (2,'2009-10-28 07:00:00.000000','trannhanhot@gmail.com','Trần Nhả','Nhớt','$2a$10$ksjN/QcVi7yWQn1UcMMj7OYNoiIleO/4esqxP4C3tqavangTQm2MK','01234546396', '020403000123','Vietnam'),
+                           (3,'2003-12-17 07:00:00.000000','adminflight@gmail.com','Hoàng','Long','$2a$10$BE0z27bNdJV1R72GCw9FxupWSFGFGDrb0sfx/s1beULqK5tl2FDYK','0123567486', '020403000121','Vietnam');  /* password : adminflight */
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
--- Table structure for table `images`
---
-DROP table if exists `images`;
-CREATE TABLE images (
-                        id BIGINT NOT NULL AUTO_INCREMENT,
-                        name VARCHAR(255) NOT NULL,
-                        type VARCHAR(255) NOT NULL,
-                        uploadDate DATE,
-                        image_data LONGBLOB,
-                        user_id BIGINT,
-                        news_id BIGINT,
-                        PRIMARY KEY (id),
-                        FOREIGN KEY (user_id) REFERENCES users(id),
-                        FOREIGN KEY (news_id) REFERENCES news(id)
-);
---
--- Table structure for table `roles`
---
-
-DROP TABLE IF EXISTS `roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `roles` (
-                         `id` bigint NOT NULL AUTO_INCREMENT,
-                         `name` varchar(255) NOT NULL,
-                         PRIMARY KEY (`id`),
-                         UNIQUE KEY `UKofx66keruapi6vyqpv6f2or37` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `roles`
---
-
-LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (2,'ROLE_ADMIN'),(1,'ROLE_USER');
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
-
-       --
 -- Table structure for table `user_roles`
 --
 
@@ -112,11 +101,30 @@ CREATE TABLE `user_roles` (
 -- Dumping data for table `user_roles`
 --
 
-LOCK TABLES `user_roles` WRITE;
+
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (1,1),(2,2);
+INSERT INTO `user_roles` VALUES (1,1),(2,2), (3,3);
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
-UNLOCK TABLES;
+
+
+--
+-- Table structure for table `images`
+--
+DROP table if exists `images`;
+CREATE TABLE images (
+                        id BIGINT NOT NULL AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL,
+                        type VARCHAR(255) NOT NULL,
+                        uploadDate DATE,
+                        image_data LONGBLOB,
+                        user_id BIGINT,
+                        news_id BIGINT,
+                        PRIMARY KEY (id),
+                        FOREIGN KEY (user_id) REFERENCES users(id),
+                        FOREIGN KEY (news_id) REFERENCES news(id)
+);
+
+
 --
 -- Table structure for table `aircrafts`
 --
@@ -130,6 +138,7 @@ CREATE TABLE `aircrafts` (
                              `model` varchar(255) DEFAULT NULL,
                              `number_of_seats` int DEFAULT NULL,
                              `status` varchar(255) NOT NULL,
+                             `serial_number` varchar(255) unique not null,
                              PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -140,22 +149,23 @@ CREATE TABLE `aircrafts` (
 
 
 /*!40000 ALTER TABLE `aircrafts` DISABLE KEYS */;
-INSERT INTO `aircrafts` VALUES (1,'Boeing','737',240,'Active'),
-                               (2,'Airbus','A320',180,'Maintenance'),
-                               (3,'Boeing','737-800',160, 'Inactive'),
-                               (4,'Boeing','787-9 Dreamliner',296,' Active'),
-                               (5,'Boeing','777-200LR',317, 'Active'),
-                               (6,'Boeing','747-8',410, 'Active'),
-                               (7,'Airbus','A320',180, 'Inactive'),
-                               (8,'Airbus','A350-900',315, 'Maintenance'),
-                               (9,'Airbus','A380',500, 'Active'),
-                               (10,'Airbus','A321',220,'Active'),
-                               (11,'Embraer','E175',88,'Active'),
-                               (12,'Embraer','E195',120,'Active'),
-                               (13,'Bombardier','CRJ200',50,'Active'),
-                               (14,'Bombardier','Q400',78, 'Maintenance'),
-                               (15,'ATR', 'BE', 160 ,'Maintenance'),
-                               (16,'ATR','AE',50,'Inactive');
+INSERT INTO `aircrafts` (`id`, `manufacturer`, `model`, `number_of_seats`, `status`, `serial_number`) VALUES
+                                                                                                        (1, 'Boeing', '737', 240, 'Active', 'B00001'),
+                                                                                                        (2, 'Airbus', 'A320', 180, 'Maintenance', 'A00001'),
+                                                                                                        (3, 'Boeing', '737-800', 160, 'Inactive', 'B00002'),
+                                                                                                        (4, 'Boeing', '787-9 Dreamliner', 296, 'Active', 'B00003'),
+                                                                                                        (5, 'Boeing', '777-200LR', 317, 'Active', 'B00004'),
+                                                                                                        (6, 'Boeing', '747-8', 410, 'Active', 'B00005'),
+                                                                                                        (7, 'Airbus', 'A320', 180, 'Inactive', 'A00002'),
+                                                                                                        (8, 'Airbus', 'A350-900', 315, 'Maintenance', 'A00003'),
+                                                                                                        (9, 'Airbus', 'A380', 500, 'Active', 'A00004'),
+                                                                                                        (10, 'Airbus', 'A321', 220, 'Active', 'A00005'),
+                                                                                                        (11, 'Embraer', 'E175', 88, 'Active', 'E00001'),
+                                                                                                        (12, 'Embraer', 'E195', 120, 'Active', 'E00002'),
+                                                                                                        (13, 'Bombardier', 'CRJ200', 50, 'Active', 'B00006'),
+                                                                                                        (14, 'Bombardier', 'Q400', 78, 'Maintenance', 'B00007'),
+                                                                                                        (15, 'ATR', 'BE', 160, 'Maintenance', 'A00006'),
+                                                                                                        (16, 'ATR', 'AE', 50, 'Inactive', 'A00007');
 
 
 --
@@ -208,11 +218,11 @@ CREATE TABLE `airports` (
 -- Dumping data for table `airports`
 --
 
-LOCK TABLES `airports` WRITE;
+
 /*!40000 ALTER TABLE `airports` DISABLE KEYS */;
 INSERT INTO `airports` VALUES (1,'HAN','Noi Bai International Airport','Hanoi',1,'',''),(2,'BKK','Suvarnabhumi Airport','Bangkok',2,'',''),(3,'NRT','Narita International Airport','Tokyo',3,'',''),(4,'SGN','Tan Son Nhat International Airport','Ho Chi Minh City',1,NULL,NULL),(6,'CXR','Cam Ranh International Airport','Nha Trang',1,NULL,NULL),(7,'DAD','Da Nang International Airport','Da Nang',1,NULL,NULL),(8,'UIH','Phu Cat Airport','Qui Nhon',1,NULL,NULL),(9,'VCA','Can Tho International Airport','Can Tho',1,NULL,NULL),(10,'VII','Phu Quoc International Airport','Phu Quoc',1,NULL,NULL),(11,'TBB','Thoi Hoa Airport','Bac Lieu',1,NULL,NULL),(12,'JFK','John F. Kennedy International Airport','New York',4,NULL,NULL),(13,'LHR','Heathrow Airport','London',5,NULL,NULL),(14,'CDG','Charles de Gaulle Airport','Paris',6,NULL,NULL),(15,'FCO','Leonardo da Vinci International Airport','Rome',7,NULL,NULL),(16,'GRU','São Paulo/Guarulhos–Governador André Franco Montoro International Airport','São Paulo',8,NULL,NULL),(17,'DEL','Indira Gandhi International Airport','New Delhi',9,NULL,NULL),(18,'YYZ','Toronto Pearson International Airport','Toronto',10,NULL,NULL),(19,'SYD','Sydney Kingsford Smith Airport','Sydney',11,NULL,NULL),(20,'MEX','Mexico City International Airport','Mexico City',12,NULL,NULL),(21,'ICN','Incheon International Airport','Seoul',13,NULL,NULL);
 /*!40000 ALTER TABLE `airports` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `countries`
@@ -233,11 +243,11 @@ CREATE TABLE `countries` (
 -- Dumping data for table `countries`
 --
 
-LOCK TABLES `countries` WRITE;
+
 /*!40000 ALTER TABLE `countries` DISABLE KEYS */;
 INSERT INTO `countries` VALUES (1,'Vietnam','Vietnam description'),(2,'Thailand','Thailand description'),(3,'Japan','Japan description'),(4,'Vietnam','Vietnam description'),(5,'Thailand','Thailand description'),(6,'Japan','Japan description'),(7,'United States','The United States is a country primarily located in North America, known for its diverse culture and landscape.'),(8,'Germany','Germany is a country in Central Europe known for its history, engineering, and technological innovations.'),(9,'France','France is a European country famous for its rich history, art, and cuisine. Paris is its capital.'),(10,'Italy','Italy is a country in Southern Europe known for its art, architecture, history, and world-famous cuisine.'),(11,'Brazil','Brazil is the largest country in South America, known for its Amazon rainforest and Carnival festival.'),(12,'India','India is a country in South Asia, known for its ancient history, diverse cultures, and the Taj Mahal.'),(13,'Canada','Canada is a country in North America, famous for its natural beauty, including the Rocky Mountains and Niagara Falls.'),(14,'Australia','Australia is a country and continent surrounded by the Indian and Pacific oceans, known for its wildlife and natural wonders.'),(15,'Mexico','Mexico is a country in North America, known for its rich culture, historical landmarks, and beautiful beaches.'),(16,'South Korea','South Korea is a country in East Asia known for its technological innovations, pop culture, and rich history.');
 /*!40000 ALTER TABLE `countries` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `flights`
@@ -275,7 +285,7 @@ CREATE TABLE `flights` (
 -- Dumping data for table `flights`
 --
 
-LOCK TABLES `flights` WRITE;
+
 /*!40000 ALTER TABLE `flights` DISABLE KEYS */;
 INSERT INTO `flights` VALUES (1,'2023-12-01 08:30:00.000000','2023-12-01 06:00:00.000000','2023-12-01 08:00:00.000000','2023-12-01 06:00:00.000000','VN123',1,1,2,'2023-06-01 08:30:00.000000',168,48,23, 'Scheduled'),
                              (2,'2023-12-02 18:30:00.000000','2023-12-02 16:00:00.000000','2023-12-02 18:00:00.000000','2023-12-02 16:00:00.000000','TG456',2,2,3,'2023-06-02 18:30:00.000000',126,36,18, 'Scheduled'),
@@ -310,7 +320,7 @@ INSERT INTO `flights` VALUES (1,'2023-12-01 08:30:00.000000','2023-12-01 06:00:0
                              (31,'2024-12-25 17:00:00.000000','2024-12-25 14:30:00.000000','2024-12-25 21:00:00.000000','2024-12-25 14:45:00.000000','VN504',9,1,6,'2024-12-25 13:00:00.000000',300,50,20, 'Scheduled'),
                              (32,'2024-12-25 23:00:00.000000','2024-12-25 21:30:00.000000','2024-12-26 06:00:00.000000','2024-12-25 22:00:00.000000','VN505',10,6,1,'2024-12-25 20:00:00.000000',300,50,20, 'Scheduled');
 /*!40000 ALTER TABLE `flights` ENABLE KEYS */;
-UNLOCK TABLES;
+
 --
 -- Table structure for table `ticket_classes`
 --
@@ -335,13 +345,13 @@ CREATE TABLE `ticket_classes` (
 -- Dumping data for table `ticket_classes`
 --
 
-LOCK TABLES `ticket_classes` WRITE;
+
 /*!40000 ALTER TABLE `ticket_classes` DISABLE KEYS */;
 INSERT INTO `ticket_classes` VALUES (1,'Economy','Basic ticket class with limited amenities',1,7,1,20,1),
                                     (2,'Business','Enhanced comfort with additional services',1.5,6,2,40,1),
                                     (3,'First','Premium class with luxury amenities',2,15,2,40,3);
 /*!40000 ALTER TABLE `ticket_classes` ENABLE KEYS */;
-UNLOCK TABLES;
+
 
 --
 -- Table structure for table `passengers`
@@ -380,13 +390,13 @@ CREATE TABLE passengers (
 -- Dumping data for table `passengers`
 --
 
-LOCK TABLES `passengers` WRITE;
+
 /*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
 INSERT INTO `passengers`
 (`passenger_id`, `bank_name`, `seat_row`, `seat_position`, `email`, `ticket_class_id`, `first_name`, `last_name`, `passport_number`, `phone_number`, `birthdate`, `flight_id`, `user_id`, `identification`, `booking_code`)
 VALUES
     (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '123-456-7890', '1990-05-15', 1, 1, 'ABC123XYZ', 'XF45LD');
-UNLOCK TABLES;
+
 
 
 

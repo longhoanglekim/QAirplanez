@@ -23,8 +23,8 @@ public class Aircraft {
     private String model;
     private Integer numberOfSeats;
     private String status;
-
-    @OneToMany(mappedBy = "aircraft")
+    private String serialNumber;
+    @OneToMany(mappedBy = "aircraft",  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Flight> flights = new ArrayList<>();
 
 }
