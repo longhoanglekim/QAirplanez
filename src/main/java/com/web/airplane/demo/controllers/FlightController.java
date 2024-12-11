@@ -63,7 +63,7 @@ public class FlightController {
     public ResponseEntity<?> addFlight(@RequestBody FlightInfo flightInfo) {
         try {
 
-                Aircraft aircraft = aircraftRepository.findBySerialNumber(flightInfo.getTailNumber());
+                Aircraft aircraft = aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber());
                 // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
                 boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
                         flightInfo.getExpectedArrivalTime(),

@@ -1,7 +1,7 @@
 let aircraft = [];
 const fetchAircraftData = async () => {
     try {
-        const  response = await fetch('http://localhost:8080/api/aircraft/admin/aircraftList', {
+        const  response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {
             method : 'Get',
             headers: {
                 'Content-Type': 'application/json',
@@ -11,6 +11,7 @@ const fetchAircraftData = async () => {
         });
         if (response.ok) {
             aircraft = await response.json();
+            console.log(aircraft);
         }
     } catch(error) {
         console.log(error);
@@ -23,12 +24,8 @@ let flights = [];
 
 const fetchFlightsData = async () => {
     try {
-<<<<<<< HEAD
-
         const response = await fetch('http://localhost:8080/api/flight/admin_flight/flightList', {
-=======
-        const response = await fetch('http://localhost:8080/api/flight/admin/flightList', {
->>>>>>> 10d85ad4843bd3ca0631d7c2e04f2d5c7905c1a7
+
             method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
             headers: {
                 'Content-Type': 'application/json',
