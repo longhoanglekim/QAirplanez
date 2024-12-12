@@ -59,22 +59,23 @@
 
 <script setup>
 
-import { computed, ref } from 'vue';
+import { computed, ref} from 'vue';
 import { aircraft } from '../../../assets/data';
 
 const activeCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Hoat dong').length;
+    return aircraft.filter(plane => plane.status === 'Active').length;
 
 });
 
 const maintenanceCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Bao duong').length;
+    return aircraft.filter(plane => plane.status === 'Maintenance').length;
 });
 
 const inactiveCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Sua chua').length;
+    return aircraft.filter(plane => plane.status === 'Inactive').length;
 });
 const pieChart = ref(null);
+
 </script>
 
 <style scoped>

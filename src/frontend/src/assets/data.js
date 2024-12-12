@@ -1,7 +1,7 @@
 let aircraft = [];
 const fetchAircraftData = async () => {
     try {
-        const  response = await fetch('http://localhost:8080/api/aircraft/admin/aircraftList', {
+        const  response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {
             method : 'Get',
             headers: {
                 'Content-Type': 'application/json',
@@ -11,6 +11,7 @@ const fetchAircraftData = async () => {
         });
         if (response.ok) {
             aircraft = await response.json();
+            console.log(aircraft);
         }
     } catch(error) {
         console.log(error);
@@ -23,9 +24,7 @@ let flights = [];
 
 const fetchFlightsData = async () => {
     try {
-
         const response = await fetch('http://localhost:8080/api/flight/admin_flight/flightList', {
-
 
             method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
             headers: {
@@ -50,34 +49,34 @@ fetchFlightsData().then(r => console.log(r));
 
 // Export flights để sử dụng ở các module khác
 export { flights };
-  
-  export const passengers = [
-    { 
-      id: 'P001', 
-      name: 'Nguyễn Văn A', 
-      flightId: 'FL001', 
-      seatNumber: '12A', 
-      ticketClass: 'Economy' 
+
+export const passengers = [
+    {
+        id: 'P001',
+        name: 'Nguyễn Văn A',
+        flightId: 'FL001',
+        seatNumber: '12A',
+        ticketClass: 'Economy'
     },
-    { 
-        id: 'P001', 
-        name: 'Nguyễn Văn A', 
-        flightId: 'FL001', 
-        seatNumber: '12A', 
-        ticketClass: 'Economy' 
+    {
+        id: 'P001',
+        name: 'Nguyễn Văn A',
+        flightId: 'FL001',
+        seatNumber: '12A',
+        ticketClass: 'Economy'
     },
-    { 
-        id: 'P001', 
-        name: 'Nguyễn Văn A', 
-        flightId: 'FL001', 
-        seatNumber: '12A', 
-        ticketClass: 'Economy' 
+    {
+        id: 'P001',
+        name: 'Nguyễn Văn A',
+        flightId: 'FL001',
+        seatNumber: '12A',
+        ticketClass: 'Economy'
     },
-    { 
-        id: 'P001', 
-        name: 'Nguyễn Văn A', 
-        flightId: 'FL001', 
-        seatNumber: '12A', 
-        ticketClass: 'Economy' 
+    {
+        id: 'P001',
+        name: 'Nguyễn Văn A',
+        flightId: 'FL001',
+        seatNumber: '12A',
+        ticketClass: 'Economy'
     }
-  ]
+]

@@ -29,7 +29,7 @@ public class FlightInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime cancelDueTime;
     private String aircraftCode;
-    private String tailNumber;
+    private String serialNumber;
     private boolean isAvailableFirstSeats;
     private boolean isAvailableBusinessSeats;
     private boolean isAvailableEconomySeats;

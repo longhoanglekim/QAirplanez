@@ -13,4 +13,8 @@ public class AircraftInfo {
     private Integer numberOfSeats;
     private String status;
     private String serialNumber;
+
+    public String getAircraftCode() {
+        return manufacturer + "-" + model;
+    }
 }
