@@ -13,9 +13,10 @@ public class AircraftService {
     public AircraftInfo getAircraftInfo(Aircraft aircraft) {
         AircraftInfo aircraftInfo = new AircraftInfo();
         aircraftInfo.setNumberOfSeats(aircraft.getNumberOfSeats());
-        aircraftInfo.setManufacturer(aircraftInfo.getManufacturer());
-        aircraftInfo.setModel(aircraftInfo.getModel());
-        aircraftInfo.setStatus(aircraftInfo.getStatus());
+        aircraftInfo.setManufacturer(aircraft.getManufacturer());
+        aircraftInfo.setModel(aircraft.getModel());
+        aircraftInfo.setStatus(aircraft.getStatus());
+        aircraftInfo.setSerialNumber(aircraft.getSerialNumber());
         return aircraftInfo;
     }
     private String generateSerialNumber(String manufacture) {

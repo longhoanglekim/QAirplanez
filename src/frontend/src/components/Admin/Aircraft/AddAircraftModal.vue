@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-lg w-1/2">
             <h3 class="text-lg font-bold mb-4">Thêm Máy Bay</h3>
             <div class="space-y-4">
@@ -51,14 +51,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref , defineEmits} from 'vue'
 
-const props = defineProps({
-    isModalOpen: {
-        type: Boolean,
-        required: true
-    }
-})
 
 const emit = defineEmits(['close', 'add-aircraft'])
 

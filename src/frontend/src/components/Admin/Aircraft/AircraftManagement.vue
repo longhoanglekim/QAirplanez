@@ -23,8 +23,8 @@
     </div>
 
     <AircraftStat />
-    <AddAircraftModal :isModalOpen="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="saveAircraft" />
-    <EditAircraftModal :isModalOpen="isModalOpen && isEditing" @close="closeModal" @save="saveAircraft" />
+  <AddAircraftModal v-if="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="saveAircraft" />
+  <EditAircraftModal v-if="isModalOpen && isEditing" @close="closeModal" @save="saveAircraft" />
     
     <!-- Bảng máy bay -->
     <table class="w-full border rounded-xl bg-white p-0 ">
@@ -60,9 +60,9 @@
         <tbody>
             <tr v-for="plane in sortedAircraft" :key="plane.id"
                 class="even:bg-gray-100 odd:bg-white">
-                <td class=" p-2">{{ plane.id }}</td>
-                <td class=" p-2">{{ plane.model }}</td>
-                <td class=" p-2">{{ plane.capacity }}</td>
+                <td class=" p-2">{{ plane.serialNumber }}</td>
+                <td class=" p-2">{{ plane.aircraftCode }}</td>
+                <td class=" p-2">{{ plane.numberOfSeats }}</td>
                 <td class=" p-2">{{ plane.status }}</td>
                 <td class=" p-2 relative">
                     <div class="relative">
@@ -97,6 +97,7 @@ import {
     aircraft
 } from '../../../assets/data'
 import AircraftStat from './AircraftStat.vue'
+import AddAircraftModal from "@/components/Admin/Aircraft/AddAircraftModal.vue";
 // Reactive state
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -109,11 +110,12 @@ const currentAircraft = ref({
 const sortKey = ref('')
 const sortOrder = ref('asc')
 const openDropdownId = ref(null)
-
+console.log(aircraft)
 // Sorting function
 const sortedAircraft = computed(() => {
-    if (!sortKey.value) return aircraft
 
+    if (!sortKey.value) return aircraft
+    console.log("log")
     return [...aircraft].sort((a, b) => {
         let modifier = sortOrder.value === 'asc' ? 1 : -1
         if (a[sortKey.value] < b[sortKey.value]) return -1 * modifier
@@ -167,6 +169,7 @@ const openAddModal = () => {
   }
   isEditing.value = false
   isModalOpen.value = true
+  console.log("Them may bay " + isModalOpen.value);
 }
 
 const startEdit = (plane) => {
