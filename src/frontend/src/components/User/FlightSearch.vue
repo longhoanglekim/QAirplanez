@@ -19,9 +19,9 @@
                 <label for="fromCity">Điểm đi</label>
                 <select v-model="form.fromCity" id="fromCity" required placeholder="Điểm đi">
                     <option value="">Chọn địa điểm</option>
-                    <option value="HAN">HN</option>
-                    <option value="SGN">SG</option>
-                    <option value="CXR">CXR</option>
+                    <option v-for = "airport in airports" :key="airport.airportCode" >
+                          {{airport.airportCode}}
+                    </option>>
                 </select>
             </div>
 
@@ -30,9 +30,9 @@
                 <label for="toCity">Điểm đến</label>
                 <select v-model="form.toCity" id="toCity" required placeholder="Điểm đi">
                     <option value="">Chọn địa điểm</option>
-                    <option value="HAN">HN</option>
-                    <option value="SGN">SG</option>
-                    <option value="CXR">CXR</option>
+                    <option v-for = "airport in filteredSelectableAirportsTo" :key="airport.airportCode" >
+                      {{airport.airportCode}}
+                    </option>>
                 </select>
             </div>
 
@@ -96,7 +96,16 @@
 <script setup>
 import { ref, computed,defineEmits} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
+import {airports} from "@/assets/data";
 
+// const filteredSelectableAirportsFrom = computed(() => {
+//   return airports.filter(airport => airport.airportCode !== form.value.toCity);
+// });
+
+// Computed property for filtering airports for the "Điểm đến" (destination) city
+const filteredSelectableAirportsTo = computed(() => {
+  return airports.filter(airport => airport.airportCode !== form.value.fromCity);
+});
 const searchFStore = searchFlightStore();
 
 // Reactive state for flight search form

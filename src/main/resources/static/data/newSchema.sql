@@ -395,7 +395,7 @@ CREATE TABLE passengers (
 INSERT INTO `passengers`
 (`passenger_id`, `bank_name`, `seat_row`, `seat_position`, `email`, `ticket_class_id`, `first_name`, `last_name`, `passport_number`, `phone_number`, `birthdate`, `flight_id`, `user_id`, `identification`, `booking_code`)
 VALUES
-    (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '123-456-7890', '1990-05-15', 1, 1, 'ABC123XYZ', 'XF45LD');
+    (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '0123456789', '1990-05-15', 1, 1, 'ABC123XYZ', 'XF45LD');
 
 
 
