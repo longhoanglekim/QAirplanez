@@ -94,17 +94,36 @@
 </template>
 
 <script setup>
-import { ref, computed,defineEmits} from 'vue'
+import { ref, computed,defineEmits ,onMounted} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
-import {airports} from "@/assets/data";
+
+const airports = ref([])
+
+onMounted(async () => {
+  try {
+    const  response = await fetch('http://localhost:8080/api/airport/public/airportList', {
+            method : 'Get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        });
+    const data = await response.json()
+    airports.value = data
+  } catch (error) {
+    console.error('Error fetching airports:', error)
+  }
+})
 
 const filteredSelectableAirportsFrom = computed(() => {
-  return airports.filter(airport => airport.airportCode !== form.value.toCity);
+    console.log(form.value.toCity)
+    console.log(airports.value)
+    return airports.value.filter(airport => airport.airportCode !== form.value.toCity);
 });
 
 // Computed property for filtering airports for the "Điểm đến" (destination) city
 const filteredSelectableAirportsTo = computed(() => {
-  return airports.filter(airport => airport.airportCode !== form.value.fromCity);
+  return airports.value.filter(airport => airport.airportCode !== form.value.fromCity);
 });
 const searchFStore = searchFlightStore();
 
