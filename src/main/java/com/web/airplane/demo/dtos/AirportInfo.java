@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DestinationInfo {
+public class AirportInfo {
+    private String airportCode;
     private String image;
     private String city;
     private String description;

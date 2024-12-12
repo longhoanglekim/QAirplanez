@@ -1,3 +1,22 @@
+let airports = [];
+const fetchAirportData = async () => {
+    try {
+        const  response = await fetch('http://localhost:8080/api/airport/public/airportList', {
+            method : 'Get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        });
+        if (response.ok) {
+            airports = await response.json();
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+fetchAirportData().then(() => console.log(airports.at(0)));
+export {airports};
 let aircraft = [];
 const fetchAircraftData = async () => {
     try {
