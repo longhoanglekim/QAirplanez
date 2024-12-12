@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JwtUtil {
-    private static JwtService jwtService = new JwtService();
+    private JwtService jwtService = new JwtService();
 
     public JwtUtil(JwtService jwtService) {
         this.jwtService = jwtService;
