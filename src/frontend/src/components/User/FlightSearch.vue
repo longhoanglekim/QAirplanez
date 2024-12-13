@@ -60,8 +60,8 @@
                     </label>
                 </div>
                 <div class="relative">
-                    <MyDatePicker v-model="form.departureDate" :disable-past-dates="true" :theme="'light'" 
-                    :label="'Ngày đi'" :disable-date-from="Date.now()" ref="departureDateRef" />
+                    <MyDatePicker v-model="form.departureDate" label="Ngày đi" 
+                    :disable-date-from="Date.now()" ref="departureDateRef" />
                 </div>
             </div>
 
@@ -89,8 +89,9 @@
                 </div>
                 
                 <div v-if="form.ticketType === 'round-trip'" class="relative group">
-                    <MyDatePicker v-model="form.returnDate" :disable-past-dates="true" 
-                    label="Ngày về" :disable-date-from="Math.max(form.departureDate, Date.now())" ref="returnDateRef"/>
+                    <MyDatePicker v-model="form.returnDate" label="Ngày về" 
+                    :disable-date-from="new Date(Math.max(form.departureDate, Date.now()))" 
+                    :range="true"  ref="returnDateRef"/>
                 </div>
             </div>
 
@@ -107,13 +108,33 @@
                     <div class="bg-white rounded-xl p-6 w-96 space-y-4">
                         <div class="space-y-2">
                             <label for="adults" class="block text-sm font-medium text-gray-700">Số vé người lớn</label>
-                            <input type="number" id="adults" v-model="form.adults" :min="1" :max="maxAdults"
-                                   class="w-full p-3 rounded-lg border border-gray-300" />
+                            <div class="flex items-center">
+                                <button type="button" @click="decreaseAdults" 
+                                        class="p-3 rounded-l-lg border border-gray-300 hover:bg-gray-100">
+                                    -
+                                </button>
+                                <input type="number" id="adults" v-model="form.adults" :min="1" :max="maxAdults"
+                                       class="w-full p-3 border-y border-gray-300 text-center" />
+                                <button type="button" @click="increaseAdults"
+                                        class="p-3 rounded-r-lg border border-gray-300 hover:bg-gray-100">
+                                    +
+                                </button>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label for="children" class="block text-sm font-medium text-gray-700">Số vé trẻ em</label>
-                            <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren"
-                                   class="w-full p-3 rounded-lg border border-gray-300" />
+                            <div class="flex items-center">
+                                <button type="button" @click="decreaseChildren"
+                                        class="p-3 rounded-l-lg border border-gray-300 hover:bg-gray-100">
+                                    -
+                                </button>
+                                <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren"
+                                       class="w-full p-3 border-y border-gray-300 text-center" />
+                                <button type="button" @click="increaseChildren"
+                                        class="p-3 rounded-r-lg border border-gray-300 hover:bg-gray-100">
+                                    +
+                                </button>
+                            </div>
                         </div>
                         <button type="button" @click="closeModal"
                                 class="w-full py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
@@ -187,7 +208,7 @@
 import { ref, computed,defineEmits ,onMounted, nextTick, watch} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
 import { PlaneTakeoff, PlaneLanding, BookCheck, BookUser} from 'lucide-vue-next';
-import MyDatePicker from '../composable/form/MyDatePicker.vue';
+import MyDatePicker from '@/components/composable/form/MyDatePicker.vue';
 
 const airports = ref([])
 
@@ -338,6 +359,10 @@ watch(() => form.value.toCity, async (newVal) => {
 watch(() => form.value.departureDate, async (newVal) => {
   if (newVal) {
     await nextTick()
+    // Clear return date if departure date is after it
+    if (form.value.returnDate && new Date(newVal) > new Date(form.value.returnDate)) {
+      form.value.returnDate = null
+    }
     toCityRef.value?.focus()
   }
 })
@@ -348,8 +373,45 @@ watch(() => form.value.returnDate, async (newVal) => {
     ticketDetailsRef.value?.focus()
   }
 })
+
+function increaseAdults() {
+    if (form.value.adults < maxAdults.value) {
+        form.value.adults++
+    }
+}
+
+function decreaseAdults() {
+    if (form.value.adults > 1) {
+        form.value.adults--
+        // Đảm bảo số trẻ em không vượt quá số người lớn
+        if (form.value.children >= form.value.adults) {
+            form.value.children = form.value.adults - 1
+        }
+    }
+}
+
+function increaseChildren() {
+    if (form.value.children < maxChildren.value) {
+        form.value.children++
+    }
+}
+
+function decreaseChildren() {
+    if (form.value.children > 0) {
+        form.value.children--
+    }
+}
 </script>
 
 <style scoped>
+/* Ẩn nút tăng/giảm mặc định của input number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
 </style>

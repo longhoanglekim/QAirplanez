@@ -5,7 +5,6 @@
       <input 
         type="text" 
         :value="formattedDate" 
-        
         @click="toggleCalendar"
         readonly
         class="w-full h-14 pl-10 pr-4 py-3 rounded-lg border transition duration-300 peer 
@@ -88,15 +87,19 @@
           <button type="button"
             v-for="day in calendarDays" 
             :key="day.date" 
-            @click="selectDate(day)"
+            @click="handleClickOnDate(day)"
             :disabled="day.disabled"
             :class="[
               'py-2 text-sm rounded-lg transition duration-200 ease-in-out',
               day.selected 
                 ? 'bg-blue-500 text-white hover:bg-blue-600' 
-                : day.current 
-                  ? 'text-gray-800 hover:bg-blue-100 hover:text-blue-600' 
-                  : 'text-gray-300 cursor-not-allowed',
+                : day.preview
+                  ? 'bg-blue-200 text-blue-700'
+                  : day.inRange
+                    ? 'bg-blue-100 text-blue-600'
+                    : day.current 
+                      ? 'text-gray-800 hover:bg-blue-100 hover:text-blue-600' 
+                      : 'text-gray-300 cursor-not-allowed',
               day.disabled ? 'opacity-50' : ''
             ]"
           >
@@ -109,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted,defineEmits,defineProps} from 'vue'
+import { ref, computed, onMounted, onUnmounted,defineEmits,defineProps } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -133,6 +136,10 @@ const props = defineProps({
   label: {
     type: String,
     default: ''
+  },
+  range: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -168,8 +175,8 @@ onUnmounted(() => {
 })
 
 const formattedDate = computed(() => {
-  return selectedDate.value 
-    ? selectedDate.value.toLocaleDateString('vi-VN') 
+  return props.modelValue 
+    ? props.modelValue.toLocaleDateString('vi-VN') 
     : null
 })
 
@@ -184,6 +191,13 @@ const calendarDays = computed(() => {
   const lastDayOfMonth = new Date(year, month + 1, 0)
   const days = []
 
+  // Chuyển đổi disableDateFrom thành Date object nếu nó là string
+  const disableDateFrom = props.disableDateFrom instanceof Date 
+    ? props.disableDateFrom 
+    : props.disableDateFrom 
+      ? new Date(props.disableDateFrom)
+      : null
+
   // Thêm các ngày từ tháng trước để lấp đầy tuần
   const startingDay = firstDayOfMonth.getDay() || 7
   for (let i = 1; i < startingDay; i++) {
@@ -193,21 +207,28 @@ const calendarDays = computed(() => {
   // Thêm các ngày trong tháng
   for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
     const date = new Date(year, month, day)
+    const isInRange = props.range && disableDateFrom && selectedDate.value && 
+      date >= disableDateFrom && date <= selectedDate.value
+    const isStartDate = disableDateFrom && 
+      date.toDateString() === disableDateFrom.toDateString()
+
     days.push({
       day,
       date,
       current: true,
       selected: selectedDate.value && date.toDateString() === selectedDate.value.toDateString(),
-      disabled: props.disableDateFrom 
-        ? date < props.disableDateFrom 
-        : false
+      disabled: disableDateFrom 
+        ? date < disableDateFrom 
+        : false,
+      inRange: isInRange,
+      isStartDate
     })
   }
 
   return days
 })
 
-const selectDate = (day) => {
+const handleClickOnDate = (day) => {
   if (day.current && !day.disabled) {
     selectedDate.value = day.date
     emit('update:modelValue', day.date)
