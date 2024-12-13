@@ -13,12 +13,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="passenger in passengers" :key="passenger.id">
-            <td class="border p-2">{{ passenger.id }}</td>
-            <td class="border p-2">{{ passenger.name }}</td>
-            <td class="border p-2">{{ passenger.flightId }}</td>
-            <td class="border p-2">{{ passenger.seatNumber }}</td>
-            <td class="border p-2">{{ passenger.ticketClass }}</td>
+          <tr v-for="passenger in passengers" :key="passenger.bookingCode">
+            <td class="border p-2">{{ passenger.bookingCode }}</td>
+            <td class="border p-2">{{ passenger.fullName }}</td>
+            <td class="border p-2">{{ passenger.flightNumber }}</td>
+            <td class="border p-2">{{ passenger.seatCode }}</td>
+            <td class="border p-2">{{ passenger.ticketClassCode}}</td>
             <td class="border p-2">
               <button class="bg-blue-500 text-white p-1 rounded">Chỉnh Sửa</button>
             </td>
