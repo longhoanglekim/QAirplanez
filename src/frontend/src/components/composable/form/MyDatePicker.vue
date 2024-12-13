@@ -174,10 +174,7 @@ const formattedDate = computed(() => {
 })
 
 const currentMonthYear = computed(() => {
-  return currentDate.value.toLocaleString('vi-VN', { 
-    month: 'long', 
-    year: 'numeric' 
-  })
+  return "Tháng " + (currentDate.value.getMonth() + 1) + "/" + currentDate.value.getFullYear();
 })
 
 const calendarDays = computed(() => {

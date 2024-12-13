@@ -43,7 +43,7 @@
                             class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
                             outline-none peer appearance-none"
-                            required>
+                            required ref="fromCityRef">
                         <option value="" disabled selected></option>
                         <option v-for="airport in filteredSelectableAirportsFrom" 
                                 :key="airport.airportCode" 
@@ -61,7 +61,7 @@
                 </div>
                 <div class="relative">
                     <MyDatePicker v-model="form.departureDate" :disable-past-dates="true" :theme="'light'" 
-                    :label="'Ngày đi'" :disable-date-from="Date.now()" />
+                    :label="'Ngày đi'" :disable-date-from="Date.now()" ref="departureDateRef" />
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
                     <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
                     <select v-model="form.toCity" id="toCity"
                             class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none peer appearance-none"
-                            required>
+                            required ref="toCityRef">
                         <option value="" disabled selected></option>
                         <option v-for="airport in filteredSelectableAirportsTo" 
                                 :key="airport.airportCode" 
@@ -90,7 +90,7 @@
                 
                 <div v-if="form.ticketType === 'round-trip'" class="relative group">
                     <MyDatePicker v-model="form.returnDate" :disable-past-dates="true" 
-                    label="Ngày về" :disable-date-from="Math.max(form.departureDate, Date.now())"/>
+                    label="Ngày về" :disable-date-from="Math.max(form.departureDate, Date.now())" ref="returnDateRef"/>
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
                 <label for="ticketDetails" class="block text-sm font-medium text-gray-700">Số vé (Tối đa 10 vé)</label>
                 <input type="text" id="ticketDetails" :value="ticketSummary" @click="toggleTicketModal" 
                        class="w-full p-3 rounded-lg border border-gray-300 cursor-pointer bg-gray-50"
-                       readonly placeholder="Nhấn để chỉnh sửa số vé" />
+                       readonly placeholder="Nhấn để chỉnh sửa số vé" ref="ticketDetailsRef" />
                 
                 <!-- Ticket Modal -->
                 <div v-if="isModalVisible" 
@@ -139,6 +139,7 @@
         <!-- Ticket Search Form -->
         <form @submit.prevent="submitFormTicket" v-if="content == 'searchTicket'" class="space-y-6">
             <div class="relative">
+                <BookCheck class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
                 <input type="text" v-model="form2.seatCode" id="seatCode"
                        class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
@@ -149,10 +150,11 @@
                                 scale-75 top-4 z-10 origin-[0] left-10 
                                 peer-valid:-translate-y-4 peer-valid:text-sm
                                 peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
-                    Mã số ngồi
+                    Mã đặt chỗ
                 </label>
             </div>
             <div class="relative">
+                <BookUser class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
                 <input type="text" v-model="form2.firstName" id="firstName"
                        class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
@@ -182,9 +184,9 @@
 </template>
 
 <script setup>
-import { ref, computed,defineEmits ,onMounted} from 'vue'
+import { ref, computed,defineEmits ,onMounted, nextTick, watch} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
-import { PlaneTakeoff, PlaneLanding } from 'lucide-vue-next';
+import { PlaneTakeoff, PlaneLanding, BookCheck, BookUser} from 'lucide-vue-next';
 import MyDatePicker from '../composable/form/MyDatePicker.vue';
 
 const airports = ref([])
@@ -305,6 +307,47 @@ function submitFormTicket() {
 
 // Use defineEmits to define emitted events
 const emit = defineEmits(['search-flight', 'search-ticket'])
+
+// Add refs for form elements
+const fromCityRef = ref(null)
+const toCityRef = ref(null)
+const departureDateRef = ref(null)
+const returnDateRef = ref(null)
+const ticketDetailsRef = ref(null)
+
+// Add watch handlers for form fields
+watch(() => form.value.fromCity, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    departureDateRef.value?.$el.querySelector('input').focus()
+  }
+})
+
+watch(() => form.value.toCity, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    
+    if (form.value.ticketType === 'round-trip') {
+      returnDateRef.value?.$el.querySelector('input').focus()
+    } else {
+      ticketDetailsRef.value?.focus()
+    }
+  }
+})
+
+watch(() => form.value.departureDate, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    toCityRef.value?.focus()
+  }
+})
+
+watch(() => form.value.returnDate, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    ticketDetailsRef.value?.focus()
+  }
+})
 </script>
 
 <style scoped>
