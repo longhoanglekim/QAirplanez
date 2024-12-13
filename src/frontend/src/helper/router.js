@@ -17,12 +17,19 @@ import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
 import SubService from "@/view/User/bookTicket/SubService.vue";
 import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
+import BangTest from "@/view/Test/BangTest.vue";
 
 
 const routes = [
     {
         path: '/test',
         component: TestComponent,
+        meta: {
+            test: true
+        }
+    }, {
+        path: '/bangtest',
+        component: BangTest,
         meta: {
             test: true
         }
