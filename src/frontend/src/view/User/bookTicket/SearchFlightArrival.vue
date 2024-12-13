@@ -159,12 +159,16 @@ const convertTimeToMinutes = (timeString) => {
 }
 
 const getListTicket = async (departureDate) => {
+    const date = new Date(departureDate);
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
+    
     const req = JSON.stringify({
         departureCode: departureCode.value,
         arrivalCode: arrivalCode.value,
-        expectedDepartureTime: departureDate + ' 00:00',
+        expectedDepartureTime: date.toISOString(),
         expectedArrivalTime: null,
-        numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children
+        numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
     })
 
     await fetch('http://localhost:8080/api/flight/public/findFlight', {
