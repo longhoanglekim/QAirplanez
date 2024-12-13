@@ -72,4 +72,4 @@ build/
 
 
 **/application.properties
-src/frontend/router.js
+src/main/resources/application.properties

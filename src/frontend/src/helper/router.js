@@ -178,59 +178,60 @@ const router = createRouter({
       }
 });
 
-// function isLoggedInAdmin() {
-//     return false;
-// }
+function isLoggedInAdmin() {
+  const adminToken = localStorage.getItem('adminToken');
+  return adminToken != null;
+}
 
-// function isLoggedInUser() {
-//     return false;
-// }
+function isLoggedInUser() {
+    return localStorage.getItem('token') != null;
+}
 
-// router.beforeEach((to, from, next) => {
-//     // Xử lý route admin
-//     if (to.path.startsWith('/admin')) {
-//       // Nếu chưa đăng nhập admin
-//       if (!isLoggedInAdmin()) {
-//         // Chuyển sang trang login nếu không phải trang login
-//         if (to.path !== '/admin/login') {
-//           return next('/admin/login');
-//         }
-//         return next();
-//       } 
+router.beforeEach((to, from, next) => {
+    // Handle admin routes
+    if (to.path.startsWith('/admin')) {
+      // If not logged in as admin
+      if (!isLoggedInAdmin()) {
+        // Redirect to admin login if not on login page
+        if (to.path !== '/admin/login') {
+          return next('/admin/login');
+        }
+        return next();
+      } 
       
-//       // Nếu đã đăng nhập admin
-//       if (to.path === '/admin/login') {
-//         // Chuyển sang dashboard nếu đang ở trang login
-//         return next('/admin/dashboard');
-//       }
+      // If logged in as admin
+      if (to.path === '/admin/login') {
+        // Redirect to dashboard if on login page
+        return next('/admin/dashboard');
+      }
       
-//       // Cho phép đi tiếp các route admin khác
-//       return next();
-//     }
+      // Allow access to other admin routes
+      return next();
+    }
   
-//     // Xử lý route user
-//     if (to.matched.some((record) => record.meta.requiresAuth)) {
-//       // Nếu chưa đăng nhập user
-//       if (!isLoggedInUser()) {
-//         // Chuyển sang trang login nếu không phải trang login
-//         if (to.path !== '/login') {
-//           return next('/login');
-//         }
-//         return next();
-//       }
+    // Xử lý route user
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+      // Nếu chưa đăng nhập user
+      if (!isLoggedInUser()) {
+        // Chuyển sang trang login nếu không phải trang login
+        if (to.path !== '/login') {
+          return next('/login');
+        }
+        return next();
+      }
       
-//       // Nếu đã đăng nhập user
-//       if (to.path === '/login') {
-//         // Chuyển sang dashboard nếu đang ở trang login
-//         return next('/home');
-//       }
+      // Nếu đã đăng nhập user
+      if (to.path === '/login') {
+        // Chuyển sang dashboard nếu đang ở trang login
+        return next('/home');
+      }
       
-//       // Cho phép đi tiếp các route yêu cầu xác thực
-//       return next();
-//     }
+      // Cho phép đi tiếp các route yêu cầu xác thực
+      return next();
+    }
   
-//     // Cho phép đi tiếp các route không yêu cầu xác thực
-//     next();
-//   });
+    // Cho phép đi tiếp các route không yêu cầu xác thực
+    next();
+  });
 
 export default router;
