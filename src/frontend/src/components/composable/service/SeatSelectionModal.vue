@@ -39,7 +39,7 @@
                     lg:max-h-64
                     xl:max-h-64">
         <div class="text-center text-gray-500 font-medium pr-12">A</div>
-        <div class="text-center text-gray-500 font-medium pr-12">B</div>
+        <div class="text-center text-gray-500 font-medium pr-12" >B</div>
         <div class="text-center text-gray-500 font-medium pr-12">C</div>
         <div class="text-center text-gray-500 font-medium pr-12">D</div>
         <div class="text-center text-gray-500 font-medium pr-12">E</div>
