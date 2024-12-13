@@ -6,6 +6,7 @@
         type="text" 
         :value="formattedDate" 
         @click="toggleCalendar"
+        @focus="toggleCalendar"
         readonly
         class="w-full h-14 pl-10 pr-4 py-3 rounded-lg border transition duration-300 peer 
               outline-none  focus:border-orange-400 focus:ring-2 ring-orange-200
@@ -159,8 +160,7 @@ const toggleCalendar = () => {
 }
 
 // Hàm xử lý click ngoài
-const handleClickOutside = (event) => {
-  // Kiểm tra xem click có nằm bên ngoài component không
+const handleClickOutside = async (event) => {
   if (datePickerRef.value && !datePickerRef.value.contains(event.target)) {
     isCalendarOpen.value = false
   }
@@ -177,9 +177,10 @@ onUnmounted(() => {
 })
 
 const formattedDate = computed(() => {
-  return props.modelValue 
-    ? props.modelValue.toLocaleDateString('vi-VN') 
-    : null
+  if (!props.modelValue) return null
+  return props.modelValue instanceof Date 
+    ? props.modelValue.toLocaleDateString('vi-VN')
+    : new Date(props.modelValue).toLocaleDateString('vi-VN')
 })
 
 const currentMonthYear = computed(() => {
@@ -218,7 +219,9 @@ const calendarDays = computed(() => {
       day,
       date,
       current: true,
-      selected: selectedDate.value && date.toDateString() === selectedDate.value.toDateString(),
+      selected: selectedDate.value && (selectedDate.value instanceof Date 
+        ? date.toDateString() === selectedDate.value.toDateString()
+        : date.toDateString() === new Date(selectedDate.value).toDateString()),
       disabled: disableDateFrom 
         ? date < disableDateFrom 
         : false,
