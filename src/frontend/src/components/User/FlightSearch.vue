@@ -1,19 +1,19 @@
 <template>
-<div class="w-5/6 md:w-3/4 xl:w-1/2 rounded-xl shadow-lg place-self-center bg-white m-4 text-left">
+<div class="w-5/6 md:w-3/4 xl:w-1/2 max-w-lg rounded-xl shadow-lg place-self-center bg-white m-4 text-left">
     <!-- Tab buttons -->
-    <div class="rounded-t-xl bg-gray-50 relative p-4">
+    <div class="rounded-t-xl bg-gray-100 relative p-4">
         <button @click="changeContent('searchFlight')" 
-                class="text-lg w-48 font-medium transition-colors duration-200" 
+                class="text-md w-32 font-medium transition-colors duration-200" 
                 :class="{'text-orange-500': content == 'searchFlight', 'text-gray-600': content != 'searchFlight'}">
             Tìm chuyến bay
         </button>
         <button @click="changeContent('searchTicket')" 
-                class="text-lg w-48 font-medium transition-colors duration-200" 
+                class="text-md w-32 font-medium transition-colors duration-200" 
                 :class="{'text-orange-500': content == 'searchTicket', 'text-gray-600': content != 'searchTicket'}">
             Tra cứu vé
         </button>
-        <span class="absolute bottom-0 w-48 border-b-4 border-orange-500 transition-all duration-300"
-              :class="{'left-4': content == 'searchFlight', 'left-52': content == 'searchTicket'}">
+        <span class="absolute bottom-0 w-32 border-b-4 border-orange-500 transition-all duration-300"
+              :class="{'left-4': content == 'searchFlight', 'left-36': content == 'searchTicket'}">
         </span>
     </div>
 
@@ -38,7 +38,7 @@
             <!-- From City & Departure Date -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="relative group  p-1">
-                    <PlaneTakeoff class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus:text-orange-500" />
+                    <PlaneTakeoff class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                     <select v-model="form.fromCity" id="fromCity" 
                             class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
@@ -67,8 +67,8 @@
 
             <!-- To City & Return Date -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="relative  p-1">
-                    <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+                <div class="relative  p-1 group">
+                    <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                     <select v-model="form.toCity" id="toCity"
                             class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none peer appearance-none"
                             required ref="toCityRef">
@@ -99,7 +99,9 @@
             <div class="space-y-2">
                 <label for="ticketDetails" class="block text-sm font-medium text-gray-700">Số vé (Tối đa 10 vé)</label>
                 <input type="text" id="ticketDetails" :value="ticketSummary" @click="toggleTicketModal" 
-                       class="w-full p-3 rounded-lg border border-gray-300 cursor-pointer bg-gray-50"
+                       class="w-full p-3 rounded-lg border border-gray-300 cursor-pointer bg-gray-50 outline-none
+                              focus:ring-2 focus:ring-orange-200 focus:border-orange-500"
+                              :class="[isModalVisible ? 'ring-2 ring-orange-500' : '']"
                        readonly placeholder="Nhấn để chỉnh sửa số vé" ref="ticketDetailsRef" />
                 
                 <!-- Ticket Modal -->
@@ -143,24 +145,26 @@
                     </div>
                 </div>
             </div>
-
+            
             <!-- Error Message -->
             <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg">
                 {{ error }}
             </div>
-
             <!-- Submit Button -->
-            <button type="submit" 
-                    :disabled="isSubmitDisabled"
-                    class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                Tìm kiếm
-            </button>
+            <div class="flex justify-center">
+                <button type="submit" 
+                        :disabled="isSubmitDisabled"
+                        class="w-full md:w-1/2 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Tìm kiếm
+                </button>
+            </div>
+            
         </form>
 
         <!-- Ticket Search Form -->
         <form @submit.prevent="submitFormTicket" v-if="content == 'searchTicket'" class="space-y-6">
-            <div class="relative">
-                <BookCheck class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+            <div class="relative group">
+                <BookCheck class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                 <input type="text" v-model="form2.seatCode" id="seatCode"
                        class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
@@ -174,8 +178,8 @@
                     Mã đặt chỗ
                 </label>
             </div>
-            <div class="relative">
-                <BookUser class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+            <div class="relative group">
+                <BookUser class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                 <input type="text" v-model="form2.firstName" id="firstName"
                        class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
@@ -194,11 +198,13 @@
                 {{ error }}
             </div>
 
-            <button type="submit" 
-                    :disabled="isSubmitDisabled"
-                    class="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                Tìm kiếm
-            </button>
+            <div class="flex justify-center">
+                <button type="submit" 
+                        :disabled="isSubmitDisabled"
+                        class="w-full md:w-1/2 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Tìm kiếm
+                </button>
+            </div>
         </form>
     </div>
 </div>

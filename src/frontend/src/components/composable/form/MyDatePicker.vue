@@ -1,15 +1,16 @@
 <template>
   <div class="relative" ref="datePickerRef">
     <!-- Input với style nâng cao -->
-    <div class="relative p-1 bg-transparent">
+    <div class="relative p-1 bg-transparent group">
       <input 
         type="text" 
         :value="formattedDate" 
         @click="toggleCalendar"
         readonly
         class="w-full h-14 pl-10 pr-4 py-3 rounded-lg border transition duration-300 peer 
-              outline-none border-gray-300 focus:border-orange-400 focus:ring-2 ring-orange-200
+              outline-none  focus:border-orange-400 focus:ring-2 ring-orange-200
               tracking-wider"
+              :class="[isCalendarOpen ? 'border-orange-500 ring-2' : 'border-gray-300']"
         required
       />
       <label for="returnDate" 
@@ -24,7 +25,8 @@
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          class="h-6 w-6 text-gray-500" 
+          class="h-6 w-6 group-focus-within:text-orange-500" 
+          :class="[isCalendarOpen ? 'text-orange-500' : 'text-gray-500']"
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
@@ -50,7 +52,7 @@
     >
       <div 
         v-if="isCalendarOpen" 
-        class="absolute z-20 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden"
+        class="absolute z-20 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden w-64"
       >
         <!-- Header với gradient và icon -->
         <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
