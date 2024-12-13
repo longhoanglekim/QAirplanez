@@ -5,8 +5,6 @@ import com.web.airplane.demo.dtos.AirportInfo;
 import com.web.airplane.demo.models.Airport;
 import com.web.airplane.demo.repositories.AirportRepository;
 import com.web.airplane.demo.services.AirportService;
-
-import org.hibernate.engine.jdbc.env.internal.LobCreationLogging_.logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
