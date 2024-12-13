@@ -172,10 +172,15 @@ const convertTimeToMinutes = (timeString) => {
 
 
 const getListTicket = async (departureDate) => {
+  console.log(departureDate);
+  const date = new Date(departureDate);
+  const offset = date.getTimezoneOffset();
+  date.setMinutes(date.getMinutes() - offset);
+  
   const req = JSON.stringify({
     departureCode: departureCode.value,
     arrivalCode: arrivalCode.value,
-    expectedDepartureTime: new Date(departureDate).toISOString(),
+    expectedDepartureTime: date.toISOString(),
     expectedArrivalTime: null,
     numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
   })
