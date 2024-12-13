@@ -156,7 +156,7 @@ const datePickerRef = ref(null)
 const weekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
 
 const toggleCalendar = () => {
-  isCalendarOpen.value = true
+  isCalendarOpen.value = !isCalendarOpen.value
 }
 
 // Hàm xử lý click ngoài
@@ -168,18 +168,19 @@ const handleClickOutside = async (event) => {
 
 // Thêm sự kiện click toàn cục khi component được mount
 onMounted(() => {
-  document.addEventListener('dblclick', handleClickOutside)
+  document.addEventListener('click', handleClickOutside)
 })
 
 // Gỡ bỏ sự kiện khi component bị unmount để tránh memory leak
 onUnmounted(() => {
-  document.removeEventListener('dblclick', handleClickOutside)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 const formattedDate = computed(() => {
-  return props.modelValue 
-    ? props.modelValue.toLocaleDateString('vi-VN') 
-    : null
+  if (!props.modelValue) return null
+  return props.modelValue instanceof Date 
+    ? props.modelValue.toLocaleDateString('vi-VN')
+    : new Date(props.modelValue).toLocaleDateString('vi-VN')
 })
 
 const currentMonthYear = computed(() => {
@@ -218,7 +219,9 @@ const calendarDays = computed(() => {
       day,
       date,
       current: true,
-      selected: selectedDate.value && date.toDateString() === selectedDate.value.toDateString(),
+      selected: selectedDate.value && (selectedDate.value instanceof Date 
+        ? date.toDateString() === selectedDate.value.toDateString()
+        : date.toDateString() === new Date(selectedDate.value).toDateString()),
       disabled: disableDateFrom 
         ? date < disableDateFrom 
         : false,

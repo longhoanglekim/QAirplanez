@@ -175,10 +175,11 @@ const getListTicket = async (departureDate) => {
   const req = JSON.stringify({
     departureCode: departureCode.value,
     arrivalCode: arrivalCode.value,
-    expectedDepartureTime: departureDate + ' 00:00',
+    expectedDepartureTime: new Date(departureDate).toISOString(),
     expectedArrivalTime: null,
     numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
   })
+  console.log(req);
 
   await fetch('http://localhost:8080/api/flight/public/findFlight', {
     method: 'POST',
