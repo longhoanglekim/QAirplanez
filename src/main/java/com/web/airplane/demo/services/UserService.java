@@ -27,6 +27,9 @@ public class UserService {
     private final PassengerRepository passengerRepository;
     private final JwtService jwtService;
 
+    @Autowired
+    private ImageService imageService;
+
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, PassengerRepository passengerRepository, JwtService jwtService) {
@@ -75,4 +78,5 @@ public class UserService {
     public User updateUser(User user) {
         return userRepository.save(user);
     }
+
 }

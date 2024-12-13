@@ -1,6 +1,7 @@
 <template>
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+    <div class="bg-white rounded-lg shadow-xl w-full p-6 relative max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl
+               ">
         <!-- Close Button -->
         <button @click="$emit('close')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -15,33 +16,57 @@
         </h2>
 
         <!-- Trip Type Selector -->
-        <div class="flex justify-center mb-4">
+        <div class="flex justify-center mb-4 ">
             <div class="flex bg-gray-100 rounded-lg p-1">
                 <button @click="currentTrip = 'outbound'" :class="{
-                'bg-blue-500 text-white': currentTrip === 'outbound',
+                'bg-orange-500 text-white': currentTrip === 'outbound',
                 'text-gray-700': currentTrip !== 'outbound'
               }" class="px-4 py-2 rounded-lg transition-colors">
                     Outbound Flight
                 </button>
                 <button @click="currentTrip = 'return'" :class="{
-                'bg-blue-500 text-white': currentTrip === 'return',
+                'bg-orange-500 text-white': currentTrip === 'return',
                 'text-gray-700': currentTrip !== 'return'
               }" class="px-4 py-2 rounded-lg transition-colors" :disabled="!isRoundTrip">
                     Return Flight
                 </button>
             </div>
         </div>
-
+      <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-64
+                    xs:max-h-4
+                    sm:max-h-4
+                    md:max-h-32
+                    lg:max-h-64
+                    xl:max-h-64">
+        <div class="text-center text-gray-500 font-medium pr-12">A</div>
+        <div class="text-center text-gray-500 font-medium pr-12" >B</div>
+        <div class="text-center text-gray-500 font-medium pr-12">C</div>
+        <div class="text-center text-gray-500 font-medium pr-12">D</div>
+        <div class="text-center text-gray-500 font-medium pr-12">E</div>
+        <div class="text-center text-gray-500 font-medium pr-12">F</div>
+      </div>
+      <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2 mb-2">First Class</div>
         <!-- Seat Grid -->
-        <div class="grid grid-cols-10 gap-2 mb-4">
-            <button v-for="(seat, seatIndex) in currentTripSeats" :key="seat.id" @click="handleSeatClick(seat)" :disabled="!seat.available" class="w-8 h-8 rounded" :class="{
+        <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-64
+                    xs:max-h-4
+                    sm:max-h-4
+                    md:max-h-32
+                    lg:max-h-64
+                    xl:max-h-64">
+
+          <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" @click="handleSeatClick(seat)" :disabled="!seat.available" class="w-8 h-8 rounded" :class="{
               'bg-gray-300 cursor-not-allowed': !seat.available,
               'bg-green-500 text-white': currentSelectedSeats.includes(seat.id),
               'bg-blue-500 text-white': seat.available && !currentSelectedSeats.includes(seat.id),
-              'hover:bg-blue-600': seat.available
+              'hover:bg-blue-600': seat.available,
+              'mb-10': seatIndex === currentTripSeats.length * 0.1 - 6 || seatIndex === currentTripSeats.length * 0.3 - 6,
+
             }">
-                {{ seatIndex % 10 + 1 }}
-            </button>
+
+            <div class="mb-4">{{ Math.floor(seatIndex / 6) + 1 }}</div>
+            <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2" v-if="seatIndex === currentTripSeats.length * 0.1 - 6">Business</div>
+            <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2" v-if="seatIndex === currentTripSeats.length * 0.3 - 6">Economy</div>
+          </div>
         </div>
 
         <!-- Seat Selection Info -->
@@ -53,7 +78,7 @@
         </div>
 
         <!-- Confirm Button -->
-        <button @click="confirmSelection" :disabled="!isSelectionComplete" class="w-full py-2 rounded bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors">
+        <button @click="confirmSelection" :disabled="!isSelectionComplete" class="w-full py-2 rounded bg-orange-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-orange-700 transition-colors">
             {{ currentTrip === 'outbound' ? 'Continue to Return Flight' : 'Confirm Seat Selection' }}
         </button>
     </div>
@@ -113,16 +138,21 @@ export default {
     },
     methods: {
         flattenSeats(seats) {
-            return seats.flatMap((row, rowIndex) =>
-                row.map((isAvailable, seatIndex) => ({
-                    id: `${rowIndex}-${seatIndex}`,
-                    available: isAvailable,
-                    rowIndex,
-                    seatIndex
+            return seats.flatMap((row, rowIndex) => {
+              const col = ['A', 'B', 'C', 'D', 'E', 'F'];
+              return row.map((isAvailable, seatIndex) => ({
+                  id: `${col[seatIndex]}-${rowIndex + 1}`,
+                  available: isAvailable,
+                  rowIndex,
+                  seatIndex
                 }))
+            }
+
             )
         },
+
         handleSeatClick(seat) {
+            console.log("Seat:" + seat);
             const currentSelectedSeats = this.currentTrip === 'outbound' ?
                 this.outboundSelectedSeats :
                 this.returnSelectedSeats;
@@ -148,8 +178,10 @@ export default {
             } else {
                 // Chọn ghế mới
                 if (this.currentTrip === 'outbound') {
+                    console.log(seatId);
                     this.outboundSelectedSeats.push(seatId);
                 } else {
+                  console.log(seatId);
                     this.returnSelectedSeats.push(seatId);
                 }
             }
@@ -174,7 +206,12 @@ export default {
                 });
                 this.$emit('close');
             }
+        },
+        getMaxBusinessRow(rows) {
+          console.log(rows)
+          return rows * 0.1 + rows * 0.2;
         }
+
     }
 }
 </script>

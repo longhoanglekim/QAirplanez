@@ -50,8 +50,7 @@
             </div>
 
             <div v-if="isLoggedIn()" class="group relative cursor-pointer p-2">
-                <img class="w-8 h-8 rounded-full" src="@/assets/login/avt.jpeg" alt="Rounded avatar">
-    
+                <img :src="imageData" class="w-8 h-8 rounded-full" alt="avt"/>
                 <div class="group-hover:visible invisible absolute right-0 z-50 p-0.5 bg-white rounded text-gray-800 shadow-xl text-left w-48">
                     <a v-for="(item, index) in profileItems" :key="index" :href="item.link" class="rounded block px-6 py-3 text-gray-800 hover:text-blue-900 hover:bg-gray-100 transition-colors w-48">
                         {{ item.label }}
@@ -100,6 +99,7 @@
 export default {
     data() {
         return {
+            imageData : null,
             isScrolled: false,
             mobileMenuOpen: false,
             dropdownTimers: {}, // Lưu trữ các timer cho từng dropdown
@@ -197,6 +197,7 @@ export default {
     },
     mounted() {
         window.addEventListener('scroll', this.handleScroll)
+        this.fetchImage();
     },
     beforeUnmount() {
         window.removeEventListener('scroll', this.handleScroll)
@@ -223,6 +224,30 @@ export default {
             } else {
                 this.openMobileSubmenus.push(index)
             }
+        },
+        async fetchImage() {
+          try {
+            // Gửi request để lấy ảnh từ server (API trả về base64)
+            const response = await fetch('http://localhost:8080/api/user/getAvatar', {
+              method: 'POST',
+              headers: {
+                Authorization : `Bearer ${localStorage.getItem('token')}` // Thêm token nếu cần
+              }
+            });
+
+            // Nếu request thất bại
+            if (!response.ok) {
+              throw new Error('Unable to fetch image');
+            }
+
+            const data = await response.json(); // Giả sử API trả về dữ liệu có trường 'image' chứa base64
+            this.imageData = data.imageUrl ? `${data.imageUrl}` : ''; // Nếu có dữ liệu, gán vào imageData
+            this.uploadStatus = 'Image loaded successfully!';
+            this.statusClass = 'text-green-500';
+          } catch (error) {
+            this.uploadStatus = error.message || 'Failed to load image';
+            this.statusClass = 'text-red-500';
+          }
         }
     }
 }

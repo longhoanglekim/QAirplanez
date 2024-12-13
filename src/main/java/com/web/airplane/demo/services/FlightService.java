@@ -3,6 +3,7 @@ package com.web.airplane.demo.services;
 import com.web.airplane.demo.dtos.FlightInfo;
 
 import com.web.airplane.demo.models.Flight;
+import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.repositories.AirportRepository;
 import com.web.airplane.demo.repositories.FlightRepository;
@@ -10,6 +11,9 @@ import com.web.airplane.demo.repositories.PassengerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -114,8 +118,26 @@ public class FlightService {
         return flight.getAircraft().getNumberOfSeats()/6;
     }
 
-
-
+    // false tức là đã chọn, true là chưa chọn
+    public List<List<Boolean>> getSeatList(String flightNumber) {
+        Flight flight = flightRepository.findByFlightNumber(flightNumber);
+        List<List<Boolean>> seatList = new ArrayList<>();
+        // tạo seatList với ban đầu là mảng toàn false
+        for (int i = 0; i < flight.getAircraft().getNumberOfSeats()/6; i++) {
+            List<Boolean> row = new ArrayList<>();
+            for (int j = 0; j < 6; j++) {
+                row.add(true);
+            }
+            seatList.add(row);
+        }
+        // ITERATOR ALL PASSSENGER LIST IN FLIGHT, AND UPDATE TRUE FOR EACH SEAT
+        for (Passenger passenger : flight.getPassengers()) {
+            int row = passenger.getSeatRow() - 1;
+            int col = passenger.getSeatPosition().charAt(0) - 'A';
+            seatList.get(row).set(col, false);
+        }
+        return seatList;
+    }
 
 
 }

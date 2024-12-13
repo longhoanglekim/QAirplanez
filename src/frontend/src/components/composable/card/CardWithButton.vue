@@ -1,9 +1,9 @@
-<template>
-    <div class="max-w-4xl mx-auto ">
+"<template>
+    <div class="max-w-4xl mx-auto w-full">
       <div>
         <h1 class="custom cursor-pointer text-white text-2xl text-center font-bold rounded-lg p-4 w-5/6 mx-auto translate-y-1/2"
         @click="handleClick">
-          <slot name="header">Lorem Ipsum Dolor</slot>
+          <slot name="header" >Lorem Ipsum Dolor</slot>
         </h1>
       </div>
       <div class="rounded-xl bg-white m-3 p-2 w-full pt-10 border-4 border-red-400">
@@ -34,4 +34,4 @@
     background-image: linear-gradient(147deg, #FFE53B 0%, #fd3838 74%)
   }
   </style>
-  
+  "

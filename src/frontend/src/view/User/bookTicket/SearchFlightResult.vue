@@ -135,12 +135,12 @@ const toggleSearchBox = () => {
 
 
 
-const userSelectTicket = async (selectedTicket) => {
+const userSelectTicket = (selectedTicket) => {
     //luu ve vao store
     selectedTicket.adults = storeSearchFlight.getOldForm().adults
     selectedTicket.children = storeSearchFlight.getOldForm().children
     storeTicket.saveDepartureTicket(selectedTicket)
-
+  console.log(selectedTicket);
     //xu li round-trip vs one-way
     if (storeSearchFlight.getOldForm().ticketType === 'one-way') {
         router.push('/booking/information/1')
@@ -156,8 +156,9 @@ const userSelectTicket = async (selectedTicket) => {
 }
 
 const departureCode = ref(storeSearchFlight.getOldForm().fromCity)
-const arrivalCode = ref(storeSearchFlight.getOldForm().toCity)
 
+const arrivalCode = ref(storeSearchFlight.getOldForm().toCity)
+console.log(departureCode.value + " " + arrivalCode.value);
 // Methods
 const calculateFlightDuration = (ticket) => {
   const departureMinutes = convertTimeToMinutes(ticket.departureTime)

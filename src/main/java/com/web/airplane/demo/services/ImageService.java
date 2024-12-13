@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 
 @Service
 public class ImageService {
@@ -24,7 +25,11 @@ public class ImageService {
         return image;
     }
 
-    public Image getImage(String filename) {
-        return imageRepository.findByName(filename);
+
+    public String getImage(Image image) {
+        String base64Image = Base64.getEncoder().encodeToString(image.getImageData());
+
+        // Trả về ảnh dưới dạng base64
+        return "data:image/" + image.getType() + ";base64," + base64Image;
     }
 }
