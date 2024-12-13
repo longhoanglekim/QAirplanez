@@ -1,6 +1,7 @@
 package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.FlightInfo;
+import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Flight;
@@ -274,8 +275,7 @@ public class UserController {
                 image.setUser(user);
                 imageRepository.save(image);
                 userRepository.save(user);
-
-                return ResponseEntity.ok("Set Avatar thanh cong");
+                return ResponseEntity.ok(image);
             }
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(image);
         } catch (IOException e) {
@@ -285,6 +285,14 @@ public class UserController {
 
     }
 
-
-
+    @PostMapping("/getAvatar")
+    public ResponseEntity<?> getImage(HttpServletRequest request) {
+        User user = getCurrentUser(request);
+        Image currentAvatar = user.getAvatarList().get(user.getAvatarList().size() - 1);
+        String imgUrl = imageService.getImage(currentAvatar);
+        ImageResponse imageResponse = new ImageResponse();
+        imageResponse.setImageUrl(imgUrl);
+        // Trả về ảnh dưới dạng base64
+        return ResponseEntity.ok(imageResponse);
+    }
 }

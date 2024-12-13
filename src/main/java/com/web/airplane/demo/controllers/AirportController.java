@@ -23,8 +23,9 @@ public class AirportController {
         this.airportRepository = airportRepository;
     }
 
+
     @GetMapping("/public/airportList")
-    public List<AirportInfo> getAllDestination() {
+    public List<AirportInfo> getAllAirport() {
         List<Airport> airportList = airportRepository.findAllAirport();
         List<AirportInfo> airportInfos = new ArrayList<>();
         for (Airport airport : airportList) {

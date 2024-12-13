@@ -5,7 +5,9 @@ export const ticketStore = defineStore('ticketStore', () => {
     // Function to save ticket to sessionStorage
     const saveTicketToStorage = (key, ticket) => {
         try {
+            console.log(ticket)
             sessionStorage.setItem(key, JSON.stringify(ticket))
+
         } catch (error) {
             console.error('Error saving ticket to sessionStorage:', error)
         }

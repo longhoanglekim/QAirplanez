@@ -17,7 +17,8 @@ import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
 import SubService from "@/view/User/bookTicket/SubService.vue";
 import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
-
+import ImageTest from "@/view/Test/ImageTest.vue";
+import LogoutUser from "@/view/User/LogoutUser.vue"
 
 const routes = [
     {
@@ -26,6 +27,17 @@ const routes = [
         meta: {
             test: true
         }
+    },
+    {
+      path: '/testImage',
+      component: ImageTest,
+      meta: {
+          test: true
+      }
+    },
+    {
+        path: '/logout',
+        component: LogoutUser,
     },
     {
         path: '/',
@@ -140,6 +152,7 @@ const routes = [
         ],
         component: ProfileUser,
     },
+
 ];
 const router = createRouter({
     history: createWebHistory(),

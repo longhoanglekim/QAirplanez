@@ -1,5 +1,6 @@
 package com.web.airplane.demo.controllers;
 
+import com.web.airplane.demo.dtos.AircraftInfo;
 import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Aircraft;
@@ -9,6 +10,7 @@ import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.repositories.AirportRepository;
 import com.web.airplane.demo.repositories.FlightRepository;
+import com.web.airplane.demo.services.AircraftService;
 import com.web.airplane.demo.services.FlightService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ import java.util.List;
 @RequestMapping("/api/flight")
 @Slf4j
 public class FlightController {
+    @Autowired
+    private AircraftService aircraftService;
     private final FlightRepository flightRepository;
     private final AircraftRepository aircraftRepository;
     @Autowired
@@ -103,6 +107,26 @@ public class FlightController {
         }
     }
 
+    @GetMapping("/public/getAircraft")
+    // Todo: Chỉnh thành get list ghế ngồi, thêm vào aircraftInfo
+    public AircraftInfo getAircraft(@RequestParam(name = "flight_number") String flightNumber) {
+        log.debug("Get aircraft info");
+        Flight flight = flightRepository.findByFlightNumber(flightNumber);
+        Aircraft aircraft = flight.getAircraft();
+        return aircraftService.getAircraftInfo(aircraft);
+    }
+
+    @GetMapping("/public/getSeatList")
+    public ResponseEntity<?> getSeatList(@RequestParam(name = "flight_number") String flightNumber) {
+        log.debug("Get seat list");
+        try {
+            List<List<Boolean>> seatList = flightService.getSeatList(flightNumber);
+            return ResponseEntity.ok(seatList);
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     /**
      *
@@ -183,4 +207,8 @@ public class FlightController {
         return (timeToCheck.isEqual(oneWeekBefore) || timeToCheck.isAfter(oneWeekBefore)) &&
                 (timeToCheck.isEqual(oneWeekAfter) || timeToCheck.isBefore(oneWeekAfter));
     }
+
+
+
+
 }

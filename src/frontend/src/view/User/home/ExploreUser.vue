@@ -129,7 +129,7 @@ export default {
   methods: {
     downloadImage() {
       console.log("Downloading...")
-      fetch("http://localhost:8080/api/airport/public/destination")
+      fetch("http://localhost:8080/api/airport/public/airportList")
           .then((response) => response.json()) // Chuyển dữ liệu thành JSON
           .then((data) => {
             this.allSlides = data; // Gán dữ liệu vào allSlides
