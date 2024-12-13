@@ -18,6 +18,16 @@ public class PassengerInfo {
     private String ticketClassCode;
     private LocalDate birthdate;
     private String identification;
+    private String bookingCode;
     private Integer seatRow;
     private String seatPosition;
+    private String flightNumber;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public String getSeatCode() {
+        return seatPosition + seatRow;
+    }
 }

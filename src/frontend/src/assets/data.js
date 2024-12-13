@@ -1,3 +1,5 @@
+
+
 let airports = [];
 const fetchAirportData = async () => {
     try {
@@ -68,34 +70,30 @@ fetchFlightsData().then(r => console.log(r));
 
 // Export flights để sử dụng ở các module khác
 export { flights };
+let passengers = [];
+const fetchPassengerData = async () => {
+    try {
+        const response = await fetch('http://localhost:8080/api/passenger/admin_passenger/allPassengers', {
 
-export const passengers = [
-    {
-        id: 'P001',
-        name: 'Nguyễn Văn A',
-        flightId: 'FL001',
-        seatNumber: '12A',
-        ticketClass: 'Economy'
-    },
-    {
-        id: 'P001',
-        name: 'Nguyễn Văn A',
-        flightId: 'FL001',
-        seatNumber: '12A',
-        ticketClass: 'Economy'
-    },
-    {
-        id: 'P001',
-        name: 'Nguyễn Văn A',
-        flightId: 'FL001',
-        seatNumber: '12A',
-        ticketClass: 'Economy'
-    },
-    {
-        id: 'P001',
-        name: 'Nguyễn Văn A',
-        flightId: 'FL001',
-        seatNumber: '12A',
-        ticketClass: 'Economy'
+            method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization:localStorage.getItem('token'),
+                'Accept': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            passengers = await response.json();
+            console.log(passengers);
+        } else {
+            console.error('Lỗi khi lấy dữ liệu khách hàng từ API');
+        }
+    } catch (error) {
+        console.error('Có lỗi xảy ra khi fetch dữ liệu:', error);
     }
-]
+};
+
+// Gọi hàm fetchFlightsData để lấy dữ liệu chuyến bay từ API
+fetchPassengerData().then(() => console.log('passenger'));
+export {passengers};
