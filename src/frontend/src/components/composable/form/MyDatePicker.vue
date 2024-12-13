@@ -156,7 +156,7 @@ const datePickerRef = ref(null)
 const weekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
 
 const toggleCalendar = () => {
-  isCalendarOpen.value = !isCalendarOpen.value
+  isCalendarOpen.value = true
 }
 
 // Hàm xử lý click ngoài
