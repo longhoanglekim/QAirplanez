@@ -1,92 +1,209 @@
 <template>
-<div class="container w-5/6 md:w-1/2  p-4 rounded-lg place-self-center bg-slate-200 m-4">
-    <div class="button-container rounded-full">
-        <button @click="changeContent('searchFlight')" class="rounded-full" :class="{chosen: content=='searchFlight'}">Tìm chuyến bay</button>
-        <button @click="changeContent('searchTicket')" class="rounded-full" :class="{chosen: content=='searchTicket'}">Tra cứu vé</button>
+<div class="w-5/6 md:w-3/4 xl:w-1/2 max-w-lg rounded-xl shadow-lg place-self-center bg-white m-4 text-left">
+    <!-- Tab buttons -->
+    <div class="rounded-t-xl bg-gray-100 relative p-4">
+        <button @click="changeContent('searchFlight')" 
+                class="text-md w-32 font-medium transition-colors duration-200" 
+                :class="{'text-orange-500': content == 'searchFlight', 'text-gray-600': content != 'searchFlight'}">
+            Tìm chuyến bay
+        </button>
+        <button @click="changeContent('searchTicket')" 
+                class="text-md w-32 font-medium transition-colors duration-200" 
+                :class="{'text-orange-500': content == 'searchTicket', 'text-gray-600': content != 'searchTicket'}">
+            Tra cứu vé
+        </button>
+        <span class="absolute bottom-0 w-32 border-b-4 border-orange-500 transition-all duration-300"
+              :class="{'left-4': content == 'searchFlight', 'left-36': content == 'searchTicket'}">
+        </span>
     </div>
-    <div class="flight-search-form">
-        <form @submit.prevent="submitForm" v-if="content == 'searchFlight' ">
-            <!-- Loại vé -->
-            <div class="form-group">
-                <label for="ticketType">Loại vé</label>
-                <select v-model="form.ticketType" id="ticketType" required>
-                    <option value="one-way">Một chiều</option>
-                    <option value="round-trip">Khứ hồi</option>
-                </select>
+
+    <div class="p-6">
+        <form @submit.prevent="submitForm" v-if="content == 'searchFlight'" class="space-y-6">
+            <!-- Ticket Type -->
+            <div class="flex space-x-4">
+                <button type="button" @click="form.ticketType = 'round-trip'" 
+                        class="w-32 py-2 rounded-full border-2 transition-all duration-200" 
+                        :class="{'bg-orange-500 border-orange-500 text-white': form.ticketType==='round-trip',
+                                'border-orange-500 text-orange-500': form.ticketType!=='round-trip'}">
+                    Khứ hồi
+                </button>
+                <button type="button" @click="form.ticketType = 'one-way'" 
+                        class="w-32 py-2 rounded-full border-2 transition-all duration-200"
+                        :class="{'bg-orange-500 border-orange-500 text-white': form.ticketType==='one-way',
+                                'border-orange-500 text-orange-500': form.ticketType!=='one-way'}">
+                    Một chiều
+                </button>
             </div>
 
-            <div class="form-group">
-                <label for="fromCity">Điểm đi</label>
-                <select v-model="form.fromCity" id="fromCity" required placeholder="Điểm đi">
-                    <option value="">Chọn địa điểm</option>
-                    <option v-for = "airport in filteredSelectableAirportsFrom" :key="airport.airportCode" :value="airport.airportCode">
-                          {{airport.city}}
-                    </option>>
-                </select>
-            </div>
-
-            <!-- Điểm đến -->
-            <div class="form-group">
-                <label for="toCity">Điểm đến</label>
-                <select v-model="form.toCity" id="toCity" required placeholder="Điểm đi">
-                    <option value="">Chọn địa điểm</option>
-                    <option v-for = "airport in filteredSelectableAirportsTo" :key="airport.airportCode" :value="airport.airportCode">
-                      {{airport.city}}
-                    </option>>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="departureDate">Ngày đi</label>
-                <input type="date" v-model="form.departureDate" id="departureDate" required />
-            </div>
-
-            <!-- Ngày về (chỉ hiển thị khi chọn vé khứ hồi) -->
-            <div class="form-group">
-                <div v-if="form.ticketType === 'round-trip'">
-                    <label for="returnDate">Ngày về</label>
-                    <input type="date" v-model="form.returnDate" id="returnDate" required />
+            <!-- From City & Departure Date -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="relative group  p-1">
+                    <PlaneTakeoff class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
+                    <select v-model="form.fromCity" id="fromCity" 
+                            class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
+                            focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
+                            outline-none peer appearance-none"
+                            required ref="fromCityRef">
+                        <option value="" disabled selected></option>
+                        <option v-for="airport in filteredSelectableAirportsFrom" 
+                                :key="airport.airportCode" 
+                                :value="airport.airportCode">
+                            {{airport.city}}
+                        </option>
+                    </select>
+                    <label for="fromCity" 
+                           class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
+                                scale-75 top-4 z-10 origin-[0] left-10 
+                                peer-valid:-translate-y-4 peer-valid:text-sm
+                                peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
+                        Điểm đi
+                    </label>
+                </div>
+                <div class="relative">
+                    <MyDatePicker v-model="form.departureDate" label="Ngày đi" 
+                    :disable-date-from="Date.now()" ref="departureDateRef" />
                 </div>
             </div>
 
-            <div class="form-group" id="ticketD">
-                <label for="ticketDetails">Số vé (Tối đa 10 vé)</label>
-                <input type="text" id="ticketDetails" :value="ticketSummary" @click="toggleTicketModal" readonly placeholder="Nhấn để chỉnh sửa số vé" />
-                <div v-if="isModalVisible" class="ticket-modal">
-                    <div class="modal-content">
-                        <label for="adults">Số vé người lớn</label>
-                        <input type="number" id="adults" v-model="form.adults" :min="1 < form.children ? form.children:1" :max="maxAdults"/>
-                        <label for="children">Số vé trẻ em</label>
-                        <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren" />
-                        <button type="button" @click="closeModal">Xong</button>
+            <!-- To City & Return Date -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="relative  p-1 group">
+                    <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
+                    <select v-model="form.toCity" id="toCity"
+                            class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none peer appearance-none"
+                            required ref="toCityRef">
+                        <option value="" disabled selected></option>
+                        <option v-for="airport in filteredSelectableAirportsTo" 
+                                :key="airport.airportCode" 
+                                :value="airport.airportCode">
+                            {{airport.city}}
+                        </option>
+                    </select>
+                    <label for="toCity" 
+                           class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
+                                scale-75 top-4 z-10 origin-[0] left-10 
+                                peer-valid:-translate-y-4 peer-valid:text-sm
+                                peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
+                        Điểm đến
+                    </label>
+                </div>
+                
+                <div v-if="form.ticketType === 'round-trip'" class="relative group">
+                    <MyDatePicker v-model="form.returnDate" label="Ngày về" 
+                    :disable-date-from="new Date(Math.max(form.departureDate, Date.now()))" 
+                    :range="true"  ref="returnDateRef"/>
+                </div>
+            </div>
+
+            <!-- Ticket Details -->
+            <div class="space-y-2">
+                <label for="ticketDetails" class="block text-sm font-medium text-gray-700">Số vé (Tối đa 10 vé)</label>
+                <input type="text" id="ticketDetails" :value="ticketSummary" @click="toggleTicketModal" 
+                       class="w-full p-3 rounded-lg border border-gray-300 cursor-pointer bg-gray-50 outline-none
+                              focus:ring-2 focus:ring-orange-200 focus:border-orange-500"
+                              :class="[isModalVisible ? 'ring-2 ring-orange-500' : '']"
+                       readonly placeholder="Nhấn để chỉnh sửa số vé" ref="ticketDetailsRef" />
+                
+                <!-- Ticket Modal -->
+                <div v-if="isModalVisible" 
+                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white rounded-xl p-6 w-96 space-y-4">
+                        <div class="space-y-2">
+                            <label for="adults" class="block text-sm font-medium text-gray-700">Số vé người lớn</label>
+                            <div class="flex items-center">
+                                <button type="button" @click="decreaseAdults" 
+                                        class="p-3 rounded-l-lg border border-gray-300 hover:bg-gray-100">
+                                    -
+                                </button>
+                                <input type="number" id="adults" v-model="form.adults" :min="1" :max="maxAdults"
+                                       class="w-full p-3 border-y border-gray-300 text-center" />
+                                <button type="button" @click="increaseAdults"
+                                        class="p-3 rounded-r-lg border border-gray-300 hover:bg-gray-100">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="children" class="block text-sm font-medium text-gray-700">Số vé trẻ em</label>
+                            <div class="flex items-center">
+                                <button type="button" @click="decreaseChildren"
+                                        class="p-3 rounded-l-lg border border-gray-300 hover:bg-gray-100">
+                                    -
+                                </button>
+                                <input type="number" id="children" v-model="form.children" min="0" :max="maxChildren"
+                                       class="w-full p-3 border-y border-gray-300 text-center" />
+                                <button type="button" @click="increaseChildren"
+                                        class="p-3 rounded-r-lg border border-gray-300 hover:bg-gray-100">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" @click="closeModal"
+                                class="w-full py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                            Xong
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <!-- Thông báo lỗi -->
-            <div v-if="error" class="error-message">
-                <p>{{ error }}</p>
+            
+            <!-- Error Message -->
+            <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg">
+                {{ error }}
             </div>
-
-            <!-- Nút tìm kiếm -->
-            <div class="form-submit">
-                <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+                <button type="submit" 
+                        :disabled="isSubmitDisabled"
+                        class="w-full md:w-1/2 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Tìm kiếm
+                </button>
             </div>
+            
         </form>
-        <form @submit.prevent="submitFormTicket" v-if="content == 'searchTicket'">
-            <div class="form-group">
-                <label for="seatCode">Mã số ngồi</label>
-                <input type="text" v-model="form2.seatCode" id="seatCode">
+
+        <!-- Ticket Search Form -->
+        <form @submit.prevent="submitFormTicket" v-if="content == 'searchTicket'" class="space-y-6">
+            <div class="relative group">
+                <BookCheck class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
+                <input type="text" v-model="form2.seatCode" id="seatCode"
+                       class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
+                            focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
+                            outline-none peer appearance-none" 
+                        required/>
+                <label for="seatCode" 
+                       class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
+                                scale-75 top-4 z-10 origin-[0] left-10 
+                                peer-valid:-translate-y-4 peer-valid:text-sm
+                                peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
+                    Mã đặt chỗ
+                </label>
             </div>
-            <div class="form-group">
-                <label for="firstName">Họ</label>
-                <input type="text" v-model="form2.firstName" id="firstName">
+            <div class="relative group">
+                <BookUser class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
+                <input type="text" v-model="form2.firstName" id="firstName"
+                       class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
+                            focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
+                            outline-none peer appearance-none" 
+                        required/>
+                <label for="firstName" 
+                       class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
+                                scale-75 top-4 z-10 origin-[0] left-10 
+                                peer-valid:-translate-y-4 peer-valid:text-sm
+                                peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
+                    Họ
+                </label>
             </div>
-            <div v-if="error" class="error-message">
-                <p>{{ error }}</p>
+            
+            <div v-if="error" class="p-4 bg-red-50 text-red-600 rounded-lg">
+                {{ error }}
             </div>
-            <div class="form-submit">
-                <button class="search" type="submit" :disabled="isSubmitDisabled">Tìm kiếm</button>
+
+            <div class="flex justify-center">
+                <button type="submit" 
+                        :disabled="isSubmitDisabled"
+                        class="w-full md:w-1/2 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Tìm kiếm
+                </button>
             </div>
         </form>
     </div>
@@ -94,8 +211,10 @@
 </template>
 
 <script setup>
-import { ref, computed,defineEmits ,onMounted} from 'vue'
+import { ref, computed,defineEmits ,onMounted, nextTick, watch} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
+import { PlaneTakeoff, PlaneLanding, BookCheck, BookUser} from 'lucide-vue-next';
+import MyDatePicker from '@/components/composable/form/MyDatePicker.vue';
 
 const airports = ref([])
 
@@ -116,8 +235,6 @@ onMounted(async () => {
 })
 
 const filteredSelectableAirportsFrom = computed(() => {
-    console.log(form.value.toCity)
-    console.log(airports.value)
     return airports.value.filter(airport => airport.airportCode !== form.value.toCity);
 });
 
@@ -217,170 +334,90 @@ function submitFormTicket() {
 
 // Use defineEmits to define emitted events
 const emit = defineEmits(['search-flight', 'search-ticket'])
+
+// Add refs for form elements
+const fromCityRef = ref(null)
+const toCityRef = ref(null)
+const departureDateRef = ref(null)
+const returnDateRef = ref(null)
+const ticketDetailsRef = ref(null)
+
+// Add watch handlers for form fields
+watch(() => form.value.fromCity, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    departureDateRef.value?.$el.querySelector('input').focus()
+  }
+})
+
+watch(() => form.value.toCity, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    
+    if (form.value.ticketType === 'round-trip') {
+      returnDateRef.value?.$el.querySelector('input').focus()
+    } else {
+      ticketDetailsRef.value?.focus()
+    }
+  }
+})
+
+watch(() => form.value.departureDate, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    // Clear return date if departure date is after it
+    if (form.value.returnDate && new Date(newVal) > new Date(form.value.returnDate)) {
+      form.value.returnDate = null
+    }
+    toCityRef.value?.focus()
+  }
+})
+
+watch(() => form.value.returnDate, async (newVal) => {
+  if (newVal) {
+    await nextTick()
+    ticketDetailsRef.value?.focus()
+  }
+})
+
+function increaseAdults() {
+    if (form.value.adults < maxAdults.value) {
+        form.value.adults++
+    }
+}
+
+function decreaseAdults() {
+    if (form.value.adults > 1) {
+        form.value.adults--
+        // Đảm bảo số trẻ em không vượt quá số người lớn
+        if (form.value.children >= form.value.adults) {
+            form.value.children = form.value.adults - 1
+        }
+    }
+}
+
+function increaseChildren() {
+    if (form.value.children < maxChildren.value) {
+        form.value.children++
+    }
+}
+
+function decreaseChildren() {
+    if (form.value.children > 0) {
+        form.value.children--
+    }
+}
 </script>
 
 <style scoped>
-
-.container {
-    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.271);
+/* Ẩn nút tăng/giảm mặc định của input number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-.button-container {
-    display: flex;
-    height: 3rem;
-    width: 100%;    
-}
-
-.button-container button {
-    color: white;
-    flex: 1 1 calc(50%);
-    border: none;
-    background: skyblue;
-}
-
-.button-container .chosen {
-    
-    background-color: #007bff;
-    opacity: 1;
-    outline: none;
-}
-
-.flight-search-form {
-    margin: 1rem;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-    /* 15px = 1rem */
-}
-
-.form-submit {
-    display: block;
-    width: 100%;
-}
-
-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    /* 20px = 1.25rem */
-}
-
-form>.form-group {
-    flex: 1 1 calc(33.33% - 1.5rem);
-    /* Chia đều 3 cột */
-    min-width: 12.5rem;
-    /* 200px = 12.5rem */
-}
-
-/* Các Label */
-label {
-    font-size: 0.875rem;
-    /* 14px = 0.875rem */
-    color: #555;
-    display: block;
-    margin-bottom: 0.3125rem;
-    /* 5px = 0.3125rem */
-    font-weight: 600;
-}
-
-/* Input và Select */
-input[type="date"],
-input[type="number"],
-input[type="text"],
-select {
-    width: 100%;
-    padding: 0.6rem;
-    font-size: 1rem;
-    /* 16px = 1rem */
-    border: 1px solid #ddd;
-    /* 1px = 0.0625rem */
-    border-radius: 0.25rem;
-    /* 4px = 0.25rem */
-    box-sizing: border-box;
-}
-
-button.search {
-    width: 36%;
-    padding: 0.75rem;
-    /* 12px = 0.75rem */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    /* 4px = 0.25rem */
-    font-size: 1rem;
-    /* 16px = 1rem */
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button.search:hover {
-    background-color: #0056b3;
-}
-
-button.search:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-
-/* Thông báo lỗi */
-.error-message {
-    color: #d8000c;
-    padding: 0.6rem;
-    /* 10px = 0.625rem */
-    margin-bottom: 1.25rem;
-    /* 20px = 1.25rem */
-    border-radius: 0.25rem;
-    /* 4px = 0.25rem */
-    font-size: 0.875rem;
-    /* 14px = 0.875rem */
-}
-
-#ticketD {
-    position: relative;
-
-}
-
-#ticketD .ticket-modal {
-    position: absolute;
-    padding: 0.2rem;
-}
-
-#ticketD .ticket-modal * {
-    margin: 0.2rem;
-}
-
-@media (max-width: 768px) {
-
-    /* 768px = 48rem */
-    form {
-        flex-direction: column;
-    }
-
-    .form-group {
-        flex: 1 1 100%;
-        margin-bottom: 0.3rem;
-    }
-
-    .flight-search-form {
-        padding: 0.9rem;
-        max-width: 70%;
-    }
-}
-
-@media (max-width: 420px) {
-
-    /* 480px = 30rem */
-    .flight-search-form {
-        padding: 0.625rem;
-        /* 10px = 0.625rem */
-        max-width: 90%;
-    }
-
-    h2 {
-        font-size: 1.125rem;
-        /* 18px = 1.125rem */
-    }
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
 }
 </style>

@@ -17,13 +17,24 @@ import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
 import SubService from "@/view/User/bookTicket/SubService.vue";
 import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
+
 import ImageTest from "@/view/Test/ImageTest.vue";
 import LogoutUser from "@/view/User/LogoutUser.vue"
+
+import BangTest from "@/view/Test/BangTest.vue";
+
+
 
 const routes = [
     {
         path: '/test',
         component: TestComponent,
+        meta: {
+            test: true
+        }
+    }, {
+        path: '/bangtest',
+        component: BangTest,
         meta: {
             test: true
         }
