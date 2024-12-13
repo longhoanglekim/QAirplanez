@@ -37,20 +37,21 @@
 
             <!-- From City & Departure Date -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="relative group  p-1">
+                <div class="relative group p-1">
                     <PlaneTakeoff class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
-                    <select v-model="form.fromCity" id="fromCity" 
-                            class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
-                            focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
-                            outline-none peer appearance-none"
-                            required ref="fromCityRef">
-                        <option value="" disabled selected></option>
-                        <option v-for="airport in filteredSelectableAirportsFrom" 
-                                :key="airport.airportCode" 
-                                :value="airport.airportCode">
-                            {{airport.city}}
-                        </option>
-                    </select>
+                    
+                    <input
+                      type="text"
+                      v-model="searchFromCity"
+                      @focus="showFromDropdown = true"
+                      @input="filterFromCities"
+                      class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
+                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
+                             outline-none peer"
+                      ref="fromCityRef"
+                      required
+                    />
+
                     <label for="fromCity" 
                            class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
                                 scale-75 top-4 z-10 origin-[0] left-10 
@@ -58,6 +59,17 @@
                                 peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
                         Điểm đi
                     </label>
+
+                    <!-- Dropdown list -->
+                    <div v-if="showFromDropdown && filteredCitiesFrom.length > 0" 
+                         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      <div v-for="airport in filteredCitiesFrom" 
+                           :key="airport.airportCode"
+                           @click="selectFromCity(airport)"
+                           class="p-3 hover:bg-orange-50 cursor-pointer">
+                        {{ airport.city }}
+                      </div>
+                    </div>
                 </div>
                 <div class="relative">
                     <MyDatePicker v-model="form.departureDate" label="Ngày đi" 
@@ -67,18 +79,17 @@
 
             <!-- To City & Return Date -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="relative  p-1 group">
+                <div class="relative p-1 group">
                     <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
-                    <select v-model="form.toCity" id="toCity"
-                            class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none peer appearance-none"
-                            required ref="toCityRef">
-                        <option value="" disabled selected></option>
-                        <option v-for="airport in filteredSelectableAirportsTo" 
-                                :key="airport.airportCode" 
-                                :value="airport.airportCode">
-                            {{airport.city}}
-                        </option>
-                    </select>
+                    <input type="text" v-model="searchToCity" 
+                      @focus="showToDropdown = true" 
+                      @input="filterToCities"
+                      class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
+                            focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
+                            outline-none peer"
+                      ref="toCityRef" 
+                      required
+                    />
                     <label for="toCity" 
                            class="pointer-events-none absolute text-xl text-gray-500 duration-300 transform 
                                 scale-75 top-4 z-10 origin-[0] left-10 
@@ -86,6 +97,16 @@
                                 peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
                         Điểm đến
                     </label>
+                    <!-- Dropdown list -->
+                    <div v-if="showToDropdown && filteredCitiesFrom.length > 0" 
+                         class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      <div v-for="airport in filteredCitiesTo" 
+                           :key="airport.airportCode"
+                           @click="selectToCity(airport)"
+                           class="p-3 hover:bg-orange-50 cursor-pointer">
+                        {{ airport.city }}
+                      </div>
+                    </div>
                 </div>
                 
                 <div v-if="form.ticketType === 'round-trip'" class="relative group">
@@ -407,6 +428,77 @@ function decreaseChildren() {
         form.value.children--
     }
 }
+
+const searchFromCity = ref('')
+const searchToCity = ref('')
+const showFromDropdown = ref(false)
+const showToDropdown = ref(false)
+const filteredCitiesFrom = ref([])
+const filteredCitiesTo = ref([])
+function filterFromCities() {
+  if (!searchFromCity.value) {
+    filteredCitiesFrom.value = filteredSelectableAirportsFrom.value
+  } else {
+    filteredCitiesFrom.value = filteredSelectableAirportsFrom.value.filter(airport => 
+      airport.city.toLowerCase().includes(searchFromCity.value.toLowerCase())
+    )
+  }
+}
+
+function filterToCities() {
+  if (!searchToCity.value) {
+    filteredCitiesTo.value = filteredSelectableAirportsTo.value
+  } else {
+    filteredCitiesTo.value = filteredSelectableAirportsTo.value.filter(airport => 
+      airport.city.toLowerCase().includes(searchToCity.value.toLowerCase())
+    )
+  }
+}
+
+function selectFromCity(airport) {
+  form.value.fromCity = airport.airportCode
+  searchFromCity.value = airport.city
+  showFromDropdown.value = false
+}
+
+function selectToCity(airport) {
+  form.value.toCity = airport.airportCode
+  searchToCity.value = airport.city
+  showToDropdown.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.group')) {
+      showFromDropdown.value = false
+      showToDropdown.value = false
+    }
+  })
+})
+
+watch(() => airports.value, () => {
+  filteredCitiesFrom.value = filteredSelectableAirportsFrom.value
+}, { immediate: true })
+
+watch(() => form.value.fromCity, (newVal) => {
+  if (newVal) {
+    const selectedAirport = airports.value.find(airport => airport.airportCode === newVal)
+    if (selectedAirport) {
+      searchFromCity.value = selectedAirport.city
+    }
+  }
+})
+
+watch(() => form.value.toCity, (newVal) => {
+  if (newVal) {
+    const selectedAirport = airports.value.find(airport => airport.airportCode === newVal)
+    if (selectedAirport) {
+      searchToCity.value = selectedAirport.city
+    }
+  }
+})
+
+
 </script>
 
 <style scoped>
@@ -420,4 +512,6 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield; /* Firefox */
 }
+
+
 </style>

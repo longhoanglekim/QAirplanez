@@ -6,6 +6,7 @@
         type="text" 
         :value="formattedDate" 
         @click="toggleCalendar"
+        @focus="toggleCalendar"
         readonly
         class="w-full h-14 pl-10 pr-4 py-3 rounded-lg border transition duration-300 peer 
               outline-none  focus:border-orange-400 focus:ring-2 ring-orange-200
@@ -159,8 +160,7 @@ const toggleCalendar = () => {
 }
 
 // Hàm xử lý click ngoài
-const handleClickOutside = (event) => {
-  // Kiểm tra xem click có nằm bên ngoài component không
+const handleClickOutside = async (event) => {
   if (datePickerRef.value && !datePickerRef.value.contains(event.target)) {
     isCalendarOpen.value = false
   }
@@ -168,12 +168,12 @@ const handleClickOutside = (event) => {
 
 // Thêm sự kiện click toàn cục khi component được mount
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
+  document.addEventListener('dblclick', handleClickOutside)
 })
 
 // Gỡ bỏ sự kiện khi component bị unmount để tránh memory leak
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('dblclick', handleClickOutside)
 })
 
 const formattedDate = computed(() => {
