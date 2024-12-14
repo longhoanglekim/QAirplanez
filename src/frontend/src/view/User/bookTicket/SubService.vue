@@ -1,8 +1,18 @@
 <template>
-<SeatSelectionModal v-if="currentModal === 'seat-selection'" :outbound-seats="outboundSeats" :return-seats="returnSeats" :outbound-ticket-count="2" :return-ticket-count="2" @close="closeModal" @seat-selection="handleSeatSelection" />
-<MealSelectionModal v-if="currentModal === 'meal-selection'" :isRoundTrip="isRoundTrip" @close="closeModal" />
-<TaxiModal v-if="currentModal === 'taxi-selection'" @close="closeModal" />
+
 <div>
+  <SeatSelectionModal v-if="currentModal === 'seat-selection'" 
+    :outbound-seats="outboundSeats" 
+    :return-seats="returnSeats" 
+    :outbound-ticket-count="2" 
+    :return-ticket-count="2" 
+    @close="closeModal" 
+    @seat-selection="handleSeatSelection" />
+  <MealSelectionModal v-if="currentModal === 'meal-selection'" 
+    :isRoundTrip="isRoundTrip" 
+    @close="closeModal" />
+  <TaxiModal v-if="currentModal === 'taxi-selection'" 
+    @close="closeModal" />
     <header class="mt-20">
         <BookingProgressBar class="mx-auto" :current-stage="2" />
     </header>
@@ -114,10 +124,7 @@ fetchSelectedAircraft()
       console.error('Error:', error);
     });
 
-const returnSeats = reactive([
-  [true, true, true, true, false, true],
-  [false, true, true, true, true, true]
-]);
+const returnSeats = ref(null);
 
 // Phương thức xử lý ghế đã chọn
 const handleSeatSelection = ({ outbound, return: returnSeats }) => {
