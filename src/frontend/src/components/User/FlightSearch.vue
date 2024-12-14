@@ -339,7 +339,7 @@ async function submitForm() {
 
   error.value = ''
   searchFStore.saveForm(form.value)
-  console.log(form.value)
+  console.log("form đã lưu: ", form.value)
 
   // Emit event for parent component
   emit('search-flight')
@@ -430,8 +430,8 @@ function decreaseChildren() {
     }
 }
 
-const searchFromCity = ref('')
-const searchToCity = ref('')
+const searchFromCity = ref(searchFStore.getOldForm().fromCityName)
+const searchToCity = ref(searchFStore.getOldForm().toCityName)
 const showFromDropdown = ref(false)
 const showToDropdown = ref(false)
 const filteredCitiesFrom = ref([])
@@ -460,12 +460,14 @@ function selectFromCity(airport) {
   form.value.fromCity = airport.airportCode
   searchFromCity.value = airport.city
   showFromDropdown.value = false
+  form.value.fromCityName = airport.city
 }
 
 function selectToCity(airport) {
   form.value.toCity = airport.airportCode
   searchToCity.value = airport.city
   showToDropdown.value = false
+  form.value.toCityName = airport.city
 }
 
 onMounted(() => {
