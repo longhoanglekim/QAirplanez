@@ -3,7 +3,8 @@
     <div class="bg-white rounded-lg shadow-xl w-full p-6 relative max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl
                ">
         <!-- Close Button -->
-        <button @click="$emit('close')" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <button @click="$emit('close')" 
+        class="absolute top-4 right-4 text-orange-500 hover:text-orange-700">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -11,66 +12,72 @@
         </button>
 
         <!-- Modal Title -->
-        <h2 class="text-xl font-semibold mb-4 text-center">
-            Select Seats
+        <h2 class="text-xl font-semibold mb-4 text-center text-orange-700">
+            Chọn ghế
         </h2>
 
         <!-- Trip Type Selector -->
-        <div class="flex justify-center mb-4 ">
-            <div class="flex bg-gray-100 rounded-lg p-1">
+        <div class="flex justify-center mb-4">
+            <div class="flex bg-orange-50 rounded-lg p-1">
                 <button @click="currentTrip = 'outbound'" :class="{
-                'bg-orange-500 text-white': currentTrip === 'outbound',
-                'text-gray-700': currentTrip !== 'outbound'
+                'bg-orange-500 text-white hover:bg-orange-600': currentTrip === 'outbound',
+                'text-orange-700 hover:bg-orange-100': currentTrip !== 'outbound'
               }" class="px-4 py-2 rounded-lg transition-colors">
-                    Outbound Flight
+                    Chuyến đi
                 </button>
-                <button @click="currentTrip = 'return'" :class="{
-                'bg-orange-500 text-white': currentTrip === 'return',
-                'text-gray-700': currentTrip !== 'return'
+                <button @click="currentTrip = 'return'" 
+                v-if="isRoundTrip"
+                :class="{
+                'bg-orange-500 text-white hover:bg-orange-600': currentTrip === 'return',
+                'text-orange-700 hover:bg-orange-100': currentTrip !== 'return'
               }" class="px-4 py-2 rounded-lg transition-colors" :disabled="!isRoundTrip">
-                    Return Flight
+                    Chuyến về
                 </button>
             </div>
         </div>
-      <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-64
-                    xs:max-h-4
-                    sm:max-h-4
-                    md:max-h-32
-                    lg:max-h-64
-                    xl:max-h-64">
-        <div class="text-center text-gray-500 font-medium pr-12">A</div>
-        <div class="text-center text-gray-500 font-medium pr-12" >B</div>
-        <div class="text-center text-gray-500 font-medium pr-12">C</div>
-        <div class="text-center text-gray-500 font-medium pr-12">D</div>
-        <div class="text-center text-gray-500 font-medium pr-12">E</div>
-        <div class="text-center text-gray-500 font-medium pr-12">F</div>
+      <div class="grid grid-cols-6 gap-2 overflow-y-auto max-h-8
+                    bg-orange-50 rounded-lg shadow-md py-1
+                    [&>*:not(:last-child)]:border-r [&>*]:border-orange-200
+                    ">
+        <div class="text-center text-orange-600 font-medium">A</div>
+        <div class="text-center text-orange-600 font-medium" >B</div>
+        <div class="text-center text-orange-600 font-medium">C</div>
+        <div class="text-center text-orange-600 font-medium">D</div>
+        <div class="text-center text-orange-600 font-medium">E</div>
+        <div class="text-center text-orange-600 font-medium">F</div>
       </div>
-      <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2 mb-2">First Class</div>
+      
         <!-- Seat Grid -->
-        <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-64
-                    xs:max-h-4
-                    sm:max-h-4
-                    md:max-h-32
-                    lg:max-h-64
-                    xl:max-h-64">
+        <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-32 relative
+                    shadow-inner
+                    
+                    bg-gray-100
+                    md:max-h-64
+                    ">
 
-          <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" @click="handleSeatClick(seat)" :disabled="!seat.available" class="w-8 h-8 rounded" :class="{
-              'bg-gray-300 cursor-not-allowed': !seat.available,
-              'bg-green-500 text-white': currentSelectedSeats.includes(seat.id),
-              'bg-blue-500 text-white': seat.available && !currentSelectedSeats.includes(seat.id),
-              'hover:bg-blue-600': seat.available,
-              'mb-10': seatIndex === currentTripSeats.length * 0.1 - 6 || seatIndex === currentTripSeats.length * 0.3 - 6,
-
-            }">
-
-            <div class="mb-4">{{ Math.floor(seatIndex / 6) + 1 }}</div>
-            <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2" v-if="seatIndex === currentTripSeats.length * 0.1 - 6">Business</div>
-            <div class="bg-orange-200 w-fit text-red-600 rounded-md py-1 px-2" v-if="seatIndex === currentTripSeats.length * 0.3 - 6">Economy</div>
+          <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" @click="handleSeatClick(seat)" :disabled="!seat.available" 
+                :class="getSeatClasses(seat, seatIndex)">
+            <div v-if="seatIndex === 0" 
+                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
+              First Class
+            </div>
+            <div v-else-if="seatIndex === Math.floor(currentTripSeats.length * 0.1 - 6)" 
+                 class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
+              Business
+            </div>
+            <div v-else-if="seatIndex === Math.floor(currentTripSeats.length * 0.3 - 6)" 
+                 class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
+              Economy
+            </div>
+            <div v-else class="mb-4 ">
+              {{ Math.floor(seatIndex / 6) + 1 }}
+            </div>
+            
           </div>
         </div>
 
         <!-- Seat Selection Info -->
-        <div class="text-center mb-4">
+        <div class="text-center mb-4 text-orange-700">
             <p>
                 Selected Seats: {{ currentSelectedSeats.length }} /
                 {{ currentTrip === 'outbound' ? outboundTicketCount : returnTicketCount }}
@@ -78,8 +85,11 @@
         </div>
 
         <!-- Confirm Button -->
-        <button @click="confirmSelection" :disabled="!isSelectionComplete" class="w-full py-2 rounded bg-orange-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed hover:bg-orange-700 transition-colors">
-            {{ currentTrip === 'outbound' ? 'Continue to Return Flight' : 'Confirm Seat Selection' }}
+        <button @click="confirmSelection"
+        class="w-full py-2 rounded bg-orange-500 text-white disabled:bg-gray-400 
+        xl:w-1/2 mx-auto
+        disabled:cursor-not-allowed hover:bg-orange-600 transition-colors">
+            {{ isRoundTrip ? (currentTrip === 'outbound' ? 'Chọn chỗ chuyến về' : 'Hoàn tất') : 'Hoàn tất' }}
         </button>
     </div>
 </div>
@@ -127,13 +137,6 @@ export default {
             return this.currentTrip === 'outbound' ?
                 this.outboundSelectedSeats :
                 this.returnSelectedSeats;
-        },
-        isSelectionComplete() {
-            if (this.currentTrip === 'outbound') {
-                return this.outboundSelectedSeats.length === this.outboundTicketCount;
-            } else {
-                return this.returnSelectedSeats.length === this.returnTicketCount;
-            }
         }
     },
     methods: {
@@ -147,12 +150,12 @@ export default {
                   seatIndex
                 }))
             }
-
             )
         },
 
         handleSeatClick(seat) {
             console.log("Seat:" + seat);
+            console.log("currenTripSeats: ", this.currentTripSeats.length)
             const currentSelectedSeats = this.currentTrip === 'outbound' ?
                 this.outboundSelectedSeats :
                 this.returnSelectedSeats;
@@ -162,12 +165,17 @@ export default {
                 this.returnTicketCount;
 
             // Kiểm tra điều kiện chọn ghế
-            if (!seat.available || currentSelectedSeats.length >= requiredTicketCount) return;
-
+            if (!seat.available) return;
             // Toggle seat selection
             const seatId = seat.id;
             const currentIndex = currentSelectedSeats.indexOf(seatId);
-
+            if (currentSelectedSeats.length >= requiredTicketCount) {
+                if (this.currentTrip === 'outbound') {
+                    this.outboundSelectedSeats.shift();
+                } else {
+                    this.returnSelectedSeats.shift();
+                }
+            }
             if (currentIndex > -1) {
                 // Bỏ chọn ghế nếu đã được chọn
                 if (this.currentTrip === 'outbound') {
@@ -178,10 +186,8 @@ export default {
             } else {
                 // Chọn ghế mới
                 if (this.currentTrip === 'outbound') {
-                    console.log(seatId);
                     this.outboundSelectedSeats.push(seatId);
                 } else {
-                  console.log(seatId);
                     this.returnSelectedSeats.push(seatId);
                 }
             }
@@ -208,8 +214,27 @@ export default {
             }
         },
         getMaxBusinessRow(rows) {
-          console.log(rows)
           return rows * 0.1 + rows * 0.2;
+        },
+        getSeatClasses(seat, seatIndex) {
+          const isHeaderRow = seatIndex === 0 || 
+                             seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
+                             seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
+
+          if (isHeaderRow) {
+            return {
+              'col-span-6 sticky top-0 left-0 z-20': true
+            };
+          }
+
+          return {
+            'w-8 h-8 rounded mx-auto py-auto': true,
+            'bg-gray-400 cursor-not-allowed': !seat.available,
+            'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
+            'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
+                     seatIndex === this.currentTripSeats.length * 0.3 - 6
+          };
         }
 
     }
