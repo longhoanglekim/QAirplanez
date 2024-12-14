@@ -62,16 +62,23 @@ import {
     ArrowLeftFromLine ,
     AlignJustify,
     X,
-    Newspaper
+    Newspaper,
+    LogOut
 } from 'lucide-vue-next'
 import DashBoard from '@/components/Admin/DashBoard.vue'
 import AircraftManagement from '@/components/Admin/Aircraft/AircraftManagement.vue'
 import FlightManagement from '@/components/Admin/Flight/FlightManagement.vue'
 import PassengerManagement from '@/components/Admin/Passenger/PassengerManagement.vue'
 import NewsManagement from '@/components/Admin/News/NewsManagement.vue'
+import { useRouter } from 'vue-router'
 const activeSection = ref('dashboard')
-
+const router = useRouter()
 const changeSection = (section) => {
+    if (section === 'logout') {
+        localStorage.removeItem('adminToken')
+        router.push('/admin/login')
+        return
+    }
     activeSection.value = section
 }
 
@@ -104,6 +111,11 @@ const menuItems = [{
         key: 'passengers',
         label: 'Hành Khách',
         icon: Users
+    },
+    {
+        key: 'logout',
+        label: 'Đăng Xuất',
+        icon: LogOut
     }
 ]
 

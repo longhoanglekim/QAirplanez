@@ -5,12 +5,12 @@
       <input 
         type="text" 
         :value="formattedDate" 
-        @click="toggleCalendar"
-        @focus="toggleCalendar"
+        @focus="handleFocus"
+        @blur="handleBlur"
         readonly
         class="w-full h-14 pl-10 pr-4 py-3 rounded-lg border transition duration-300 peer 
               outline-none  focus:border-orange-400 focus:ring-2 ring-orange-200
-              tracking-wider"
+              tracking-wider cursor-pointer"
               :class="[isCalendarOpen ? 'border-orange-500 ring-2' : 'border-gray-300']"
         required
       />
@@ -152,6 +152,7 @@ const isCalendarOpen = ref(false)
 const currentDate = ref(new Date())
 const selectedDate = ref(props.modelValue || null)
 const datePickerRef = ref(null)
+const isFocused = ref(false)
 
 const weekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
 
@@ -161,7 +162,7 @@ const toggleCalendar = () => {
 
 // Hàm xử lý click ngoài
 const handleClickOutside = async (event) => {
-  if (datePickerRef.value && !datePickerRef.value.contains(event.target)) {
+  if (datePickerRef.value && !datePickerRef.value.contains(event.target) && !isFocused.value) {
     isCalendarOpen.value = false
   }
 }
@@ -255,5 +256,16 @@ const nextMonth = () => {
     currentDate.value.getMonth() + 1, 
     1
   )
+}
+
+const handleFocus = () => {
+  isFocused.value = true
+  if (!isCalendarOpen.value) {
+    toggleCalendar()
+  }
+}
+
+const handleBlur = () => {
+  isFocused.value = false 
 }
 </script>

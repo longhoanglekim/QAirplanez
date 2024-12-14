@@ -97,8 +97,8 @@
                                 peer-focus:-translate-y-4 peer-focus:text-orange-500 peer-focus:text-sm">
                         Điểm đến
                     </label>
-                    <!-- Dropdown list -->
-                    <div v-if="showToDropdown && filteredCitiesFrom.length > 0" 
+                    <!-- To City Dropdown -->
+                    <div v-if="showToDropdown && filteredCitiesTo.length > 0" 
                          class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                       <div v-for="airport in filteredCitiesTo" 
                            :key="airport.airportCode"
@@ -339,6 +339,7 @@ async function submitForm() {
 
   error.value = ''
   searchFStore.saveForm(form.value)
+  console.log(form.value)
 
   // Emit event for parent component
   emit('search-flight')
@@ -478,6 +479,10 @@ onMounted(() => {
 
 watch(() => airports.value, () => {
   filteredCitiesFrom.value = filteredSelectableAirportsFrom.value
+}, { immediate: true })
+
+watch(() => airports.value, () => {
+  filteredCitiesTo.value = filteredSelectableAirportsTo.value
 }, { immediate: true })
 
 watch(() => form.value.fromCity, (newVal) => {
