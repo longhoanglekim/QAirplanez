@@ -8,6 +8,5 @@ import java.util.Optional;
 public interface AircraftRepository extends JpaRepository<Aircraft, Long> {
     Optional<Aircraft> findTopByOrderBySerialNumberDesc();
     Aircraft findBySerialNumber(String number);
-
-
+    Optional<Aircraft> findFirstBySerialNumberStartingWithOrderBySerialNumberDesc(String prefix);
 }
