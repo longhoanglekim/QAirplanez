@@ -1,5 +1,5 @@
 <script>
-  import MyProfile from "@/components/User/profileUser/Profile.vue";
+  import MyProfile from "@/components/User/profileUser/MyProfile.vue";
   import MyDashBoard from "@/components/User/profileUser/Dashboard.vue";
   import MyBookings from "@/components/User/profileUser/Bookings.vue";
   export default {

@@ -12,7 +12,7 @@ import ProfileUser from "@/view/User/ProfileUser.vue";
 import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
 import InformationForm from "@/view/User/bookTicket/InformationForm.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
-import MyProfile from "@/components/User/profileUser/Profile.vue";
+import MyProfile from "@/components/User/profileUser/MyProfile.vue";
 import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
 import MyBookings from "@/components/User/profileUser/Bookings.vue";
 import SubService from "@/view/User/bookTicket/SubService.vue";
