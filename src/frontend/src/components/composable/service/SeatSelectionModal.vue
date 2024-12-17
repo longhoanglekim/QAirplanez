@@ -54,26 +54,36 @@
                     bg-gray-100
                     md:max-h-64
                     ">
-
-          <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" @click="handleSeatClick(seat)" :disabled="!seat.available" 
-                :class="getSeatClasses(seat, seatIndex)">
-            <div v-if="seatIndex === 0" 
+            <div v-for="seat in currentTripSeats" :key="seat"
+            class="col-span-6 sticky top-0 left-0 z-20">
+                <div v-if="seat === 0" 
                 class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-              First Class
+                Hạng nhất
+                </div>
+                <div v-else-if="seat === Math.floor(currentTripSeats.length * 0.1 - 6)" 
+                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
+                Hạng thương gia
+                </div>
+                <div v-else-if="seat === Math.floor(currentTripSeats.length * 0.3 - 6)" 
+                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
+                Hạng phổ thông
+                </div>
             </div>
-            <div v-else-if="seatIndex === Math.floor(currentTripSeats.length * 0.1 - 6)" 
-                 class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-              Business
+            <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" 
+            @click="handleSeatClick(seat)" 
+            :disabled="!seat.available" 
+            :class="{
+                'w-8 h-8 rounded mx-auto py-auto': true,
+                'bg-gray-400 cursor-not-allowed': !seat.available,
+                'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
+                'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
+                'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
+                         seatIndex === this.currentTripSeats.length * 0.3 - 6
+            }">
+                <div class="mb-4 ">
+                {{ Math.floor(seatIndex / 6) + 1 }}
+                </div>
             </div>
-            <div v-else-if="seatIndex === Math.floor(currentTripSeats.length * 0.3 - 6)" 
-                 class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-              Economy
-            </div>
-            <div v-else class="mb-4 ">
-              {{ Math.floor(seatIndex / 6) + 1 }}
-            </div>
-            
-          </div>
         </div>
 
         <!-- Seat Selection Info -->
@@ -216,26 +226,26 @@ export default {
         getMaxBusinessRow(rows) {
           return rows * 0.1 + rows * 0.2;
         },
-        getSeatClasses(seat, seatIndex) {
-          const isHeaderRow = seatIndex === 0 || 
-                             seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
-                             seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
+        // getSeatClasses(seat, seatIndex) {
+        //   const isHeaderRow = seatIndex === 0 || 
+        //                      seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
+        //                      seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
 
-          if (isHeaderRow) {
-            return {
-              'col-span-6 sticky top-0 left-0 z-20': true
-            };
-          }
+        //   if (isHeaderRow) {
+        //     return {
+        //       'col-span-6 sticky top-0 left-0 z-20': true
+        //     };
+        //   }
 
-          return {
-            'w-8 h-8 rounded mx-auto py-auto': true,
-            'bg-gray-400 cursor-not-allowed': !seat.available,
-            'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
-            'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
-            'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
-                     seatIndex === this.currentTripSeats.length * 0.3 - 6
-          };
-        }
+        //   return {
+        //     'w-8 h-8 rounded mx-auto py-auto': true,
+        //     'bg-gray-400 cursor-not-allowed': !seat.available,
+        //     'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
+        //     'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
+        //     'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
+        //              seatIndex === this.currentTripSeats.length * 0.3 - 6
+        //   };
+        // }
 
     }
 }
