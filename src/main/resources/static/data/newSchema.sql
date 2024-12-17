@@ -183,7 +183,11 @@ CREATE TABLE news (
                       content TEXT
 );
 
-
+INSERT INTO news (`index`, title, posting_date, content)
+VALUES
+    (1, 'Breaking News: Market Hits New High', '2024-12-17 10:00:00', 'The stock market reached an all-time high today, fueled by optimism about the economy. Investors are seeing strong earnings reports from major corporations.'),
+    (2, 'Weather Alert: Winter Storm Approaching', '2024-12-17 12:00:00', 'A winter storm is expected to hit the region by tomorrow morning. Residents are advised to prepare for heavy snow and icy roads.'),
+    (3, 'New Technology Startup Gains Attention', '2024-12-17 14:00:00', 'A new tech startup focused on AI solutions is making waves in Silicon Valley. The company has already secured a significant amount of investment and is poised for growth.');
 
 --
 -- Table structure for table `airports`
