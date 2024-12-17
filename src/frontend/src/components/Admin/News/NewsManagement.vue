@@ -21,9 +21,9 @@
         </thead>
         <tbody class="text-left">
           <tr v-for="item in newsList" :key="item.id">
-            <td>{{ item.id }}</td>
+            <td>{{ item.index }}</td>
             <td>{{ item.title }}</td>
-            <td>{{ item.date }}</td>
+            <td>{{ item.createdDate }}</td>
             <td><img :src="item.image" alt="Ảnh" class="w-20 h-20 object-cover"></td>
             <td>{{ item.content }}</td>
             <td>
@@ -43,39 +43,12 @@
 import { PlusIcon } from 'lucide-vue-next';
 import { ref } from 'vue';
 import AddNewsModal from './AddNewsModal.vue';
-const newsList = ref([]);
+
+import {news} from '@/assets/data';
+const newsList = news;
 const isAddNewsModalOpen = ref(false);
 // Sample news data
-newsList.value = [
-  {
-    id: 1,
-    title: 'QAirline mở đường bay mới đến Phú Quốc',
-    date: '2024-01-15',
-    image: 'phu-quoc-route.jpg',
-    content: 'QAirline vui mừng thông báo mở đường bay mới kết nối TP.HCM với Phú Quốc, bắt đầu từ tháng 2/2024...'
-  },
-  {
-    id: 2, 
-    title: 'Chương trình khuyến mãi mùa xuân 2024',
-    date: '2024-01-10',
-    image: 'spring-promo.jpg',
-    content: 'Chào đón mùa xuân 2024, QAirline triển khai chương trình khuyến mãi đặc biệt với nhiều ưu đãi hấp dẫn...'
-  },
-  {
-    id: 3,
-    title: 'QAirline đạt chứng nhận an toàn 5 sao',
-    date: '2024-01-05', 
-    image: 'safety-cert.jpg',
-    content: 'QAirline tự hào thông báo đã đạt chứng nhận an toàn 5 sao từ tổ chức đánh giá hàng không quốc tế...'
-  },
-  {
-    id: 4,
-    title: 'Nâng cấp đội bay với máy bay thế hệ mới',
-    date: '2024-01-01',
-    image: 'new-aircraft.jpg', 
-    content: 'QAirline vừa ký kết hợp đồng mua thêm 5 máy bay thế hệ mới, dự kiến đưa vào khai thác từ quý 3/2024...'
-  }
-]
+
 
 
 const addNews = () => {

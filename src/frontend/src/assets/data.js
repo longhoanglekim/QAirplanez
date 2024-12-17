@@ -1,5 +1,22 @@
-
-
+let news = [];
+const fetchNewsData = async () => {
+    try {
+        const  response = await fetch('http://localhost:8080/api/news/public/newsList', {
+            method : 'Get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        });
+        if (response.ok) {
+            news = await response.json();
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+fetchNewsData().then(() => console.log('news'));
+export {news};
 let airports = [];
 const fetchAirportData = async () => {
     try {

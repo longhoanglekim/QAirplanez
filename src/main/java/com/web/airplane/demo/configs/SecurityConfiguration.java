@@ -52,10 +52,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("api/flight/admin/**", "/test/admin/**").hasRole("ADMIN")
                         .requestMatchers("/test/admin_flight/**", "/api/flight/admin_flight/**").hasRole("ADMIN_FLIGHT")
+                        .requestMatchers("/test/admin_news/**", "/api/news/admin_news/**").hasRole("ADMIN_NEWS")
                         .requestMatchers("/test/admin_aircraft/**", "/api/flight/admin_aircraft/**").hasRole("ADMIN_AIRCRAFT")
                         .requestMatchers("/api/auth/**","/api/ticket_class/**",
                                 "/api/flight/public/**", "/test/string/**", "/api/user/public/**",
-                                "/api/airport/public/**", "/favicon.ico").permitAll()
+                                "/api/airport/public/**", "/favicon.ico", "/api/news/public/**").permitAll()
 
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
