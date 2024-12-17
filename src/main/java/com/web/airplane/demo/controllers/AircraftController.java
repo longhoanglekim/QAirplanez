@@ -9,6 +9,7 @@ import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.services.AircraftService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -32,11 +33,12 @@ public class AircraftController {
 
 
     @PostMapping("/admin_aircraft/addAircraft")
-    public ResponseEntity<?> addAircraft(AircraftInfo aircraftInfo) {
+    public ResponseEntity<?> addAircraft(@RequestBody AircraftInfo aircraftInfo) {
         try {
-
-            aircraftService.createAircraft(aircraftInfo);
-            return ResponseEntity.ok(aircraftInfo);
+            log.debug(aircraftInfo.toString());
+            String serialNumber = aircraftService.createAircraft(aircraftInfo);
+            return ResponseEntity.ok(aircraftService
+                .getAircraftInfo(aircraftRepository.findBySerialNumber(serialNumber)));
         } catch (Exception e) {
             log.debug(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,7 +65,7 @@ public class AircraftController {
             if (aircraft == null) {
                 return ResponseEntity.notFound().build();
             }
-
+            log.debug("aircraft: " + aircraft.getSerialNumber());
             // thay doi thong tin
             aircraft.setStatus(aircraftInfo.getStatus());
             aircraft.setModel(aircraftInfo.getModel());
@@ -75,7 +77,7 @@ public class AircraftController {
 
             return ResponseEntity.ok(aircraftService.getAircraftInfo(aircraft));
         } catch (Exception e) {
-            log.debug(e.getMessage());
+            log.debug("edit aircraft error: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

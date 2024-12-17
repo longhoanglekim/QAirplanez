@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <h2 class="text-xl font-bold mb-4">Quản Lý Chuyến Bay</h2>
 
-    <!-- Modal chỉnh sửa chuyến bay -->
-    <div v-if="editingFlight" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded-lg w-1/2">
-        <h3 class="text-lg font-bold mb-4">Chỉnh Sửa Chuyến Bay</h3>
-        <div class="space-y-4">
-          <input
+    <div>
+      <h2 class="text-xl font-bold mb-4">Quản Lý Chuyến Bay</h2>
+      <button @click="openAddModal" class="bg-blue-500 text-white p-2 rounded mb-4">Thêm Chuyến Bay</button>
+      <AddFlight @add-flight="fetchFlights" @close="closeAddModal"/>
+      <!-- Modal chỉnh sửa chuyến bay -->
+      <div v-if="editingFlight" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-1/2">
+          <h3 class="text-lg font-bold mb-4">Chỉnh Sửa Chuyến Bay</h3>
+          <div class="space-y-4">
+            <input 
               v-model="editingFlight.flightNumber"
               placeholder="Mã Chuyến Bay"
               class="w-full p-2 border rounded"

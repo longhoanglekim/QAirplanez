@@ -9,7 +9,9 @@
               v-model="aircraftData.manufacturer"
               placeholder="Nhà sản xuất"
               class="w-full p-2 border rounded"
+              :class="{ 'border-red-500': errors.manufacturer }"
           />
+          <span v-if="errors.manufacturer" class="text-red-500 text-sm mt-1">{{ errors.manufacturer }}</span>
         </div>
 
         <div class="flex flex-col">
@@ -18,7 +20,9 @@
               v-model="aircraftData.model"
               placeholder="Model máy bay"
               class="w-full p-2 border rounded"
+              :class="{ 'border-red-500': errors.model }"
           />
+          <span v-if="errors.model" class="text-red-500 text-sm mt-1">{{ errors.model }}</span>
         </div>
 
         <div class="flex flex-col">
@@ -28,8 +32,10 @@
               type="number"
               placeholder="Số ghế"
               class="w-full p-2 border rounded"
+              :class="{ 'border-red-500': errors.numberOfSeats }"
               min="1"
           />
+          <span v-if="errors.numberOfSeats" class="text-red-500 text-sm mt-1">{{ errors.numberOfSeats }}</span>
         </div>
 
         <div class="flex flex-col">
@@ -63,25 +69,63 @@ const aircraftData = ref({
   status: 'Active'
 })
 
+const errors = ref({
+  manufacturer: '',
+  model: '',
+  numberOfSeats: ''
+})
+
 const closeModal = () => {
   emit('close')
   resetForm()
 }
 
+const validateForm = () => {
+  let isValid = true
+  errors.value = {
+    manufacturer: '',
+    model: '',
+    numberOfSeats: ''
+  }
+
+  if (!aircraftData.value.manufacturer.trim()) {
+    errors.value.manufacturer = 'Vui lòng nhập nhà sản xuất'
+    isValid = false
+  }
+
+  if (!aircraftData.value.model.trim()) {
+    errors.value.model = 'Vui lòng nhập model máy bay'
+    isValid = false
+  }
+
+  if (!aircraftData.value.numberOfSeats || aircraftData.value.numberOfSeats <= 0) {
+    errors.value.numberOfSeats = 'Số ghế phải lớn hơn 0'
+    isValid = false
+  }
+
+  return isValid
+}
+
 const addAircraft = async () => {
+  if (!validateForm()) {
+    return
+  }
+
   try {
-    const response = await fetch('http://localhost:8080/api/aircraft/admin/addAircraft', {
+    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/addAircraft', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token'),
+        'Authorization': localStorage.getItem('adminToken'),
         'Accept': 'application/json'
       },
       body: JSON.stringify(aircraftData.value)
     })
-
+    
     if (response.ok) {
-      emit('add-aircraft')
+      const newAircraft = await response.json()
+      console.log('newAircraft', newAircraft)
+      emit('add-aircraft', newAircraft)
       closeModal()
     } else {
       console.error('Failed to add aircraft')

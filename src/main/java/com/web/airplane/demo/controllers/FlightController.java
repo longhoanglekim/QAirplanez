@@ -217,7 +217,15 @@ public class FlightController {
                 (timeToCheck.isEqual(oneWeekAfter) || timeToCheck.isBefore(oneWeekAfter));
     }
 
-
+    @PutMapping("/admin_flight/editFlight")
+    @Transactional
+    public ResponseEntity<?> editFlight(@RequestBody FlightInfo flightInfo) {
+        try {
+            return ResponseEntity.ok(flightService.editFlight(flightInfo));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
 }
