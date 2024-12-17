@@ -26,7 +26,7 @@ const fetchAircraftData = async () => {
             method : 'Get',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization:localStorage.getItem('token'),
+                Authorization:localStorage.getItem('adminToken'),
                 'Accept': 'application/json',
             }
         });
@@ -50,7 +50,7 @@ const fetchFlightsData = async () => {
             method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
             headers: {
                 'Content-Type': 'application/json',
-                Authorization:localStorage.getItem('token'),
+                Authorization:localStorage.getItem('adminToken'),
                 'Accept': 'application/json',
             }
         });
@@ -78,7 +78,7 @@ const fetchPassengerData = async () => {
             method: 'GET', // hoặc 'POST' tùy vào loại yêu cầu
             headers: {
                 'Content-Type': 'application/json',
-                Authorization:localStorage.getItem('token'),
+                Authorization:localStorage.getItem('adminToken'),
                 'Accept': 'application/json',
             }
         });
