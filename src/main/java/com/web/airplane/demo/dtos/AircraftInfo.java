@@ -17,4 +17,15 @@ public class AircraftInfo {
     public String getAircraftCode() {
         return manufacturer + "-" + model;
     }
+
+    @Override
+    public String toString() {
+        return "AircraftInfo{" +
+                "manufacturer='" + manufacturer + '\'' +
+                ", model='" + model + '\'' +
+                ", numberOfSeats=" + numberOfSeats +
+                ", status='" + status + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                '}';
+    }
 }

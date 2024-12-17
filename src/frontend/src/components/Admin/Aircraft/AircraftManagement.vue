@@ -1,7 +1,6 @@
 <template>
   <div>
     <h2 class="text-xl font-bold mb-4">Quản Lý Máy Bay</h2>
-
     <div class="mb-4">
       <div class="flex items-center bg-white rounded-lg border p-2 max-w-md">
         <input
@@ -21,10 +20,11 @@
         </button>
       </div>
     </div>
-
-    <AircraftStat />
-    <AddAircraftModal v-if="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="saveAircraft" />
-    <EditAircraftModal v-if="isModalOpen && isEditing" @close="closeModal" @save="saveAircraft" />
+    <!-- Stat -->
+    <AircraftStat :aircraft="aircraftList" :key="reloadStat"/>
+    
+    <AddAircraftModal v-if="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="addAircraft" />
+    <EditAircraftModal v-if="isModalOpen && isEditing" :current-aircraft="currentAircraft" @close="closeModal" @save="saveAircraft"/>
 
     <!-- Bảng máy bay -->
     <table class="w-full border rounded-xl bg-white p-0 ">
@@ -58,7 +58,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="plane in sortedAircraft" :key="plane.id"
+      <tr v-for="plane in sortedAircraft" :key="plane.serialNumber"
           class="even:bg-gray-100 odd:bg-white">
         <td class=" p-2">{{ plane.serialNumber }}</td>
         <td class=" p-2">{{ plane.aircraftCode }}</td>
@@ -69,7 +69,7 @@
             <button @click="toggleDropdown(plane)" class="bg-blue-500 text-white p-1 rounded">
               Hành Động
             </button>
-            <div v-if="openDropdownId === plane.id" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
+            <div v-if="openDropdownId === plane.serialNumber" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
               <div @click="startEdit(plane)" class="p-2 hover:bg-gray-100 cursor-pointer">
                 Chỉnh Sửa
               </div>
@@ -85,19 +85,15 @@
   </div>
 </template>
 
-
-
 <script setup>
 import {
   ref,
   computed,
   onMounted
 } from 'vue'
-import {
-  aircraft
-} from '../../../assets/data'
 import AircraftStat from './AircraftStat.vue'
 import AddAircraftModal from "@/components/Admin/Aircraft/AddAircraftModal.vue";
+import EditAircraftModal from "@/components/Admin/Aircraft/EditAircraftModal.vue";
 // Reactive state
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -107,16 +103,43 @@ const currentAircraft = ref({
   capacity: 0,
   status: 'Active'
 })
+
 const sortKey = ref('')
 const sortOrder = ref('asc')
 const openDropdownId = ref(null)
-console.log(aircraft)
-// Sorting function
-const sortedAircraft = computed(() => {
+const reloadStat = ref(0)
+// Add aircraft ref
+const aircraftList = ref([])
 
-  if (!sortKey.value) return aircraft
-  console.log("log")
-  return [...aircraft].sort((a, b) => {
+// Add refreshAircraftData function
+const refreshAircraftData = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('adminToken'),
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      aircraftList.value = await response.json();
+      reloadStat.value++;
+      console.log('reloadStat: ', reloadStat.value)
+    } else {
+      console.error('Failed to fetch aircraft data');
+    }
+  } catch (error) {
+    console.error('Error fetching aircraft data:', error);
+  }
+}
+
+// Update sortedAircraft computed to use aircraftList instead of imported aircraft
+const sortedAircraft = computed(() => {
+  if (!sortKey.value) return aircraftList.value
+
+  return [...aircraftList.value].sort((a, b) => {
     let modifier = sortOrder.value === 'asc' ? 1 : -1
     if (a[sortKey.value] < b[sortKey.value]) return -1 * modifier
     if (a[sortKey.value] > b[sortKey.value]) return 1 * modifier
@@ -126,7 +149,7 @@ const sortedAircraft = computed(() => {
 
 // Dropdown toggle
 const toggleDropdown = (plane) => {
-  openDropdownId.value = openDropdownId.value === plane.id ? null : plane.id
+  openDropdownId.value = openDropdownId.value === plane.serialNumber ? null : plane.serialNumber
 }
 
 // Close dropdowns when clicking outside
@@ -169,11 +192,16 @@ const openAddModal = () => {
   }
   isEditing.value = false
   isModalOpen.value = true
-  console.log("Them may bay " + isModalOpen.value);
 }
 
 const startEdit = (plane) => {
-  currentAircraft.value = {...plane}
+  currentAircraft.value = {
+    serialNumber: plane.serialNumber,
+    model: plane.model,
+    manufacturer: plane.manufacturer,
+    numberOfSeats: plane.numberOfSeats,
+    status: plane.status
+  }
   isEditing.value = true
   isModalOpen.value = true
   openDropdownId.value = null
@@ -183,25 +211,82 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-const saveAircraft = () => {
-  if (isEditing.value) {
-    const index = aircraft.findIndex(a => a.id === currentAircraft.value.id)
-    if (index !== -1) {
-      aircraft[index] = {...currentAircraft.value}
+const addAircraft = async (newAircraft) => {
+  try {
+    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/addAircraft', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('adminToken'),
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(newAircraft)
+    });
+
+    if (response.ok) {
+      await refreshAircraftData(); // Refresh after adding
+      closeModal();
     }
-  } else {
-    aircraft.push({...currentAircraft.value})
+  } catch (error) {
+    console.error('Error adding aircraft:', error);
   }
-  isModalOpen.value = false
 }
 
-const deleteAircraft = (plane) => {
-  const index = aircraft.findIndex(a => a.id === plane.id)
-  if (index !== -1) {
-    aircraft.splice(index, 1)
+const saveAircraft = async (editedAircraft) => {
+  if (isEditing.value) {
+    console.log('editedAircraft: ', editedAircraft)
+    try {
+      const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/editAircraft', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('adminToken'),
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(editedAircraft)
+      });
+      
+      if (response.ok) {
+        const updatedAircraft = await response.json();
+        console.log('updatedAircraft: ', updatedAircraft)
+        await refreshAircraftData();
+        closeModal();
+      } else {
+        console.error('Failed to update aircraft');
+      }
+    } catch (error) {
+      console.error('Error updating aircraft:', error);
+    }
   }
-  openDropdownId.value = null
 }
+
+const deleteAircraft = async (plane) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/aircraft/admin_aircraft/delete_aircraft?serial_number=${plane.serialNumber}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('adminToken'),
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      await refreshAircraftData(); // Refresh after deleting
+      openDropdownId.value = null;
+    } else {
+      console.error('Failed to delete aircraft');
+    }
+  } catch (error) {
+    console.error('Error deleting aircraft:', error);
+  }
+}
+
+// Call refreshAircraftData on component mount
+onMounted(() => {
+  refreshAircraftData()
+  // ... existing onMounted code ...
+})
 </script>
 
 <style  scoped>

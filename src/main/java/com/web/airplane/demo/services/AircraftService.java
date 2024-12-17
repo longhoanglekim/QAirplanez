@@ -20,24 +20,27 @@ public class AircraftService {
         return aircraftInfo;
     }
     private String generateSerialNumber(String manufacture) {
-        // Lấy số đăng ký lớn nhất trong bảng Aircraft
-        String lastTailNumber = aircraftRepository.findTopByOrderBySerialNumberDesc().map(Aircraft::getSerialNumber).orElse(manufacture.charAt(0) + "00000");
+        String prefix = String.valueOf(manufacture.charAt(0));
+        
+        // Lấy số serial number lớn nhất cho manufacturer cụ thể
+        String lastTailNumber = aircraftRepository.findFirstBySerialNumberStartingWithOrderBySerialNumberDesc(prefix)
+            .map(Aircraft::getSerialNumber)
+            .orElse(prefix + "00000");
 
-        // Trích xuất phần số trong tailNumber và cộng thêm 1
-        int nextNumber = Integer.parseInt(lastTailNumber.substring(1)) + 1;  // Lấy phần số từ tail number (bỏ chữ 'N')
-
-        // Tạo tail number mới
-        return manufacture.charAt(0) + String.format("%05d", nextNumber);  // Đảm bảo có 5 chữ số
+        // Trích xuất phần số và tăng lên 1
+        int nextNumber = Integer.parseInt(lastTailNumber.substring(1)) + 1;
+        return prefix.toUpperCase() + String.format("%05d", nextNumber);
     }
 
-    public void createAircraft(AircraftInfo aircraftInfo) {
+    public String createAircraft(AircraftInfo aircraftInfo) {
         Aircraft aircraft = new Aircraft();
-        aircraft.setStatus(aircraft.getStatus());
+        aircraft.setStatus(aircraftInfo.getStatus());
         aircraft.setModel(aircraftInfo.getModel());
-        aircraft.setManufacturer(aircraft.getManufacturer());
+        aircraft.setManufacturer(aircraftInfo.getManufacturer());
         aircraft.setFlights(null);
         aircraft.setNumberOfSeats(aircraftInfo.getNumberOfSeats());
         aircraft.setSerialNumber(generateSerialNumber(aircraftInfo.getManufacturer()));
         aircraftRepository.save(aircraft);
+        return aircraft.getSerialNumber();
     }
 }

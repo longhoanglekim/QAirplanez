@@ -49,7 +49,6 @@ const fetchAircraftData = async () => {
         });
         if (response.ok) {
             aircraft = await response.json();
-            console.log(aircraft);
         }
     } catch(error) {
         console.log(error);

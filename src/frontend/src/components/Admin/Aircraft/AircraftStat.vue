@@ -58,22 +58,26 @@
 </template>
 
 <script setup>
+import { ref, defineProps, watchEffect } from 'vue';
 
-import { computed, ref} from 'vue';
-import { aircraft } from '../../../assets/data';
+const props = defineProps({
+    aircraft: {
+        type: Array,
+        required: true
+    }
+})
 
-const activeCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Active').length;
+const activeCount = ref(0)
+const maintenanceCount = ref(0) 
+const inactiveCount = ref(0)
 
-});
+// Use watchEffect to automatically track and update counts when aircraft changes
+watchEffect(() => {
+    activeCount.value = props.aircraft.filter(plane => plane.status === 'Active').length
+    maintenanceCount.value = props.aircraft.filter(plane => plane.status === 'Maintenance').length
+    inactiveCount.value = props.aircraft.filter(plane => plane.status === 'Inactive').length
+})
 
-const maintenanceCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Maintenance').length;
-});
-
-const inactiveCount = computed(() => {
-    return aircraft.filter(plane => plane.status === 'Inactive').length;
-});
 const pieChart = ref(null);
 
 </script>

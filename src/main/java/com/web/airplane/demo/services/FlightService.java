@@ -139,5 +139,18 @@ public class FlightService {
         return seatList;
     }
 
+    public FlightInfo editFlight(FlightInfo flightInfo) {
 
+        Flight flight = flightRepository.findByFlightNumber(flightInfo.getFlightNumber());
+        flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
+        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
+        flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
+        flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
+        flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
+        flight.setCancelDueTime(flightInfo.getCancelDueTime());
+
+        // Lưu vào cơ sở dữ liệu
+        flightRepository.save(flight);
+        return getFlightInfo(flight);
+    }
 }
