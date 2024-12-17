@@ -1,6 +1,7 @@
 package com.web.airplane.demo.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,4 +17,5 @@ public class NewsService {
         news.setCreatedDate(LocalDateTime.now());
         return newsRepository.save(news);
     }
+
 }
