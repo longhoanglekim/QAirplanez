@@ -1,110 +1,121 @@
-<script>
-import { profileStore } from "@/store/account";
-import ChangePassword from "@/components/User/profileUser/ChangePassword.vue"
+<script setup>
+import {ref, onBeforeMount} from 'vue';
 
-export default {
-  name: "MyProfile",
-  components: {ChangePassword},
-  data() {
-    return {
-      isEditingProfile: false,
-      isEditingLoginDetails: false,
-      profileData: {
-        firstname: "Lương Thế",
-        lastname: "Quyền",
-        birthdate: "03/02/2004",
-        nationality: "Việt Nam",
-      },
-      loginDetails: {
-        phoneNumber: "0986405165",
-        email: "hehe@gmail.com",
-        password: "luongthequyen",
-      },
-      isChangePasswordVisible: false,
-    };
-  },
-  methods: {
-    toggleEditProfile() {
-      if (this.isEditingProfile) {
-        this.updateProfile();
-      }
-      this.isEditingProfile = !this.isEditingProfile;
-    },
-    toggleEditLoginDetails() {
-      if (this.isEditingLoginDetails) {
-        this.updateProfile();
-      }
-      this.isEditingLoginDetails = !this.isEditingLoginDetails;
-    },
-    getMaskedPassword() {
-      return "*".repeat(this.loginDetails.password.length);
-    },
-    async updateProfile() {
-      const store = profileStore();
-      try {
-        const response = await fetch("/api/user/updateUser", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstname: this.profileData.firstname,
-            lastname: this.profileData.lastname,
-            birthdate: this.profileData.birthdate,
-            phoneNumber: this.loginDetails.phoneNumber,
-            email: this.loginDetails.email,
-          }),
-        });
+import ChangePassword from "@/components/User/profileUser/ChangePassword.vue";
 
-        if (!response.ok) {
-          throw new Error("Cập nhật thất bại");
-        }
+// Define the component state variables
+const isEditingProfile = ref(false);
+const isEditingLoginDetails = ref(false);
+const isChangePasswordVisible = ref(false);
 
-        const updatedUser = await response.json();
-        store.saveUser(updatedUser);
-        alert("Cập nhật thông tin cá nhân thành công!");
-      } catch (error) {
-        console.error(error);
-        alert("Cập nhật thông tin cá nhân thất bại!");
-      }
-    },
-    showChangePassword() {
-      this.isChangePasswordVisible = true; // Hiển thị pop-up
-    },
-    closeChangePassword() {
-      this.isChangePasswordVisible = false; // Đóng pop-up
-    },
-  },
-  /*
-  mounted() {
-    const store = profileStore();
+const loginDetails = ref({
+  phoneNumber: "",
+  email: "",
+  password: "",
+});
+const user = ref({
+  firstname: "",
+  lastname: "",
+  birthdate: "",
+  nationality: "",
+  phoneNumber: "",
+  email: "",
+  password: ""
+});
 
-    fetch("/api/user/currentUser")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Không thể tải dữ liệu người dùng");
-          }
-          return response.json();
-        })
-        .then((user) => {
-          store.saveUser(user);
-          this.profileData.firstname = user.firstname;
-          this.profileData.lastname = user.lastname;
-          this.profileData.birthdate = user.birthdate;
-          this.loginDetails.phoneNumber = user.phoneNumber;
-          this.loginDetails.email = user.email;
-        })
-        .catch((error) => {
-          console.error(error);
-          alert("Không thể tải thông tin người dùng");
-        });
+// Methods
+const toggleEditProfile = () => {
+  if (isEditingProfile.value) {
+    updateProfile();
   }
-*/
+  isEditingProfile.value = !isEditingProfile.value;
 };
+
+const toggleEditLoginDetails = () => {
+  if (isEditingLoginDetails.value) {
+    updateProfile();
+  }
+  isEditingLoginDetails.value = !isEditingLoginDetails.value;
+};
+
+const updateProfile = async () => {
+  // const store = profileStore();
+  // try {
+  //   const response = await fetch("/api/user/updateUser", {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       firstname: profileData.value.firstname,
+  //       lastname: profileData.value.lastname,
+  //       birthdate: profileData.value.birthdate,
+  //       phoneNumber: loginDetails.value.phoneNumber,
+  //       email: loginDetails.value.email,
+  //     }),
+  //   });
+  //
+  //   if (!response.ok) {
+  //     throw new Error("Cập nhật thất bại");
+  //   }
+  //
+  //   const updatedUser = await response.json();
+  //   store.saveUser(updatedUser);
+  //   alert("Cập nhật thông tin cá nhân thành công!");
+  // } catch (error) {
+  //   console.error(error);
+  //   alert("Cập nhật thông tin cá nhân thất bại!");
+  // }
+};
+
+const showChangePassword = () => {
+  isChangePasswordVisible.value = true;
+};
+
+const closeChangePassword = () => {
+  isChangePasswordVisible.value = false;
+};
+
+// Mounted lifecycle hook
+onBeforeMount(async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/user/currentUser', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token if needed
+      },
+    });
+
+    if (!response.ok) {
+      // If the response is not OK, the token might be invalid or expired
+      throw new Error('Unauthorized');
+    } else {
+      // Await the JSON response to get the user data
+      const fetchedUser = await response.json();
+
+      // Gán dữ liệu vào user.value
+      user.value = {
+        firstname: fetchedUser.firstname || '',
+        lastname: fetchedUser.lastname || '',
+        birthdate: fetchedUser.birthdate || '',
+        nationality: fetchedUser.nationality || '',
+        phoneNumber: fetchedUser.phoneNumber || '',
+        email: fetchedUser.email || '',
+        password: '', // Mật khẩu có thể không cần thiết hiển thị
+      };
+
+
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+});
 </script>
 
 <template>
+  <!-- Template remains the same as in the original code -->
   <div class="text-center my-5">
+<!--    <div>{{user.firstname}}</div>-->
     <h1 class="text-3xl text-orange-500 font-bold">Hồ sơ cá nhân</h1>
   </div>
   <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md border border-orange-100">
@@ -128,26 +139,26 @@ export default {
             <input
                 v-if="isEditingProfile"
                 type="text"
-                v-model="profileData.firstname"
+                v-model="user.firstname"
                 class="px-2 py-3 border border-orange-200 rounded-xl focus:border-orange-500 focus:ring-orange-500"
             />
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Họ</label>
-            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ profileData.firstname }}</span>
+            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.firstname }}</span>
           </div>
           <div v-if="isEditingProfile" class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Tên</label>
             <input
                 v-if="isEditingProfile"
                 type="text"
-                v-model="profileData.lastname"
+                v-model="user.lastname"
                 class="px-2 py-3 border border-orange-200 rounded-xl focus:border-orange-500 focus:ring-orange-500"
             />
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Tên</label>
-            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ profileData.lastname }}</span>
+            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.lastname }}</span>
           </div>
         </div>
 
@@ -158,19 +169,19 @@ export default {
             <input
                 v-if="isEditingProfile"
                 type="date"
-                v-model="profileData.birthdate"
+                v-model="user.birthdate"
                 class="w-1/2 px-2 py-3 border border-orange-200 rounded-xl focus:border-orange-500 focus:ring-orange-500"
             />
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Ngày sinh</label>
-            <span class="w-1/2 px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ profileData.birthdate }}</span>
+            <span class="w-1/2 px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.birthdate }}</span>
           </div>
           <div v-if="isEditingProfile" class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Quốc tịch</label>
             <select
                 v-if="isEditingProfile"
-                v-model="profileData.nationality"
+                v-model="user.nationality"
                 class="w-1/2 px-2 py-3 border border-orange-200 rounded-xl focus:border-orange-500 focus:ring-orange-500"
             >
               <option>Việt Nam</option>
@@ -178,7 +189,7 @@ export default {
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Quốc tịch</label>
-            <span class="w-1/2 px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ profileData.nationality }}</span>
+            <span class="w-1/2 px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.nationality }}</span>
           </div>
         </div>
 
@@ -210,20 +221,20 @@ export default {
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Số điện thoại</label>
-            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ loginDetails.phoneNumber }}</span>
+            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.phoneNumber }}</span>
           </div>
           <div v-if="isEditingProfile" class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Email</label>
             <input
                 v-if="isEditingProfile"
                 type="email"
-                v-model="loginDetails.email"
+                v-model="user.email"
                 class="px-2 py-3 border border-orange-200 rounded-xl focus:border-orange-500 focus:ring-orange-500"
             />
           </div>
           <div v-else class="flex flex-col w-1/2">
             <label class="font-semibold text-orange-700 text-left">Email</label>
-            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ loginDetails.email }}</span>
+            <span class="px-2 py-3 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ user.email }}</span>
           </div>
         </div>
 
@@ -231,9 +242,9 @@ export default {
         <div class="flex flex-col">
           <label class="font-semibold text-orange-700 text-left">Mật khẩu</label>
           <div class="flex-1 flex space-x-4 w-1/2">
-            <span class="w-2/3 px-2 py-2 border border-orange-200 bg-orange-50 rounded-xl block text-orange-800 text-left cursor-default">{{ getMaskedPassword() }}</span>
+
             <button
-                class="w-1/3 ml-2.5 px-1 py-2 bg-orange-100 font-semibold text-orange-800 rounded-lg hover:bg-orange-200"
+                class="w-1/3  py-2 bg-orange-100 font-semibold text-orange-800 rounded-lg hover:bg-orange-200"
                 @click="showChangePassword"
             >
               Đổi mật khẩu
@@ -255,7 +266,6 @@ export default {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 

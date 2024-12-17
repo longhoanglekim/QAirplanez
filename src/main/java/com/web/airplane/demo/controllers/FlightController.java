@@ -91,6 +91,16 @@ public class FlightController {
         }
     }
 
+    @PutMapping("/admin_flight/editFlight")
+    @Transactional
+    public ResponseEntity<?> editFlight(@RequestBody FlightInfo flightInfo) {
+        try {
+            return ResponseEntity.ok(flightService.editFlight(flightInfo));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/admin_flight/deleteFlight")
     @Transactional
     public ResponseEntity<?> deleteFlight(@RequestParam(name = "flight_number") String flightNumber ) {

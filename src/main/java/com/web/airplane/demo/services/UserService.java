@@ -1,6 +1,7 @@
 package com.web.airplane.demo.services;
 
 import com.web.airplane.demo.dtos.RegisterDTO;
+import com.web.airplane.demo.dtos.UserInfo;
 import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.models.Role;
@@ -63,6 +64,18 @@ public class UserService {
             flights.add(passenger.getFlight());
         }
         return flights;
+    }
+
+    public UserInfo getUserInfo(User user) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setFirstname(user.getFirstname());
+        userInfo.setLastname(user.getLastname());
+        userInfo.setEmail(user.getEmail());
+        userInfo.setPhoneNumber(user.getPhoneNumber());
+        userInfo.setBirthdate(user.getBirthdate());
+        userInfo.setIdentification(user.getIdentification());
+        userInfo.setNationality(user.getNationality());
+        return userInfo;
     }
 
     public User getCurrentUser(HttpServletRequest request) {
