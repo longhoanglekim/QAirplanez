@@ -46,12 +46,14 @@ public class FlightController {
 
     @GetMapping("/admin_flight/flightList")
     public List<FlightInfo> getFlightList() {
+        log.debug("Get flight list");
         List<Flight> flights = flightRepository.findAll();
         List<FlightInfo> flightInfoList = new ArrayList<>();
         for (Flight flight : flights) {
             FlightInfo newFlightInfo = flightService.getFlightInfo(flight);
             flightInfoList.add(newFlightInfo);
         }
+        log.debug("success load flight list");
         return flightInfoList;
     }
 
@@ -62,33 +64,69 @@ public class FlightController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/admin/addFlight")
+    @PostMapping("/admin_flight/addFlight")
     public ResponseEntity<?> addFlight(@RequestBody FlightInfo flightInfo) {
         try {
+            // Validate flight info
+            if (!validateFlightInfo(flightInfo)) {
+                return ResponseEntity.badRequest().body("Invalid flight information. Please check all required fields.");
+            }
 
-                Aircraft aircraft = aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber());
-                // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
-                boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
-                        flightInfo.getExpectedArrivalTime(),
-                        flightInfo.getFlightNumber(),
-                        aircraft
-                );
+            Aircraft aircraft = aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber());
+            if (aircraft == null) {
+                return ResponseEntity.badRequest().body("Aircraft with given serial number not found.");
+            }
 
-                if (isFlightExist) {
-                    // Trả về lỗi nếu có chuyến bay trùng
-                    return ResponseEntity.badRequest().body("Flight with the same flight number, aircraft code, and expected departure time already exists.");
-                }
+            // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
+            boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
+                    flightInfo.getExpectedArrivalTime(),
+                    flightInfo.getFlightNumber(),
+                    aircraft
+            );
 
-                // Nếu không có chuyến bay trùng, tiến hành thêm chuyến bay mới
-                Flight flight = flightService.createFlight(flightInfo);
-                // Lưu chuyến bay mới vào cơ sở dữ liệu
-                flightRepository.save(flight);
+            if (isFlightExist) {
+                // Trả về lỗi nếu có chuyến bay trùng
+                return ResponseEntity.badRequest().body("Flight with the same flight number, aircraft code, and expected departure time already exists.");
+            }
+            flightInfo.setFlightNumber(flightService.generateFlightNumber(flightInfo.getDepartureCode(), flightInfo.getArrivalCode()));
+            flightInfo.setCancelDueTime(flightInfo.getExpectedDepartureTime().minusHours(2));
+            // Nếu không có chuyến bay trùng, tiến hành thêm chuyến bay mới
+            Flight flight = flightService.createFlight(flightInfo);
+            // Lưu chuyến bay mới vào cơ sở dữ liệu
+            flightRepository.save(flight);
             // Trả về phản hồi thành công
             return ResponseEntity.ok("Flight added successfully.");
         } catch (Exception e) {
             // Trả về lỗi nếu có bất kỳ vấn đề nào xảy ra
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the flight.");
         }
+    }
+
+    private boolean validateFlightInfo(FlightInfo flightInfo) {
+        log.debug("Validate flight info");
+        // Check for null values
+        if (flightInfo == null) return false;
+        log.debug("flightInfo: " + flightInfo);
+        // Validate required fields
+        if (flightInfo.getSerialNumber() == null || flightInfo.getSerialNumber().trim().isEmpty() ||
+            flightInfo.getDepartureCode() == null || flightInfo.getDepartureCode().trim().isEmpty() ||
+            flightInfo.getArrivalCode() == null || flightInfo.getArrivalCode().trim().isEmpty() ||
+            flightInfo.getExpectedDepartureTime() == null ||
+            flightInfo.getExpectedArrivalTime() == null) {
+                
+            return false;
+        }
+        
+        // Validate departure time is before arrival time
+        if (flightInfo.getExpectedDepartureTime().isAfter(flightInfo.getExpectedArrivalTime())) {
+            return false;
+        }
+        
+        // Validate airport codes are different
+        if (flightInfo.getDepartureCode().equals(flightInfo.getArrivalCode())) {
+            return false;
+        }
+        return true;
     }
 
     @DeleteMapping("/admin_flight/deleteFlight")

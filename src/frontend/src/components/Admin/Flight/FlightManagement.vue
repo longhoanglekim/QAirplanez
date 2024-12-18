@@ -2,7 +2,7 @@
     <div>
       <h2 class="text-xl font-bold mb-4">Quản Lý Chuyến Bay</h2>
       <button @click="openAddModal" class="bg-blue-500 text-white p-2 rounded mb-4">Thêm Chuyến Bay</button>
-      <AddFlight @add-flight="fetchFlights" @close="closeAddModal"/>
+      <AddFlight v-if="isAddModalOpen" @add-flight="finishAddFlight" @close="closeAddModal"/>
       <!-- Modal chỉnh sửa chuyến bay -->
       <div v-if="editingFlight" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg w-1/2">
@@ -73,7 +73,7 @@
             <td class="border p-2">{{ flight.flightNumber }}</td>
             <td class="border p-2">{{ flight.departureCode }}</td>
             <td class="border p-2">{{ flight. arrivalCode }}</td>
-            <td class="border p-2">{{ flight.aircraftCode }}</td>
+            <td class="border p-2">{{ flight.serialNumber }}</td>
             <td class="border p-2">{{ formatDateTime(flight.expectedDepartureTime) }}</td>
             <td class="border p-2">{{ flight.status }}</td>
             <td class="border p-2">
@@ -91,10 +91,24 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue'
-  import { flights } from '@/assets/data'
+  import { onMounted, ref } from 'vue'
+  import AddFlight from './AddFlight.vue'
+
+
+  import { useAircraftStore } from '@/store/aircraftstore'
+  import { useAirportStore } from '@/store/airportstore'
+  import { useFlightStore } from '@/store/flightstore'
+
+
+  const storeAircraft = useAircraftStore()
+  const storeAirport = useAirportStore()
+  const storeFlight = useFlightStore()
+
+
+  const flights = ref(storeFlight.getFlights())
   
   const editingFlight = ref(null)
+  const isAddModalOpen = ref(false)
   
   const startEdit = (flight) => {
     editingFlight.value = {...flight}
@@ -104,16 +118,36 @@
     editingFlight.value = null
   }
   
-  const saveFlight = () => {
-    const index = flights.findIndex(f => f.id === editingFlight.value.id)
-    if (index !== -1) {
-      flights[index] = {...editingFlight.value}
-    }
-    editingFlight.value = null
+  const saveFlight = async () => {
+    await refreshFlightData()
+  }
+  const openAddModal = () => {
+    isAddModalOpen.value = true
+  }
+  const closeAddModal = () => {
+    isAddModalOpen.value = false
   }
   
   const formatDateTime = (dateTime) => {
     return new Date(dateTime).toLocaleString()
   }
-  </script>
 
+  const finishAddFlight = async () => {
+    console.log('finishAddFlight')
+    await refreshFlightData()
+    closeAddModal()
+  }
+
+  const refreshFlightData = async () => {
+    await storeFlight.reloadFlights()
+    flights.value = storeFlight.getFlights()
+  }
+
+
+  onMounted( async () => {
+    await refreshFlightData()
+    await storeAirport.reloadAirports()
+    await storeAircraft.reloadAircraft()
+    
+  })
+  </script>

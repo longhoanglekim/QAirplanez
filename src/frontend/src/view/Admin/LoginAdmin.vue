@@ -54,10 +54,6 @@ export default {
             password: this.password
           })
         });
-        console.log(JSON.stringify({
-            username: this.username,
-            password: this.password
-          }))
         const data = await response.json();
 
         if (response.ok) {

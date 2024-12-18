@@ -6,7 +6,7 @@
         <div class="grid grid-cols-3 gap-4">
             <!-- Active Aircraft -->
             <div class="bg-green-100 p-4 rounded-lg">
-                <div class="text-green-800 font-semibold">Đang Hoạt Động</div>
+                <div class="text-green-800 font-semibold">Đang rảnh</div>
                 <div class="text-2xl font-bold text-green-600">
                     {{ activeCount }}
                 </div>
@@ -14,7 +14,7 @@
 
             <!-- Maintenance Aircraft -->
             <div class="bg-yellow-100 p-4 rounded-lg">
-                <div class="text-yellow-800 font-semibold">Đang Bảo Trì</div>
+                <div class="text-yellow-800 font-semibold">Được lên lịch</div>
                 <div class="text-2xl font-bold text-yellow-600">
                     {{ maintenanceCount }}
                 </div>
@@ -22,7 +22,7 @@
 
             <!-- Inactive Aircraft -->
             <div class="bg-red-100 p-4 rounded-lg">
-                <div class="text-red-800 font-semibold">Không Hoạt Động</div>
+                <div class="text-red-800 font-semibold">Sửa chữa</div>
                 <div class="text-2xl font-bold text-red-600">
                     {{ inactiveCount }}
                 </div>
@@ -42,15 +42,15 @@
         <div class="flex justify-center mt-4 gap-6">
             <div class="flex items-center">
                 <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
-                <span>Đang Hoạt Động</span>
+                <span>Đang rảnh</span>
             </div>
             <div class="flex items-center">
                 <div class="w-4 h-4 bg-yellow-500 rounded-full mr-2"></div>
-                <span>Đang Bảo Trì</span>
+                <span>Được lên lịch</span>
             </div>
             <div class="flex items-center">
                 <div class="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
-                <span>Không Hoạt Động</span>
+                <span>Sửa chữa</span>
             </div>
             </div>
         </div>

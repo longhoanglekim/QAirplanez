@@ -8,12 +8,15 @@ import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.repositories.AirportRepository;
 import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -34,12 +37,20 @@ public class FlightService {
         flight.setFlightNumber(flightInfo.getFlightNumber());
         flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
         log.debug("Departure airport " + flightInfo.getDepartureCode() +":" + airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
-        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
+        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getArrivalCode()));
         flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
         flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
+        flight.setStatus(flightInfo.getStatus());
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
 
+        int numberOfSeats = flight.getAircraft().getNumberOfSeats();
+        int firstAvailableSeats = (int) (numberOfSeats * 0.1);
+        int businessAvailableSeats = (int) (numberOfSeats * 0.2);
+        int economyAvailableSeats = numberOfSeats - firstAvailableSeats - businessAvailableSeats;
+        flight.setFirstAvailableSeats(firstAvailableSeats);
+        flight.setBusinessAvailableSeats(businessAvailableSeats);
+        flight.setEconomyAvailableSeats(economyAvailableSeats);
         // Lưu vào cơ sở dữ liệu
         return flightRepository.save(flight);
     }
@@ -152,5 +163,19 @@ public class FlightService {
         // Lưu vào cơ sở dữ liệu
         flightRepository.save(flight);
         return getFlightInfo(flight);
+    }
+
+    public String generateFlightNumber(String departureCityCode, String arrivalCityCode) {
+        Random random = new Random();
+        String flightNumber;
+        boolean isUnique;
+
+        do {
+            int randomNumber = 100 + random.nextInt(900);
+            flightNumber = departureCityCode.toUpperCase() + arrivalCityCode.toUpperCase() + randomNumber;
+            isUnique = (flightRepository.findByFlightNumber(flightNumber) == null);
+        } while (!isUnique);
+
+        return flightNumber;
     }
 }

@@ -35,9 +35,9 @@
                 <div class="flex flex-col">
                     <label class="mb-1">Trạng thái</label>
                     <select v-model="editedAircraft.status" class="w-full p-2 border rounded">
-                        <option value="Active">Đang hoạt động</option>
-                        <option value="Maintenance">Đang bảo trì</option>
-                        <option value="Inactive">Không hoạt động</option>
+                        <option value="Active">Đang rảnh</option>
+                        <option value="Maintenance">Được lên lịch</option>
+                        <option value="Inactive">Sửa chữa</option>
                     </select>
                 </div>
 
