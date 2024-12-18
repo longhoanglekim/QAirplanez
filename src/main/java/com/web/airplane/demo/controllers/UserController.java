@@ -3,6 +3,7 @@ package com.web.airplane.demo.controllers;
 import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
+import com.web.airplane.demo.dtos.UserInfo;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.models.Image;
@@ -68,8 +69,8 @@ public class UserController {
     }
 
     @GetMapping("/currentUser")
-    public User getCurrentUser(HttpServletRequest request) {
-        return userService.getCurrentUser(request);
+    public UserInfo getCurrentUser(HttpServletRequest request) {
+        return userService.getUserInfo(userService.getCurrentUser(request));
     }
 
     @Transactional
@@ -185,7 +186,7 @@ public class UserController {
                 passenger.setBookingCode(stringBuilder.toString());
             }
             log.debug("Them vao database");
-            passenger.setUser(getCurrentUser(request));
+            passenger.setUser(userService.getCurrentUser(request));
             log.debug("Set booking code");
             passenger.setBookingCode(bookingCodeService.generateBookingCode());
             log.debug("Them Passenger");
@@ -230,7 +231,7 @@ public class UserController {
     @GetMapping("/public/checkLogged")
     public ResponseEntity<?> hasLoggedIn(HttpServletRequest request) {
         // Lấy người dùng hiện tại
-        User currentUser = getCurrentUser(request);
+        User currentUser = userService.getCurrentUser(request);
 
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -270,7 +271,7 @@ public class UserController {
             image = imageService.storeImage(file);
             if (image != null) {
                 log.debug("Thêm vào database");
-                User user = getCurrentUser(request);
+                User user = userService.getCurrentUser(request);
                 user.getAvatarList().add(image);
                 image.setUser(user);
                 imageRepository.save(image);
@@ -287,7 +288,7 @@ public class UserController {
 
     @PostMapping("/getAvatar")
     public ResponseEntity<?> getImage(HttpServletRequest request) {
-        User user = getCurrentUser(request);
+        User user = userService.getCurrentUser(request);
         Image currentAvatar = user.getAvatarList().get(user.getAvatarList().size() - 1);
         String imgUrl = imageService.getImage(currentAvatar);
         ImageResponse imageResponse = new ImageResponse();
