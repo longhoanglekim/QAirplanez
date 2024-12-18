@@ -23,7 +23,7 @@
     <!-- Stat -->
     <AircraftStat :aircraft="aircraftList" :key="reloadStat"/>
     
-    <AddAircraftModal v-if="isModalOpen && !isEditing" @close="closeModal" @add-aircraft="addAircraft" />
+    <AddAircraftModal v-if="isModalOpen && !isEditing" @finish-add-aircraft="finishAddAircraft" @close="closeModal" />
     <EditAircraftModal v-if="isModalOpen && isEditing" :current-aircraft="currentAircraft" @close="closeModal" @save="saveAircraft"/>
 
     <!-- Bảng máy bay -->
@@ -63,7 +63,12 @@
         <td class=" p-2">{{ plane.serialNumber }}</td>
         <td class=" p-2">{{ plane.aircraftCode }}</td>
         <td class=" p-2">{{ plane.numberOfSeats }}</td>
-        <td class=" p-2">{{ plane.status }}</td>
+        <td class=" p-2" :class="'text-' + getStatusColor(plane.status)">
+          <div class="flex items-center space-x-2 justify-center">
+            <Dot class="w-2 h-2 rounded" :class="'bg-' + getStatusColor(plane.status)"></Dot>
+            <span>{{ getStatus(plane.status) }}</span>
+          </div>
+        </td>
         <td class=" p-2 relative">
           <div class="relative">
             <button @click="toggleDropdown(plane)" class="bg-blue-500 text-white p-1 rounded">
@@ -94,6 +99,8 @@ import {
 import AircraftStat from './AircraftStat.vue'
 import AddAircraftModal from "@/components/Admin/Aircraft/AddAircraftModal.vue";
 import EditAircraftModal from "@/components/Admin/Aircraft/EditAircraftModal.vue";
+import { Dot    } from 'lucide-vue-next';
+import { useAircraftStore } from '@/store/aircraftstore'
 // Reactive state
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -104,37 +111,33 @@ const currentAircraft = ref({
   status: 'Active'
 })
 
+const storeAircraft = useAircraftStore()
+
 const sortKey = ref('')
 const sortOrder = ref('asc')
 const openDropdownId = ref(null)
 const reloadStat = ref(0)
 // Add aircraft ref
-const aircraftList = ref([])
+const aircraftList = ref(storeAircraft.getAircraft())
 
 // Add refreshAircraftData function
 const refreshAircraftData = async () => {
-  try {
-    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      aircraftList.value = await response.json();
-      reloadStat.value++;
-      console.log('reloadStat: ', reloadStat.value)
-    } else {
-      console.error('Failed to fetch aircraft data');
-    }
-  } catch (error) {
-    console.error('Error fetching aircraft data:', error);
-  }
+  await storeAircraft.reloadAircraft()
+  aircraftList.value = storeAircraft.getAircraft()
 }
 
+
+const getStatus = (status) => {
+  if (status === 'Active') return 'Đang rảnh'
+  if (status === 'Maintenance') return 'Được lên lịch'
+  if (status === 'Inactive') return 'Sửa chữa'
+}
+
+const getStatusColor = (status) => {
+  if (status === 'Active') return 'green-500'
+  if (status === 'Maintenance') return 'yellow-500'
+  if (status === 'Inactive') return 'red-500'
+}
 // Update sortedAircraft computed to use aircraftList instead of imported aircraft
 const sortedAircraft = computed(() => {
   if (!sortKey.value) return aircraftList.value
@@ -211,81 +214,33 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
-const addAircraft = async (newAircraft) => {
-  try {
-    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/addAircraft', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(newAircraft)
-    });
-
-    if (response.ok) {
-      await refreshAircraftData(); // Refresh after adding
-      closeModal();
-    }
-  } catch (error) {
-    console.error('Error adding aircraft:', error);
-  }
+const finishAddAircraft = async () => {
+  await refreshAircraftData()
+  closeModal()
 }
 
 const saveAircraft = async (editedAircraft) => {
   if (isEditing.value) {
     console.log('editedAircraft: ', editedAircraft)
     try {
-      const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/editAircraft', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('adminToken'),
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(editedAircraft)
-      });
-      
-      if (response.ok) {
-        const updatedAircraft = await response.json();
-        console.log('updatedAircraft: ', updatedAircraft)
-        await refreshAircraftData();
-        closeModal();
-      } else {
-        console.error('Failed to update aircraft');
-      }
+      await storeAircraft.editAircraft(editedAircraft)
+      await refreshAircraftData()
+      closeModal()
     } catch (error) {
-      console.error('Error updating aircraft:', error);
+      alert('Error editing aircraft:', error);
     }
   }
 }
 
 const deleteAircraft = async (plane) => {
-  try {
-    const response = await fetch(`http://localhost:8080/api/aircraft/admin_aircraft/delete_aircraft?serial_number=${plane.serialNumber}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      await refreshAircraftData(); // Refresh after deleting
-      openDropdownId.value = null;
-    } else {
-      console.error('Failed to delete aircraft');
-    }
-  } catch (error) {
-    console.error('Error deleting aircraft:', error);
-  }
+  await storeAircraft.deleteAircraft(plane)
+  await refreshAircraftData()
+  openDropdownId.value = null
 }
 
 // Call refreshAircraftData on component mount
-onMounted(() => {
-  refreshAircraftData()
-  // ... existing onMounted code ...
+onMounted( async () => {
+  await refreshAircraftData()
 })
 </script>
 

@@ -16,17 +16,17 @@ public class FlightInfo {
     private String arrivalCode;
     private int numOfTicketRequest;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime expectedDepartureTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime expectedArrivalTime;
 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime cancelDueTime;
     private String aircraftCode;
     private String serialNumber;
@@ -74,5 +74,10 @@ public class FlightInfo {
 
     public String getArrivalTime() {
         return String.format("%02d:%02d", expectedArrivalTime.getHour(), expectedArrivalTime.getMinute());
+    }
+
+    @Override
+    public String toString() {
+        return "FlightInfo [flightNumber=" + flightNumber + ", departureCode=" + departureCode + ", arrivalCode=" + arrivalCode + ", numOfTicketRequest=" + numOfTicketRequest + ", expectedDepartureTime=" + expectedDepartureTime + ", expectedArrivalTime=" + expectedArrivalTime + ", cancelDueTime=" + cancelDueTime + ", aircraftCode=" + aircraftCode + ", serialNumber=" + serialNumber + ", isAvailableFirstSeats=" + isAvailableFirstSeats + ", isAvailableBusinessSeats=" + isAvailableBusinessSeats + ", isAvailableEconomySeats=" + isAvailableEconomySeats + ", status=" + status + "]";
     }
 }

@@ -4,45 +4,40 @@
       <h3 class="text-lg font-bold mb-4">Thêm Chuyến Bay</h3>
       <div class="space-y-4">
         <div class="flex flex-col">
-          <label class="mb-1">Mã Chuyến Bay</label>
-          <input
-              v-model="flightData.flightNumber"
-              placeholder="Mã Chuyến Bay"
-              class="w-full p-2 border rounded"
-          />
+          <label class="mb-1">Máy Bay</label>
+          <select v-model="flightData.serialNumber" class="w-full p-2 border rounded">
+            <option v-for="aircraft in activeAircraft" :key="aircraft.serialNumber" 
+            :value="aircraft.serialNumber">{{ aircraft.serialNumber }}</option>
+          </select>
         </div>
 
         <div class="flex flex-col">
           <label class="mb-1">Điểm Đi</label>
-          <input
-              v-model="flightData.departureCode"
-              placeholder="Điểm Đi"
-              class="w-full p-2 border rounded"
-          />
+          <select v-model="flightData.departureCode" class="w-full p-2 border rounded">
+            <option v-for="airport in airports" :key="airport.airportCode" :value="airport.airportCode">{{ airport.city }} ({{ airport.airportCode }})</option>
+          </select>
         </div>
 
         <div class="flex flex-col">
           <label class="mb-1">Điểm Đến</label>
-          <input
-              v-model="flightData.arrivalCode"
-              placeholder="Điểm Đến"
-              class="w-full p-2 border rounded"
-          />
-        </div>
+          <select v-model="flightData.arrivalCode" class="w-full p-2 border rounded">
+            <option v-for="airport in airports" :key="airport.airportCode" :value="airport.airportCode">{{ airport.city }} ({{ airport.airportCode }})</option>
+          </select>
+        </div>      
 
         <div class="flex flex-col">
-          <label class="mb-1">Máy Bay</label>
-          <input
-              v-model="flightData.aircraftCode"
-              placeholder="Máy Bay"
-              class="w-full p-2 border rounded"
-          />
-        </div>
-
-        <div class="flex flex-col">
-          <label class="mb-1">Thời Gian Khởi Hành</label>
+          <label class="mb-1">Thời Gian Khởi Hành (dự kiến)</label>
           <input
               v-model="flightData.expectedDepartureTime"
+              type="datetime-local"
+              class="w-full p-2 border rounded"
+          />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="mb-1">Thời Gian Đến (dự kiến)</label>
+          <input
+              v-model="flightData.expectedArrivalTime"
               type="datetime-local"
               class="w-full p-2 border rounded"
           />
@@ -57,7 +52,9 @@
             <option>Completed</option>
           </select>
         </div>
-
+        <div v-if="errors" class="p-3 bg-red-100 text-red-700 rounded-md">
+          {{ errors }}
+        </div>
         <div class="flex justify-end space-x-2">
           <button @click="closeModal" class="bg-gray-500 text-white p-2 rounded">Hủy</button>
           <button @click="addFlight" class="bg-blue-500 text-white p-2 rounded">Thêm</button>
@@ -68,55 +65,90 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits,  } from 'vue'
+import { useAircraftStore } from '@/store/aircraftstore'
+import { useAirportStore } from '@/store/airportstore'
+import { useFlightStore } from '@/store/flightstore'
 
-const emit = defineEmits(['close', 'add-flight'])
+const emit = defineEmits(['close', 'finish-add-flight'])
+
+const storeAircraft = useAircraftStore()
+const storeAirport = useAirportStore()
+const storeFlight = useFlightStore()
+const activeAircraft = ref(storeAircraft.getActiveAircraft())
+const airports = ref(storeAirport.getAirports())
 
 const flightData = ref({
-  flightNumber: '',
+  serialNumber: '',
   departureCode: '',
   arrivalCode: '',
   aircraftCode: '',
   expectedDepartureTime: '',
+  expectedArrivalTime: '',
   status: 'Scheduled'
 })
+
+const errors = ref('')
+
+
+
+const validateForm = () => {
+  if (!flightData.value.departureCode.trim()) {
+    errors.value = 'Vui lòng nhập điểm đi'
+    return false
+  }
+  if (!flightData.value.arrivalCode.trim()) {
+    errors.value = 'Vui lòng nhập điểm đến'
+    return false
+  }
+  if (!flightData.value.serialNumber.trim()) {
+    errors.value = 'Vui lòng nhập mã máy bay'
+    return false
+  }
+  if (!flightData.value.expectedDepartureTime) {
+    errors.value = 'Vui lòng chọn thời gian khởi hành'
+    return false
+  }
+  if (!flightData.value.expectedArrivalTime) {
+    errors.value = 'Vui lòng chọn thời gian đến'
+    return false
+  }
+  if (flightData.value.expectedDepartureTime >= flightData.value.expectedArrivalTime) {
+    errors.value = 'Thời gian khởi hành phải trước thời gian đến'
+    return false
+  }
+  return true
+}
+
+const addFlight = async () => {
+
+  errors.value = ''
+  if (!validateForm()) {
+    return
+  }
+  var result = await storeFlight.addFlight(flightData.value)
+  if (result.success) {
+    emit('finish-add-flight')
+    closeModal()
+  } else {
+    errors.value = result.message
+  }
+}
 
 const closeModal = () => {
   emit('close')
   resetForm()
 }
 
-const addFlight = async () => {
-  try {
-    const response = await fetch('http://localhost:8080/api/flight/admin/addFlight', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(flightData.value)
-    })
-
-    if (response.ok) {
-      emit('add-flight')
-      closeModal()
-    } else {
-      console.error('Failed to add flight')
-    }
-  } catch (error) {
-    console.error('Error adding flight:', error)
-  }
-}
-
 const resetForm = () => {
   flightData.value = {
-    flightNumber: '',
+    serialNumber: '',
     departureCode: '',
     arrivalCode: '',
-    aircraftCode: '',
     expectedDepartureTime: '',
+    expectedArrivalTime: '',
     status: 'Scheduled'
   }
+  errors.value = ''
 }
 </script>

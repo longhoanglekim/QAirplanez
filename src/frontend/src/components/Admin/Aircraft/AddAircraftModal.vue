@@ -41,12 +41,11 @@
         <div class="flex flex-col">
           <label class="mb-1">Trạng thái</label>
           <select v-model="aircraftData.status" class="w-full p-2 border rounded">
-            <option value="Active">Đang hoạt động</option>
-            <option value="Maintenance">Đang bảo trì</option>
-            <option value="Inactive">Không hoạt động</option>
+            <option value="Active">Đang rảnh</option>
+            <option value="Inactive">Đang sửa chữa</option>
           </select>
         </div>
-
+        <div v-if="errorMessage" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
         <div class="flex justify-end space-x-2">
           <button @click="closeModal" class="bg-gray-500 text-white p-2 rounded">Hủy</button>
           <button @click="addAircraft" class="bg-blue-500 text-white p-2 rounded">Thêm</button>
@@ -57,11 +56,12 @@
 </template>
 
 <script setup>
-import { ref , defineEmits} from 'vue'
+import { ref , defineEmits, onMounted} from 'vue'
+import { useAircraftStore } from '@/store/aircraftstore'
 
-
+const storeAircraft = useAircraftStore()
 const emit = defineEmits(['close', 'add-aircraft'])
-
+const errorMessage = ref('')
 const aircraftData = ref({
   manufacturer: '',
   model: '',
@@ -107,33 +107,33 @@ const validateForm = () => {
 }
 
 const addAircraft = async () => {
+  // Validate form before proceeding
   if (!validateForm()) {
-    return
+    return;
   }
 
   try {
-    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/addAircraft', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(aircraftData.value)
-    })
+    const result = await storeAircraft.addAircraft(aircraftData.value);
     
-    if (response.ok) {
-      const newAircraft = await response.json()
-      console.log('newAircraft', newAircraft)
-      emit('add-aircraft', newAircraft)
-      closeModal()
+    // Check for successful result
+    if (result.success) {
+      alert('Thêm máy bay thành công')
+      // Emit event to parent component
+      emit('add-aircraft');
+      
+      // Close modal after successful addition
+      closeModal();
     } else {
-      console.error('Failed to add aircraft')
+      // Set error message from the result
+      errorMessage.value = result.message || 'Failed to add aircraft';
+      alert(errorMessage.value)
     }
   } catch (error) {
-    console.error('Error adding aircraft:', error)
+    // Handle any unexpected errors
+    console.error('Error adding aircraft:', error);
+    errorMessage.value = 'An unexpected error occurred';
   }
-}
+};
 
 const resetForm = () => {
   aircraftData.value = {
@@ -142,5 +142,15 @@ const resetForm = () => {
     numberOfSeats: 0,
     status: 'Active'
   }
+  errorMessage.value = ''
+  errors.value = {
+    manufacturer: '',
+    model: '',
+    numberOfSeats: ''
+  }
 }
+
+onMounted(() => {
+  resetForm()
+})
 </script>
