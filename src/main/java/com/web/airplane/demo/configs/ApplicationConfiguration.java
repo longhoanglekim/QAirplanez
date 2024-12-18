@@ -53,6 +53,7 @@ public class ApplicationConfiguration {
         return RoleHierarchyImpl.fromHierarchy(
                         "ROLE_ADMIN > ROLE_ADMIN_FLIGHT\n" +
                         "ROLE_ADMIN > ROLE_ADMIN_PASSENGER\n" +
+                        "ROLE_ADMIN > ROLE_ADMIN_NEWS\n" +
                         "ROLE_ADMIN_FLIGHT > ROLE_ADMIN_FLIGHT_READ\n" +
                         "ROLE_ADMIN_FLIGHT > ROLE_ADMIN_FLIGHT_WRITE\n" +
                         "ROLE_ADMIN_PASSENGER > ROLE_ADMIN_PASSENGER_READ\n" +
