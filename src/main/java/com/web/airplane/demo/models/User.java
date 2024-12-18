@@ -54,6 +54,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Passenger> passengers = new HashSet<>();
 
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private Set<News> newsList = new HashSet<>();
+
     @Override
     public String getUsername() {
         return email;

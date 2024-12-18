@@ -23,7 +23,7 @@
           <tr v-for="item in newsList" :key="item.id">
             <td>{{ item.index }}</td>
             <td>{{ item.title }}</td>
-            <td>{{ item.createdDate }}</td>
+            <td>{{ item.postingDate }}</td>
             <td><img :src="item.image" alt="Ảnh" class="w-20 h-20 object-cover"></td>
             <td>{{ item.content }}</td>
             <td>
@@ -45,7 +45,7 @@ import { ref } from 'vue';
 import AddNewsModal from './AddNewsModal.vue';
 
 import {news} from '@/assets/data';
-const newsList = news;
+const newsList = ref(news);
 const isAddNewsModalOpen = ref(false);
 // Sample news data
 
@@ -57,15 +57,45 @@ const addNews = () => {
 const closeAddNewsModal = () => {
   isAddNewsModalOpen.value = false;
 }
-const postNews = (news) => {
-  newsList.value.push({
-    ...news,
-    id: newsList.value.length + 1,
-    date: new Date().toISOString().split('T')[0],
-    image: news.image ? news.image : '@/assets/logo.png'
-  });
-  isAddNewsModalOpen.value = false;
-}
+const postNews = async (news) => {
+  try {
+    // Tạo dữ liệu tin tức mới
+    const newNews = {
+      ...news,
+      date: new Date().toISOString().split('T')[0],
+      image: news.image ? news.image : '@/assets/logo.png'
+    };
+    console.log(JSON.stringify(newNews))
+    // Gọi API để thêm tin tức
+    const response = await fetch( 'http://localhost:8080/api/news/admin_news/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('adminToken')}`
+      },
+      body: JSON.stringify(newNews)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to post news: ${response.statusText}`);
+    }
+
+    // Lấy dữ liệu trả về từ API
+    const result = await response.json();
+
+    // Cập nhật newsList với dữ liệu trả về
+    newsList.value.push({
+      ...result, // Sử dụng dữ liệu từ API trả về (vd: ID tự sinh từ server)
+      index: newsList.value.length + 1 // Cập nhật chỉ số
+    });
+
+    // Đóng modal
+    isAddNewsModalOpen.value = false;
+  } catch (error) {
+    console.error('Error posting news:', error);
+    alert('Có lỗi xảy ra khi thêm tin tức. Vui lòng thử lại.');
+  }
+};
 const deleteNews = (id) => {
   newsList.value = newsList.value.filter(item => item.id !== id);
 }

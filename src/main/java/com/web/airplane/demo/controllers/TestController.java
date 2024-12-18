@@ -50,7 +50,7 @@ public class TestController {
         News newNews = new News();
         newNews.setTitle(news.getTitle());
         newNews.setContent(news.getContent());
-        newNews.setCreatedDate(LocalDateTime.now());
+        newNews.setPostingDate(LocalDateTime.now());
         return ResponseEntity.ok((newNews));
     }
 }
