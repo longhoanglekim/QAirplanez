@@ -35,12 +35,10 @@
 
         <div class="flex flex-col">
           <label class="mb-1">Máy Bay</label>
-          <input
-              v-model="flightData.aircraftCode"
-              placeholder="Máy Bay"
-              class="w-full p-2 border rounded"
-              readonly
-          />
+          <select v-model="flightData.serialNumber" class="w-full p-2 border rounded">
+            <option v-for="aircraft in aircrafts" :key="aircraft.serialNumber" 
+            :value="aircraft.serialNumber">{{ aircraft.serialNumber }}</option>
+          </select>
         </div>
 
         <div class="flex flex-col">
@@ -49,7 +47,17 @@
               v-model="flightData.expectedDepartureTime"
               type="datetime-local"
               class="w-full p-2 border rounded"
-              readonly
+              
+          />
+        </div>
+
+        <div class="flex flex-col">
+          <label class="mb-1">Thời Gian Đến (dự kiến)</label>
+          <input
+              v-model="flightData.expectedArrivalTime"
+              type="datetime-local"
+              class="w-full p-2 border rounded"
+              
           />
         </div>
 
@@ -60,17 +68,8 @@
             <option value="Delayed">Delayed</option>
             <option value="Cancelled">Cancelled</option>
             <option value="Completed">Completed</option>
+            <option value="On-time">On-time</option>
           </select>
-        </div>
-
-        <div v-if="flightData.status === 'Delayed'" class="flex flex-col">
-          <label class="mb-1">Thời Gian hoãn chuyến bay</label>
-          <input
-              v-model="flightData.expectedDepartureTime"
-              type="datetime-local"
-              class="w-full p-2 border rounded"
-              readonly
-          />
         </div>
 
         <div class="flex justify-end space-x-2">
@@ -83,7 +82,9 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps } from 'vue'
+import { ref, defineEmits, defineProps, watch ,} from 'vue'
+import { useFlightStore } from '@/store/flightstore'
+import { useAircraftStore } from '@/store/aircraftstore'
 
 const emit = defineEmits(['close', 'update-flight'])
 const props = defineProps({
@@ -93,13 +94,26 @@ const props = defineProps({
   }
 })
 
+const storeFlight = useFlightStore()
+const storeAircraft = useAircraftStore()
+
+const aircrafts = ref(storeAircraft.getActiveAircraft())
+
 const flightData = ref({
   flightNumber: props.flight.flightNumber,
   departureCode: props.flight.departureCode,
   arrivalCode: props.flight.arrivalCode,
-  aircraftCode: props.flight.aircraftCode,
+  serialNumber: props.flight.serialNumber,
   expectedDepartureTime: props.flight.expectedDepartureTime,
-  status: props.flight.status
+  expectedArrivalTime: props.flight.expectedArrivalTime,
+  status: props.flight.status,
+})
+
+// Watch for status changes to reset delayHours when not delayed
+watch(() => flightData.value.status, (newStatus) => {
+  if (newStatus !== 'Delayed') {
+    flightData.value.delayHours = 0
+  }
 })
 
 const closeModal = () => {
@@ -109,20 +123,15 @@ const closeModal = () => {
 
 const saveFlight = async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/flight/admin/updateFlight', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('adminToken'),
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(flightData.value)
-    })
+    // Ensure delayHours is included in the payload only when status is Delayed
+    const payload = { ...flightData.value }
 
-    if (response.ok) {
+    const result = await storeFlight.editFlight(payload)
+    if (result.success) {
       emit('update-flight')
       closeModal()
     } else {
+      alert(result.message)
       console.error('Failed to update flight')
     }
   } catch (error) {
@@ -137,7 +146,8 @@ const resetForm = () => {
     arrivalCode: '',
     aircraftCode: '',
     expectedDepartureTime: '',
-    status: 'Scheduled'
+    status: 'Scheduled',
+    delayHours: 0
   }
 }
 </script>

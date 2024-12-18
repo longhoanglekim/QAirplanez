@@ -34,61 +34,8 @@
     <button @click="openAddModal" class="bg-blue-500 text-white p-2 rounded mb-4">Thêm Chuyến Bay</button>
     
     <AddFlight v-if="isAddModalOpen" @finish-add-flight="finishAddFlight" @close="closeAddModal"/>
-    <EditFlight v-if="isEditModalOpen" :flight="editingFlight" @close="closeEditModal"/>
+    <EditFlight v-if="isEditModalOpen" :flight="editingFlight" @update-flight="saveFlight" @close="closeEditModal"/>
     
-    <!-- Modal chỉnh sửa chuyến bay (unchanged from previous version) -->
-    <div v-if="editingFlight" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div class="bg-white p-6 rounded-lg w-1/2">
-        <h3 class="text-lg font-bold mb-4">Chỉnh Sửa Chuyến Bay</h3>
-        <div class="space-y-4">
-          <input 
-            v-model="editingFlight.flightNumber"
-            placeholder="Mã Chuyến Bay" 
-            class="w-full p-2 border rounded"
-          />
-          <input 
-            v-model="editingFlight.departureCode"
-            placeholder="Điểm Đi" 
-            class="w-full p-2 border rounded"
-          />
-          <input 
-            v-model="editingFlight.arrivalCode"
-            placeholder="Điểm Đến" 
-            class="w-full p-2 border rounded"
-          />
-          <input 
-            v-model="editingFlight.aircraftCode"
-            placeholder="Máy Bay" 
-            class="w-full p-2 border rounded"
-          />
-          <input 
-            v-model="editingFlight.expectedDepartureTime"
-            type="datetime-local" 
-            class="w-full p-2 border rounded"
-          />
-          <select 
-            v-model="editingFlight.status" 
-            class="w-full p-2 border rounded"
-          >
-            <option>Scheduled</option>
-            <option>Delayed</option>
-            <option>Cancelled</option>
-            <option>Completed</option>
-          </select>
-          <div class="flex justify-end space-x-2">
-            <button 
-              @click="cancelEdit" 
-              class="bg-gray-500 text-white p-2 rounded"
-            >Hủy</button>
-            <button 
-              @click="saveFlight" 
-              class="bg-blue-500 text-white p-2 rounded"
-            >Lưu</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
     <table class="w-full border">
       <thead>
         <tr>
@@ -126,7 +73,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import AddFlight from './AddFlight.vue'
-
+import EditFlight from './EditFlight.vue'
 import { useAircraftStore } from '@/store/aircraftstore'
 import { useAirportStore } from '@/store/airportstore'
 import { useFlightStore } from '@/store/flightstore'
@@ -161,11 +108,10 @@ const filteredFlights = computed(() => {
   
 const startEdit = (flight) => {
   editingFlight.value = {...flight}
+  console.log('editingFlight', JSON.stringify(editingFlight.value))
+  isEditModalOpen.value = true
 }
   
-const cancelEdit = () => {
-  editingFlight.value = null
-}
   
 const saveFlight = async () => {
   await refreshFlightData()
@@ -181,6 +127,7 @@ const closeAddModal = () => {
 
 const closeEditModal = () => {
   isEditModalOpen.value = false
+  editingFlight.value = null
 }
   
 const formatDateTime = (dateTime) => {
