@@ -2,8 +2,10 @@
 <div class="flex h-screen ">
     <!-- Navbar start -->
     <nav id="navbar" class="fixed top-0 z-30  w-full flex flex-row justify-start bg-gray-700 p-3 sm:justify-between">
-      <button id="btnSidebarToggler" @click="toggleSidebar" type="button" class=" text-2xl text-white hover:text-gray-200">
-        <align-justify v-if="!sideBarIsOpening" class="z-50 stroke-4 hover:stroke-blue-500"/>
+      <button id="btnSidebarToggler" @click="toggleSidebar" type="button"
+      class=" text-2xl text-white hover:text-gray-200 z-50">
+        <align-justify v-if="!sideBarIsOpening" 
+        class="cursor-pointer  stroke-4 hover:stroke-blue-500"/>
         
       </button>
       <span>&nbsp;</span>
@@ -20,10 +22,9 @@
     <!-- Navbar end -->
     <!-- Sidebar -->
     <div class="z-40 w-64 h-full text-white p-4 bg-slate-600 transition-all duration-300 ease-in-out"
-        :class="sideBarIsOpening ? 'max-w-screen opacity-100 p-0' : 'max-w-0 opacity-0 p-0 -z-0'" >
+        :class="sideBarIsOpening ? '-translate-x-0 opacity-100 p-0' : 'opacity-0 p-0 -z-0 -translate-x-full'" >
         <h1 class="text-2xl font-bold mb-6 flex relative">
             <span>QAirline</span>
-            <X @click="toggleSidebar" class="absolute right-0 w-8 h-8 border-2 border-white"/> 
         </h1>
         <nav class="space-y-4">
             <button class="rounded-lg "
@@ -37,8 +38,9 @@
                 </div>
             </button>
         </nav>
-        <button id="btnSidebarToggler" @click="toggleSidebar" type="button" class="place-self-center my-16 text-2xl text-white hover:text-gray-200">
-          <ArrowLeftFromLine class="z-50 stroke-4 hover:stroke-blue-500"/>
+        <button id="btnSidebarToggler" @click="toggleSidebar" type="button" 
+        class="place-self-center my-16 text-2xl text-white hover:text-gray-200">
+          <ArrowLeftFromLine class="z-50 stroke-4 w-full hover:stroke-blue-500"/>
         </button>
     </div>
 
@@ -61,7 +63,6 @@ import {
     CalendarCheck,
     ArrowLeftFromLine ,
     AlignJustify,
-    X,
     Newspaper,
     LogOut
 } from 'lucide-vue-next'
@@ -85,6 +86,7 @@ const changeSection = (section) => {
 const sideBarIsOpening = ref(true)
 const toggleSidebar = () => {
   sideBarIsOpening.value = !sideBarIsOpening.value
+  console.log(sideBarIsOpening.value)
 }
 
 const menuItems = [{

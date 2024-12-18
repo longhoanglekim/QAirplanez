@@ -180,7 +180,7 @@ const getListTicket = async (departureDate) => {
   const req = JSON.stringify({
     departureCode: departureCode.value,
     arrivalCode: arrivalCode.value,
-    expectedDepartureTime: date.toISOString(),
+    expectedDepartureTime: date.toISOString().slice(0, 16),
     expectedArrivalTime: null,
     numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
   })

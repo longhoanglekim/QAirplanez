@@ -23,8 +23,8 @@
     <!-- Stat -->
     <AircraftStat :aircraft="aircraftList" :key="reloadStat"/>
     
-    <AddAircraftModal v-if="isModalOpen && !isEditing" @finish-add-aircraft="finishAddAircraft" @close="closeModal" />
-    <EditAircraftModal v-if="isModalOpen && isEditing" :current-aircraft="currentAircraft" @close="closeModal" @save="saveAircraft"/>
+    <AddAircraftModal v-if="isModalOpen && !isEditing" @add-aircraft="finishAddAircraft" @close="closeModal" />
+    <EditAircraftModal v-if="isModalOpen && isEditing" :key="currentAircraft.serialNumber" :current-aircraft="currentAircraft" @close="closeModal" @save="saveAircraft"/>
 
     <!-- Bảng máy bay -->
     <table class="w-full border rounded-xl bg-white p-0 ">
@@ -124,6 +124,7 @@ const aircraftList = ref(storeAircraft.getAircraft())
 const refreshAircraftData = async () => {
   await storeAircraft.reloadAircraft()
   aircraftList.value = storeAircraft.getAircraft()
+  console.log('refreshAircraftData')
 }
 
 
@@ -215,6 +216,7 @@ const closeModal = () => {
 }
 
 const finishAddAircraft = async () => {
+  console.log('finishAddAircraft')
   await refreshAircraftData()
   closeModal()
 }

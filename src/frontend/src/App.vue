@@ -2,7 +2,7 @@
 <div id="app">
     <header v-if="!isAdminRoute && !isTest">
         <PageHeader />
-        <PageNavBar />
+        <PageNavBar :key="$route.fullPath"/>
     </header>
 
     <router-view></router-view>
