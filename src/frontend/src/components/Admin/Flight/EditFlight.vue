@@ -9,6 +9,7 @@
               v-model="flightData.flightNumber"
               placeholder="Mã Chuyến Bay"
               class="w-full p-2 border rounded"
+              readonly
           />
         </div>
 
@@ -18,6 +19,7 @@
               v-model="flightData.departureCode"
               placeholder="Điểm Đi"
               class="w-full p-2 border rounded"
+              readonly
           />
         </div>
 
@@ -27,6 +29,7 @@
               v-model="flightData.arrivalCode"
               placeholder="Điểm Đến"
               class="w-full p-2 border rounded"
+              readonly
           />
         </div>
 
@@ -36,6 +39,7 @@
               v-model="flightData.aircraftCode"
               placeholder="Máy Bay"
               class="w-full p-2 border rounded"
+              readonly
           />
         </div>
 
@@ -45,6 +49,7 @@
               v-model="flightData.expectedDepartureTime"
               type="datetime-local"
               class="w-full p-2 border rounded"
+              readonly
           />
         </div>
 
@@ -58,6 +63,16 @@
           </select>
         </div>
 
+        <div v-if="flightData.status === 'Delayed'" class="flex flex-col">
+          <label class="mb-1">Thời Gian hoãn chuyến bay</label>
+          <input
+              v-model="flightData.expectedDepartureTime"
+              type="datetime-local"
+              class="w-full p-2 border rounded"
+              readonly
+          />
+        </div>
+
         <div class="flex justify-end space-x-2">
           <button @click="closeModal" class="bg-gray-500 text-white p-2 rounded">Hủy</button>
           <button @click="saveFlight" class="bg-blue-500 text-white p-2 rounded">Lưu</button>
@@ -68,17 +83,23 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, defineProps } from 'vue'
 
 const emit = defineEmits(['close', 'update-flight'])
+const props = defineProps({
+  flight: {
+    type: Object,
+    required: true
+  }
+})
 
 const flightData = ref({
-  flightNumber: '',
-  departureCode: '',
-  arrivalCode: '',
-  aircraftCode: '',
-  expectedDepartureTime: '',
-  status: 'Scheduled'
+  flightNumber: props.flight.flightNumber,
+  departureCode: props.flight.departureCode,
+  arrivalCode: props.flight.arrivalCode,
+  aircraftCode: props.flight.aircraftCode,
+  expectedDepartureTime: props.flight.expectedDepartureTime,
+  status: props.flight.status
 })
 
 const closeModal = () => {

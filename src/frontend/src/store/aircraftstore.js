@@ -12,7 +12,11 @@ export const useAircraftStore = defineStore('aircraft', () => {
         'Accept': 'application/json'
       }
     })
-    aircraft.value = await response.json()
+    if (response.ok) {
+      aircraft.value = await response.json()
+    } else {
+      console.error('Error fetching aircraft:', response.status, response.statusText)
+    }
   }
 
   const getAircraft = () => {
