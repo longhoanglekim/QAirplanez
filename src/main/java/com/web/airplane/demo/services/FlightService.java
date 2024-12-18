@@ -152,13 +152,14 @@ public class FlightService {
     }
 
     public FlightInfo editFlight(FlightInfo flightInfo) {
-
+        log.debug("Edit flight: " + flightInfo);
         Flight flight = flightRepository.findByFlightNumber(flightInfo.getFlightNumber());
         flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
-        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
+        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getArrivalCode()));
         flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
         flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
+        flight.setStatus(flightInfo.getStatus());
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
 
         // Lưu vào cơ sở dữ liệu
