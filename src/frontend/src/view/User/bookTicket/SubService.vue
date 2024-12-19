@@ -2,16 +2,27 @@
 
 <div>
   <SeatSelectionModal v-if="currentModal === 'seat-selection'" 
+    :key="(outboundSeats, returnSeats)"
     :outbound-seats="outboundSeats" 
     :return-seats="returnSeats" 
     :outbound-ticket-count="adultsLength + childrenLength"
     :return-ticket-count="adultsLength + childrenLength"
+    :selected-outbound-seats="seatSelectedOutBound"
+    :selected-return-seats="seatSelectedReturn"
     @close="closeModal" 
     @seat-selection="handleSeatSelection" />
   <MealSelectionModal v-if="currentModal === 'meal-selection'" 
-    :isRoundTrip="isRoundTrip" 
-    @close="closeModal" />
+    :isRoundTrip="isRoundTrip()" 
+    :maxTickets="adultsLength + childrenLength"
+    :key="(mealSelectedOutBound, mealSelectedReturn)"
+    :propOutboundMeals="mealSelectedOutBound"
+    :propReturnMeals="mealSelectedReturn"
+    @close="closeModal" 
+    @confirm="handleMealConfirm" />
   <TaxiModal v-if="currentModal === 'taxi-selection'" 
+    :services="taxiSelected"
+    :key="taxiSelected"
+    @taxi-selection="handleTaxiSelection"
     @close="closeModal" />
     <header class="mt-20">
         <BookingProgressBar class="mx-auto" :current-stage="2" />
@@ -24,18 +35,26 @@
         </div>
         <CardWithButton @beClicked="currentModal = 'seat-selection'">
             <template v-slot:header>
-                Chọn chỗ ngồi
+              <div class="flex items-center justify-center">
+                <Armchair class="h-8 w-8"/> Chọn chỗ ngồi
+              </div>
             </template>
             <template v-slot:slogan>
-                <p> <Armchair/> Chọn chỗ ngồi yêu thích của bạn.</p>
+                <p>Chọn chỗ ngồi yêu thích của bạn.</p>
+                <p>50.000 VNĐ/chỗ</p>
             </template>
             <template v-slot:content>
               <div class="w-full">
-                <div v-if="selectedOutBound.length > 0">
-                  <p class="flex">{{ storeSearFlight.getOldForm().fromCity }} <span><SendHorizontal /></span> {{ storeSearFlight.getOldForm().toCity }}</p>
-
+                <div v-if="seatSelectedOutBound.length > 0 || (selectedReturn && selectedReturn.length > 0)">
+                  <p v-if="seatSelectedOutBound.length > 0" class="flex">{{ storeSearFlight.getOldForm().fromCity }} <span><MoveRight /></span> {{ storeSearFlight.getOldForm().toCity }}</p>
                   <ul>
-                    <li v-for="(item, index) in selectedOutBound" :key="index">
+                    <li v-for="(item, index) in seatSelectedOutBound" :key="index">
+                      {{ item }}
+                    </li>
+                  </ul>
+                  <p v-if="selectedReturn && selectedReturn.length > 0" class="flex">{{ storeSearFlight.getOldForm().toCity }} <span><MoveRight /></span> {{ storeSearFlight.getOldForm().fromCity }}</p>
+                  <ul>
+                    <li v-for="(item, index) in selectedReturn" :key="index">
                       {{ item }}
                     </li>
                   </ul>
@@ -49,10 +68,12 @@
         </CardWithButton>
         <CardWithButton @beClicked="currentModal = 'meal-selection'">
             <template v-slot:header>
-                Chọn bữa ăn
+                <div class="flex items-center justify-center">
+                  <Soup class="h-8 w-8"/> Chọn bữa ăn
+                </div>
             </template>
             <template v-slot:slogan>
-              <p> <Soup/> Chọn món ăn yêu thích của bạn.</p>
+              <p>Chọn món ăn yêu thích của bạn.</p>
             </template>
             <template v-slot:content>
               <p>Có rất nhiều loại món ăn hấp dẫn đang chờ bạn thưởng thức</p>
@@ -60,22 +81,30 @@
         </CardWithButton>
         <CardWithButton @beClicked="currentModal = 'taxi-selection'">
             <template v-slot:header>
-                Chọn dịch vụ đưa đón
+                <div class="flex items-center justify-center">
+                  <CarTaxiFront class="h-8 w-8"/> Chọn dịch vụ đưa đón
+                </div>
             </template>
             <template v-slot:slogan>
-              <p> <CarTaxiFront/> Lựa chọn dịch vụ phù hợp với bạn.</p>
+              <p>Lựa chọn dịch vụ phù hợp với bạn.</p>
             </template>
             <template v-slot:content>
                 <p>Có rất nhiều dịch vụ hấp dẫn đang chờ đón bạn</p>
             </template>
         </CardWithButton>
-      <button
-          class="bg-gray-200 border border-gray-300 text-black px-4 py-2 w-[10%] ml-auto rounded-none hover:bg-gray-300 shadow-sm"
-          type="button"
-          @click="handleSubmit"
-      >
-        Submit
-      </button>
+
+        <div class="flex flex-col justify-center items-center mt-10 text-center bg-amber-50 shadow-2xl m-5 rounded-xl p-5">
+          <div class="flex text-xl font-bold text-orange-500">
+            <p>Tổng tiền cộng thêm: {{ formatCurrency(getPrice()) }}</p>
+          </div>
+          <button
+              class="bg-orange-400 border-amber-300 min-w-32 text-white px-4 py-2 w-[10%] rounded-md hover:bg-orange-600 shadow-sm m-5"
+              type="button"
+              @click="handleSubmit"
+          >
+            Xác nhận
+          </button>
+        </div>
 
     </main>
 </div>
@@ -84,8 +113,9 @@
 
 
 <script setup>
-import {reactive, ref} from 'vue';
-import {Armchair, SendHorizontal, Soup, CarTaxiFront} from 'lucide-vue-next';
+import {ref} from 'vue';
+import {Armchair,  Soup, CarTaxiFront, MoveRight} from 'lucide-vue-next';
+import { formatCurrency } from '@/helper/currency';
 import SeatSelectionModal from '@/components/composable/service/SeatSelectionModal.vue';
 import MealSelectionModal from '@/components/composable/service/MealSelectionModal.vue';
 import TaxiModal from '@/components/composable/service/TaxiModal.vue';
@@ -97,8 +127,14 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 // Dữ liệu trong data()
 const currentModal = ref('');
-const selectedOutBound = ref([]);
+const seatSelectedOutBound = ref([]);
+const seatSelectedReturn = ref([]);
+const mealSelectedOutBound = ref({});
+const mealSelectedReturn = ref({});
+const mealTotalPrice = ref(0);
+const taxiSelected = ref([]);
 const storeSearFlight = searchFlightStore();
+const storeTicket = ticketStore();
 // Ghế outbound và return
 const storeForm = searchFlightStore()
 // Reactive variables
@@ -106,10 +142,11 @@ const adultsLength = ref(storeForm.getOldForm().adults)
 const childrenLength = ref(storeForm.getOldForm().children)
 
 // Khai báo biến outboundSeats trước với giá trị mặc định là một mảng trống
-let outboundSeats = reactive([]);
+const outboundSeats = ref([]);
+const returnSeats = ref([]);
 
 const fetchSelectedAircraft = async () => {
-  const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + ticketStore().getSelectedDeparture().flightNumber, {
+  const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + storeTicket.getSelectedDeparture().flightNumber, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -126,25 +163,30 @@ const fetchSelectedAircraft = async () => {
 // Lấy dữ liệu từ API và tạo outboundSeats khi đã có rows
 fetchSelectedAircraft()
     .then(data => {
-      outboundSeats = reactive(data);
+      outboundSeats.value = data;
       // outboundSeats = reactive([
       //   [true, true, true, true, false, true],
       //   [false, true, true, true, true, true]
       // ]);
-      console.log(data);
     })
     .catch(error => {
       console.error('Error:', error);
     });
 
-const returnSeats = ref(null);
-
-// Phương thức xử lý ghế đã chọn
-const handleSeatSelection = ({ outbound, return: returnSeats }) => {
-  console.log('Outbound seats:', outbound);
-  selectedOutBound.value = outbound;
-  console.log('Return seats:', returnSeats);
+const handleSeatSelection = ({ outbound, returned}) => {
+  seatSelectedOutBound.value = outbound;
+  seatSelectedReturn.value = returned;
 };
+
+const handleTaxiSelection = (taxiServices) => {
+  taxiSelected.value = taxiServices;
+};
+
+const handleMealConfirm = ({outboundMeals, returnMeals, totalPrice}) => {
+  mealSelectedOutBound.value = outboundMeals;
+  mealSelectedReturn.value = returnMeals;
+  mealTotalPrice.value = totalPrice;
+}
 
 // Đóng modal
 const closeModal = () => {
@@ -152,7 +194,33 @@ const closeModal = () => {
 };
 
 const handleSubmit = () => {
-  // Điều hướng đến trang khác
-  router.push('/booking/information/3'); // Điều hướng đến trang mới
+  //load dât
+  const data = {  
+    departure: storeTicket.getSelectedDeparture(),
+    arrival: storeTicket.getSelectedArrival(),
+    outboundSeats: seatSelectedOutBound.value,
+    returnSeats: seatSelectedReturn.value,
+    taxiServices: taxiSelected.value,
+    meal: storeTicket.getSelectedMeal(),
+    seatPrice: 50000,
+    taxiPrice: taxiSelected.value.reduce((total, service) => total + service.price, 0)
+  }
+  console.log('data', data)
+
+  router.push('/booking/information/3'); 
 };
+
+
+
+
+const getPrice = () => {
+  const seatPrice = 50000 * (seatSelectedOutBound.value.length + (seatSelectedReturn.value ? seatSelectedReturn.value.length : 0))
+  const taxiPrice = (taxiSelected.value.reduce((total, service) => total + service.price, 0))
+  return seatPrice + taxiPrice + mealTotalPrice.value
+}
+
+const isRoundTrip = () => {
+  return storeSearFlight.getOldForm().ticketType === 'roundTrip'
+}
+
 </script>

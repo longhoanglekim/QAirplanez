@@ -15,7 +15,7 @@ const fetchNewsData = async () => {
         console.log(error);
     }
 }
-fetchNewsData().then(() => console.log('news'));
+fetchNewsData().then(() => 'news');
 export {news};
 let airports = [];
 const fetchAirportData = async () => {
@@ -54,7 +54,7 @@ const fetchAircraftData = async () => {
         console.log(error);
     }
 }
-fetchAircraftData().then(r => console.log(r));
+fetchAircraftData().then(r => r);
 export {aircraft};
 
 let flights = [];
@@ -82,7 +82,7 @@ const fetchFlightsData = async () => {
 };
 
 // Gọi hàm fetchFlightsData để lấy dữ liệu chuyến bay từ API
-fetchFlightsData().then(r => console.log(r));
+fetchFlightsData().then(r => r);
 
 // Export flights để sử dụng ở các module khác
 export { flights };
@@ -111,5 +111,5 @@ const fetchPassengerData = async () => {
 };
 
 // Gọi hàm fetchFlightsData để lấy dữ liệu chuyến bay từ API
-fetchPassengerData().then(() => console.log('passenger'));
+fetchPassengerData().then(() => 'passenger');
 export {passengers};
