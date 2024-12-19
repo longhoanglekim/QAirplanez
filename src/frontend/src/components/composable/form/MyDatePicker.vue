@@ -167,12 +167,10 @@ const handleClickOutside = async (event) => {
   }
 }
 
-// Thêm sự kiện click toàn cục khi component được mount
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 })
 
-// Gỡ bỏ sự kiện khi component bị unmount để tránh memory leak
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })

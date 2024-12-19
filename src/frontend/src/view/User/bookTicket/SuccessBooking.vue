@@ -70,19 +70,22 @@
   
 <script setup>
 import {
-    ref
+    ref,
+    onMounted
 } from 'vue'
 
-// Reactive data
 const bookingCode = ref('VN8745')
 const passengerName = ref('Nguyễn Văn A')
 const flightDate = ref('15/12/2024')
 
-// Method to handle ticket download
 const downloadTicket = () => {
     // Implement ticket download logic here
     alert('Chức năng tải vé đang được phát triển')
 }
+
+onMounted(() => {
+    document.title = 'Đặt vé thành công';
+})
 </script>
   
   

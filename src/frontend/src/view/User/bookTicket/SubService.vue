@@ -17,6 +17,7 @@
     :key="(mealSelectedOutBound, mealSelectedReturn)"
     :propOutboundMeals="mealSelectedOutBound"
     :propReturnMeals="mealSelectedReturn"
+    :meals="mealList"
     @close="closeModal" 
     @confirm="handleMealConfirm" />
   <TaxiModal v-if="currentModal === 'taxi-selection'" 
@@ -113,7 +114,7 @@
 
 
 <script setup>
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {Armchair,  Soup, CarTaxiFront, MoveRight} from 'lucide-vue-next';
 import { formatCurrency } from '@/helper/currency';
 import SeatSelectionModal from '@/components/composable/service/SeatSelectionModal.vue';
@@ -123,6 +124,7 @@ import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import CardWithButton from '@/components/composable/card/CardWithButton.vue';
 import {searchFlightStore} from '@/store/searchFlight';
 import {ticketStore} from "@/store/ticket";
+import {useMealStore} from "@/store/mealStore";
 import { useRouter } from 'vue-router';
 const router = useRouter();
 // Dữ liệu trong data()
@@ -135,6 +137,7 @@ const mealTotalPrice = ref(0);
 const taxiSelected = ref([]);
 const storeSearFlight = searchFlightStore();
 const storeTicket = ticketStore();
+const storeMeal = useMealStore();
 // Ghế outbound và return
 const storeForm = searchFlightStore()
 // Reactive variables
@@ -144,7 +147,7 @@ const childrenLength = ref(storeForm.getOldForm().children)
 // Khai báo biến outboundSeats trước với giá trị mặc định là một mảng trống
 const outboundSeats = ref([]);
 const returnSeats = ref([]);
-
+const mealList = ref([]);
 const fetchSelectedAircraft = async () => {
   const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + storeTicket.getSelectedDeparture().flightNumber, {
     method: 'GET',
@@ -194,16 +197,20 @@ const closeModal = () => {
 };
 
 const handleSubmit = () => {
-  //load dât
-  const data = {  
-    departure: storeTicket.getSelectedDeparture(),
-    arrival: storeTicket.getSelectedArrival(),
+  const allService = JSON.stringify({
     outboundSeats: seatSelectedOutBound.value,
     returnSeats: seatSelectedReturn.value,
-    taxiServices: taxiSelected.value,
+    taxiServices: taxiSelected.value.map(service => service.id),
     meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
-    seatPrice: 50000,
-    taxiPrice: taxiSelected.value.reduce((total, service) => total + service.price, 0)
+  })
+  console.log('allService', allService)
+  //load dât
+  const data = {  
+    departure: storeTicket.getSelectedDeparture().flightNumber,
+    arrival: (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null,
+    allService,
+    adults: storeTicket.getAdultInformation(),
+    children: storeTicket.getChildInformation(),
   }
   console.log('data', data)
 
@@ -222,5 +229,8 @@ const getPrice = () => {
 const isRoundTrip = () => {
   return storeSearFlight.getOldForm().ticketType === 'roundTrip'
 }
-
+onMounted(async () => {
+  document.title = 'Dịch vụ đi kèm';
+  mealList.value = await storeMeal.getMealList();
+})
 </script>

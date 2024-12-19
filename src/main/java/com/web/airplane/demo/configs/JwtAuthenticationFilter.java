@@ -83,6 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.debug(path);
         List<String> publicPaths = Arrays.asList("/api/auth/", "/api/ticket_class/", "/api/flight/public/", "/api/airport/public/",
+                "/api/meal/public",
                 "/api/news/public",
                 "/test/string");
 

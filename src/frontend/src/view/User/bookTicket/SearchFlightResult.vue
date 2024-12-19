@@ -231,6 +231,7 @@ const handleReSearch = () => {
 
 // Lifecycle hook
 onMounted(() => {
+  document.title = 'Kết quả tìm kiếm chuyến bay';
   getListTicket(storeSearchFlight.getOldForm().departureDate)
 })
 

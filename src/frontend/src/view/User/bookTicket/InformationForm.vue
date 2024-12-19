@@ -14,8 +14,8 @@
             <child-passenger-form ref="childForms"></child-passenger-form>
         </div>
 
-        <div class="my-20">
-            <button @click="sendPassengerInformation" class="p-5 rounded-xl bg-orange-500 hover:scale-105 custom">
+        <div class="my-20 text-center">
+            <button @click="sendPassengerInformation" class="p-5 rounded-xl text-white bg-orange-500 hover:scale-105 custom">
                 Xác nhận thông tin
             </button>
         </div>
@@ -33,7 +33,9 @@ import ChildPassengerForm from '@/components/composable/form/ChildPassengerForm.
 import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import ErrorModal from '@/components/composable/ErrorModal.vue';
 import { searchFlightStore } from '@/store/searchFlight';
+import { ticketStore } from '@/store/ticket';
 import {
+    onMounted,
     ref
 } from 'vue'
 import { useRouter } from 'vue-router';
@@ -41,7 +43,7 @@ import { useRouter } from 'vue-router';
 const route = useRouter()
 
 const storeForm = searchFlightStore()
-// Reactive variables
+const storeTicket = ticketStore()
 const adults = ref(storeForm.getOldForm().adults)
 const children = ref(storeForm.getOldForm().children)
 const adultForms = ref([])
@@ -67,12 +69,9 @@ const sendPassengerInformation = async () => {
     // Thu thập thông tin từ các form trẻ em
     const childPassengers = childForms.value.map(form => form.getPassengerData())
 
-    // Gộp dữ liệu
-    const passengerData = {
-        adults: adultPassengers,
-        children: childPassengers
-    }
-    console.log(passengerData)
+    storeTicket.saveAdultInformation(adultPassengers)
+    storeTicket.saveChildInformation(childPassengers)
+    console.log(storeTicket.getAdultInformation())
     route.push('/booking/information/2')
     // Gửi dữ liệu lên server
     //await submitPassengerData(passengerData)
@@ -97,6 +96,10 @@ const sendPassengerInformation = async () => {
     //     toast.error('Đã có lỗi xảy ra')
     // }
 //}
+
+onMounted(() => {
+    document.title = 'Thông tin hành khách';
+})
 </script>
 
 <style scoped>

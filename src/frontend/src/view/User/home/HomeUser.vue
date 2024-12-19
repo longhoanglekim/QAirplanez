@@ -20,7 +20,10 @@ export default {
       this.$router.push('/booking/availability/0')
     }
   },
-  name: 'HomeUser'
+  name: 'HomeUser',
+  mounted() {
+    document.title = 'Trang chủ';
+  }
 }
 </script>
 
