@@ -26,8 +26,9 @@ public class News {
     private LocalDateTime editDate;
     private String content;
 
-    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> imageList;
+    @OneToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id") // Tạo cột image_id
+    private Image image;
 
     @ManyToOne
     @JoinColumn(name = "author_id")

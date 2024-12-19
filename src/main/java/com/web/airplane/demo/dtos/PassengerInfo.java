@@ -22,6 +22,8 @@ public class PassengerInfo {
     private Integer seatRow;
     private String seatPosition;
     private String flightNumber;
+    private String email;
+    private String phoneNumber;
 
     public String getFullName() {
         return firstName + " " + lastName;
