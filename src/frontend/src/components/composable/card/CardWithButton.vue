@@ -31,7 +31,7 @@
   
   <style scoped>
   .custom {
-    background-image: linear-gradient(147deg, #FFE53B 0%, #fd3838 74%)
+    background-color: #eaa347;
   }
   </style>
   "
