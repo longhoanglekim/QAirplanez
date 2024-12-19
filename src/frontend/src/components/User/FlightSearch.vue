@@ -45,6 +45,7 @@
                       v-model="searchFromCity"
                       @focus="showFromDropdown = true"
                       @input="filterFromCities"
+                      @blur="showFromDropdown = false"
                       class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                              focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
                              outline-none peer"
@@ -82,8 +83,9 @@
                 <div class="relative p-1 group">
                     <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                     <input type="text" v-model="searchToCity" 
-                      @focus="showToDropdown = true" 
-                      @input="filterToCities"
+                      @focus="showToDropdown = true; filterToCities" 
+                      @input="showToDropdown = true; filterToCities"
+                      @blur="showToDropdown = false"
                       class="w-full h-14 p-3 pt-5 pl-10 rounded-lg border border-gray-300 
                             focus:ring-2 focus:ring-orange-200 focus:border-orange-500 
                             outline-none peer"
@@ -384,24 +386,6 @@ watch(() => form.value.toCity, async (newVal) => {
   }
 })
 
-watch(() => form.value.departureDate, async (newVal) => {
-  if (newVal) {
-    await nextTick()
-    // Clear return date if departure date is after it
-    if (form.value.returnDate && new Date(newVal) > new Date(form.value.returnDate)) {
-      form.value.returnDate = null
-    }
-    toCityRef.value?.focus()
-  }
-})
-
-watch(() => form.value.returnDate, async (newVal) => {
-  if (newVal) {
-    await nextTick()
-    ticketDetailsRef.value?.focus()
-  }
-})
-
 function increaseAdults() {
     if (form.value.adults < maxAdults.value) {
         form.value.adults++
@@ -509,7 +493,7 @@ watch(() => form.value.toCity, (newVal) => {
 </script>
 
 <style scoped>
-/* Ẩn nút tăng/giảm mặc định của input number */
+/* Ẩn */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;

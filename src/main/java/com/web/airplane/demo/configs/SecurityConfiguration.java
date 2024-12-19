@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/test/admin_aircraft/**", "/api/flight/admin_aircraft/**").hasRole("ADMIN_AIRCRAFT")
                         .requestMatchers("/api/auth/**","/api/ticket_class/**",
                                 "/api/flight/public/**", "/test/string/**", "/api/user/public/**",
-                                "/api/airport/public/**", "/favicon.ico", "/api/news/public/**").permitAll()
+                                "/api/airport/public/**", "/favicon.ico", "/api/news/public/**", "/api/meal/public/**").permitAll()
 
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session

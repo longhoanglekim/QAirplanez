@@ -14,8 +14,8 @@
             <child-passenger-form ref="childForms"></child-passenger-form>
         </div>
 
-        <div class="my-20">
-            <button @click="sendPassengerInformation" class="p-5 rounded-xl bg-orange-500 hover:scale-105 custom">
+        <div class="my-20 text-center">
+            <button @click="sendPassengerInformation" class="p-5 rounded-xl text-white bg-orange-500 hover:scale-105 custom">
                 Xác nhận thông tin
             </button>
         </div>

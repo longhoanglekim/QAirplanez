@@ -116,122 +116,107 @@
   </div>
 </template>
 
-<script>
-import { Utensils, X } from 'lucide-vue-next';
-export default {
-  name: 'AirplaneMealModal',
-  props: {
-    isRoundTrip: {
-      type: Boolean,
-      default: false
-    },
-    maxTickets: {
-      type: Number,
-      default: 0
-    }, 
-    propOutboundMeals: {
-      type: Object,
-      default: () => {}
-    },
-    propReturnMeals: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  components: {
-    Utensils, X
-  },
-  data() {
-    return {
-      meals: [
-        {
-          id: 1,
-          name: "Cơm gà Nhật",
-          description: "Cơm gà nướng kiểu Nhật với sốt teriyaki",
-          price: 55000,
-          image: "/api/placeholder/300/200?text=Cơm+gà+Nhật",
-          dietaryInfo: "Gluten-free"
-        },
-        {
-          id: 2,
-          name: "Salad rau đặc biệt",
-          description: "Salad tươi với các loại rau hữu cơ",
-          price: 125000,
-          image: "/api/placeholder/300/200?text=Salad+rau",
-          dietaryInfo: "Vegetarian"
-        },
-        {
-          id: 3,
-          name: "Bò bít tết Âu",
-          description: "Bò nướng với khoai tây chiên và sốt",
-          price: 200000,
-          image: "/api/placeholder/300/200?text=Bò+bít+tết",
-          dietaryInfo: "Không chứa sữa"
-        }
-      ],
-      outboundMeals: {...this.propOutboundMeals},
-      returnMeals: {...this.propReturnMeals}
-    };
-  },
-  computed: {
-    totalPrice() {
-      let total = 0;
-      Object.keys(this.outboundMeals).forEach(mealId => {
-        console.log('mealId', mealId)
-        const meal = this.meals.find(m => m.id === parseInt(mealId));
-        total += (meal.price * this.outboundMeals[mealId]);
-      });
-      if (this.isRoundTrip) {
-        Object.keys(this.returnMeals).forEach(mealId => {
-          const meal = this.meals.find(m => m.id === parseInt(mealId));
-          total += (meal.price * this.returnMeals[mealId]);
-        });
-      }
-      return total;
-    },
-    totalOutboundMeals() {
-      return Object.values(this.outboundMeals).reduce((sum, qty) => sum + qty, 0);
-    },
-    totalReturnMeals() {
-      return Object.values(this.returnMeals).reduce((sum, qty) => sum + qty, 0);
-    },
-    isSelectionValid() {
-      return this.totalOutboundMeals <= this.maxTickets
-        &&(!this.isRoundTrip || this.totalReturnMeals <= this.maxTickets);
-    }
-  },
-  methods: {
-    increaseMealQuantity(meal, type) {
-      const mealCollection = type === 'outbound' ? this.outboundMeals : this.returnMeals;
-      const totalMeals = type === 'outbound' ? this.totalOutboundMeals : this.totalReturnMeals;
-      if (totalMeals < this.maxTickets) {
-        mealCollection[meal.id] = (mealCollection[meal.id] || 0) + 1;
-      }
-    },
-    decreaseMealQuantity(meal, type) {
-      const mealCollection = type === 'outbound' ? this.outboundMeals : this.returnMeals;
-      if (mealCollection[meal.id] > 0) {
-        mealCollection[meal.id] -= 1;
-        if (mealCollection[meal.id] === 0) {
-          delete mealCollection[meal.id];
-        }
-      }
-    },
-    formatCurrency(value) {
-      return new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-      }).format(value);
-    },
-    handleConfirm() {
+<script setup>
+import { ref, computed, defineProps, defineEmits, onMounted } from 'vue'
+import { Utensils, X } from 'lucide-vue-next'
+import { useMealStore } from '@/store/mealStore'
 
-      this.$emit('confirm', {
-        outboundMeals: this.outboundMeals,
-        returnMeals: this.returnMeals,
-        totalPrice: this.totalPrice
-      });
-      this.$emit('close')
+
+
+const props = defineProps({
+  isRoundTrip: {
+    type: Boolean,
+    default: false
+  },
+  maxTickets: {
+    type: Number,
+    default: 0
+  },
+  propOutboundMeals: {
+    type: Object,
+    default: () => ({})
+  },
+  propReturnMeals: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const mealStore = useMealStore();
+
+const emit = defineEmits(['confirm', 'close'])
+
+const meals = ref([])
+
+const outboundMeals = ref({...props.propOutboundMeals})
+const returnMeals = ref({...props.propReturnMeals})
+
+const totalPrice = computed(() => {
+  let total = 0
+  Object.keys(outboundMeals.value).forEach(mealId => {
+    const meal = meals.value.find(m => m.id === parseInt(mealId))
+    total += (meal.price * outboundMeals.value[mealId])
+  })
+  
+  if (props.isRoundTrip) {
+    Object.keys(returnMeals.value).forEach(mealId => {
+      const meal = meals.value.find(m => m.id === parseInt(mealId))
+      total += (meal.price * returnMeals.value[mealId])
+    })
+  }
+  return total
+})
+
+const totalOutboundMeals = computed(() => {
+  return Object.values(outboundMeals.value).reduce((sum, qty) => sum + qty, 0)
+})
+
+const totalReturnMeals = computed(() => {
+  return Object.values(returnMeals.value).reduce((sum, qty) => sum + qty, 0)
+})
+
+const isSelectionValid = computed(() => {
+  return totalOutboundMeals.value <= props.maxTickets && 
+    (!props.isRoundTrip || totalReturnMeals.value <= props.maxTickets)
+})
+
+const increaseMealQuantity = (meal, type) => {
+  const mealCollection = type === 'outbound' ? outboundMeals : returnMeals
+  const totalMeals = type === 'outbound' ? totalOutboundMeals.value : totalReturnMeals.value
+  
+  if (totalMeals < props.maxTickets) {
+    mealCollection.value[meal.id] = (mealCollection.value[meal.id] || 0) + 1
+  }
+}
+
+const decreaseMealQuantity = (meal, type) => {
+  const mealCollection = type === 'outbound' ? outboundMeals : returnMeals
+  
+  if (mealCollection.value[meal.id] > 0) {
+    mealCollection.value[meal.id] -= 1
+    if (mealCollection.value[meal.id] === 0) {
+      delete mealCollection.value[meal.id]
     }
   }
-};
+}
+
+const formatCurrency = (value) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(value)
+}
+
+const handleConfirm = () => {
+  emit('confirm', {
+    outboundMeals: outboundMeals.value,
+    returnMeals: returnMeals.value,
+    totalPrice: totalPrice.value
+  })
+  emit('close')
+}
+
+onMounted(async () => {
+  meals.value = await mealStore.getMealList()
+})
 </script>
