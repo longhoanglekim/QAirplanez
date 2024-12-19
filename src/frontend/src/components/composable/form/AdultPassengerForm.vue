@@ -134,7 +134,7 @@ const validCccd = () => {
     } else if (formData.cccd.length !== 9 && formData.cccd.length !== 12) {
         errorsData.cccd = "Căn cước công dân hoặc chứng minh nhân dân phải có 9 hoặc 12 ký tự.";
         errors.cccd = true
-    } else if (!/^[0-9]*$/.test(errorsData.cccd)) {
+    } else if (!/^[0-9]*/.test(errorsData.cccd)) {
         errorsData.cccd = 'Vui lòng điền số CCCD/CMND hợp lệ'
         errors.cccd = true
     }

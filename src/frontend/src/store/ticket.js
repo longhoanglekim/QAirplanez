@@ -5,7 +5,6 @@ export const ticketStore = defineStore('ticketStore', () => {
     // Function to save ticket to sessionStorage
     const saveTicketToStorage = (key, ticket) => {
         try {
-            console.log(ticket)
             sessionStorage.setItem(key, JSON.stringify(ticket))
 
         } catch (error) {
@@ -78,10 +77,30 @@ export const ticketStore = defineStore('ticketStore', () => {
         return selectedDeparture.value
     }
 
+    const saveAdultInformation = (information) => {
+        sessionStorage.setItem('adultInformation', JSON.stringify(information))
+    }
+
+    const saveChildInformation = (information) => {
+        sessionStorage.setItem('childInformation', JSON.stringify(information))
+    }
+
+    const getAdultInformation = () => {
+        return JSON.parse(sessionStorage.getItem('adultInformation'))
+    }
+
+    const getChildInformation = () => {
+        return JSON.parse(sessionStorage.getItem('childInformation'))
+    }
+
     return {
         saveDepartureTicket, 
         saveArrivalTicket, 
         getSelectedArrival, 
-        getSelectedDeparture
+        getSelectedDeparture,
+        saveAdultInformation,
+        saveChildInformation,
+        getAdultInformation,
+        getChildInformation
     }
 })

@@ -1,6 +1,7 @@
 <script setup>
 import {onMounted} from "vue";
 onMounted(() => {
+      document.title = 'Đăng xuất';
       localStorage.removeItem('token');
   }
 

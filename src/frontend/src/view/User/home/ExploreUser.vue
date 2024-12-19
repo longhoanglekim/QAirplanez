@@ -118,6 +118,7 @@ export default {
     };
   },
   mounted() {
+    document.title = 'Khám phá';
     this.downloadImage();
     this.startSlideshow();
     document.addEventListener("click", this.handleOutsideClick);

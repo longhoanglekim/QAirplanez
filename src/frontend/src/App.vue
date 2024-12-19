@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header v-if="!isAdminRoute && !isTest">
+    <header v-if="showNavbar">
         <PageHeader />
         <PageNavBar :key="$route.fullPath"/>
     </header>
@@ -26,6 +26,8 @@ const isAdminRoute = computed(() => route.meta.isAdminRoute);
 const isTest = computed(() => route.meta.test);
 const isLogin = computed(() => route.meta.login);
 const isSignup = computed(() => route.meta.signup);
+
+const showNavbar = computed(() => (!isAdminRoute.value && !isTest.value && !isLogin.value && !isSignup.value ));
 </script>
 
 <style>

@@ -77,6 +77,7 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
+    document.title = 'Trang cá nhân';
     const dataVerticalBarChart = {
         labels: labels_vertical_bar_chart,
         datasets: [

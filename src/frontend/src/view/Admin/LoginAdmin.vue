@@ -41,6 +41,9 @@ export default {
       error: ''
     };
   },
+  mounted() {
+    document.title = 'Đăng nhập admin';
+  },
   methods: {
     async handleSubmit() {
       try {

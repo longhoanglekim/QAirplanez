@@ -54,7 +54,8 @@
 <script setup>
 import {
     ref,
-    computed
+    computed,
+    onMounted
 } from 'vue'
 import {
     LayoutDashboard,
@@ -131,6 +132,8 @@ const currentComponent = computed(() => {
     }
     return componentMap[activeSection.value]
 })
+
+onMounted
 </script>
 
 <style scoped>

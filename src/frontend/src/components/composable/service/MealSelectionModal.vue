@@ -117,9 +117,8 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps, defineEmits, onMounted } from 'vue'
+import { ref, computed, defineProps, defineEmits,  } from 'vue'
 import { Utensils, X } from 'lucide-vue-next'
-import { useMealStore } from '@/store/mealStore'
 
 
 
@@ -134,19 +133,21 @@ const props = defineProps({
   },
   propOutboundMeals: {
     type: Object,
-    default: () => ({})
+    default: () => {} 
   },
   propReturnMeals: {
     type: Object,
-    default: () => ({})
+    default: () => {} 
+  },
+  meals: {
+    type: Array,
+    default: () => []
   }
 })
 
-const mealStore = useMealStore();
 
 const emit = defineEmits(['confirm', 'close'])
 
-const meals = ref([])
 
 const outboundMeals = ref({...props.propOutboundMeals})
 const returnMeals = ref({...props.propReturnMeals})
@@ -154,13 +155,14 @@ const returnMeals = ref({...props.propReturnMeals})
 const totalPrice = computed(() => {
   let total = 0
   Object.keys(outboundMeals.value).forEach(mealId => {
-    const meal = meals.value.find(m => m.id === parseInt(mealId))
+    console.log("mealId: ", mealId)
+    const meal = props.meals.find(m => m.id === parseInt(mealId))
     total += (meal.price * outboundMeals.value[mealId])
   })
   
   if (props.isRoundTrip) {
     Object.keys(returnMeals.value).forEach(mealId => {
-      const meal = meals.value.find(m => m.id === parseInt(mealId))
+      const meal = props.meals.find(m => m.id === parseInt(mealId))
       total += (meal.price * returnMeals.value[mealId])
     })
   }
@@ -216,7 +218,4 @@ const handleConfirm = () => {
   emit('close')
 }
 
-onMounted(async () => {
-  meals.value = await mealStore.getMealList()
-})
 </script>
