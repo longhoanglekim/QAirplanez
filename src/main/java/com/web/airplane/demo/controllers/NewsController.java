@@ -1,5 +1,6 @@
 package com.web.airplane.demo.controllers;
 
+import com.web.airplane.demo.dtos.News.EditNewsDTO;
 import com.web.airplane.demo.dtos.News.NewsResponse;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.NewsRepository;
@@ -30,6 +31,30 @@ public class NewsController {
     public ResponseEntity<?> createNews(@RequestBody AddNewsDTO news, HttpServletRequest request) {
 
         return ResponseEntity.ok(newsService.createNews(news, request));
+    }
+    @PutMapping("/admin_news/edit")
+    @Transactional
+    public ResponseEntity<?> editNews(@RequestBody EditNewsDTO editedNews, @RequestParam(name = "index") Long index) {
+        News news = newsRepository.findByNewsIndex(index);
+        news.setTitle(editedNews.getTitle());
+        news.setContent(editedNews.getContent());
+        news.setPostingDate(editedNews.getPostingDate());
+        newsRepository.save(news);
+        return ResponseEntity.ok(newsService.getNewsInfo(news));
+
+    }
+
+    @DeleteMapping("/admin_news/delete")
+    @Transactional
+    public ResponseEntity<?> deleteNews(@RequestParam(name = "index") Long index) {
+        log.debug("Delete" + index);
+        newsRepository.delete(newsRepository.findByNewsIndex(index));
+        List<News> greaterList = newsService.getNewsWithIndexGreaterThan(index);
+        for (News news : greaterList) {
+            news.setNewsIndex(news.getNewsIndex() - 1);
+            newsRepository.save(news);
+        }
+        return ResponseEntity.ok("Đã xóa News với index = " + index);
     }
 
     @GetMapping("/public/newsList")

@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface NewsRepository extends JpaRepository<News, Long> {
     @Query(value = "SELECT MAX(n.news_index) FROM News n", nativeQuery = true)
     Long findMaxIndex();
+
+    News findByNewsIndex(Long id);
 }

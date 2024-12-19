@@ -1,18 +1,23 @@
 <template>
   <div class="flex justify-center items-center h-screen bg-gray-100">
-    <div class="w-full max-w-lg p-8 bg-white shadow-lg rounded-lg">
-      <h2 class="text-2xl font-semibold text-center mb-4">View Image</h2>
+    <div class="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg">
+      <h2 class="text-2xl font-semibold text-center mb-4">Upload Avatar</h2>
 
-      <!-- Hiển thị ảnh khi đã tải -->
-      <div v-if="imageData">
-        <img :src="imageData" alt="Image" class="w-full h-auto rounded-lg" />
-      </div>
+      <form enctype="multipart/form-data" @submit.prevent="uploadImage">
+        <div class="mb-4">
+          <input type="file" @change="handleFileChange" class="w-full p-2 border rounded-md" accept="image/*" />
+        </div>
 
-      <!-- Thông báo lỗi nếu có -->
-      <p v-else-if="uploadStatus" class="mt-4 text-center" :class="statusClass">{{ uploadStatus }}</p>
-    </div>
-    <div>
-      <p>Taken from wikpedia</p>
+        <button
+            type="submit"
+            :disabled="!selectedImage"
+            class="w-full py-2 px-4 bg-blue-500 text-white rounded-md disabled:bg-gray-400"
+        >
+          Upload Image
+        </button>
+      </form>
+
+      <p v-if="uploadStatus" class="mt-4 text-center" :class="statusClass">{{ uploadStatus }}</p>
     </div>
   </div>
 </template>
@@ -21,37 +26,44 @@
 export default {
   data() {
     return {
-      imageData: null, // Dữ liệu base64 của ảnh
-      uploadStatus: '', // Trạng thái tải ảnh
-      statusClass: '' // Lớp CSS để thông báo trạng thái (thành công hoặc thất bại)
+      selectedImage: null,
+      uploadStatus: '',
+      statusClass: ''
     };
   },
-  mounted() {
-    this.fetchImage();
-  },
   methods: {
-    // Phương thức lấy ảnh từ API và chuyển thành base64
-    async fetchImage() {
+    handleFileChange(event) {
+      this.selectedImage = event.target.files[0];
+    },
+
+    async uploadImage() {
+      if (!this.selectedImage) {
+        this.uploadStatus = 'Please select an image';
+        this.statusClass = 'text-red-500';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', this.selectedImage);
+
       try {
-        // Gửi request để lấy ảnh từ server (API trả về base64)
-        const response = await fetch('http://localhost:8080/api/user/getAvatar', {
+        const response = await fetch('http://localhost:8080/api/user/setAvatar', {
           method: 'POST',
           headers: {
-            Authorization : `Bearer ${localStorage.getItem('token')}` // Thêm token nếu cần
-          }
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: formData,
         });
 
-        // Nếu request thất bại
         if (!response.ok) {
-          throw new Error('Unable to fetch image');
+          throw new Error('Upload failed');
         }
 
-        const data = await response.json(); // Giả sử API trả về dữ liệu có trường 'image' chứa base64
-        this.imageData = data.imageUrl ? `${data.imageUrl}` : ''; // Nếu có dữ liệu, gán vào imageData
-        this.uploadStatus = 'Image loaded successfully!';
+        const data = await response.json(); // Giả sử API trả về thông báo dạng JSON
+        this.uploadStatus = data.message || 'Set Avatar thành công';
         this.statusClass = 'text-green-500';
       } catch (error) {
-        this.uploadStatus = error.message || 'Failed to load image';
+        this.uploadStatus = error.message || 'Upload failed';
         this.statusClass = 'text-red-500';
       }
     }
@@ -60,5 +72,5 @@ export default {
 </script>
 
 <style scoped>
-/* Optional: Add custom styling for your image display */
+/* Optional: Add custom styling if needed */
 </style>
