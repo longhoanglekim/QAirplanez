@@ -59,6 +59,7 @@ export const useFlightStore = defineStore('flight', () => {
 
     const editFlight = async (flight) => {
         try {
+            console.log('flightstore editFlight: ' + JSON.stringify(flight))
             const response = await fetch('http://localhost:8080/api/flight/admin_flight/editFlight', {
                 method: 'PUT',
                 headers: {

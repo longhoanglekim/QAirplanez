@@ -7,8 +7,8 @@
                 <input type="text" id="title" class="border border-slate-300 rounded-md p-2" v-model="title">
             </div>
             <div class="flex flex-col gap-2 mb-4">
-                <label for="description" class="pl-2">Nội dung</label>
-                <input type="text" id="description" class="border border-slate-300 rounded-md p-2" v-model="description">
+                <label for="content" class="pl-2">Nội dung</label>
+                <input type="text" id="content" class="border border-slate-300 rounded-md p-2" v-model="content">
             </div>
             <div class="flex flex-col gap-2 mb-4">
                 <label for="image" class="pl-2">Ảnh</label>
@@ -31,7 +31,7 @@
 import { ref ,defineEmits} from 'vue';
 const emit = defineEmits(['close', 'postNews']);
 const title = ref('');
-const description = ref('');
+const content = ref('');
 const image = ref('');
 const closeAddNewsModal = () => {
     emit('close');
@@ -39,7 +39,7 @@ const closeAddNewsModal = () => {
 const postNews = () => {
     emit('postNews', {
         title: title.value,
-        description: description.value,
+        content: content.value,
         image: image.value
     });
 }

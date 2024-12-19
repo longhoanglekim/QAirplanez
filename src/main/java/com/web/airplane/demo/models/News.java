@@ -20,13 +20,16 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long index;
+    private Long newsIndex;
     private String title;
-    private LocalDateTime createdDate;
+    private LocalDateTime postingDate;
     private LocalDateTime editDate;
-    private String author;
     private String content;
 
     @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> imageList;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
 }

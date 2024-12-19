@@ -215,11 +215,11 @@ public class FlightController {
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
-        log.debug("he");
+        log.debug(flightInfo.toString());
         if (flights.isEmpty()) return new ArrayList<>();
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
-            log.debug("hehe");
+            
 //            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
 //                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
 //                filteredFlights.add(flight);

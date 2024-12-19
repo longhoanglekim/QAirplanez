@@ -175,19 +175,22 @@ INSERT INTO `aircrafts` (`id`, `manufacturer`, `model`, `number_of_seats`, `stat
 DROP TABLE IF EXISTS `news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE news (
-                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                      `index` BIGINT,
-                      title VARCHAR(255) NOT NULL,
-                      posting_date DATETIME,
-                      content TEXT
+CREATE TABLE `news` (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        `news_index` BIGINT,
+                        title VARCHAR(255) NOT NULL,
+                        posting_date DATETIME,
+                        author_id BIGINT NOT NULL,
+                        content TEXT,
+                        edit_date DATETIME,
+                        CONSTRAINT `key_user` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) -- Giả sử bảng `users` tồn tại
 );
 
-INSERT INTO news (`index`, title, posting_date, content)
+INSERT INTO news (`news_index`, title, posting_date, content, author_id)
 VALUES
-    (1, 'Breaking News: Market Hits New High', '2024-12-17 10:00:00', 'The stock market reached an all-time high today, fueled by optimism about the economy. Investors are seeing strong earnings reports from major corporations.'),
-    (2, 'Weather Alert: Winter Storm Approaching', '2024-12-17 12:00:00', 'A winter storm is expected to hit the region by tomorrow morning. Residents are advised to prepare for heavy snow and icy roads.'),
-    (3, 'New Technology Startup Gains Attention', '2024-12-17 14:00:00', 'A new tech startup focused on AI solutions is making waves in Silicon Valley. The company has already secured a significant amount of investment and is poised for growth.');
+    (1, 'Breaking News: Market Hits New High', '2024-12-17 10:00:00', 'The stock market reached an all-time high today, fueled by optimism about the economy. Investors are seeing strong earnings reports from major corporations.', 2),
+    (2, 'Weather Alert: Winter Storm Approaching', '2024-12-17 12:00:00', 'A winter storm is expected to hit the region by tomorrow morning. Residents are advised to prepare for heavy snow and icy roads.', 2),
+    (3, 'New Technology Startup Gains Attention', '2024-12-17 14:00:00', 'A new tech startup focused on AI solutions is making waves in Silicon Valley. The company has already secured a significant amount of investment and is poised for growth.', 2);
 
 --
 -- Table structure for table `airports`

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <header v-if="!isAdminRoute && !isTest">
-      <PageHeader />
-      <PageNavBar />
+        <PageHeader />
+        <PageNavBar :key="$route.fullPath"/>
     </header>
     <div>
       <router-view />

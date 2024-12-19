@@ -54,24 +54,11 @@ public class FlightService {
         // Lưu vào cơ sở dữ liệu
         return flightRepository.save(flight);
     }
-    public FlightInfo editFlight(FlightInfo flightInfo) {
-
-        Flight flight = flightRepository.findByFlightNumber(flightInfo.getFlightNumber());
-        flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
-        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
-        flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
-        flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
-        flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
-        flight.setCancelDueTime(flightInfo.getCancelDueTime());
-
-        // Lưu vào cơ sở dữ liệu
-        flightRepository.save(flight);
-        return getFlightInfo(flight);
-    }
 
     public FlightInfo getFlightInfo(Flight flight) {
         FlightInfo flightInfo = new FlightInfo();
         flightInfo.setFlightNumber(flight.getFlightNumber());
+        log.debug(flight.getAircraft().getManufacturer() + " -" + flight.getAircraft().getManufacturer());
         flightInfo.setAircraftCode(flight.getAircraft().getManufacturer() + "-" + flight.getAircraft().getModel());
         flightInfo.setDepartureCode(flight.getDepartureAirport().getAirportCode());
         flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
@@ -165,13 +152,14 @@ public class FlightService {
     }
 
     public FlightInfo editFlight(FlightInfo flightInfo) {
-
+        log.debug("Edit flight: " + flightInfo);
         Flight flight = flightRepository.findByFlightNumber(flightInfo.getFlightNumber());
         flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
-        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getAircraftCode()));
+        flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getArrivalCode()));
         flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
         flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
+        flight.setStatus(flightInfo.getStatus());
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
 
         // Lưu vào cơ sở dữ liệu
