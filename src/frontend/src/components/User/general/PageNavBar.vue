@@ -175,7 +175,6 @@ export default {
 
   methods: {
     isLoggedIn() {
-      console.log('check');
       return localStorage.getItem('token') != null;
     },
     handleScroll() {

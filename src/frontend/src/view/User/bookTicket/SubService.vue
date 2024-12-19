@@ -4,8 +4,8 @@
   <SeatSelectionModal v-if="currentModal === 'seat-selection'" 
     :outbound-seats="outboundSeats" 
     :return-seats="returnSeats" 
-    :outbound-ticket-count="2" 
-    :return-ticket-count="2" 
+    :outbound-ticket-count="adultsLength + childrenLength"
+    :return-ticket-count="adultsLength + childrenLength"
     @close="closeModal" 
     @seat-selection="handleSeatSelection" />
   <MealSelectionModal v-if="currentModal === 'meal-selection'" 
@@ -42,7 +42,7 @@
                 </div>
                 <div v-else>
                   <!-- Hiển thị thông báo khi selectedOutBound là mảng rỗng -->
-                  <p>Ghế.</p>
+                  <p>Ghế của bạn.</p>
                 </div>
               </div>
             </template>
@@ -52,10 +52,10 @@
                 Chọn bữa ăn
             </template>
             <template v-slot:slogan>
-
+              <p> <Soup/> Chọn món ăn yêu thích của bạn.</p>
             </template>
             <template v-slot:content>
-                
+              <p>Có rất nhiều loại món ăn hấp dẫn đang chờ bạn thưởng thức</p>
             </template>
         </CardWithButton>
         <CardWithButton @beClicked="currentModal = 'taxi-selection'">
@@ -63,12 +63,20 @@
                 Chọn dịch vụ đưa đón
             </template>
             <template v-slot:slogan>
-
+              <p> <CarTaxiFront/> Lựa chọn dịch vụ phù hợp với bạn.</p>
             </template>
             <template v-slot:content>
-                
+                <p>Có rất nhiều dịch vụ hấp dẫn đang chờ đón bạn</p>
             </template>
         </CardWithButton>
+      <button
+          class="bg-gray-200 border border-gray-300 text-black px-4 py-2 w-[10%] ml-auto rounded-none hover:bg-gray-300 shadow-sm"
+          type="button"
+          @click="handleSubmit"
+      >
+        Submit
+      </button>
+
     </main>
 </div>
 </template>
@@ -77,7 +85,7 @@
 
 <script setup>
 import {reactive, ref} from 'vue';
-import {Armchair, SendHorizontal} from 'lucide-vue-next';
+import {Armchair, SendHorizontal, Soup, CarTaxiFront} from 'lucide-vue-next';
 import SeatSelectionModal from '@/components/composable/service/SeatSelectionModal.vue';
 import MealSelectionModal from '@/components/composable/service/MealSelectionModal.vue';
 import TaxiModal from '@/components/composable/service/TaxiModal.vue';
@@ -85,12 +93,17 @@ import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import CardWithButton from '@/components/composable/card/CardWithButton.vue';
 import {searchFlightStore} from '@/store/searchFlight';
 import {ticketStore} from "@/store/ticket";
+import { useRouter } from 'vue-router';
+const router = useRouter();
 // Dữ liệu trong data()
 const currentModal = ref('');
 const selectedOutBound = ref([]);
 const storeSearFlight = searchFlightStore();
 // Ghế outbound và return
-
+const storeForm = searchFlightStore()
+// Reactive variables
+const adultsLength = ref(storeForm.getOldForm().adults)
+const childrenLength = ref(storeForm.getOldForm().children)
 
 // Khai báo biến outboundSeats trước với giá trị mặc định là một mảng trống
 let outboundSeats = reactive([]);
@@ -136,5 +149,10 @@ const handleSeatSelection = ({ outbound, return: returnSeats }) => {
 // Đóng modal
 const closeModal = () => {
   currentModal.value = '';
+};
+
+const handleSubmit = () => {
+  // Điều hướng đến trang khác
+  router.push('/booking/information/3'); // Điều hướng đến trang mới
 };
 </script>
