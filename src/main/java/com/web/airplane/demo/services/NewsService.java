@@ -3,6 +3,7 @@ package com.web.airplane.demo.services;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.web.airplane.demo.dtos.News.AddNewsDTO;
 import com.web.airplane.demo.dtos.News.NewsResponse;
@@ -33,6 +34,8 @@ public class NewsService {
         return getNewsInfo(news);
     }
 
+
+
     public NewsResponse getNewsInfo(News news) {
         NewsResponse newsResponse = new NewsResponse();
         newsResponse.setIndex(news.getNewsIndex());
@@ -49,5 +52,13 @@ public class NewsService {
         newsResponse.setContent(news.getContent());
         newsResponse.setAuthor(news.getAuthor().getFirstname() + " " + news.getAuthor().getLastname());
         return newsResponse;
+    }
+
+    public List<News> getNewsWithIndexGreaterThan(long index) {
+        List<News> newsList = newsRepository.findAll();
+        newsList = newsList.stream()
+                .filter(news -> news.getNewsIndex() > index)
+                .collect(Collectors.toList());
+        return newsList;
     }
 }

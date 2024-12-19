@@ -4,12 +4,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.lang.Long;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class EditNewsDTO {
-    private Long newsId;
+    private String title;
+    private LocalDateTime postingDate;
+    private LocalDateTime editDate;
     private String content;
+    private List<byte[]> imageList;
+
 }
     

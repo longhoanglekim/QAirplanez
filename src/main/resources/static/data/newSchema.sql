@@ -110,22 +110,32 @@ INSERT INTO `user_roles` VALUES (1,1),(2,2), (3,3);
 --
 -- Table structure for table `images`
 --
-DROP table if exists `images`;
-CREATE TABLE images (
-                        id BIGINT NOT NULL AUTO_INCREMENT,
-                        name VARCHAR(255) NOT NULL,
-                        type VARCHAR(255) NOT NULL,
-                        uploadDate DATE,
-                        image_data LONGBLOB,
-                        user_id BIGINT,
-                        news_id BIGINT,
-                        PRIMARY KEY (id),
-                        FOREIGN KEY (user_id) REFERENCES users(id),
-                        FOREIGN KEY (news_id) REFERENCES news(id)
-);
 
+DROP TABLE IF EXISTS `images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `images` (
+                          `id` bigint NOT NULL AUTO_INCREMENT,
+                          `name` varchar(255) NOT NULL,
+                          `type` varchar(255) NOT NULL,
+                          `image_data` longblob,
+                          `user_id` bigint DEFAULT NULL,
+                          `news_id` bigint DEFAULT NULL,
+                          `upload_date` date DEFAULT NULL,
+                          PRIMARY KEY (`id`),
+                          KEY `user_id` (`user_id`),
+                          KEY `news_id` (`news_id`),
+                          CONSTRAINT `images_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+                          CONSTRAINT `images_ibfk_2` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `images`
+--
+
+
+
 -- Table structure for table `aircrafts`
 --
 
@@ -150,22 +160,22 @@ CREATE TABLE `aircrafts` (
 
 /*!40000 ALTER TABLE `aircrafts` DISABLE KEYS */;
 INSERT INTO `aircrafts` (`id`, `manufacturer`, `model`, `number_of_seats`, `status`, `serial_number`) VALUES
-                                                                                                        (1, 'Boeing', '737', 240, 'Active', 'B00001'),
-                                                                                                        (2, 'Airbus', 'A320', 180, 'Maintenance', 'A00001'),
-                                                                                                        (3, 'Boeing', '737-800', 160, 'Inactive', 'B00002'),
-                                                                                                        (4, 'Boeing', '787-9 Dreamliner', 296, 'Active', 'B00003'),
-                                                                                                        (5, 'Boeing', '777-200LR', 317, 'Active', 'B00004'),
-                                                                                                        (6, 'Boeing', '747-8', 410, 'Active', 'B00005'),
-                                                                                                        (7, 'Airbus', 'A320', 180, 'Inactive', 'A00002'),
-                                                                                                        (8, 'Airbus', 'A350-900', 315, 'Maintenance', 'A00003'),
-                                                                                                        (9, 'Airbus', 'A380', 500, 'Active', 'A00004'),
-                                                                                                        (10, 'Airbus', 'A321', 220, 'Active', 'A00005'),
-                                                                                                        (11, 'Embraer', 'E175', 88, 'Active', 'E00001'),
-                                                                                                        (12, 'Embraer', 'E195', 120, 'Active', 'E00002'),
-                                                                                                        (13, 'Bombardier', 'CRJ200', 50, 'Active', 'B00006'),
-                                                                                                        (14, 'Bombardier', 'Q400', 78, 'Maintenance', 'B00007'),
-                                                                                                        (15, 'ATR', 'BE', 160, 'Maintenance', 'A00006'),
-                                                                                                        (16, 'ATR', 'AE', 50, 'Inactive', 'A00007');
+                                                                                                          (1, 'Boeing', '737', 240, 'Active', 'B00001'),
+                                                                                                          (2, 'Airbus', 'A320', 180, 'Maintenance', 'A00001'),
+                                                                                                          (3, 'Boeing', '737-800', 160, 'Inactive', 'B00002'),
+                                                                                                          (4, 'Boeing', '787-9 Dreamliner', 296, 'Active', 'B00003'),
+                                                                                                          (5, 'Boeing', '777-200LR', 317, 'Active', 'B00004'),
+                                                                                                          (6, 'Boeing', '747-8', 410, 'Active', 'B00005'),
+                                                                                                          (7, 'Airbus', 'A320', 180, 'Inactive', 'A00002'),
+                                                                                                          (8, 'Airbus', 'A350-900', 315, 'Maintenance', 'A00003'),
+                                                                                                          (9, 'Airbus', 'A380', 500, 'Active', 'A00004'),
+                                                                                                          (10, 'Airbus', 'A321', 220, 'Active', 'A00005'),
+                                                                                                          (11, 'Embraer', 'E175', 88, 'Active', 'E00001'),
+                                                                                                          (12, 'Embraer', 'E195', 120, 'Active', 'E00002'),
+                                                                                                          (13, 'Bombardier', 'CRJ200', 50, 'Active', 'B00006'),
+                                                                                                          (14, 'Bombardier', 'Q400', 78, 'Maintenance', 'B00007'),
+                                                                                                          (15, 'ATR', 'BE', 160, 'Maintenance', 'A00006'),
+                                                                                                          (16, 'ATR', 'AE', 50, 'Inactive', 'A00007');
 
 
 --
@@ -408,19 +418,29 @@ VALUES
 -- Table structure for table `foods`
 --
 
-DROP TABLE IF EXISTS `passengers`;
+DROP TABLE IF EXISTS `foods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE foods (
-                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                       name VARCHAR(255) NOT NULL,
-                       description VARCHAR(255),
-                       image_id BIGINT NOT NULL UNIQUE,
-                       FOREIGN KEY (image_id) REFERENCES images(id)
-);
+CREATE TABLE `foods` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `image_id` bigint NOT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `image_id` (`image_id`),
+  CONSTRAINT `foods_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `foods`
+--
 
 
-
+/*!40000 ALTER TABLE `foods` DISABLE KEYS */;
+INSERT INTO `foods` VALUES (1,'Cơm gà Nhật','Cơm gà nướng kiểu Nhật với sốt teriyaki',2,55000.00),(2,'Salad rau đặc biệt','Salad tươi với các loại rau hữu cơ',3,125000.00),(3,'Bò bít tết Âu','Bò nướng với khoai tây chiên và sốt',4,200000.00);
+/*!40000 ALTER TABLE `foods` ENABLE KEYS */;
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
