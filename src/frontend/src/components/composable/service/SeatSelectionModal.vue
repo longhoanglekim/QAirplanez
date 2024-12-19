@@ -1,20 +1,15 @@
 <template>
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg shadow-xl w-full p-6 relative max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto
                ">
-        <!-- Close Button -->
-        <button @click="$emit('close')" 
-        class="absolute top-4 right-4 text-orange-500 hover:text-orange-700">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+        <div class="flex justify-between items-center p-6 border-b border-yellow-500">
+            <h2 class="text-2xl font-bold flex items-center text-orange-600">
+                <Armchair class="h-8 w-8 mr-5"/> Chọn chỗ ngồi
+            </h2>
+        <button @click="$emit('close')" class="text-gray-500 hover:text-orange-600 transition-colors">
+          <X class="h-8 w-8 hover:rotate-90 transition-all duration-300 hover:scale-125"/>
         </button>
-
-        <!-- Modal Title -->
-        <h2 class="text-xl font-semibold mb-4 text-center text-orange-700">
-            Chọn ghế
-        </h2>
+      </div>
 
         <!-- Trip Type Selector -->
         <div class="flex justify-center mb-4">
@@ -48,59 +43,72 @@
       </div>
       
         <!-- Seat Grid -->
-        <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-32 relative
+        <div class="grid grid-cols-6 gap-2 mb-4 overflow-y-auto max-h-32 
+                    px-4
                     shadow-inner
-                    
+                    text-center
                     bg-gray-100
                     md:max-h-64
                     ">
-            <div v-for="seat in currentTripSeats" :key="seat"
-            class="col-span-6 sticky top-0 left-0 z-20">
-                <div v-if="seat === 0" 
-                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-                Hạng nhất
-                </div>
-                <div v-else-if="seat === Math.floor(currentTripSeats.length * 0.1 - 6)" 
-                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-                Hạng thương gia
-                </div>
-                <div v-else-if="seat === Math.floor(currentTripSeats.length * 0.3 - 6)" 
-                class="bg-red-100 text-orange-700 rounded-b-md py-1 px-2 mx-auto">
-                Hạng phổ thông
-                </div>
+            <div class="bg-red-100 text-orange-700 rounded-b-md py-1 col-span-6 sticky top-0  z-20">Hạng nhất</div>
+            <div v-for="seat in firstSeats" :key="seat.id" @click="handleSeatClick(seat)" :disabled="!seat.available" 
+            class="rounded border-2 border-orange-500"
+            :class="{'bg-gray-300 cursor-not-allowed': !seat.available,
+            'bg-orange-500 text-white': this.currentSelectedSeats.includes(seat.id),
+            'bg-white text-orange-500': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id)}">
+            {{ seat.id }}
             </div>
-            <div v-for="(seat, seatIndex) in currentTripSeats" :key="seatIndex" 
-            @click="handleSeatClick(seat)" 
-            :disabled="!seat.available" 
-            :class="{
-                'w-8 h-8 rounded mx-auto py-auto': true,
-                'bg-gray-400 cursor-not-allowed': !seat.available,
-                'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
-                'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
-                'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
-                         seatIndex === this.currentTripSeats.length * 0.3 - 6
-            }">
-                <div class="mb-4 ">
-                {{ Math.floor(seatIndex / 6) + 1 }}
-                </div>
+
+            <div class="bg-red-100 text-orange-700 rounded-b-md py-1 col-span-6 sticky top-0  z-20">Hạng thương gia</div>
+            <div v-for="seat in businessSeats" :key="seat.id" @click="handleSeatClick(seat)" :disabled="!seat.available" 
+            class="rounded border-2 border-orange-500"
+            :class="{'bg-gray-300 cursor-not-allowed': !seat.available,
+            'bg-orange-500 !text-white': this.currentSelectedSeats.includes(seat.id),
+            'bg-white text-orange-500': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id)}">
+            {{ seat.id }}
+            </div>
+
+            <div class="bg-red-100 text-orange-700 rounded-b-md py-1 col-span-6 sticky top-0  z-20">Hạng thường</div>
+            <div v-for="seat in economySeats" :key="seat.id" @click="handleSeatClick(seat)" :disabled="!seat.available" 
+            class="rounded border-2 border-orange-500"
+            :class="{'bg-gray-300 cursor-not-allowed': !seat.available,
+            'bg-orange-500 text-white': this.currentSelectedSeats.includes(seat.id),
+            'bg-white text-orange-500': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id)}">
+            {{ seat.id }}
             </div>
         </div>
 
         <!-- Seat Selection Info -->
-        <div class="text-center mb-4 text-orange-700">
-            <p>
-                Selected Seats: {{ currentSelectedSeats.length }} /
-                {{ currentTrip === 'outbound' ? outboundTicketCount : returnTicketCount }}
-            </p>
-        </div>
-
+        
+    
         <!-- Confirm Button -->
-        <button @click="confirmSelection"
-        class="w-full py-2 rounded bg-orange-500 text-white disabled:bg-gray-400 
-        xl:w-1/2 mx-auto
-        disabled:cursor-not-allowed hover:bg-orange-600 transition-colors">
-            {{ isRoundTrip ? (currentTrip === 'outbound' ? 'Chọn chỗ chuyến về' : 'Hoàn tất') : 'Hoàn tất' }}
-        </button>
+         <div class="p-6 border-t flex justify-between items-center bg-amber-50">
+            <div class="text-center mb-4 text-orange-700">
+                <p class="font-semibold text-orange-600">
+                    Tổng chi phí:
+                    <span class="text-yellow-600 ml-2">
+                    {{ formatCurrency((outboundSelectedSeats.length+ (returnSelectedSeats  ? returnSelectedSeats.length : 0)) * priceSeat) }}
+                    </span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    Đã chọn: {{ currentSelectedSeats.length }} /
+                    {{ currentTrip === 'outbound' ? outboundTicketCount : returnTicketCount }} ghế
+                </p>
+            </div>
+            <div class="space-x-4">
+                <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded border border-gray-300 hover:bg-gray-200" @click="$emit('close')">
+                    Hủy
+                </button>
+                <button @click="confirmSelection"
+                class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-700 disabled:opacity-50 cursor-pointer" 
+                >
+                {{ isRoundTrip ? (currentTrip === 'outbound' ? 'Chọn chỗ chuyến về' : 'Hoàn tất') : 'Hoàn tất' }}
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -108,8 +116,17 @@
   
   
 <script>
+import { X, Armchair } from 'lucide-vue-next';
 export default {
+    components: {
+        X,
+        Armchair
+    },
     props: {
+        priceSeat: {
+            type: Number,
+            default: 55000
+        },
         outboundSeats: {
             type: Array,
             required: true
@@ -117,6 +134,14 @@ export default {
         returnSeats: {
             type: Array,
             default: null
+        },
+        selectedOutboundSeats: {
+            type: Array,
+            default: () => []
+        },
+        selectedReturnSeats: {
+            type: Array,
+            default: () => []
         },
         outboundTicketCount: {
             type: Number,
@@ -130,18 +155,45 @@ export default {
     data() {
         return {
             currentTrip: 'outbound',
-            outboundSelectedSeats: [],
-            returnSelectedSeats: []
+            outboundSelectedSeats: [...this.selectedOutboundSeats],
+            returnSelectedSeats: [...this.selectedReturnSeats]
         }
     },
     computed: {
         isRoundTrip() {
-            return this.returnSeats !== null;
+            return this.returnSeats !== null && this.returnSeats.length > 0;
         },
         currentTripSeats() {
             return this.currentTrip === 'outbound' ?
                 this.flattenSeats(this.outboundSeats) :
                 this.flattenSeats(this.returnSeats);
+        },
+        firstSeats() {
+            const totalSeats = this.currentTripSeats.length;
+            const maxFirst = Math.floor(totalSeats * 0.1);
+            const firstClassSeats = Math.floor(maxFirst / 6) * 6;
+            return this.currentTripSeats.slice(0, firstClassSeats);
+        },
+
+    businessSeats() {
+        const totalSeats = this.currentTripSeats.length;
+        const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
+        // Số ghế thương gia (20% và chia hết cho 6)
+        const maxBusiness = Math.floor(totalSeats * 0.2);
+        const businessClassSeats = Math.floor(maxBusiness / 6) * 6;
+        return this.currentTripSeats.slice(
+            firstClassSeats, 
+            firstClassSeats + businessClassSeats
+        );
+    },
+
+    economySeats() {
+    const totalSeats = this.currentTripSeats.length;
+    const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
+    const businessClassSeats = Math.floor(Math.floor(totalSeats * 0.2) / 6) * 6;
+    return this.currentTripSeats.slice(
+        firstClassSeats + businessClassSeats
+            );
         },
         currentSelectedSeats() {
             return this.currentTrip === 'outbound' ?
@@ -164,8 +216,6 @@ export default {
         },
 
         handleSeatClick(seat) {
-            console.log("Seat:" + seat);
-            console.log("currenTripSeats: ", this.currentTripSeats.length)
             const currentSelectedSeats = this.currentTrip === 'outbound' ?
                 this.outboundSelectedSeats :
                 this.returnSelectedSeats;
@@ -191,6 +241,7 @@ export default {
                 if (this.currentTrip === 'outbound') {
                     this.outboundSelectedSeats.splice(currentIndex, 1);
                 } else {
+                    console.log('returnSelectedSeats', this.returnSelectedSeats)
                     this.returnSelectedSeats.splice(currentIndex, 1);
                 }
             } else {
@@ -202,6 +253,7 @@ export default {
                 }
             }
         },
+        
         confirmSelection() {
             if (this.currentTrip === 'outbound') {
                 // Chuyển sang chọn ghế chuyến về nếu là vé khứ hồi
@@ -226,26 +278,31 @@ export default {
         getMaxBusinessRow(rows) {
           return rows * 0.1 + rows * 0.2;
         },
-        // getSeatClasses(seat, seatIndex) {
-        //   const isHeaderRow = seatIndex === 0 || 
-        //                      seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
-        //                      seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
-
-        //   if (isHeaderRow) {
-        //     return {
-        //       'col-span-6 sticky top-0 left-0 z-20': true
-        //     };
-        //   }
-
-        //   return {
-        //     'w-8 h-8 rounded mx-auto py-auto': true,
-        //     'bg-gray-400 cursor-not-allowed': !seat.available,
-        //     'bg-orange-400 text-white border-2 border-orange-500': this.currentSelectedSeats.includes(seat.id),
-        //     'bg-white border-2 border-orange-500 text-orange-700 hover:bg-orange-600 hover:text-white': seat.available && !this.currentSelectedSeats.includes(seat.id),
-        //     'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
-        //              seatIndex === this.currentTripSeats.length * 0.3 - 6
-        //   };
-        // }
+        getSeatClasses(seat, seatIndex) {
+          const isHeaderRow = seatIndex === 0 || 
+                             seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
+                             seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
+          if (isHeaderRow) {
+            return {
+              'col-span-6  z-20': true
+            };
+          }
+          return {
+            'w-8 h-8 rounded border-2 border-orange-500 mx-auto': true,
+            'bg-gray-300 cursor-not-allowed': !seat.available,
+            'bg-orange-500 !text-white': this.currentSelectedSeats.includes(seat.id),
+            'bg-white !text-orange-500': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'hover:bg-orange-600': seat.available && !this.currentSelectedSeats.includes(seat.id),
+            'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
+                     seatIndex === this.currentTripSeats.length * 0.3 - 6
+          };
+        }, 
+        formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+        }).format(value );
+        }
 
     }
 }

@@ -38,6 +38,7 @@ export default {
   background-color: #fff5f5;
   padding: 20px;
   text-align: center;
+  z-index: 100;
 }
 
 .footer-links {
