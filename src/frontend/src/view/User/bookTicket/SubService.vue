@@ -201,7 +201,7 @@ const handleSubmit = () => {
     outboundSeats: seatSelectedOutBound.value,
     returnSeats: seatSelectedReturn.value,
     taxiServices: taxiSelected.value,
-    meal: storeTicket.getSelectedMeal(),
+    meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
     seatPrice: 50000,
     taxiPrice: taxiSelected.value.reduce((total, service) => total + service.price, 0)
   }
