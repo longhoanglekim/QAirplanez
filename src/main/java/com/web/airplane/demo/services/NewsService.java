@@ -43,11 +43,7 @@ public class NewsService {
         newsResponse.setPostingDate(news.getPostingDate());
         newsResponse.setEditDate(news.getEditDate());
         newsResponse.setImageList(new ArrayList<>());
-        if (news.getImageList() != null) {
-            for (Image image : news.getImageList()) {
-                newsResponse.getImageList().add(image.getImageData());
-            }
-        }
+
 
         newsResponse.setContent(news.getContent());
         newsResponse.setAuthor(news.getAuthor().getFirstname() + " " + news.getAuthor().getLastname());

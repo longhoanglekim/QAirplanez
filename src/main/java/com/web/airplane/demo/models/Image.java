@@ -27,8 +27,7 @@ public class Image {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "news_id")
+    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private News news;
 
     public void setId(Long id) {

@@ -1,0 +1,25 @@
+http://localhost:8080/api/user/public/bookFlight?depart_flight_number=VN123&return_flight_number=VN124
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "ticketClassCode": "Economy",
+    "birthdate": "1990-05-15",
+    "identification": "A12345678",
+    "seatRow": 12,
+    "seatPosition": "A",
+    "phoneNumber": "1234567890",
+    "email": "john.doe@example.com"
+  },
+  {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "ticketClassCode": "Business",
+    "birthdate": "1985-03-22",
+    "identification": "B98765432",
+    "seatRow": 5,
+    "seatPosition": "C",
+    "phoneNumber": "0987654321",
+    "email": "jane.smith@example.com"
+  }
+]

@@ -120,13 +120,9 @@ CREATE TABLE `images` (
                           `type` varchar(255) NOT NULL,
                           `image_data` longblob,
                           `user_id` bigint DEFAULT NULL,
-                          `news_id` bigint DEFAULT NULL,
                           `upload_date` date DEFAULT NULL,
                           PRIMARY KEY (`id`),
-                          KEY `user_id` (`user_id`),
-                          KEY `news_id` (`news_id`),
-                          CONSTRAINT `images_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-                          CONSTRAINT `images_ibfk_2` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`)
+                          CONSTRAINT `images_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -193,7 +189,9 @@ CREATE TABLE `news` (
                         author_id BIGINT NOT NULL,
                         content TEXT,
                         edit_date DATETIME,
-                        CONSTRAINT `key_user` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`) -- Giả sử bảng `users` tồn tại
+                        image_id bigint,
+                        CONSTRAINT `key_user` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`), -- Giả sử bảng `users` tồn tại
+                        CONSTRAINT `key_image` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`) -- Giả sử bảng `users` tồn tại
 );
 
 INSERT INTO news (`news_index`, title, posting_date, content, author_id)
@@ -304,8 +302,8 @@ CREATE TABLE `flights` (
 
 
 /*!40000 ALTER TABLE `flights` DISABLE KEYS */;
-INSERT INTO `flights` VALUES (1,'2024-12-30 08:30:00.000000','2023-12-30 06:00:00.000000','2024-12-30 08:00:00.000000','2024-12-30 06:00:00.000000','VN123',1,1,2,'2024-12-22 08:30:00.000000',168,48,23, 'Scheduled'),
-                             (2,'2024-12-29 18:30:00.000000','2024-12-29 16:00:00.000000','2024-12-29 18:00:00.000000','2024-12-29 16:00:00.000000','TG456',2,2,3,'2024-12-21 18:30:00.000000',126,36,18, 'Scheduled'),
+INSERT INTO `flights` VALUES (1,'2024-12-30 08:30:00.000000','2024-12-30 06:00:00.000000','2024-12-30 08:00:00.000000','2024-12-30 06:00:00.000000','VN123',1,1,2,'2024-12-22 08:30:00.000000',168,48,23,'Scheduled'),
+                             (2,'2025-01-07 08:30:00.000000','2025-01-07 08:30:00.000000','2025-01-07 10:30:00.000000','2025-01-07 10:30:00.000000','VN124',1,2,1,'2025-01-02 10:30:00.000000',168,48,23,'Scheduled'),
                              (3,'2024-12-05 15:30:00.000000','2024-12-05 13:00:00.000000','2024-12-05 15:45:00.000000','2024-12-05 13:15:00.000000','VN100',1,1,2,'2024-12-05 14:00:00.000000',150,20,5, 'Scheduled'),
                              (4,'2024-12-05 17:45:00.000000','2024-12-05 15:10:00.000000','2024-12-05 17:50:00.000000','2024-12-05 15:30:00.000000','VN101',2,2,1,'2024-12-05 16:00:00.000000',150,20,5, 'Scheduled'),
                              (5,'2024-12-05 22:30:00.000000','2024-12-05 20:00:00.000000','2024-12-06 05:30:00.000000','2024-12-05 20:10:00.000000','VN200',3,1,3,'2024-12-05 19:00:00.000000',200,30,10, 'Scheduled'),
@@ -390,7 +388,7 @@ CREATE TABLE passengers (
                             phone_number varchar(255) DEFAULT NULL,
                             birthdate date DEFAULT NULL,
                             flight_id bigint NOT NULL,
-                            user_id bigint NOT NULL,
+                            user_id bigint,
                             booking_code varchar(255) not null,
                             identification varchar(255) DEFAULT NULL,
                             PRIMARY KEY (passenger_id),
@@ -422,14 +420,14 @@ DROP TABLE IF EXISTS `foods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `foods` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image_id` bigint NOT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `image_id` (`image_id`),
-  CONSTRAINT `foods_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`)
+                         `id` bigint NOT NULL AUTO_INCREMENT,
+                         `name` varchar(255) NOT NULL,
+                         `description` varchar(255) DEFAULT NULL,
+                         `image_id` bigint NOT NULL,
+                         `price` decimal(10,2) DEFAULT NULL,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `image_id` (`image_id`),
+                         CONSTRAINT `foods_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
