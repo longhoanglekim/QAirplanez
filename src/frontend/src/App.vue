@@ -1,68 +1,47 @@
 <template>
-<div id="app">
+  <div id="app">
     <header v-if="!isAdminRoute && !isTest">
-        <PageHeader />
-        <PageNavBar />
+      <PageHeader />
+      <PageNavBar />
     </header>
-
-    <router-view></router-view>
-    <footer v-if="!isAdminRoute && !isTest">
-        <PageFooter />
+    <div>
+      <router-view />
+    </div>
+    <footer v-if="!isAdminRoute && !isTest && !isLogin && !isSignup">
+      <PageFooter />
     </footer>
-</div>
+  </div>
 </template>
 
-<script>
+<script setup lang="js">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import PageHeader from "@/components/User/general/PageHeader.vue";
 import PageFooter from "@/components/User/general/PageFooter.vue";
 import PageNavBar from "@/components/User/general/PageNavBar.vue";
 
-export default {
-    name: 'App',
-    components: {
-        PageFooter,
-        PageHeader,
-        PageNavBar
-    },
-    computed: {
-        isAdminRoute() {
-            return this.$route.meta.isAdminRoute;
-        },
-        isTest() {
-            return this.$route.meta.test;
-        }
-    },
+const route = useRoute();
 
-    data() {
-        return {};
-    }
-}
+const isAdminRoute = computed(() => route.meta.isAdminRoute);
+const isTest = computed(() => route.meta.test);
+const isLogin = computed(() => route.meta.login);
+const isSignup = computed(() => route.meta.signup);
 </script>
 
 <style>
 body,
 html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    /* display: flex;
-  justify-content: center;
-  align-items: center; */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
 }
 
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-footer {
-    font-family: "Rubik", sans-serif;
-    background-color: rgb(255, 242, 242);
-    margin-top: 0;
-    padding-top: 1px;
-}
 </style>
