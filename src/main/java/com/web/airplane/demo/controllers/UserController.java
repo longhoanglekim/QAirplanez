@@ -75,73 +75,91 @@ public class UserController {
 
     @Transactional
     @PostMapping("/public/bookFlight")
-    public ResponseEntity<?> bookFlight(@RequestParam("flight_number") String flightNumber,
+    public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String departFlightNumber,
+                                        @RequestParam(value = "return_flight_number", required = false) String returnFlightNumber,
                                         HttpServletRequest request,
                                         @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
-            log.debug("Tim chuyen bay");
-            Flight flight = flightRepository.findByFlightNumber(flightNumber);
-            if (flight == null) {
-                return ResponseEntity.badRequest().body("Flight not found.");
+            log.debug("Tim chuyen bay: " + departFlightNumber);
+            Flight departFlight = flightRepository.findByFlightNumber(departFlightNumber);
+            if (departFlight == null) {
+                return ResponseEntity.badRequest().body("Depart flight not found.");
             }
 
-
-            int bookedSeats = flight.getPassengers().size();
-
-            if (flight.getFirstAvailableSeats() == 0 && flight.getBusinessAvailableSeats() == 0 && flight.getEconomyAvailableSeats() == 0) {
-                throw new SeatUnavailableException("There are only " + (flight.getAircraft().getNumberOfSeats() - bookedSeats) + " available seats.");
-            }
-            //Todo : Xét ngoại lệ với từng hạng ghế
-            log.debug("Xet ngoai le tung hang ghe");
-            int numberReqFirstSeat = 0;
-            int numberReqBusinessSeat = 0;
-            int numberReqEconomySeat = 0;
-            for (PassengerInfo passengerInfo : passengerInfoList) {
-                if (passengerInfo.getTicketClassCode().equals("First")) {
-                    numberReqFirstSeat++;
-                } else if (passengerInfo.getTicketClassCode().equals("Business")) {
-                    numberReqBusinessSeat++;
-                } else numberReqEconomySeat++;
-            }
-            log.debug("Xet first class");
-            if (flight.getFirstAvailableSeats() - numberReqFirstSeat < 0) {
-                throw new SeatUnavailableException("There're not enough seats for first class!");
-            }
-            log.debug("Xet business class");
-            if (flight.getBusinessAvailableSeats() - numberReqBusinessSeat < 0) {
-                throw new SeatUnavailableException("There're not enough seats for business class!");
-            }
-            log.debug("Xet economy class");
-            if (flight.getEconomyAvailableSeats() - numberReqEconomySeat < 0) {
-                throw new SeatUnavailableException("There're not enough seats for economy class!");
+            Flight returnFlight = null;
+            if (returnFlightNumber != null) {
+                log.debug("Tim chuyen bay ve: " + returnFlightNumber);
+                returnFlight = flightRepository.findByFlightNumber(returnFlightNumber);
+                if (returnFlight == null) {
+                    return ResponseEntity.badRequest().body("Return flight not found.");
+                }
             }
 
-            // Todo : Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay
-            String genBookingCode = bookingProcess(request, passengerInfoList, flight);
-            flightRepository.save(flight);  // Lưu lại chuyến bay với hành khách đã được đặt
+            // Kiểm tra ghế khả dụng
+            if (!checkAvailableSeats(departFlight, passengerInfoList)) {
+                return ResponseEntity.badRequest().body("Not enough seats available for the departure flight.");
+            }
 
-            return ResponseEntity.ok(genBookingCode);
+            if (returnFlight != null && !checkAvailableSeats(returnFlight, passengerInfoList)) {
+                return ResponseEntity.badRequest().body("Not enough seats available for the return flight.");
+            }
 
-        } catch (SeatUnavailableException e) {
-            // Xử lý exception nếu không đủ ghế
-            return ResponseEntity.badRequest().body(e.getMessage());
+            // Tạo bookingCode chung
+            String commonBookingCode = bookingCodeService.generateBookingCode();
+
+            // Đặt vé cho chiều đi
+            bookingProcess(commonBookingCode, request, passengerInfoList, departFlight);
+            flightRepository.save(departFlight);
+            log.debug("booking xong");
+            // Đặt vé cho chiều về (nếu có)
+            if (returnFlight != null) {
+                bookingProcess(commonBookingCode, request, passengerInfoList, returnFlight);
+                flightRepository.save(returnFlight);
+            }
+
+            return ResponseEntity.ok(commonBookingCode);
+
         } catch (Exception e) {
-            // Xử lý các lỗi khác (nếu có)
+            log.error("Error occurred while booking flight", e);
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
 
-    private String bookingProcess(HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
+    private boolean checkAvailableSeats(Flight flight, List<PassengerInfo> passengerInfoList) {
+        int numberReqFirstSeat = 0;
+        int numberReqBusinessSeat = 0;
+        int numberReqEconomySeat = 0;
+
+        for (PassengerInfo passengerInfo : passengerInfoList) {
+            switch (passengerInfo.getTicketClassCode()) {
+                case "First" -> numberReqFirstSeat++;
+                case "Business" -> numberReqBusinessSeat++;
+                default -> numberReqEconomySeat++;
+            }
+        }
+
+        return flight.getFirstAvailableSeats() >= numberReqFirstSeat &&
+                flight.getBusinessAvailableSeats() >= numberReqBusinessSeat &&
+                flight.getEconomyAvailableSeats() >= numberReqEconomySeat;
+    }
+
+
+    private void bookingProcess(String commonBookingCode, HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
         log.debug("Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay");
-        StringBuilder stringBuilder = new StringBuilder();
+
+
+
         for (PassengerInfo passengerInfo : passengerInfoList) {
             log.debug("THEM KHACH HANG");
+
             Passenger passenger = new Passenger();
             passenger.setFirstName(passengerInfo.getFirstName());
             passenger.setLastName(passengerInfo.getLastName());
             passenger.setBirthdate(passengerInfo.getBirthdate());
-            log.debug("Set cho ngoi");
             passenger.setFlight(flight);
+            passenger.setEmail(passengerInfo.getEmail());
+            passenger.setPhoneNumber(passengerInfo.getPhoneNumber());
+            // Xử lý logic chọn ghế dựa trên hạng vé
             if (passengerInfo.getTicketClassCode().equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
                 if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
@@ -154,11 +172,10 @@ public class UserController {
                     passenger.setSeatPosition(passengerInfo.getSeatPosition());
                 }
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
-                stringBuilder.append(bookingCodeService.generateBookingCode());
-                passenger.setBookingCode(stringBuilder.toString());
+
             } else if (passengerInfo.getTicketClassCode().equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
-                if (passengerInfo.getSeatPosition() == null && passenger.getSeatRow() == null) {
+                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
                     log.debug("Chon ghe bus");
                     String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
@@ -168,11 +185,10 @@ public class UserController {
                     passenger.setSeatPosition(passengerInfo.getSeatPosition());
                 }
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
-                stringBuilder.append(bookingCodeService.generateBookingCode());
-                passenger.setBookingCode(stringBuilder.toString());
+
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
-                if (passengerInfo.getSeatPosition() == null && passenger.getSeatRow() == null) {
+                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
                     log.debug("Chon ghe economy");
                     String seatCode = flightService.getEconomySeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
@@ -181,20 +197,19 @@ public class UserController {
                     passenger.setSeatRow(passengerInfo.getSeatRow());
                     passenger.setSeatPosition(passengerInfo.getSeatPosition());
                 }
-                flight.setEconomyAvailableSeats(flight.getBusinessAvailableSeats() - 1);
-                stringBuilder.append(bookingCodeService.generateBookingCode());
-                passenger.setBookingCode(stringBuilder.toString());
+                flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() - 1);
             }
+
             log.debug("Them vao database");
-            passenger.setUser(userService.getCurrentUser(request));
-            log.debug("Set booking code");
-            passenger.setBookingCode(bookingCodeService.generateBookingCode());
+            // Gán bookingCode chung
+            passenger.setBookingCode(commonBookingCode);
+
             log.debug("Them Passenger");
             passengerRepository.save(passenger);
             flight.getPassengers().add(passenger);
-
+            log.debug("Them thanh cong Passenger");
         }
-        return stringBuilder.toString();
+
     }
 
     @Transactional

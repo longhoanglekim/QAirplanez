@@ -1,6 +1,7 @@
 package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
+import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.services.FlightService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,12 @@ public class TestController {
     @Autowired
     private NewsService newsService;
     @GetMapping("/string")
-    public ResponseEntity<?> getMessage() throws SeatUnavailableException {
-        TimeZone tz = TimeZone.getDefault();
-        log.debug(tz.getID());
-        return ResponseEntity.ok().body(tz.getID());
-
+    public String getMessage() throws SeatUnavailableException {
+        Flight departFlight = flightRepository.findByFlightNumber("VN123");
+        if (departFlight != null) {
+            return "Có";
+        }
+        return "không";
     }
 
 

@@ -31,10 +31,10 @@ public class Passenger {
 
     private String passportNumber;
 
-    @NotNull(message = "Email không được để trống")
-    @Email(message = "Địa chỉ email không hợp lệ")
+
     @Size(max = 100, message = "Email không được vượt quá 100 ký tự")
     private String email;
+
     @NotNull
     @ManyToOne
     private TicketClass ticketClass;
@@ -57,7 +57,7 @@ public class Passenger {
 
     private String bookingCode;
 
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
