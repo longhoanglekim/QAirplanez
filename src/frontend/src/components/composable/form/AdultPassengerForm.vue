@@ -121,7 +121,7 @@ const validLastName = () => {
     if (formData.lastName == null || formData.lastName === '') {
         errorsData.lastName = 'Vui lòng điền tên'
         errors.lastName = true
-    } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
+    } else if (!/^[A-Za-zÀ-ÿ\s]+$/.test(formData.lastName)) {
         errorsData.lastName = 'Vui lòng điền tên hợp lệ'
         errors.lastName = true
     }

@@ -404,8 +404,20 @@ INSERT INTO `passengers`
 VALUES
     (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '0123456789', '1990-05-15', 1, 1, 'ABC123XYZ', 'XF45LD');
 
+--
+-- Table structure for table `foods`
+--
 
-
+DROP TABLE IF EXISTS `passengers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE foods (
+                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                       name VARCHAR(255) NOT NULL,
+                       description VARCHAR(255),
+                       image_id BIGINT NOT NULL UNIQUE,
+                       FOREIGN KEY (image_id) REFERENCES images(id)
+);
 
 
 

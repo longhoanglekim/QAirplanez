@@ -2,17 +2,17 @@ package com.web.airplane.demo.models;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name = "images")
+@Setter
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,34 +30,6 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "news_id")
     private News news;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public LocalDate getUploadDate() {
-        return this.uploadDate;
-    }
-
-    public byte[] getImageData() {
-        return this.imageData;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public News getNews() {
-        return this.news;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -141,4 +113,7 @@ public class Image {
     public String toString() {
         return "Image(id=" + this.getId() + ", name=" + this.getName() + ", type=" + this.getType() + ", uploadDate=" + this.getUploadDate() + ", imageData=" + java.util.Arrays.toString(this.getImageData()) + ", user=" + this.getUser() + ", news=" + this.getNews() + ")";
     }
+
+    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Food food;
 }
