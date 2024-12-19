@@ -12,9 +12,6 @@ import ProfileUser from "@/view/User/ProfileUser.vue";
 import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
 import InformationForm from "@/view/User/bookTicket/InformationForm.vue";
 import SearchSeatResult from "@/view/User/SearchSeatResult.vue";
-import MyProfile from "@/components/User/profileUser/MyProfile.vue";
-import MyDashboard from "@/components/User/profileUser/Dashboard.vue";
-import MyBookings from "@/components/User/profileUser/Bookings.vue";
 import SubService from "@/view/User/bookTicket/SubService.vue";
 import SuccessBooking from "@/view/User/bookTicket/SuccessBooking.vue";
 
@@ -68,14 +65,16 @@ const routes = [
         name : 'LoginUser',
         component: LoginUser,
         meta: {
-            guest: true
+            guest: true,
+            login: true,
           }
     }, {
         path : '/signup',
         name : 'SignUp',
         component : SignUpUser,
         meta: {
-            guest: true
+            guest: true,
+            signup: true
           }
     }, {
         path : '/booking/availability/0',
@@ -147,23 +146,8 @@ const routes = [
     }, {
         path: '/user',
         name: 'Profile',
-        children: [{
-                path: 'dashboard',
-                name: MyDashboard,
-                component: MyDashboard,
-            },{
-                path: 'bookings',
-                name: MyBookings,
-                component: MyBookings,
-            },{
-                path: 'profile',
-                name: MyProfile,
-                component: MyProfile,
-        }
-        ],
         component: ProfileUser,
-    },
-
+    }, 
 ];
 const router = createRouter({
     history: createWebHistory(),
