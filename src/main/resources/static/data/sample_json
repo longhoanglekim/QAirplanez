@@ -1,31 +1,35 @@
 http://localhost:8080/api/user/public/bookFlight?depart_flight_number=VN123&return_flight_number=VN124
 CỦA LONG
-[
-  {
-    "firstName": "John",
-    "lastName": "Doe",
-    "outboundTicketClassCode": "Economy",
-    "inboundTicketClassCode": "Business",
-    "birthdate": "1990-05-15",
-    "identification": "A12345678",
-    "email": "john.doe@example.com",
-    "phoneNumber": "1234567890",
-    "outboundSeatCode": "A12",
-    "inboundSeatCode": "C5"
-  },
-  {
-    "firstName": "Jane",
-    "lastName": "Smith",
-    "outboundTicketClassCode": "Business",
-    "inboundTicketClassCode": "Business",
-    "birthdate": "1985-03-22",
-    "identification": "B98765432",
-    "email": "jane.smith@example.com",
-    "phoneNumber": "0987654321",
-    "outboundSeatCode": "B5",
-    "inboundSeatCode": "A3"
-  }
-]
+{
+  "allService": "{\"taxiServices\":[\"vip-service\",\"child-support\"],\"meal\":{\"outboundMeals\":{\"2\":1},\"returnMeals\":{\"2\":1}}}",
+  "passengerInfoList": [
+    {
+      "firstName": "To",
+      "lastName": "Bang",
+      "birthdate": "2004-09-09",
+      "gender": "male",
+      "identification": "312434345422",
+      "phoneNumber": "0924234388",
+      "email": "doctruyen956@gmail.com",
+      "outboundTicketClassCode": "First",
+      "inboundTicketClassCode": "Business",
+      "outboundSeatCode": "",
+      "inboundSeatCode": ""
+    },
+    {
+      "firstName": "To",
+      "lastName": "To",
+      "birthdate": "2016-12-20",
+      "gender": "male",
+      "identification": "321321321321",
+      "outboundTicketClassCode": "Economy",
+      "inboundTicketClassCode": "First"
+    }
+  ],
+  "totalPrice": 3120000
+}
+
+
 
 cỦA bẰNG
 {
@@ -63,6 +67,6 @@ cỦA bẰNG
 
 http://localhost:8080/api/user/public/findTicketInfo
 {
-  "bookingCode": "IZ7KE1X2",
-  "firstName": "John"
+  "bookingCode": "AFJHINH",
+  "firstName": "To"
 }

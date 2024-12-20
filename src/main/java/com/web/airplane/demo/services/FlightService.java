@@ -3,18 +3,18 @@ package com.web.airplane.demo.services;
 import com.web.airplane.demo.dtos.FlightInfo;
 
 import com.web.airplane.demo.dtos.bookings.FlightResponse;
+import com.web.airplane.demo.enums.FlightStatus;
 import com.web.airplane.demo.models.Flight;
+import com.web.airplane.demo.models.FlightNotification;
 import com.web.airplane.demo.models.Passenger;
-import com.web.airplane.demo.repositories.AircraftRepository;
-import com.web.airplane.demo.repositories.AirportRepository;
-import com.web.airplane.demo.repositories.FlightRepository;
-import com.web.airplane.demo.repositories.PassengerRepository;
+import com.web.airplane.demo.repositories.*;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +30,9 @@ public class FlightService {
     private AirportRepository airportRepository;
     @Autowired
     private PassengerRepository passengerRepository;
+
+    @Autowired
+    private FlightNotificationRepository notificationRepository;
     // Phương thức tạo flight mới mà không cần actual times và passengers
     public Flight createFlight(FlightInfo flightInfo) {
 
@@ -157,17 +160,76 @@ public class FlightService {
         Flight flight = flightRepository.findByFlightNumber(flightInfo.getFlightNumber());
         flight.setDepartureAirport(airportRepository.findByAirportCode(flightInfo.getDepartureCode()));
         flight.setDestinationAirport(airportRepository.findByAirportCode(flightInfo.getArrivalCode()));
-        flight.setExpectedDepartureTime(flightInfo.getExpectedDepartureTime());
-        flight.setExpectedArrivalTime(flightInfo.getExpectedArrivalTime());
+
+        if (!flight.getExpectedDepartureTime().equals(flightInfo.getExpectedDepartureTime()) ||
+                !flight.getExpectedArrivalTime().equals(flightInfo.getExpectedArrivalTime())) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+            String originalTime = flight.getExpectedDepartureTime().format(formatter);
+            FlightNotification notification = new FlightNotification();
+
+            if (flight.getExpectedDepartureTime().isBefore(flightInfo.getExpectedDepartureTime())) {
+                // Trường hợp hoãn chuyến
+                Duration delay = Duration.between(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime());
+
+                long days = delay.toDays();
+                long hours = delay.minusDays(days).toHours();
+
+                StringBuilder delayMessage = new StringBuilder();
+                if (days > 0) {
+                    delayMessage.append(days).append(" ngày ");
+                }
+                if (hours > 0) {
+                    delayMessage.append(hours).append(" giờ");
+                }
+
+                notification.setTitle("Chuyến bay với mã số " + flight.getFlightNumber()
+                        + " đã bị hoãn " + delayMessage);
+
+                notification.setContent("Chuyến bay với mã số " + flight.getFlightNumber()
+                        + " có thời gian khởi hành dự kiến ban đầu là " + originalTime
+                        + " đã bị hoãn " + delayMessage
+                        + " do lí do sắp xếp lịch trình.");
+                flight.setStatus("Delayed");
+            } else {
+                // Trường hợp đẩy sớm chuyến
+                Duration early = Duration.between(flightInfo.getExpectedDepartureTime(), flight.getExpectedDepartureTime());
+
+                long days = early.toDays();
+                long hours = early.minusDays(days).toHours();
+
+                StringBuilder earlyMessage = new StringBuilder();
+                if (days > 0) {
+                    earlyMessage.append(days).append(" ngày ");
+                }
+                if (hours > 0) {
+                    earlyMessage.append(hours).append(" giờ");
+                }
+
+                notification.setTitle("Chuyến bay với mã số " + flight.getFlightNumber()
+                        + " đã được đẩy sớm " + earlyMessage);
+
+                notification.setContent("Chuyến bay với mã số " + flight.getFlightNumber()
+                        + " có thời gian khởi hành dự kiến ban đầu là " + originalTime
+                        + " đã được đẩy sớm " + earlyMessage
+                        + " do lí do sắp xếp lịch trình.");
+                flight.setStatus("Advanced");
+            }
+
+            flight.setActualDepartureTime(flightInfo.getExpectedDepartureTime());
+            flight.setActualArrivalTime(flightInfo.getExpectedArrivalTime());
+
+            // Lưu notification vào database hoặc gửi notification
+            notificationRepository.save(notification); // Thêm dòng này nếu cần
+        }
+
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
         flight.setStatus(flightInfo.getStatus());
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
 
-        // Lưu vào cơ sở dữ liệu
         flightRepository.save(flight);
         return getFlightInfo(flight);
     }
-
     public String generateFlightNumber(String departureCityCode, String arrivalCityCode) {
         Random random = new Random();
         String flightNumber;
@@ -191,6 +253,7 @@ public class FlightService {
         flightInfo.setDepartTime(flight.getExpectedDepartureTime());
         flightInfo.setCancelTime(flight.getCancelDueTime());
         flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
+        flightInfo.setStatus(flight.getStatus());
         return flightInfo;
     }
 }

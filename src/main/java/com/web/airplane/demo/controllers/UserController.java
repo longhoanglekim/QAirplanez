@@ -102,10 +102,9 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Depart flight not found.");
             }
 
-            Flight returnFlight = null;
+            Flight returnFlight = flightRepository.findByFlightNumber(returnFlightNumber);
             if (returnFlightNumber != null) {
                 log.debug("Tim chuyen bay ve: " + returnFlightNumber);
-                returnFlight = flightRepository.findByFlightNumber(returnFlightNumber);
                 if (returnFlight == null) {
                     return ResponseEntity.badRequest().body("Return flight not found.");
                 }
@@ -133,8 +132,12 @@ public class UserController {
             log.debug("booking xong");
             // Đặt vé cho chiều về (nếu có)
             if (returnFlight != null) {
+                log.debug("sET CHUYẾN VỀ");
                 bookingProcess(bookingTicket, request, passengerInfoList, returnFlight, false);
-                flightRepository.save(returnFlight);
+                Flight temp = flightRepository.save(returnFlight);
+                if (temp.getPassengers().isEmpty()) {
+                    log.debug("Có");
+                }
             }
 
             return ResponseEntity.ok(commonBookingCode);
@@ -358,7 +361,7 @@ public class UserController {
         return ResponseEntity.ok(imageResponse);
     }
 
-    @GetMapping("/public/findTicketInfo")
+    @PostMapping("/public/findTicketInfo")
     public ResponseEntity<?> getTicketInfo(@RequestBody TicketInput ticketInput) {
         log.debug("Bắt đầu tìm vé");
         BookingTicket bookingTicket = bookingTicketRepository.findBookingTicketByBookingCode(ticketInput.getBookingCode());
@@ -378,7 +381,7 @@ public class UserController {
         ticketResponse.setService(bookingTicket.getService());
         ticketResponse.setAdultResponseList(
                 passengerList.stream()
-                        .filter(this::isAdult) // Lọc chỉ giữ người lớn
+                        .filter(passenger -> isAdult(passenger)) // Lọc chỉ giữ người lớn
                         .map(passenger -> passengerService.getAdultInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
                         .collect(Collectors.toList()) // Thu thập thành danh sách
         );
@@ -391,14 +394,16 @@ public class UserController {
         List<Flight> flights = getFlights(passengerList);
         ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(0)));
         if (flights.size() == 2) {
-            ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(1)));
+            ticketResponse.setInboundFlight(flightService.getFlightResponse(flights.get(1)));
         }
         return ResponseEntity.ok(ticketResponse);
     }
 
     private boolean isAdult(Passenger passenger) {
+
         LocalDate today = LocalDate.now();
         int age = Period.between(passenger.getBirthdate(), today).getYears(); // Tính số năm
+
         return age >= 18;
     }
 //    private boolean checkIfExistInboundFlight(List<Passenger> passengerList) {
@@ -436,12 +441,14 @@ public class UserController {
                 flights.add(passenger.getFlight());
             }
         }
+        log.debug(String.valueOf(flights.size()));
         if (flights.size() == 1) return flights;
         if (flights.get(0).getExpectedDepartureTime().isAfter(flights.get(1).getExpectedDepartureTime())) {
             Flight temp = flights.get(0);
             flights.set(0, flights.get(1));
             flights.set(1, temp);
         }
+        log.debug(String.valueOf(flights.size()));
         return flights;
     }
     @PostMapping("/update")
