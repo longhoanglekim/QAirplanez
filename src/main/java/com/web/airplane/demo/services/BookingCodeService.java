@@ -1,5 +1,6 @@
 package com.web.airplane.demo.services;
 
+import com.web.airplane.demo.repositories.BookingTicketRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,8 @@ public class BookingCodeService {
 
     @Autowired
     private PassengerRepository passengerRepository;
-
+    @Autowired
+    private BookingTicketRepository bookingTicketRepository;
 
 
     public String generateBookingCode() {
@@ -30,7 +32,8 @@ public class BookingCodeService {
                 code.append(characters.charAt(randomIndex));
             }
             bookingCode = code.toString();
-        } while (passengerRepository.existsPassengerByBookingCode(bookingCode));  // Kiểm tra tính duy nhất trong DB
+
+        } while (passengerRepository.existsPassengerByBookingTicket(bookingTicketRepository.findBookingTicketByBookingCode(bookingCode)));  // Kiểm tra tính duy nhất trong DB
 
         return bookingCode;
     }

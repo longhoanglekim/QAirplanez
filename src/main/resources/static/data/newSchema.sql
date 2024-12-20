@@ -367,7 +367,19 @@ INSERT INTO `ticket_classes` VALUES (1,'Economy','Basic ticket class with limite
                                     (3,'First','Premium class with luxury amenities',2,15,2,40,3);
 /*!40000 ALTER TABLE `ticket_classes` ENABLE KEYS */;
 
-
+--
+-- Table structure for table `booking_ticket`
+--
+DROP table if exists `booking_tickets`;
+CREATE TABLE booking_tickets (
+                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                 booking_code VARCHAR(255),
+                                 service VARCHAR(255)
+);
+--
+-- Dumping data for table `booking_ticket`
+--
+INSERT into booking_tickets values (1, 'XLF45', "something");
 --
 -- Table structure for table `passengers`
 --
@@ -376,30 +388,29 @@ DROP TABLE IF EXISTS `passengers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE passengers (
-                            passenger_id bigint NOT NULL AUTO_INCREMENT,
-                            bank_name varchar(255) DEFAULT NULL,
-                            seat_row int NOT NULL,
-                            seat_position varchar(255) NOT NULL,
-                            email varchar(255) DEFAULT NULL,
-                            ticket_class_id bigint NOT NULL,
-                            first_name varchar(255) NOT NULL,
-                            last_name varchar(255) NOT NULL,
-                            passport_number varchar(255) DEFAULT NULL,
-                            phone_number varchar(255) DEFAULT NULL,
-                            birthdate date DEFAULT NULL,
-                            flight_id bigint NOT NULL,
-                            user_id bigint,
-                            booking_code varchar(255) not null,
-                            identification varchar(255) DEFAULT NULL,
-                            PRIMARY KEY (passenger_id),
-                            KEY FK5rwljsnya2tdu14sy99r39k1b (flight_id),
-                            KEY FK_user (user_id),
-                            KEY FK_ticket_class (ticket_class_id),
-                            CONSTRAINT FK5rwljsnya2tdu14sy99r39k1b FOREIGN KEY (flight_id) REFERENCES flights (id),
-                            CONSTRAINT FK_ticket_class FOREIGN KEY (ticket_class_id) REFERENCES ticket_classes (id),
-                            CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES users (id)
+                            passenger_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            first_name VARCHAR(255) NOT NULL,
+                            last_name VARCHAR(255) NOT NULL,
+                            phone_number VARCHAR(10),
+                            passport_number VARCHAR(255),
+                            email VARCHAR(100),
+                            bank_name VARCHAR(255),
+                            birthdate DATE,
+                            seat_row INT NOT NULL,
+                            seat_position VARCHAR(255) NOT NULL,
+                            identification VARCHAR(255),
+                            booking_ticket_id BIGINT NOT NULL,
+                            flight_id BIGINT NOT NULL,
+                            user_id BIGINT,
+                            ticket_class_id BIGINT,
+                            CONSTRAINT fk_booking_ticket FOREIGN KEY (booking_ticket_id) REFERENCES booking_tickets (id) ON DELETE CASCADE,
+                            CONSTRAINT fk_flight FOREIGN KEY (flight_id) REFERENCES flights (id),
+                            CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id),
+                            CONSTRAINT fk_ticket_class FOREIGN KEY (ticket_class_id) REFERENCES ticket_classes (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
 
 --
 -- Dumping data for table `passengers`
@@ -408,38 +419,89 @@ CREATE TABLE passengers (
 
 /*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
 INSERT INTO `passengers`
-(`passenger_id`, `bank_name`, `seat_row`, `seat_position`, `email`, `ticket_class_id`, `first_name`, `last_name`, `passport_number`, `phone_number`, `birthdate`, `flight_id`, `user_id`, `identification`, `booking_code`)
+(`passenger_id`, `bank_name`, `seat_row`, `seat_position`, `email`, `ticket_class_id`, `first_name`, `last_name`, `passport_number`, `phone_number`, `birthdate`, `flight_id`, `user_id`, `identification`, `booking_ticket_id`)
 VALUES
-    (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '0123456789', '1990-05-15', 1, 1, 'ABC123XYZ', 'XF45LD');
+    (1, 'Bank of America', 1, 'A', 'john.doe@example.com', 3, 'John', 'Smith', 'X123456789', '0123456789', '1990-05-15', 1, 1, 'ABC123XYZ', 1);
 
 --
--- Table structure for table `foods`
+-- Table structure for table `meals`
 --
 
-DROP TABLE IF EXISTS `foods`;
+
+DROP TABLE IF EXISTS `meals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `foods` (
+CREATE TABLE `meals` (
                          `id` bigint NOT NULL AUTO_INCREMENT,
-                         `name` varchar(255) NOT NULL,
                          `description` varchar(255) DEFAULT NULL,
-                         `image_id` bigint NOT NULL,
-                         `price` decimal(10,2) DEFAULT NULL,
-                         PRIMARY KEY (`id`),
-                         UNIQUE KEY `image_id` (`image_id`),
-                         CONSTRAINT `foods_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `images` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                         `dietary_info` varchar(255) DEFAULT NULL,
+                         `image` varchar(255) DEFAULT NULL,
+                         `name` varchar(255) DEFAULT NULL,
+                         `price` double NOT NULL,
+                         PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `foods`
+-- Dumping data for table `meals`
 --
 
+LOCK TABLES `meals` WRITE;
+/*!40000 ALTER TABLE `meals` DISABLE KEYS */;
+INSERT INTO `meals` VALUES (1,'Cơm rang cực ngon','Món mặn',NULL,'Cơm rang bò Wagu',150000),(2,'Kem Merino với các vị chanh, cam, socola, dâu tây','Đồ ngọt',NULL,'Kem Merino',25000),(3,'Đậu hũ được chế biến với phong cách cay nồng của Tứ Xuyên, với hành tỏi ớt tiêu,...','Món chay, cay',NULL,'Đậu phụ Tứ Xuyên',120000);
+/*!40000 ALTER TABLE `meals` ENABLE KEYS */;
+UNLOCK TABLES;
 
-/*!40000 ALTER TABLE `foods` DISABLE KEYS */;
-INSERT INTO `foods` VALUES (1,'Cơm gà Nhật','Cơm gà nướng kiểu Nhật với sốt teriyaki',2,55000.00),(2,'Salad rau đặc biệt','Salad tươi với các loại rau hữu cơ',3,125000.00),(3,'Bò bít tết Âu','Bò nướng với khoai tây chiên và sốt',4,200000.00);
-/*!40000 ALTER TABLE `foods` ENABLE KEYS */;
+--
+-- Table structure for table `notifications`
+--
 
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notifications` (
+                                 `id` bigint NOT NULL AUTO_INCREMENT,
+                                 `content` varchar(255) DEFAULT NULL,
+                                 `created_date` datetime(6) DEFAULT NULL,
+                                 `title` varchar(255) DEFAULT NULL,
+                                 PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `promotion`
+--
+
+DROP TABLE IF EXISTS `promotion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promotion` (
+                             `id` bigint NOT NULL AUTO_INCREMENT,
+                             `code` varchar(255) DEFAULT NULL,
+                             `discount` int NOT NULL,
+                             `end_date` datetime(6) DEFAULT NULL,
+                             `start_date` datetime(6) DEFAULT NULL,
+                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `promotion`
+--
+
+LOCK TABLES `promotion` WRITE;
+/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
+UNLOCK TABLES;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

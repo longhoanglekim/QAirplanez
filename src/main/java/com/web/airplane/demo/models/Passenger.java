@@ -51,11 +51,15 @@ public class Passenger {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "flight_id")
     private Flight flight;
 
     private String identification;
 
-    private String bookingCode;
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "booking_ticket_id")
+    private BookingTicket bookingTicket;
 
 
     @ManyToOne
