@@ -364,20 +364,25 @@ public class UserController {
         }
         log.debug("Set vé");
         TicketResponse ticketResponse = new TicketResponse();
+        log.debug("create ticket response");
         ticketResponse.setBookingCode(bookingTicket.getBookingCode());
+        log.debug("booking code: " + ticketResponse.getBookingCode());
         ticketResponse.setService(bookingTicket.getService());
+        log.debug("service: " + ticketResponse.getService());   
         ticketResponse.setAdultResponseList(
                 passengerList.stream()
                         .filter(this::isAdult) // Lọc chỉ giữ người lớn
                         .map(passenger -> passengerService.getAdultInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
                         .collect(Collectors.toList()) // Thu thập thành danh sách
         );
+        
         ticketResponse.setChildResponseList(
                 passengerList.stream()
                         .filter(passenger -> !isAdult(passenger))
                         .map(passenger -> passengerService.getChildInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
                         .collect(Collectors.toList()) // Thu thập thành danh sách
         );
+        
         List<Flight> flights = getFlights(passengerList);
         ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(0)));
         if (flights.size() == 2) {
@@ -388,6 +393,7 @@ public class UserController {
 
     private boolean isAdult(Passenger passenger) {
         LocalDate today = LocalDate.now();
+        log.debug("birthdate: " + passenger.getBirthdate());
         int age = Period.between(passenger.getBirthdate(), today).getYears(); // Tính số năm
         return age >= 18;
     }

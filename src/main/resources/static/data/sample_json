@@ -66,3 +66,35 @@ http://localhost:8080/api/user/public/findTicketInfo
   "bookingCode": "IZ7KE1X2",
   "firstName": "John"
 }
+
+//new json
+{
+  "allService": "{\"taxiServices\":[\"vip-service\",\"child-support\"],\"meal\":{\"outboundMeals\":{\"2\":1},\"returnMeals\":{\"2\":1}}}",
+  "passengerInfoList": [
+    {
+      "firstName": "To",
+      "lastName": "Bang",
+      "birthdate": "2004-09-09",
+      "gender": "male",
+      "identification": "312434345422",
+      "phoneNumber": "0924234388",
+      "email": "doctruyen956@gmail.com",
+      "outboundTicketClassCode": "Economy",
+      "inboundTicketClassCode": "First",
+      "outboundSeatCode": "",
+      "inboundSeatCode": ""
+    },
+    {
+      "firstName": "To",
+      "lastName": "To",
+      "birthDate": "2016-12-20",
+      "gender": "male",
+      "identification": "321321321321",
+      "outboundTicketClassCode": "Business",
+      "inboundTicketClassCode": "Business",
+      "outboundSeatCode": "",
+      "inboundSeatCode": ""
+    }
+  ],
+  "totalPrice": 3120000
+}
