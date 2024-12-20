@@ -143,7 +143,7 @@ CREATE TABLE `aircrafts` (
                              `manufacturer` varchar(255) DEFAULT NULL,
                              `model` varchar(255) DEFAULT NULL,
                              `number_of_seats` int DEFAULT NULL,
-                             `status` varchar(255) NOT NULL,
+                             `status` varchar(255) NOT NULL DEFAULT 'Scheduled',
                              `serial_number` varchar(255) unique not null,
                              PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -374,12 +374,13 @@ DROP table if exists `booking_tickets`;
 CREATE TABLE booking_tickets (
                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                  booking_code VARCHAR(255),
-                                 service VARCHAR(255)
+                                 service VARCHAR(255),
+                                 total_price decimal
 );
 --
 -- Dumping data for table `booking_ticket`
 --
-INSERT into booking_tickets values (1, 'XLF45', "something");
+INSERT into booking_tickets values (1, 'XLF45', "something", 123000.00);
 --
 -- Table structure for table `passengers`
 --
@@ -452,25 +453,18 @@ INSERT INTO `meals` VALUES (1,'Cơm rang cực ngon','Món mặn',NULL,'Cơm ran
 /*!40000 ALTER TABLE `meals` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `notifications`
---
-
-DROP TABLE IF EXISTS `notifications`;
+DROP TABLE IF EXISTS `flight_notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `notifications` (
-                                 `id` bigint NOT NULL AUTO_INCREMENT,
-                                 `content` varchar(255) DEFAULT NULL,
-                                 `created_date` datetime(6) DEFAULT NULL,
-                                 `title` varchar(255) DEFAULT NULL,
-                                 PRIMARY KEY (`id`)
+CREATE TABLE `flight_notifications` (
+                                        `id` bigint NOT NULL AUTO_INCREMENT,
+                                        `title` varchar(255) DEFAULT NULL,
+                                        `content` varchar(255) DEFAULT NULL,
+                                        `created_date` datetime(6) DEFAULT NULL,
+                                        `flight_number` varchar(255) DEFAULT NULL,
+                                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notifications`
---
 
 LOCK TABLES `notifications` WRITE;
 /*!40000 ALTER TABLE `notifications` DISABLE KEYS */;

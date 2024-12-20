@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
     <div class="bg-white p-6 rounded-lg w-1/2">
       <h3 class="text-lg font-bold mb-4">Chỉnh Sửa Chuyến Bay</h3>
       <div class="space-y-4">

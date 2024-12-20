@@ -245,6 +245,7 @@ const handleSubmit = async () => {
     passengerInfoList,
     totalPrice: getPrice() + storeTicket.getTicketPrice()
   }
+  console.log('data', data)
   const bookingLink = 'http://localhost:8080/api/user/public/bookFlight?depart_flight_number=' 
   + departFlightNumber 
   + (returnFlightNumber && returnFlightNumber !== '' ? '&return_flight_number=' + returnFlightNumber : '')

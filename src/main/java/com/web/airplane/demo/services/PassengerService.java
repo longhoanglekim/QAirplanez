@@ -47,7 +47,7 @@ public class PassengerService {
         adultResponse.setTicketClassCode(passenger.getTicketClass().getClassName());
         adultResponse.setEmail(passenger.getEmail());
         adultResponse.setPhoneNumber(passenger.getPhoneNumber());
-        adultResponse.setIdentification(adultResponse.getIdentification());
+        adultResponse.setIdentification(passenger.getIdentification());
         return adultResponse;
     }
 }

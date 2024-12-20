@@ -18,4 +18,5 @@ public class FlightResponse {
     private LocalDateTime cancelTime;
     private String departAirportCode;
     private String arrivalAirportCode;
+    private String status;
 }
