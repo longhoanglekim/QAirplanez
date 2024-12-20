@@ -183,6 +183,7 @@ public class UserController {
             passenger.setFlight(flight);
             passenger.setEmail(passengerInfo.getEmail());
             passenger.setPhoneNumber(passengerInfo.getPhoneNumber());
+            passenger.setIdentification(passengerInfo.getIdentification());
             String ticketClassCode = outbound ? passengerInfo.getOutboundTicketClassCode() : passengerInfo.getInboundTicketClassCode();
             // Xử lý logic chọn ghế dựa trên hạng vé
             String seat = outbound ? passengerInfo.getOutboundSeatCode() : passengerInfo.getInboundSeatCode();
