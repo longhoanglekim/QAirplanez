@@ -11,8 +11,6 @@ import lombok.Setter;
 @Getter
 public class BookingDTO {
     private List<PassengerInfo> passengerInfoList;
-    private String departFlightNumber;
-    private String returnFlightNumber;
     private String allService;
     private String totalPrice;
 }

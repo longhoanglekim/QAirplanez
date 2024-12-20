@@ -198,23 +198,21 @@ const closeModal = () => {
 
 const handleSubmit = () => {
   const allService = JSON.stringify({
-    outboundSeats: seatSelectedOutBound.value,
-    returnSeats: seatSelectedReturn.value,
     taxiServices: taxiSelected.value.map(service => service.id),
     meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
   })
 
   const passengerDepartureInfoList = storeTicket.getPassengerDepartureInformation(seatSelectedOutBound.value)
-  
-  console.log('passengerDepartureInfoList', passengerDepartureInfoList)
-  
-  console.log('allService', allService)
+  const passengerArrivalInfoList = storeTicket.getPassengerArrivalInformation(seatSelectedReturn.value)
+  const departFlightNumber = storeTicket.getSelectedDeparture().flightNumber
+  const returnFlightNumber = (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null
+  console.log('departFlightNumber', departFlightNumber)
+  console.log('returnFlightNumber', returnFlightNumber)
   //load dât
   const data = {  
-    departFlightNumber: storeTicket.getSelectedDeparture().flightNumber,
-    returnFlightNumber: (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null,
     allService,
     passengerDepartureInfoList,
+    passengerArrivalInfoList
   }
   console.log('data', JSON.stringify(data))
 

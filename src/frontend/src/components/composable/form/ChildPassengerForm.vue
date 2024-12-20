@@ -51,6 +51,19 @@
             {{ errorsData.birthDate }}
         </span>
     </div>
+    <div class="relative z-0 w-full mb-5">
+        <input type="text" v-model="formData.cccd" name="cccd" placeholder=" " :class="[
+                    'text-black  pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                    errors.cccd ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.cccd}
+                  ]" @blur="validCccd" />
+        <IdCard class="absolute right-0 top-5 text-gray-500" />
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.cccd}">
+            CCCD/CMND:<span class="text-red-500">*</span>
+        </label>
+        <span v-if="errors.cccd" class="text-sm text-red-600">
+            {{ errorsData.cccd }}
+        </span>
+    </div>
 </form>
 </template>
 
@@ -67,6 +80,7 @@ const formData = reactive({
     lastName: '',
     gender: '',
     birthDate: '',
+    cccd: '',
 })
 
 const errors = reactive({
@@ -74,6 +88,7 @@ const errors = reactive({
     lastName: false,
     gender: false,
     birthDate: false,
+    cccd: false,
 })
 
 const errorsData = reactive({
@@ -81,6 +96,7 @@ const errorsData = reactive({
     lastName: '',
     gender: '',
     birthDate: '',
+    cccd: '',
 })
 
 const validFirstName = () => {
@@ -131,6 +147,19 @@ const validBirthDate = () => {
         }
     }
 }
+const validCccd = () => {
+    errors.cccd = false
+    if (formData.cccd == null || formData.cccd == '') {
+        errorsData.cccd = 'Vui lòng điền số CCCD/CMND'
+        errors.cccd = true
+    } else if (formData.cccd.length !== 9 && formData.cccd.length !== 12) {
+        errorsData.cccd = "Căn cước công dân hoặc chứng minh nhân dân phải có 9 hoặc 12 ký tự.";
+        errors.cccd = true
+    } else if (!/^[0-9]*/.test(formData.cccd)) {
+        errorsData.cccd = 'Vui lòng điền số CCCD/CMND hợp lệ'
+        errors.cccd = true
+    }
+}
 const submitted = ref(false)
 const emit = defineEmits(['submit'])
 
@@ -138,7 +167,8 @@ const validateForm = () => {
     validFirstName()
     validLastName()
     validBirthDate()
-    return !(errors.firstName || errors.lastName || errors.gender || errors.birthDate)
+    validCccd()
+    return !(errors.firstName || errors.lastName || errors.gender || errors.birthDate || errors.cccd)
 }
 
 const handleSubmit = () => {

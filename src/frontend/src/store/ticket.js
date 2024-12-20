@@ -129,7 +129,38 @@ export const ticketStore = defineStore('ticketStore', () => {
     }
 
     const getPassengerReturnInformation = (seatsSelected) => {
-        console.log('seatsSelected', seatsSelected)
+        const adultInformation = getAdultInformation()
+        const childInformation = getChildInformation()
+        const passengerInfoList = []
+        let j = 0
+        for(let i = 0; i < adultInformation.length; i++) {
+            passengerInfoList.push({
+                firstName: adultInformation[i].firstName,
+                lastName: adultInformation[i].lastName,
+                birthdate: adultInformation[i].birthDate,
+                gender: adultInformation[i].gender,
+                identification: adultInformation[i].cccd,
+                phoneNumber: adultInformation[i].phone,
+                email: adultInformation[i].email,
+                ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
+                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
+                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+            })
+            j++
+        }
+        for(let i = 0; i < childInformation.length; i++) {
+            passengerInfoList.push({
+                firstName: childInformation[i].firstName,
+                lastName: childInformation[i].lastName,
+                birthDate: childInformation[i].birthDate,
+                ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
+                gender: childInformation[i].gender,
+                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
+                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+            })
+            j++
+        }
+        return passengerInfoList
     }
 
     const getRowAndPosition = (seat) => {
