@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useAircraftStore = defineStore('aircraft', () => {
+export const useAircraftStore = defineStore('aircraft-store', () => {
   const aircraft = ref([])
   const reloadAircraft = async () => {
     const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {

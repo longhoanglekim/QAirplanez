@@ -9,11 +9,13 @@
     <div class="place-items-center mb-2">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
-            <ChevronDown :class="{'rotate-180' : showingSearchBox}" @click="toggleSearchBox" class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
+            <ChevronDown :class="{'rotate-180' : showingSearchBox}" 
+            @click="toggleSearchBox" 
+            class="ease-in-out duration-300 cursor-pointer hover:text-blue-500 " />
         </button>
     </div>
     <div class="transition-all duration-500 ease-in-out relative place-items-center"
-          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0'">
+          :class="showingSearchBox ? 'max-h-screen opacity-100 p-4': 'max-h-0 opacity-0 p-0 pointer-events-none'">
         <FlightSearch @search-flight="handleReSearch"/>
     </div>
 
@@ -98,7 +100,7 @@ const storeSearchFlight = searchFlightStore();
 // Ticket classes definition
 const ticketClasses = [{
         value: 'economy',
-        label: 'Economy',
+        label: 'Hạng phổ thông',
         priceMultiplier: 1,
         baggageInfo: {
             carryon: 7,
@@ -107,7 +109,7 @@ const ticketClasses = [{
     },
     {
         value: 'business',
-        label: 'Business',
+        label: 'Hạng thương gia',
         priceMultiplier: 2.5,
         baggageInfo: {
             carryon: 10,
@@ -116,7 +118,7 @@ const ticketClasses = [{
     },
     {
         value: 'first',
-        label: 'First Class',
+        label: 'Hạng cao cấp',
         priceMultiplier: 4,
         baggageInfo: {
             carryon: 12,

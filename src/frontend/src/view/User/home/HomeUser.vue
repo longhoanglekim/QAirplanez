@@ -9,7 +9,6 @@
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue';
-import {searchTicket} from "@/store/searchTicket";
 
 </script>
 
@@ -18,6 +17,10 @@ export default {
   methods: {
     searchFlight() {
       this.$router.push('/booking/availability/0')
+    },
+    searchTicket() {
+      console.log('searchTicket')
+      this.$router.push('/booking/done/0')
     }
   },
   name: 'HomeUser',
