@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.web.airplane.demo.dtos.BookingDTO;
+
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -77,7 +79,8 @@ public class UserController {
     public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String departFlightNumber,
                                         @RequestParam(value = "return_flight_number", required = false) String returnFlightNumber,
                                         HttpServletRequest request,
-                                        @RequestBody List<PassengerInfo> passengerInfoList) {
+                                        @RequestBody BookingDTO bookingDTO) {
+        List<PassengerInfo> passengerInfoList = bookingDTO.getPassengerInfoList();
         try {
             log.debug("Tim chuyen bay: " + departFlightNumber);
             Flight departFlight = flightRepository.findByFlightNumber(departFlightNumber);
@@ -316,5 +319,22 @@ public class UserController {
         imageResponse.setImageUrl(imgUrl);
         // Trả về ảnh dưới dạng base64
         return ResponseEntity.ok(imageResponse);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+        try {
+            User currentUser = userService.getCurrentUser(request);
+            currentUser.setFirstname(userInfo.getFirstname());
+            currentUser.setLastname(userInfo.getLastname());
+            currentUser.setBirthdate(userInfo.getBirthdate());
+            currentUser.setPhoneNumber(userInfo.getPhoneNumber());
+            currentUser.setEmail(userInfo.getEmail());
+            currentUser.setNationality(userInfo.getNationality());
+            userService.updateUser(currentUser);
+            return ResponseEntity.ok("User information updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating user information: " + e.getMessage());
+        }
     }
 }
