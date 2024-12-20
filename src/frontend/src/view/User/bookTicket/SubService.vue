@@ -198,21 +198,23 @@ const closeModal = () => {
 
 const handleSubmit = () => {
   const allService = JSON.stringify({
-    outboundSeats: seatSelectedOutBound.value,
-    returnSeats: seatSelectedReturn.value,
     taxiServices: taxiSelected.value.map(service => service.id),
     meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
   })
-  console.log('allService', allService)
+
+  const passengerDepartureInfoList = storeTicket.getPassengerDepartureInformation(seatSelectedOutBound.value)
+  const passengerArrivalInfoList = storeTicket.getPassengerArrivalInformation(seatSelectedReturn.value)
+  const departFlightNumber = storeTicket.getSelectedDeparture().flightNumber
+  const returnFlightNumber = (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null
+  console.log('departFlightNumber', departFlightNumber)
+  console.log('returnFlightNumber', returnFlightNumber)
   //load dât
   const data = {  
-    departure: storeTicket.getSelectedDeparture().flightNumber,
-    arrival: (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null,
     allService,
-    adults: storeTicket.getAdultInformation(),
-    children: storeTicket.getChildInformation(),
+    passengerDepartureInfoList,
+    passengerArrivalInfoList
   }
-  console.log('data', data)
+  console.log('data', JSON.stringify(data))
 
   router.push('/booking/information/3'); 
 };

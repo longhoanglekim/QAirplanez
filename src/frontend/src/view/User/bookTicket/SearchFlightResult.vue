@@ -194,6 +194,7 @@ const getListTicket = async (departureDate) => {
     })
     .then(response => response.json())
     .then(data => {
+      console.log('data', data)
         tickets.value = data.map(flight => ({
     ...flight,
     basePrice: 250000,
