@@ -4,13 +4,12 @@ import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.dtos.UserInfo;
+import com.web.airplane.demo.dtos.bookings.TicketInput;
+import com.web.airplane.demo.dtos.bookings.TicketResponse;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.*;
 import com.web.airplane.demo.repositories.*;
-import com.web.airplane.demo.services.BookingCodeService;
-import com.web.airplane.demo.services.FlightService;
-import com.web.airplane.demo.services.ImageService;
-import com.web.airplane.demo.services.UserService;
+import com.web.airplane.demo.services.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Period;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -34,6 +35,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private PassengerService passengerService;
     private final UserRepository userRepository;
     @Autowired
     private TicketClassRepository ticketClassRepository;
@@ -44,11 +47,10 @@ public class UserController {
     private FlightRepository flightRepository;
     @Autowired
     private PassengerRepository passengerRepository;
+    @Autowired BookingTicketRepository bookingTicketRepository;
     private final BookingCodeService bookingCodeService;
     @Autowired
     private ImageService imageService;
-    @Autowired
-    private BookingTicketRepository bookingTicketRepository;
 
     public UserController(UserRepository userRepository, UserService userService, BookingCodeService bookingCodeService) {
         this.userRepository = userRepository;
@@ -79,6 +81,11 @@ public class UserController {
                                         HttpServletRequest request,
                                         @RequestBody List<PassengerInfo> passengerInfoList) {
         try {
+            if (checkDuplicateIdentification(passengerInfoList)) {
+                return ResponseEntity.badRequest().body("Có trùng hành khách!");
+            }
+
+
             log.debug("Tim chuyen bay: " + departFlightNumber);
             Flight departFlight = flightRepository.findByFlightNumber(departFlightNumber);
             if (departFlight == null) {
@@ -105,14 +112,17 @@ public class UserController {
 
             // Tạo bookingCode chung
             String commonBookingCode = bookingCodeService.generateBookingCode();
-
+            BookingTicket bookingTicket = new BookingTicket();
+            bookingTicket.setBookingCode(commonBookingCode);
+            bookingTicket.setService("something");
+            bookingTicketRepository.save(bookingTicket);
             // Đặt vé cho chiều đi
-            bookingProcess(commonBookingCode, request, passengerInfoList, departFlight);
+            bookingProcess(bookingTicket, request, passengerInfoList, departFlight);
             flightRepository.save(departFlight);
             log.debug("booking xong");
             // Đặt vé cho chiều về (nếu có)
             if (returnFlight != null) {
-                bookingProcess(commonBookingCode, request, passengerInfoList, returnFlight);
+                bookingProcess(bookingTicket, request, passengerInfoList, returnFlight);
                 flightRepository.save(returnFlight);
             }
 
@@ -142,14 +152,22 @@ public class UserController {
                 flight.getEconomyAvailableSeats() >= numberReqEconomySeat;
     }
 
+    private boolean checkDuplicateIdentification(List<PassengerInfo> passengerInfoList) {
+        Set<String> identificationSet = new HashSet<>();
+        for (PassengerInfo passengerInfo : passengerInfoList) {
+            if (!identificationSet.add(passengerInfo.getIdentification())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    private void bookingProcess(String commonBookingCode, HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
-        log.debug("Tiến hành đặt vé, ví dụ thêm hành khách vào chuyến bay");
 
-
+    private void bookingProcess(BookingTicket bookingTicket, HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
+        log.debug("Tiến hành đặt vé");
 
         for (PassengerInfo passengerInfo : passengerInfoList) {
-            log.debug("THEM KHACH HANG");
+            log.debug("THÊM KHÁCH HÀNG");
 
             Passenger passenger = new Passenger();
             passenger.setFirstName(passengerInfo.getFirstName());
@@ -158,11 +176,11 @@ public class UserController {
             passenger.setFlight(flight);
             passenger.setEmail(passengerInfo.getEmail());
             passenger.setPhoneNumber(passengerInfo.getPhoneNumber());
+
             // Xử lý logic chọn ghế dựa trên hạng vé
             if (passengerInfo.getTicketClassCode().equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
                 if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
-                    log.debug("Chon ghe first");
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
@@ -171,11 +189,9 @@ public class UserController {
                     passenger.setSeatPosition(passengerInfo.getSeatPosition());
                 }
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
-
             } else if (passengerInfo.getTicketClassCode().equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
                 if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
-                    log.debug("Chon ghe bus");
                     String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
@@ -184,11 +200,9 @@ public class UserController {
                     passenger.setSeatPosition(passengerInfo.getSeatPosition());
                 }
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
-
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
                 if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
-                    log.debug("Chon ghe economy");
                     String seatCode = flightService.getEconomySeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
@@ -199,24 +213,23 @@ public class UserController {
                 flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() - 1);
             }
 
-            log.debug("Them vao database");
-            // Gán bookingCode chung
-            BookingTicket bookingTicket = new BookingTicket();
-            bookingTicket.setBookingCode(commonBookingCode);
-            //dịch vụ add đây
-            bookingTicket.setService("something");
-            bookingTicket.getPassengers().add(passenger);
-            bookingTicketRepository.save(bookingTicket);
+            // Liên kết Passenger với BookingTicket
             passenger.setBookingTicket(bookingTicket);
+            bookingTicket.getPassengers().add(passenger);
 
-            log.debug("Them Passenger");
             passengerRepository.save(passenger);
-
-            flight.getPassengers().add(passenger);
-            log.debug("Them thanh cong Passenger");
+            log.debug("Thêm thành công Passenger");
         }
 
+        // Lưu lại BookingTicket để cập nhật danh sách hành khách
+        bookingTicketRepository.save(bookingTicket);
+
+        // Lưu lại Flight để cập nhật danh sách hành khách
+        flightRepository.save(flight);
+
+        log.debug("Hoàn thành đặt vé");
     }
+
 
     @Transactional
     @PostMapping("/cancel")
@@ -316,5 +329,92 @@ public class UserController {
         imageResponse.setImageUrl(imgUrl);
         // Trả về ảnh dưới dạng base64
         return ResponseEntity.ok(imageResponse);
+    }
+
+    @GetMapping("/public/findTicketInfo")
+    public ResponseEntity<?> getTicketInfo(@RequestBody TicketInput ticketInput) {
+        log.debug("Bắt đầu tìm vé");
+        BookingTicket bookingTicket = bookingTicketRepository.findBookingTicketByBookingCode(ticketInput.getBookingCode());
+        if (bookingTicket == null) {
+            return ResponseEntity.badRequest().body("Không có vé với mã số trên!");
+        }
+        List<Passenger> passengerList = passengerRepository.findAllByBookingTicket(bookingTicket);
+        if (passengerList == null) {
+            return ResponseEntity.badRequest().body("Danh sách khách hàng trống");
+        }
+        if (!checkIfExistPassengerWithFirstName(passengerList, ticketInput.getFirstName())) {
+            return ResponseEntity.badRequest().body("Không có hành khách nào có họ như trên");
+        }
+        log.debug("Set vé");
+        TicketResponse ticketResponse = new TicketResponse();
+        ticketResponse.setBookingCode(bookingTicket.getBookingCode());
+        ticketResponse.setService(bookingTicket.getService());
+        ticketResponse.setAdultResponseList(
+                passengerList.stream()
+                        .filter(this::isAdult) // Lọc chỉ giữ người lớn
+                        .map(passenger -> passengerService.getAdultInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
+                        .collect(Collectors.toList()) // Thu thập thành danh sách
+        );
+        ticketResponse.setChildResponseList(
+                passengerList.stream()
+                        .filter(passenger -> !isAdult(passenger))
+                        .map(passenger -> passengerService.getChildInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
+                        .collect(Collectors.toList()) // Thu thập thành danh sách
+        );
+        List<Flight> flights = getFlights(passengerList);
+        ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(0)));
+        if (flights.size() == 2) {
+            ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(1)));
+        }
+        return ResponseEntity.ok(ticketResponse);
+    }
+
+    private boolean isAdult(Passenger passenger) {
+        LocalDate today = LocalDate.now();
+        int age = Period.between(passenger.getBirthdate(), today).getYears(); // Tính số năm
+        return age >= 18;
+    }
+//    private boolean checkIfExistInboundFlight(List<Passenger> passengerList) {
+//        Map<String, Integer> identificationCount = new HashMap<>();
+//
+//        // Đếm số lần xuất hiện của mỗi identification
+//        for (Passenger passengerInfo : passengerList) {
+//            String identification = passengerInfo.getIdentification();
+//            identificationCount.put(identification, identificationCount.getOrDefault(identification, 0) + 1);
+//        }
+//
+//        // Kiểm tra nếu có bất kỳ identification nào xuất hiện đúng 2 lần
+//        for (Integer count : identificationCount.values()) {
+//            if (count == 2) {
+//                return true; // Có chuyến bay khứ hồi
+//            }
+//        }
+//
+//        return false;
+//    }
+
+    boolean checkIfExistPassengerWithFirstName(List<Passenger> passengerList, String firstName) {
+        for (Passenger passenger : passengerList) {
+            if (passenger.getFirstName().equalsIgnoreCase(firstName)) {
+                return true; // Tìm thấy hành khách có firstName khớp
+            }
+        }
+        return false; // Không tìm thấy hành khách nào khớp
+    }
+
+    private List<Flight> getFlights(List<Passenger> passengerList) {
+        List<Flight> flights = new ArrayList<>();
+        for (Passenger passenger : passengerList) {
+            if (!flights.contains(passenger.getFlight())) {
+                flights.add(passenger.getFlight());
+            }
+        }
+        if (flights.size() == 1) return flights;
+        if (flights.get(0).getExpectedDepartureTime().isAfter(flights.get(1).getExpectedDepartureTime())) {
+            Flight temp = flights.get(0);
+            flights.set(0, flights.get(1));
+            flights.set(1, temp);
+        }
+        return flights;
     }
 }
