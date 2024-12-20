@@ -5,10 +5,7 @@ import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.dtos.UserInfo;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
-import com.web.airplane.demo.models.Flight;
-import com.web.airplane.demo.models.Image;
-import com.web.airplane.demo.models.Passenger;
-import com.web.airplane.demo.models.User;
+import com.web.airplane.demo.models.*;
 import com.web.airplane.demo.repositories.*;
 import com.web.airplane.demo.services.BookingCodeService;
 import com.web.airplane.demo.services.FlightService;
@@ -50,6 +47,8 @@ public class UserController {
     private final BookingCodeService bookingCodeService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private BookingTicketRepository bookingTicketRepository;
 
     public UserController(UserRepository userRepository, UserService userService, BookingCodeService bookingCodeService) {
         this.userRepository = userRepository;
@@ -202,10 +201,17 @@ public class UserController {
 
             log.debug("Them vao database");
             // Gán bookingCode chung
-            passenger.setBookingCode(commonBookingCode);
+            BookingTicket bookingTicket = new BookingTicket();
+            bookingTicket.setBookingCode(commonBookingCode);
+            //dịch vụ add đây
+            bookingTicket.setService("something");
+            bookingTicket.getPassengers().add(passenger);
+            bookingTicketRepository.save(bookingTicket);
+            passenger.setBookingTicket(bookingTicket);
 
             log.debug("Them Passenger");
             passengerRepository.save(passenger);
+
             flight.getPassengers().add(passenger);
             log.debug("Them thanh cong Passenger");
         }

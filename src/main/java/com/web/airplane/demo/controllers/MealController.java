@@ -3,6 +3,7 @@ package com.web.airplane.demo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +41,7 @@ public class MealController {
 
     @DeleteMapping("/admin_meal/deleteMeal/{id}")
     @Transactional
-    public String deleteMeal(@PathVariable Long id) {
-        return mealService.deleteMeal(id);
+    public ResponseEntity<?> deleteMeal(@PathVariable Long id) {
+        return ResponseEntity.ok(deleteMeal(id));
     }
 }
