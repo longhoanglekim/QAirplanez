@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class BookingTicket {
 
     private String bookingCode;
     private String service;
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
     @OneToMany(mappedBy = "bookingTicket", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
 
