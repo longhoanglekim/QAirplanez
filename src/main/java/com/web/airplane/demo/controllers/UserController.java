@@ -379,16 +379,10 @@ public class UserController {
         TicketResponse ticketResponse = new TicketResponse();
         ticketResponse.setBookingCode(bookingTicket.getBookingCode());
         ticketResponse.setService(bookingTicket.getService());
-        ticketResponse.setAdultResponseList(
+        ticketResponse.setPrice(bookingTicket.getTotalPrice());
+        ticketResponse.setPassengerInfoList(
                 passengerList.stream()
-                        .filter(passenger -> isAdult(passenger)) // Lọc chỉ giữ người lớn
-                        .map(passenger -> passengerService.getAdultInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
-                        .collect(Collectors.toList()) // Thu thập thành danh sách
-        );
-        ticketResponse.setChildResponseList(
-                passengerList.stream()
-                        .filter(passenger -> !isAdult(passenger))
-                        .map(passenger -> passengerService.getChildInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
+                        .map(passenger -> passengerService.getPassengerInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
                         .collect(Collectors.toList()) // Thu thập thành danh sách
         );
         List<Flight> flights = getFlights(passengerList);
