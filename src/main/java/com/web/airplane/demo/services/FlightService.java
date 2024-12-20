@@ -247,7 +247,12 @@ public class FlightService {
     public FlightResponse getFlightResponse(Flight flight) {
         FlightResponse flightInfo = new FlightResponse();
         flightInfo.setFlightNumber(flight.getFlightNumber());
-        flightInfo.setDepartAirportCode(flight.getDepartureAirport().getAirportCode());
+
+        StringBuilder departCode = new StringBuilder(airportRepository.findByAirportCode(flight.getDepartureAirport().getAirportCode()).getAirportName());
+        departCode.append("(").append(flight.getDepartureAirport().getAirportCode()).append(")");
+        flightInfo.setDepartAirportCode(departCode.toString());
+        StringBuilder arrivalCode = new StringBuilder(airportRepository.findByAirportCode(flight.getDestinationAirport().getAirportCode()).getAirportName());
+        arrivalCode.append("(").append(flight.getDestinationAirport().getAirportCode()).append(")");
         flightInfo.setArrivalAirportCode(flight.getDestinationAirport().getAirportCode());
         flightInfo.setArrivalTime(flight.getExpectedArrivalTime());
         flightInfo.setDepartTime(flight.getExpectedDepartureTime());
