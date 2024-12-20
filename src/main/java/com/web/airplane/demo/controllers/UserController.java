@@ -311,4 +311,21 @@ public class UserController {
         // Trả về ảnh dưới dạng base64
         return ResponseEntity.ok(imageResponse);
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+        try {
+            User currentUser = userService.getCurrentUser(request);
+            currentUser.setFirstname(userInfo.getFirstname());
+            currentUser.setLastname(userInfo.getLastname());
+            currentUser.setBirthdate(userInfo.getBirthdate());
+            currentUser.setPhoneNumber(userInfo.getPhoneNumber());
+            currentUser.setEmail(userInfo.getEmail());
+            currentUser.setNationality(userInfo.getNationality());
+            userService.updateUser(currentUser);
+            return ResponseEntity.ok("User information updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating user information: " + e.getMessage());
+        }
+    }
 }

@@ -16,19 +16,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthenticationService {
     private final UserRepository userRepository;
-
-
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
-    private final AuthenticationManager authenticationManager;
     @Autowired
     public AuthenticationService(
-           UserRepository userRepository,
+            UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
     }
 
@@ -59,4 +59,23 @@ public class AuthenticationService {
         throw new BadCredentialsException("Sai tài khoản hoặc mật khẩu.");
     }
 
+    // Method to verify password
+    public boolean verifyPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    // Method to change password
+    public void changePassword(String username, String currentPassword, String newPassword) throws BadCredentialsException {
+        User user = userRepository.findByEmail(username);
+        if (user == null) {
+            user = userRepository.findByPhoneNumber(username);
+        }
+
+        if (user == null || !verifyPassword(currentPassword, user.getPassword())) {
+            throw new BadCredentialsException("Mật khẩu hiện tại không đúng!");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

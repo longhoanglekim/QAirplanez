@@ -1,5 +1,6 @@
 package com.web.airplane.demo.controllers;
 
+import com.web.airplane.demo.dtos.ChangePasswordDTO;
 import com.web.airplane.demo.dtos.LoginDTO;
 import com.web.airplane.demo.dtos.LoginResponse;
 import com.web.airplane.demo.dtos.RegisterDTO;
@@ -24,11 +25,14 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
+
     @Autowired
-    public AuthenticationController(UserRepository userRepository, AuthenticationService authenticationService, JwtService jwtService) {
+    public AuthenticationController(UserRepository userRepository, AuthenticationService authenticationService,
+            JwtService jwtService) {
         this.authenticationService = authenticationService;
         this.jwtService = jwtService;
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerAccountDto) {
         // register new account with encoded password
@@ -45,13 +49,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginDTO loginUserDto, HttpServletResponse response) {
+    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginDTO loginUserDto,
+            HttpServletResponse response) {
         try {
             User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
             String jwtToken = jwtService.generateToken(authenticatedUser);
 
-            LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+            LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
+                    .setExpiresIn(jwtService.getExpirationTime());
 
             return ResponseEntity.ok(loginResponse);
         } catch (BadCredentialsException e) {
@@ -60,7 +66,17 @@ public class AuthenticationController {
         }
     }
 
-
-
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDto) {
+        try {
+            authenticationService.changePassword(changePasswordDto.getUsername(),
+                    changePasswordDto.getCurrentPassword(), changePasswordDto.getNewPassword());
+            return ResponseEntity.ok("Đổi mật khẩu thành công!");
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).body("Mật khẩu hiện tại không đúng!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Có lỗi xảy ra khi đổi mật khẩu.");
+        }
+    }
 
 }
