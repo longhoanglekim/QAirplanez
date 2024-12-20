@@ -358,7 +358,7 @@ public class UserController {
         return ResponseEntity.ok(imageResponse);
     }
 
-    @GetMapping("/public/findTicketInfo")
+    @PostMapping("/public/findTicketInfo")
     public ResponseEntity<?> getTicketInfo(@RequestBody TicketInput ticketInput) {
         log.debug("Bắt đầu tìm vé");
         BookingTicket bookingTicket = bookingTicketRepository.findBookingTicketByBookingCode(ticketInput.getBookingCode());

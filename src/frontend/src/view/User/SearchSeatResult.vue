@@ -1,55 +1,86 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
-    <div class="bg-white rounded-lg shadow-lg p-6">
+<div class="max-w-4xl mx-auto p-6">
+    <!-- Loading state -->
+    <div v-if="loading" class="bg-white rounded-lg shadow-lg p-6">
+      <div class="animate-pulse space-y-4">
+        <div class="h-8 bg-gray-200 rounded w-3/4"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+        <div class="space-y-3">
+          <div class="h-4 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error state -->
+    <div v-else-if="error" class="bg-white rounded-lg shadow-lg p-6">
+      <div class="text-center">
+        <div class="text-red-500 text-xl mb-2">{{ error }}</div>
+        <button @click="fetchTicketData" 
+                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+          Thử lại
+        </button>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div v-else-if="ticketData" class="bg-white rounded-lg shadow-lg p-6">
       <!-- Header -->
       <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2 mb-2">
-          
           <PlaneIcon class="h-6 w-6" />
           Thông Tin Vé Máy Bay
         </h1>
-        <div class="text-lg font-semibold text-blue-600">
-          {{ ticketData.ticketType }}
+        
+        <div class="text-lg font-semibold text-blue-600 grid grid-cols-2 gap-4">
+          <h2>Mã đặt vé: {{ loadData.bookingCode }}</h2>
+          <h2>Loại vé: {{ ticketData.ticketType }}</h2>
         </div>
       </div>
 
       <!-- Chuyến đi -->
       <div class="bg-gray-50 rounded-lg p-6 mb-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex">
-          <PlaneTakeoff class="h-6 w-6 mr-4" />
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          <PlaneTakeoff class="h-6 w-6" />
           Chuyến đi
         </h2>
         <div class="grid md:grid-cols-2 gap-6">
+          <div class="col-span-2">
+            <label class="text-sm text-gray-500">Số hiệu chuyến bay</label>
+            <div class="font-medium text-gray-800">{{ loadData.outboundFlight.flightNumber }}</div>
+          </div>
           <div>
             <label class="text-sm text-gray-500">Điểm khởi hành</label>
-            <div class="font-medium text-gray-800">{{ ticketData.departureInfo.from }}</div>
+            <div class="font-medium text-gray-800">{{ loadData.outboundFlight.departCityName }}({{ loadData.outboundFlight.departAirportCode }})</div>
           </div>
           <div>
             <label class="text-sm text-gray-500">Điểm đến</label>
-            <div class="font-medium text-gray-800">{{ ticketData.departureInfo.to }}</div>
+            <div class="font-medium text-gray-800">{{ loadData.outboundFlight.arrivalCityName }}({{ loadData.outboundFlight.arrivalAirportCode }})</div>
           </div>
           <div>
             <label class="text-sm text-gray-500">Ngày bay</label>
-            <div class="font-medium text-gray-800">{{ formatDate(ticketData.departureInfo.date) }}</div>
+            <div class="font-medium text-gray-800">{{ formatDate(loadData.outboundFlight.departTime) }}</div>
           </div>
           <div>
             <label class="text-sm text-gray-500">Giờ bay</label>
-            <div class="font-medium text-gray-800">{{ ticketData.departureInfo.time }}</div>
+            <div class="font-medium text-gray-800">{{ loadData.outboundFlight.departTime.slice(11, 16) }}</div>
           </div>
-          <div>
-            <label class="text-sm text-gray-500">Số hiệu chuyến bay</label>
-            <div class="font-medium text-gray-800">{{ ticketData.departureInfo.flightNumber }}</div>
-          </div>
+          
         </div>
       </div>
 
       <!-- Chuyến về (nếu là vé khứ hồi) -->
-      <div v-if="ticketData.ticketType === 'Khứ hồi'" class="bg-gray-50 rounded-lg p-6 mb-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex">
-          <PlaneLanding class="h-6 w-6 mr-4" />
+      <div v-if="loadData.inboundFlight" class="bg-gray-50 rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          <PlaneLanding class="h-6 w-6" />
           Chuyến về
         </h2>
         <div class="grid md:grid-cols-2 gap-6">
+          <div class="col-span-2">
+            <label class="text-sm text-gray-500">Số hiệu chuyến bay</label>
+            <div class="font-medium text-gray-800">{{ ticketData.returnInfo.flightNumber }}</div>
+          </div>
           <div>
             <label class="text-sm text-gray-500">Điểm khởi hành</label>
             <div class="font-medium text-gray-800">{{ ticketData.returnInfo.from }}</div>
@@ -66,14 +97,11 @@
             <label class="text-sm text-gray-500">Giờ bay</label>
             <div class="font-medium text-gray-800">{{ ticketData.returnInfo.time }}</div>
           </div>
-          <div>
-            <label class="text-sm text-gray-500">Số hiệu chuyến bay</label>
-            <div class="font-medium text-gray-800">{{ ticketData.returnInfo.flightNumber }}</div>
-          </div>
+          
         </div>
       </div>
 
-      <!-- Thongo tin hafnh khachs -->
+      <!-- Thông tin hành khách -->
       <div class="mb-6">
         <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,6 +131,7 @@
         </div>
       </div>
 
+      <!-- Dịch vụ đi kèm -->
       <div>
         <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,9 +152,71 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { PlaneIcon, PlaneTakeoff, PlaneLanding } from 'lucide-vue-next';
 
+const loadData = ref(null)
+const loading = ref(true)
+const error = ref(null)
+
+/**
+ * {
+  "bookingCode": "ZXBK96",
+  "outboundFlight": {
+    "flightNumber": "VN124",
+    "serialNumber": "B00001",
+    "departTime": "2025-01-07T10:30:00",
+    "arrivalTime": "2025-01-07T10:30:00",
+    "cancelTime": "2025-01-02T10:30:00",
+    "departAirportCode": "BKK",
+    "arrivalAirportCode": "HAN"
+  },
+  "inboundFlight": null,
+  "adultResponseList": [
+    {
+      "firstName": "To",
+      "lastName": "Bang",
+      "ticketClassCode": "Economy",
+      "birthdate": "2004-05-09",
+      "bookingCode": "ZXBK96",
+      "seatCode": "D-13",
+      "identification": null,
+      "email": "bangvoip673@gmail.com",
+      "phoneNumber": "0924234388"
+    },
+    {
+      "firstName": "To",
+      "lastName": "Bang",
+      "ticketClassCode": "Business",
+      "birthdate": "2004-05-09",
+      "bookingCode": "ZXBK96",
+      "seatCode": "E-7",
+      "identification": null,
+      "email": "bangvoip673@gmail.com",
+      "phoneNumber": "0924234388"
+    }
+  ],
+  "childResponseList": [
+    {
+      "firstName": "HU",
+      "lastName": "TO",
+      "ticketClassCode": "Economy",
+      "birthdate": "2020-09-09",
+      "bookingCode": "ZXBK96",
+      "seatCode": "E-13"
+    },
+    {
+      "firstName": "HU",
+      "lastName": "TO",
+      "ticketClassCode": "Business",
+      "birthdate": "2020-09-09",
+      "bookingCode": "ZXBK96",
+      "seatCode": "F-7"
+    }
+  ],
+  "service": "{\"taxiServices\":[\"airport-pickup\",\"vip-service\"],\"meal\":{\"outboundMeals\":{\"2\":2},\"returnMeals\":{\"2\":2}}}"
+}
+ */
 const ticketData = ref({
   ticketType: "Khứ hồi",
   departureInfo: {
@@ -165,4 +256,38 @@ const formatDate = (dateString) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   return new Date(dateString).toLocaleDateString('vi-VN', options);
 };
+
+const loadTicketFromServer = async () => {
+  console.log("loadTicketFromServer")
+  loading.value = true
+  error.value = null
+  try {
+    const req = {
+      "bookingCode": "ZXBK96",
+      "firstName": "To"
+    }
+  const response = await fetch('http://localhost:8080/api/user/public/findTicketInfo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }, body: JSON.stringify(req)
+  })
+  if (response.ok) {
+    const res = await response.json()
+    loadData.value = res
+    console.log(loadData.value)
+  } else {
+    error.value = await response.text()
+  }
+} catch (err) {
+  error.value = err
+} finally {
+  loading.value = false
+}
+}
+
+onMounted(() => {
+  document.title = "Kết quả tìm kiếm vé máy bay"
+  loadTicketFromServer()
+})
 </script>

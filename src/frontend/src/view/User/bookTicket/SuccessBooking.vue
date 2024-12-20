@@ -1,6 +1,7 @@
 <template>
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
-    <div class="bg-white shadow-2xl rounded-2xl max-w-md w-full p-8 border border-red-100">
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex flex-col items-center justify-center p-4 pt-20">
+    <BookingProgressBar :current-stage="3" />
+    <div class="bg-white shadow-2xl rounded-2xl max-w-md w-full p-8 border border-red-100 mt-10">
         <div class="text-center">
             <!-- Success Icon -->
             <div class="flex justify-center mb-6">
@@ -16,12 +17,11 @@
                 Đăng Ký Vé Thành Công
             </h1>
 
-            <!-- Subtitle -->
+            
             <p class="text-gray-600 mb-6">
                 Cảm ơn bạn đã đặt vé. Dưới đây là thông tin đặt chỗ của bạn.
             </p>
 
-            <!-- Booking Details Card -->
             <div class="bg-orange-50 border border-orange-200 rounded-xl p-6 mb-6">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-3">
@@ -31,33 +31,16 @@
                         </svg>
                         <span class="font-semibold text-gray-700">Mã Đặt Chỗ</span>
                     </div>
-                    <span class="text-2xl font-bold text-red-600">{{ bookingCode }}</span>
+                    <span class="text-2xl font-bold text-red-600">{{ $route.params.bookingCode }}</span>
                 </div>
 
                 <div class="border-t border-dashed border-orange-200 my-4"></div>
 
-                <!-- QR Code Placeholder -->
+                <!--qr code-->
                 <div class="flex justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <path d="M7 10h2v4H7zm4 0h2v4h-2z"></path>
-                    </svg>
+                    <QrCode class="text-red-500 w-64 h-64"/>
                 </div>
             </div>
-
-            <!-- Passenger Details -->
-            <div class="grid grid-cols-2 gap-4 text-left">
-                <div>
-                    <p class="text-sm text-gray-500">Hành Khách</p>
-                    <p class="font-semibold text-gray-700">{{ passengerName }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Ngày Bay</p>
-                    <p class="font-semibold text-gray-700">{{ flightDate }}</p>
-                </div>
-            </div>
-
-            <!-- Download Ticket Button -->
             <button @click="downloadTicket" class="mt-6 w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold">
                 Tải Vé Điện Tử
             </button>
@@ -70,16 +53,13 @@
   
 <script setup>
 import {
-    ref,
-    onMounted
+    onMounted, 
+    
 } from 'vue'
-
-const bookingCode = ref('VN8745')
-const passengerName = ref('Nguyễn Văn A')
-const flightDate = ref('15/12/2024')
+import BookingProgressBar from '@/components/composable/BookingProgressBar.vue'
+import { QrCode } from 'lucide-vue-next';
 
 const downloadTicket = () => {
-    // Implement ticket download logic here
     alert('Chức năng tải vé đang được phát triển')
 }
 

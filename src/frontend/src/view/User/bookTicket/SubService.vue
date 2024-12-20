@@ -257,15 +257,16 @@ const handleSubmit = async () => {
     body: JSON.stringify(data)  
   });
 
-
-  const result = await response.json()
-  console.log('result', result)
-  submitting.value = false
-  if(result.status === 'success'){
-    router.push('/booking/information/3'); 
-    storeSearFlight.clear()
-    storeTicket.clear()
+  if(!response.ok){
+    throw new Error('Failed to book flight');
   }
+
+  const result = await response.text()
+  
+  submitting.value = false
+  storeSearFlight.clear()
+  storeTicket.clear()
+  router.push('/booking/information/3/' + result); 
 };
 
 
