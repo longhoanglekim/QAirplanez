@@ -105,7 +105,7 @@ const routes = [
             guest: true
         }
     }, {
-        path: '/booking/information/3',
+        path: '/booking/information/3/:bookingCode',
         name: 'SuccessBooking',
         component : SuccessBooking,
         meta: {

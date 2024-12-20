@@ -110,7 +110,7 @@ export const ticketStore = defineStore('ticketStore', () => {
                 outboundTicketClassCode: getSelectedDeparture().selectedClass.charAt(0).toUpperCase() + getSelectedDeparture().selectedClass.slice(1), //"economy" to "Economy"
                 inboundTicketClassCode: getSelectedArrival().selectedClass ? getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1) : '',
                 outboundSeatCode: j < seatsSelectedDepart.length ? seatsSelectedDepart[j] : '',
-                inboundSeatCode: k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
+                inboundSeatCode: seatsSelectedReturn && k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
             })
             j++
             k++
@@ -119,13 +119,13 @@ export const ticketStore = defineStore('ticketStore', () => {
             passengerInfoList.push({
                 firstName: childInformation[i].firstName,
                 lastName: childInformation[i].lastName,
-                birthDate: childInformation[i].birthDate,
+                birthdate: childInformation[i].birthDate,
                 gender: childInformation[i].gender,
                 identification: childInformation[i].cccd,
                 outboundTicketClassCode: getSelectedDeparture().selectedClass.charAt(0).toUpperCase() + getSelectedDeparture().selectedClass.slice(1), //"economy" to "Economy"
                 inboundTicketClassCode: getSelectedArrival().selectedClass ? getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1) : '',
                 outboundSeatCode: j < seatsSelectedDepart.length ? seatsSelectedDepart[j] : '',
-                inboundSeatCode: k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
+                inboundSeatCode: seatsSelectedReturn && k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
             })
             j++
             k++
