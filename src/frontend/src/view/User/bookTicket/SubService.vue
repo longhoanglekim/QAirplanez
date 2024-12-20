@@ -115,6 +115,7 @@
           <button
               class="bg-orange-400 border-amber-300 min-w-32 text-white px-4 py-2 w-[10%] rounded-md hover:bg-orange-600 shadow-sm m-5"
               type="button"
+              :disabled="submitting"
               @click="handleSubmit"
           >
             Xác nhận
@@ -225,40 +226,59 @@ const closeModal = () => {
   currentModal.value = '';
 };
 
-const handleSubmit = () => {
+
+const submitting = ref(false)
+const handleSubmit = async () => {
+  submitting.value = true
   const allService = JSON.stringify({
     taxiServices: taxiSelected.value.map(service => service.id),
     meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
   })
 
-  const passengerDepartureInfoList = storeTicket.getPassengerDepartureInformation(seatSelectedOutBound.value)
-  const passengerArrivalInfoList = storeTicket.getPassengerArrivalInformation(seatSelectedReturn.value)
+  const passengerInfoList = storeTicket.getPassengerInformation(seatSelectedOutBound.value, seatSelectedReturn.value)
   const departFlightNumber = storeTicket.getSelectedDeparture().flightNumber
-  const returnFlightNumber = (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null
-  console.log('departFlightNumber', departFlightNumber)
-  console.log('returnFlightNumber', returnFlightNumber)
+  const returnFlightNumber = (storeSearFlight.getOldForm().ticketType === 'round-trip') ? storeTicket.getSelectedArrival().flightNumber : null
+
   //load dât
   const data = {  
     allService,
-    passengerDepartureInfoList,
-    passengerArrivalInfoList
+    passengerInfoList,
+    totalPrice: getPrice() + storeTicket.getTicketPrice()
   }
-  console.log('data', JSON.stringify(data))
+  const bookingLink = 'http://localhost:8080/api/user/public/bookFlight?depart_flight_number=' 
+  + departFlightNumber 
+  + (returnFlightNumber && returnFlightNumber !== '' ? '&return_flight_number=' + returnFlightNumber : '')
+  console.log('bookingLink', bookingLink)
+  const response = await fetch(bookingLink, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)  
+  });
 
-  router.push('/booking/information/3'); 
+
+  const result = await response.json()
+  console.log('result', result)
+  submitting.value = false
+  if(result.status === 'success'){
+    router.push('/booking/information/3'); 
+    storeSearFlight.clear()
+    storeTicket.clear()
+  }
 };
 
 
 
 
 const getPrice = () => {
-  const seatPrice = 50000 * (seatSelectedOutBound.value.length + (seatSelectedReturn.value ? seatSelectedReturn.value.length : 0))
+  const seatPrice = 55000 * (seatSelectedOutBound.value.length + (seatSelectedReturn.value ? seatSelectedReturn.value.length : 0))
   const taxiPrice = (taxiSelected.value.reduce((total, service) => total + service.price, 0))
   return seatPrice + taxiPrice + mealTotalPrice.value
 }
 
 const isRoundTrip = () => {
-  return storeSearFlight.getOldForm().ticketType === 'roundTrip'
+  return storeSearFlight.getOldForm().ticketType === 'round-trip'
 }
 onMounted(async () => {
   document.title = 'Dịch vụ đi kèm';

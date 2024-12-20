@@ -29,7 +29,7 @@ export const searchFlightStore = defineStore('searchFlight', () => {
         return form.value;
     };
 
-    const deleteForm = () => {
+    const clear = () => {
         form.value = {
             ticketType: 'round-trip',
             fromCity: '',
@@ -51,6 +51,6 @@ export const searchFlightStore = defineStore('searchFlight', () => {
     return {
         saveForm, 
         getOldForm, 
-        deleteForm, 
+        clear, 
     };
 });

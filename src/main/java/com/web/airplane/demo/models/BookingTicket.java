@@ -23,7 +23,7 @@ public class BookingTicket {
 
     private String bookingCode;
     private String service;
-
+    private Integer totalPrice;
     @OneToMany(mappedBy = "bookingTicket", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
 

@@ -12,6 +12,6 @@ import lombok.Setter;
 public class BookingDTO {
     private List<PassengerInfo> passengerInfoList;
     private String allService;
-    private String totalPrice;
+    private Integer totalPrice;
 }
 
