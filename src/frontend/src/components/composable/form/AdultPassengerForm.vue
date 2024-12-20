@@ -30,7 +30,30 @@
             {{ errorsData.lastName }}
         </span>
     </div>
-
+    <div class="relative z-0 w-full mb-5">
+        <select name="gender" v-model="formData.gender" class="text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black">
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+        </select>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.gender}">
+            Giới tính<span class="text-red-500">*</span>
+        </label>
+    </div>
+    <div class="relative z-0 w-full mb-5">
+        <input type="date" v-model="formData.birthDate" name="birthDate" placeholder=""
+                @blur="validBirthDate"
+                :class="[
+                    'text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
+                    errors.birthDate ? 'border-red-500' : 'border-gray-200', {'text-red-600': errors.birthDate}
+                  ]"/>
+        <label class="pointer-events-none absolute duration-300 top-3 z-10 origin-0 text-gray-500 left-0" :class="{'text-red-600': errors.birthDate}">
+            Ngày sinh<span class="text-red-500">*</span>
+        </label>
+        <span v-if="errors.birthDate" class="text-sm text-red-600">
+            {{ errorsData.birthDate }}
+        </span>
+    </div>
+    
     <div class="relative z-0 w-full mb-5">
         <input type="text" v-model="formData.phone" name="phone" placeholder=" " :class="[
                     'relative text-black pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black',
@@ -72,6 +95,7 @@
             {{ errorsData.email }}
         </span>
     </div>
+    
 </form>
 </template>             
     
@@ -87,7 +111,9 @@ const formData = reactive({
     lastName: '',
     phone: '',
     cccd: '',
-    email: ''
+    email: '',
+    birthDate: '',
+    gender: ''
 })
 
 const errors = reactive({
@@ -95,7 +121,9 @@ const errors = reactive({
     lastName: false,
     phone: false,
     cccd: false,
-    email: false
+    email: false,
+    birthDate: false,
+    gender: false
 })
 
 const errorsData = reactive({
@@ -103,7 +131,9 @@ const errorsData = reactive({
     lastName: '',
     phone: '',
     cccd: '',
-    email: ''
+    email: '',
+    birthDate: '',
+    gender: ''
 })
 
 const validFirstName = () => {
@@ -126,6 +156,35 @@ const validLastName = () => {
         errors.lastName = true
     }
 }
+
+const validBirthDate = () => {
+    errors.birthDate = false;
+
+    if (!formData.birthDate || formData.birthDate.trim() === '') {
+        errorsData.birthDate = 'Vui lòng điền ngày sinh';
+        errors.birthDate = true;
+    } else {
+        const today = new Date();
+        const cutoffDate = new Date();
+        cutoffDate.setFullYear(today.getFullYear() - 18);
+
+        const userBirthDate = new Date(formData.birthDate);
+
+        if (isNaN(userBirthDate.getTime())) {
+            errorsData.birthDate = 'Ngày sinh không hợp lệ';
+            errors.birthDate = true;
+        } else if(userBirthDate > today) {
+            errorsData.birthDate = 'Vui lòng điền đúng ngày sinh';
+            errors.birthDate = true;
+        } else if (userBirthDate > cutoffDate) {
+            errorsData.birthDate = 'Bạn phải đủ 18 tuổi';
+            errors.birthDate = true;
+        } else {
+            errorsData.birthDate = '';  
+            errors.birthDate = false;
+        }
+    }
+};
 const validCccd = () => {
     errors.cccd = false
     if (formData.cccd == null || formData.cccd == '') {
@@ -173,7 +232,8 @@ const validateForm = () => {
     validFirstName()
     validLastName()
     validPhone()
-    return !(errors.firstName || errors.name || errors.phone || errors.email)
+    validBirthDate()
+    return !(errors.firstName || errors.lastName || errors.phone || errors.email || errors.birthDate)
 }
 
 const handleSubmit = () => {

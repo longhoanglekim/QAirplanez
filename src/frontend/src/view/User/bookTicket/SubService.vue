@@ -203,16 +203,20 @@ const handleSubmit = () => {
     taxiServices: taxiSelected.value.map(service => service.id),
     meal: {outboundMeals: mealSelectedOutBound.value, returnMeals: mealSelectedReturn.value},
   })
+
+  const passengerDepartureInfoList = storeTicket.getPassengerDepartureInformation(seatSelectedOutBound.value)
+  
+  console.log('passengerDepartureInfoList', passengerDepartureInfoList)
+  
   console.log('allService', allService)
   //load dât
   const data = {  
-    departure: storeTicket.getSelectedDeparture().flightNumber,
-    arrival: (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null,
+    departFlightNumber: storeTicket.getSelectedDeparture().flightNumber,
+    returnFlightNumber: (storeSearFlight.getOldForm().ticketType === 'roundTrip') ? storeTicket.getSelectedArrival().flightNumber : null,
     allService,
-    adults: storeTicket.getAdultInformation(),
-    children: storeTicket.getChildInformation(),
+    passengerDepartureInfoList,
   }
-  console.log('data', data)
+  console.log('data', JSON.stringify(data))
 
   router.push('/booking/information/3'); 
 };

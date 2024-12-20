@@ -31,6 +31,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.web.airplane.demo.dtos.BookingDTO;
+
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -78,7 +80,8 @@ public class UserController {
     public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String departFlightNumber,
                                         @RequestParam(value = "return_flight_number", required = false) String returnFlightNumber,
                                         HttpServletRequest request,
-                                        @RequestBody List<PassengerInfo> passengerInfoList) {
+                                        @RequestBody BookingDTO bookingDTO) {
+        List<PassengerInfo> passengerInfoList = bookingDTO.getPassengerInfoList();
         try {
             log.debug("Tim chuyen bay: " + departFlightNumber);
             Flight departFlight = flightRepository.findByFlightNumber(departFlightNumber);
