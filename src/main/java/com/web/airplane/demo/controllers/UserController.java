@@ -14,6 +14,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -102,11 +103,11 @@ public class UserController {
             }
 
             // Kiểm tra ghế khả dụng
-            if (!checkAvailableSeats(departFlight, passengerInfoList)) {
+            if (!checkAvailableSeats(departFlight, passengerInfoList, true)) {
                 return ResponseEntity.badRequest().body("Not enough seats available for the departure flight.");
             }
 
-            if (returnFlight != null && !checkAvailableSeats(returnFlight, passengerInfoList)) {
+            if (returnFlight != null && !checkAvailableSeats(returnFlight, passengerInfoList, false)) {
                 return ResponseEntity.badRequest().body("Not enough seats available for the return flight.");
             }
 
@@ -117,12 +118,12 @@ public class UserController {
             bookingTicket.setService("something");
             bookingTicketRepository.save(bookingTicket);
             // Đặt vé cho chiều đi
-            bookingProcess(bookingTicket, request, passengerInfoList, departFlight);
+            bookingProcess(bookingTicket, request, passengerInfoList, departFlight, true);
             flightRepository.save(departFlight);
             log.debug("booking xong");
             // Đặt vé cho chiều về (nếu có)
             if (returnFlight != null) {
-                bookingProcess(bookingTicket, request, passengerInfoList, returnFlight);
+                bookingProcess(bookingTicket, request, passengerInfoList, returnFlight, false);
                 flightRepository.save(returnFlight);
             }
 
@@ -134,13 +135,19 @@ public class UserController {
         }
     }
 
-    private boolean checkAvailableSeats(Flight flight, List<PassengerInfo> passengerInfoList) {
+    private boolean checkAvailableSeats(Flight flight, List<PassengerInfo> passengerInfoList, boolean outbound) {
         int numberReqFirstSeat = 0;
         int numberReqBusinessSeat = 0;
         int numberReqEconomySeat = 0;
 
         for (PassengerInfo passengerInfo : passengerInfoList) {
-            switch (passengerInfo.getTicketClassCode()) {
+            String ticketClassCode;
+            if (outbound) {
+                ticketClassCode = passengerInfo.getOutboundTicketClassCode();
+            } else {
+                ticketClassCode = passengerInfo.getInboundTicketClassCode();
+            }
+            switch (ticketClassCode) {
                 case "First" -> numberReqFirstSeat++;
                 case "Business" -> numberReqBusinessSeat++;
                 default -> numberReqEconomySeat++;
@@ -163,7 +170,7 @@ public class UserController {
     }
 
 
-    private void bookingProcess(BookingTicket bookingTicket, HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight) throws SeatUnavailableException {
+    private void bookingProcess(BookingTicket bookingTicket, HttpServletRequest request, List<PassengerInfo> passengerInfoList, Flight flight, boolean outbound) throws SeatUnavailableException {
         log.debug("Tiến hành đặt vé");
 
         for (PassengerInfo passengerInfo : passengerInfoList) {
@@ -176,39 +183,45 @@ public class UserController {
             passenger.setFlight(flight);
             passenger.setEmail(passengerInfo.getEmail());
             passenger.setPhoneNumber(passengerInfo.getPhoneNumber());
-
+            passenger.setIdentification(passengerInfo.getIdentification());
+            String ticketClassCode = outbound ? passengerInfo.getOutboundTicketClassCode() : passengerInfo.getInboundTicketClassCode();
             // Xử lý logic chọn ghế dựa trên hạng vé
-            if (passengerInfo.getTicketClassCode().equals("First")) {
+            String seat = outbound ? passengerInfo.getOutboundSeatCode() : passengerInfo.getInboundSeatCode();
+            log.debug(seat);
+            if (ticketClassCode.equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
-                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
+                Pair<String, Integer> pair = splitString(seat);
+                if (seat == null) {
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 } else {
-                    passenger.setSeatRow(passengerInfo.getSeatRow());
-                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                    passenger.setSeatRow((int) seat.charAt(2));
+                    passenger.setSeatPosition(seat);
                 }
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
-            } else if (passengerInfo.getTicketClassCode().equals("Business")) {
+            } else if (ticketClassCode.equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
-                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
+                Pair<String, Integer> pair = splitString(seat);
+                if (seat == null) {
                     String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 } else {
-                    passenger.setSeatRow(passengerInfo.getSeatRow());
-                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                    passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(pair.a);
                 }
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
-                if (passengerInfo.getSeatPosition() == null && passengerInfo.getSeatRow() == null) {
+                Pair<String, Integer> pair = splitString(seat);
+                if (seat == null) {
                     String seatCode = flightService.getEconomySeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 } else {
-                    passenger.setSeatRow(passengerInfo.getSeatRow());
-                    passenger.setSeatPosition(passengerInfo.getSeatPosition());
+                     passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(pair.a);
                 }
                 flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() - 1);
             }
@@ -432,5 +445,25 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating user information: " + e.getMessage());
         }
+
+
+    }
+
+    public static Pair<String, Integer> splitString(String input) {
+        if (input != null && input.length() > 1 && Character.isLetter(input.charAt(0))) {
+            // Tách phần chữ cái và phần số
+            String letter = input.substring(0, 1);
+            String numberPart = input.substring(1);
+
+            try {
+                // Chuyển phần số từ String sang Integer
+                int number = Integer.parseInt(numberPart);
+                return new Pair<>(letter, number); // Trả về cặp (String, Integer)
+            } catch (NumberFormatException e) {
+                System.out.println("Number parsing error: " + e.getMessage());
+                return null; // Lỗi nếu phần số không hợp lệ
+            }
+        }
+        return null; // Trả về null nếu không đúng định dạng
     }
 }

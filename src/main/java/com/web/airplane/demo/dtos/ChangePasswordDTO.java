@@ -1,16 +1,13 @@
 package com.web.airplane.demo.dtos;
 
-import javax.validation.constraints.NotBlank;
 
 public class ChangePasswordDTO {
-
-    @NotBlank
     private String username;
 
-    @NotBlank
+
     private String currentPassword;
 
-    @NotBlank
+
     private String newPassword;
 
     // Getters and Setters
