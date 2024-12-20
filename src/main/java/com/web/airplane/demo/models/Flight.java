@@ -65,6 +65,7 @@ public class Flight {
     @Min(value = 0, message = "Số ghế hạng nhất phải lớn hơn hoặc bằng 0")
     private int firstAvailableSeats;
 
+    @Column(nullable = false, columnDefinition = "varchar(255) DEFAULT 'Scheduled'")
     private String status;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
