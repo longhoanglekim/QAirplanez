@@ -1,5 +1,6 @@
 package com.web.airplane.demo.dtos;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.Getter;
@@ -12,6 +13,6 @@ import lombok.Setter;
 public class BookingDTO {
     private List<PassengerInfo> passengerInfoList;
     private String allService;
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
 }
 
