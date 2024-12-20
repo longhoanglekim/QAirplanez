@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -86,7 +87,7 @@ public class UserController {
         List<PassengerInfo> passengerInfoList = bookingData.getPassengerInfoList();
         String service = bookingData.getAllService();
         log.debug("dịch vụ: " + service);
-        Integer totalPrice = bookingData.getTotalPrice();
+        BigDecimal totalPrice = bookingData.getTotalPrice();
         log.debug("tổng giá: " + totalPrice);
 
         try {
@@ -196,37 +197,45 @@ public class UserController {
             String ticketClassCode = outbound ? passengerInfo.getOutboundTicketClassCode() : passengerInfo.getInboundTicketClassCode();
             // Xử lý logic chọn ghế dựa trên hạng vé
             String seat = outbound ? passengerInfo.getOutboundSeatCode() : passengerInfo.getInboundSeatCode();
-            log.debug(seat);
+            log.debug(String.valueOf(seat == null));
             if (ticketClassCode.equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (pair == null) {
+                if (seat == null || seat.isEmpty()) {
+                    log.debug("seat null");
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
-                    pair = splitString(seatCode);
-                } 
-                passenger.setSeatPosition(pair.a);
-                passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(pair.a);
+                }
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
             } else if (ticketClassCode.equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (pair == null) {
-                    String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
-                    pair = splitString(seatCode);
-                   
-                } 
-                passenger.setSeatPosition(pair.a);
-                passenger.setSeatRow(pair.b);
+                if (seat == null || seat.isEmpty()) {
+                    log.debug("seat null");
+                    String seatCode = flightService.getFirstSeatForAutoBooking(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(pair.a);
+                }
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (pair == null) {
-                    String seatCode = flightService.getEconomySeatForAutoBooking(flight);
-                    pair = splitString(seatCode);
-                } 
-                passenger.setSeatPosition(pair.a);
-                passenger.setSeatRow(pair.b);
+                if (seat == null || seat.isEmpty()) {
+                    log.debug("seat null");
+                    String seatCode = flightService.getFirstSeatForAutoBooking(flight);
+                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
+                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
+                } else {
+                    passenger.setSeatRow(pair.b);
+                    passenger.setSeatPosition(pair.a);
+                }
                 flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() - 1);
             }
 
@@ -246,6 +255,7 @@ public class UserController {
 
         log.debug("Hoàn thành đặt vé");
     }
+
 
 
     @Transactional
