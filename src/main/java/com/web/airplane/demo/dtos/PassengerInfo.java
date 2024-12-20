@@ -20,9 +20,8 @@ public class PassengerInfo {
     private LocalDate birthdate;
 
     private String bookingCode;
-    
-    private Integer seatRow;
-    private String seatPosition;
+    private String outboundSeatCode;
+    private String inboundSeatCode;
     private String flightNumber;
     private String identification;
     private String email;
@@ -32,7 +31,5 @@ public class PassengerInfo {
         return firstName + " " + lastName;
     }
 
-    public String getSeatCode() {
-        return seatPosition + seatRow;
-    }
 }
+
