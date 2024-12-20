@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useAirportStore = defineStore('airport', () => {
+export const useAirportStore = defineStore('airport-store', () => {
     const airports = ref([])
     const reloadAirports = async () => {
         try {

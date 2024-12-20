@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const searchTicket = defineStore('searchFlight', () => {
+export const searchTicket = defineStore('searchFlight-store', () => {
     const form = ref({
         seatCode: '',
         firstName: ''

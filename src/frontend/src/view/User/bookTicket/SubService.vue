@@ -45,20 +45,34 @@
                 <p>50.000 VNĐ/chỗ</p>
             </template>
             <template v-slot:content>
-              <div class="w-full">
-                <div v-if="seatSelectedOutBound.length > 0 || (selectedReturn && selectedReturn.length > 0)">
-                  <p v-if="seatSelectedOutBound.length > 0" class="flex">{{ storeSearFlight.getOldForm().fromCity }} <span><MoveRight /></span> {{ storeSearFlight.getOldForm().toCity }}</p>
-                  <ul>
-                    <li v-for="(item, index) in seatSelectedOutBound" :key="index">
-                      {{ item }}
-                    </li>
-                  </ul>
-                  <p v-if="selectedReturn && selectedReturn.length > 0" class="flex">{{ storeSearFlight.getOldForm().toCity }} <span><MoveRight /></span> {{ storeSearFlight.getOldForm().fromCity }}</p>
-                  <ul>
-                    <li v-for="(item, index) in selectedReturn" :key="index">
-                      {{ item }}
-                    </li>
-                  </ul>
+              <div class="w-full ">
+                <div v-if="seatSelectedOutBound.length > 0 || (seatSelectedReturn && seatSelectedReturn.length > 0)"
+                  class="grid grid-cols-2"
+                >
+                  <div >
+                    <p v-if="seatSelectedOutBound.length > 0" class="flex">
+                      {{ storeSearFlight.getOldForm().fromCityName }} 
+                      <span class="mx-5"><MoveRight /></span> 
+                      {{ storeSearFlight.getOldForm().toCityName }}
+                    </p>
+                    <ul >
+                      <li v-for="(item, index) in seatSelectedOutBound" :key="index">
+                        {{ item }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p v-if="seatSelectedReturn && seatSelectedReturn.length > 0" class="flex">
+                      {{ storeSearFlight.getOldForm().toCityName }} 
+                      <span class="mx-5"><MoveRight /></span> 
+                      {{ storeSearFlight.getOldForm().fromCityName }}
+                    </p>
+                    <ul>
+                      <li v-for="(item, index) in seatSelectedReturn" :key="index">
+                        {{ item }}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
                 <div v-else>
                   <!-- Hiển thị thông báo khi selectedOutBound là mảng rỗng -->
@@ -148,8 +162,8 @@ const childrenLength = ref(storeForm.getOldForm().children)
 const outboundSeats = ref([]);
 const returnSeats = ref([]);
 const mealList = ref([]);
-const fetchSelectedAircraft = async () => {
-  const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + storeTicket.getSelectedDeparture().flightNumber, {
+const fetchSelectedAircraft = async (flightNumber) => {
+  const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + flightNumber, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -163,8 +177,12 @@ const fetchSelectedAircraft = async () => {
   return response.json();
 };
 
+
+
+
+
 // Lấy dữ liệu từ API và tạo outboundSeats khi đã có rows
-fetchSelectedAircraft()
+fetchSelectedAircraft(storeTicket.getSelectedDeparture().flightNumber)
     .then(data => {
       outboundSeats.value = data;
       // outboundSeats = reactive([
@@ -174,7 +192,18 @@ fetchSelectedAircraft()
     })
     .catch(error => {
       console.error('Error:', error);
+});
+
+if(storeSearFlight.getOldForm().ticketType === 'round-trip'){
+  fetchSelectedAircraft(storeTicket.getSelectedArrival().flightNumber)
+    .then(data => {
+      returnSeats.value = data;
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
+}
+
 
 const handleSeatSelection = ({ outbound, returned}) => {
   seatSelectedOutBound.value = outbound;

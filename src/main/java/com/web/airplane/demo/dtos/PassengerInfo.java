@@ -15,10 +15,12 @@ import java.time.LocalDate;
 public class PassengerInfo {
     private String firstName;
     private String lastName;
-    private String ticketClassCode;
+    private String outboundTicketClassCode;
+    private String inboundTicketClassCode;
     private LocalDate birthdate;
 
     private String bookingCode;
+    
     private Integer seatRow;
     private String seatPosition;
     private String flightNumber;

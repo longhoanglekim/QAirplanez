@@ -238,7 +238,7 @@ import { PlaneTakeoff, PlaneLanding, BookCheck, BookUser} from 'lucide-vue-next'
 import MyDatePicker from '@/components/composable/form/MyDatePicker.vue';
 
 const airports = ref([])
-
+const emit = defineEmits(['search-flight', 'search-ticket'])
 onMounted(async () => {
   try {
     const  response = await fetch('http://localhost:8080/api/airport/public/airportList', {
@@ -349,13 +349,11 @@ async function submitForm() {
 
 function submitFormTicket() {
   error.value = ''
-  
-  // Emit event for parent component
   emit('search-ticket', form2.value)
 }
 
 // Use defineEmits to define emitted events
-const emit = defineEmits(['search-flight', 'search-ticket'])
+
 
 // Add refs for form elements
 const fromCityRef = ref(null)

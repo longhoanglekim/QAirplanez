@@ -117,6 +117,9 @@
   
 <script>
 import { X, Armchair } from 'lucide-vue-next';
+
+import { ticketStore } from '@/store/ticket';
+
 export default {
     components: {
         X,
@@ -169,29 +172,50 @@ export default {
                 this.flattenSeats(this.returnSeats);
         },
         firstSeats() {
+            const storeTicket = ticketStore()
+            if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'first') {
+                return []
+            }
+            if (this.currentTrip === 'return' && storeTicket.getSelectedArrival().selectedClass !== 'first') {
+                return []
+            }
             const totalSeats = this.currentTripSeats.length;
             const maxFirst = Math.floor(totalSeats * 0.1);
             const firstClassSeats = Math.floor(maxFirst / 6) * 6;
             return this.currentTripSeats.slice(0, firstClassSeats);
         },
 
-    businessSeats() {
-        const totalSeats = this.currentTripSeats.length;
-        const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
-        // Số ghế thương gia (20% và chia hết cho 6)
-        const maxBusiness = Math.floor(totalSeats * 0.2);
-        const businessClassSeats = Math.floor(maxBusiness / 6) * 6;
-        return this.currentTripSeats.slice(
-            firstClassSeats, 
-            firstClassSeats + businessClassSeats
+         businessSeats() {
+            const storeTicket = ticketStore()
+            if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'business') {
+                return []
+            }
+            if (this.currentTrip === 'return' && storeTicket.getSelectedArrival().selectedClass !== 'business') {
+                return []
+            }
+            const totalSeats = this.currentTripSeats.length;
+            const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
+            // Số ghế thương gia (20% và chia hết cho 6)
+            const maxBusiness = Math.floor(totalSeats * 0.2);
+            const businessClassSeats = Math.floor(maxBusiness / 6) * 6;
+            return this.currentTripSeats.slice(
+                firstClassSeats, 
+                firstClassSeats + businessClassSeats
         );
     },
 
     economySeats() {
-    const totalSeats = this.currentTripSeats.length;
-    const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
-    const businessClassSeats = Math.floor(Math.floor(totalSeats * 0.2) / 6) * 6;
-    return this.currentTripSeats.slice(
+        const storeTicket = ticketStore()
+        if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'economy') {
+            return []
+        }
+        if (this.currentTrip === 'return' && storeTicket.getSelectedArrival().selectedClass !== 'economy') {
+            return []
+        }
+        const totalSeats = this.currentTripSeats.length;
+        const firstClassSeats = Math.floor(Math.floor(totalSeats * 0.1) / 6) * 6;
+        const businessClassSeats = Math.floor(Math.floor(totalSeats * 0.2) / 6) * 6;
+        return this.currentTripSeats.slice(
         firstClassSeats + businessClassSeats
             );
         },
@@ -241,7 +265,7 @@ export default {
                 if (this.currentTrip === 'outbound') {
                     this.outboundSelectedSeats.splice(currentIndex, 1);
                 } else {
-                    console.log('returnSelectedSeats', this.returnSelectedSeats)
+                    
                     this.returnSelectedSeats.splice(currentIndex, 1);
                 }
             } else {
@@ -250,6 +274,7 @@ export default {
                     this.outboundSelectedSeats.push(seatId);
                 } else {
                     this.returnSelectedSeats.push(seatId);
+                    
                 }
             }
         },
@@ -267,36 +292,16 @@ export default {
                     this.$emit('close');
                 }
             } else {
+                console.log('returnSelectedSeats', this.returnSelectedSeats)
                 // Xác nhận chọn ghế chuyến về
                 this.$emit('seat-selection', {
                     outbound: this.outboundSelectedSeats,
-                    return: this.returnSelectedSeats
+                    returned: this.returnSelectedSeats
                 });
                 this.$emit('close');
             }
         },
-        getMaxBusinessRow(rows) {
-          return rows * 0.1 + rows * 0.2;
-        },
-        getSeatClasses(seat, seatIndex) {
-          const isHeaderRow = seatIndex === 0 || 
-                             seatIndex === Math.floor(this.currentTripSeats.length * 0.1 - 6) || 
-                             seatIndex === Math.floor(this.currentTripSeats.length * 0.3 - 6);
-          if (isHeaderRow) {
-            return {
-              'col-span-6  z-20': true
-            };
-          }
-          return {
-            'w-8 h-8 rounded border-2 border-orange-500 mx-auto': true,
-            'bg-gray-300 cursor-not-allowed': !seat.available,
-            'bg-orange-500 !text-white': this.currentSelectedSeats.includes(seat.id),
-            'bg-white !text-orange-500': seat.available && !this.currentSelectedSeats.includes(seat.id),
-            'hover:bg-orange-600': seat.available && !this.currentSelectedSeats.includes(seat.id),
-            'mb-10': seatIndex === this.currentTripSeats.length * 0.1 - 6 || 
-                     seatIndex === this.currentTripSeats.length * 0.3 - 6
-          };
-        }, 
+        
         formatCurrency(value) {
             return new Intl.NumberFormat('vi-VN', {
                 style: 'currency',

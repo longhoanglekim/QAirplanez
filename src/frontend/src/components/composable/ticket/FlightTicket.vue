@@ -3,9 +3,9 @@
      <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg " >
         <!-- Header with Flight Number -->
         <div class="relative flex justify-between items-center mb-4">
-             <div class=" transform w-16 h-10 text-sm text-gray-500">
-                Flight No: 
-                <span class="font-semibold text-red-600">{{ ticket.flightNumber }}</span>
+             <div class=" transform w-fit h-10 text-sm text-gray-500">
+                Số hiệu chuyến bay: 
+                <div class="font-semibold text-red-600">{{ ticket.flightNumber }}</div>
             </div>
             <div class="text-sm font-bold text-gray-700">
                 {{ ticket.departureDate }}
@@ -18,7 +18,7 @@
                 <p class="text-2xl font-bold text-gray-600">{{ ticket.departureTime }}</p>
             </div>
             <div class="flex items-center space-x-4 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg">
-                <div class="text-gray-500 text-sm text">{{ calculateFlightDuration }} mins</div>
+                <div class="text-gray-500 text-sm text">{{ calculateFlightDuration }} phút</div>
             </div>
             <div class="text-right">
                 <h1 class="text-xl font-semibold">{{ ticket.arrivalAirport }}</h1>
@@ -60,7 +60,7 @@
                 >
                     {{ ticketClass.label }}
                 </h2>
-                <p class="text-sm text-gray-500">from VND</p>
+                <p class="text-sm text-gray-500">Giá tiền:</p>
                 <p 
                     class="text-2xl font-bold transition-transform duration-300" 
                     :class="{
@@ -75,13 +75,13 @@
         <div v-if="localTicket.selectedClass" class="mt-4 bg-pink-50 p-3 rounded-lg transition-all">
             <div class="flex justify-between">
                 <div>
-                    <p class="text-orange-600 text-xs">Carry-on Baggage</p>
+                    <p class="text-orange-600 text-xs">Hành lý xách tay</p>
                     <p class="font-medium text-sm">
                         {{ getBaggageInfo(localTicket.selectedClass).carryon }} kg
                     </p>
                 </div>
                 <div>
-                    <p class="text-orange-600 text-xs">Checked Baggage</p>
+                    <p class="text-orange-600 text-xs">Hành lý ký gửi</p>
                     <p class="font-medium text-sm">
                         {{ getBaggageInfo(localTicket.selectedClass).checkedbaggage }} kg
                     </p>
@@ -99,7 +99,7 @@
             active:scale-95"
             @click="selectTicket"
         >
-            Select Flight
+            Chọn chuyến bay
         </button>
     </div>
 </template>

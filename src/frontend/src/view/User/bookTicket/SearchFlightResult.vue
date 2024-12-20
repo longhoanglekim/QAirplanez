@@ -97,7 +97,7 @@ const storeSearchFlight = searchFlightStore();
 const ticketClasses = [
   {
     value: 'economy',
-    label: 'Economy',
+    label: 'Hạng phổ thông',
     priceMultiplier: 1,
     baggageInfo: {
       carryon: 7,
@@ -106,7 +106,7 @@ const ticketClasses = [
   },
   {
     value: 'business',
-    label: 'Business',
+    label: 'Hạng thương gia',
     priceMultiplier: 2.5,
     baggageInfo: {
       carryon: 10,
@@ -115,7 +115,7 @@ const ticketClasses = [
   },
   {
     value: 'first',
-    label: 'First Class',
+    label: 'Hạng cao cấp',
     priceMultiplier: 4,
     baggageInfo: {
       carryon: 12,
