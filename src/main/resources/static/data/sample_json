@@ -68,6 +68,7 @@ cỦA bẰNG
 http://localhost:8080/api/user/public/findTicketInfo
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "bookingCode": "IZ7KE1X2",
   "firstName": "John"
 }
@@ -106,4 +107,8 @@ http://localhost:8080/api/user/public/findTicketInfo
   "bookingCode": "AFJHINH",
   "firstName": "To"
 >>>>>>> 93a352093a6c118f935f4c5dc29c4cec74109eca
+=======
+  "bookingCode": "AFJHINH",
+  "firstName": "To"
+>>>>>>> b82ba773602ef04ffb01721a6c938117d5e8cbdb
 }
