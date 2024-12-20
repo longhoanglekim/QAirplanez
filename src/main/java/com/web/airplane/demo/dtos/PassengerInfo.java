@@ -17,11 +17,12 @@ public class PassengerInfo {
     private String lastName;
     private String ticketClassCode;
     private LocalDate birthdate;
-    private String identification;
+
     private String bookingCode;
     private Integer seatRow;
     private String seatPosition;
     private String flightNumber;
+    private String identification;
     private String email;
     private String phoneNumber;
 

@@ -2,6 +2,7 @@ package com.web.airplane.demo.services;
 
 import com.web.airplane.demo.dtos.FlightInfo;
 
+import com.web.airplane.demo.dtos.bookings.FlightResponse;
 import com.web.airplane.demo.models.Flight;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.AircraftRepository;
@@ -179,5 +180,17 @@ public class FlightService {
         } while (!isUnique);
 
         return flightNumber;
+    }
+
+    public FlightResponse getFlightResponse(Flight flight) {
+        FlightResponse flightInfo = new FlightResponse();
+        flightInfo.setFlightNumber(flight.getFlightNumber());
+        flightInfo.setDepartAirportCode(flight.getDepartureAirport().getAirportCode());
+        flightInfo.setArrivalAirportCode(flight.getDestinationAirport().getAirportCode());
+        flightInfo.setArrivalTime(flight.getExpectedArrivalTime());
+        flightInfo.setDepartTime(flight.getExpectedDepartureTime());
+        flightInfo.setCancelTime(flight.getCancelDueTime());
+        flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
+        return flightInfo;
     }
 }
