@@ -18,7 +18,8 @@
             <td class="border p-2">{{ passenger.fullName }}</td>
             <td class="border p-2">{{ passenger.flightNumber }}</td>
             <td class="border p-2">{{ passenger.seatCode }}</td>
-            <td class="border p-2">{{ passenger.ticketClassCode}}</td>
+            <td class="border p-2">{{ passenger.outboundSeatCode}}</td>
+            <td class="border p-2">{{ passenger.outboundTicketClassCode}}</td>
             <td class="border p-2">
               <button class="bg-blue-500 text-white p-1 rounded">Chỉnh Sửa</button>
             </td>

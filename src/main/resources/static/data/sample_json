@@ -4,26 +4,29 @@ CỦA LONG
   {
     "firstName": "John",
     "lastName": "Doe",
-    "ticketClassCode": "Economy",
+    "outboundTicketClassCode": "Economy",
+    "inboundTicketClassCode": "Business",
     "birthdate": "1990-05-15",
     "identification": "A12345678",
-    "seatRow": 12,
-    "seatPosition": "A",
+    "email": "john.doe@example.com",
     "phoneNumber": "1234567890",
-    "email": "john.doe@example.com"
+    "outboundSeatCode": "A12",
+    "inboundSeatCode": "C5"
   },
   {
     "firstName": "Jane",
     "lastName": "Smith",
-    "ticketClassCode": "Business",
+    "outboundTicketClassCode": "Business",
+    "inboundTicketClassCode": "Business",
     "birthdate": "1985-03-22",
     "identification": "B98765432",
-    "seatRow": 5,
-    "seatPosition": "C",
+    "email": "jane.smith@example.com",
     "phoneNumber": "0987654321",
-    "email": "jane.smith@example.com"
+    "outboundSeatCode": "B5",
+    "inboundSeatCode": "A3"
   }
 ]
+
 cỦA bẰNG
 {
   [
@@ -48,7 +51,7 @@ cỦA bẰNG
       "seatPosition": "C",
       "phoneNumber": "0987654321",
       "email": "jane.smith@example.com",
-      
+
     },
   ],
 "service": {

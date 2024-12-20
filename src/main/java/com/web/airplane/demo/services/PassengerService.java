@@ -20,9 +20,8 @@ public class PassengerService {
         passengerInfo.setBirthdate(passenger.getBirthdate());
         passengerInfo.setIdentification(passengerInfo.getIdentification());
         passengerInfo.setBookingCode(passenger.getBookingTicket().getBookingCode());
-        passengerInfo.setTicketClassCode(passenger.getTicketClass().getClassName());
-        passengerInfo.setSeatPosition(passenger.getSeatPosition());
-        passengerInfo.setSeatRow(passenger.getSeatRow());
+        passengerInfo.setOutboundTicketClassCode(passenger.getTicketClass().getClassName());
+        passengerInfo.setOutboundSeatCode(passenger.getSeatPosition() + passenger.getSeatRow());
         passengerInfo.setFlightNumber(passenger.getFlight().getFlightNumber());
         return passengerInfo;
     }
