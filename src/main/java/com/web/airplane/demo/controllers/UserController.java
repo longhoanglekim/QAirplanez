@@ -1,5 +1,6 @@
 package com.web.airplane.demo.controllers;
 
+import com.web.airplane.demo.dtos.BookingDTO;
 import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
@@ -80,7 +81,14 @@ public class UserController {
     public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String departFlightNumber,
                                         @RequestParam(value = "return_flight_number", required = false) String returnFlightNumber,
                                         HttpServletRequest request,
-                                        @RequestBody List<PassengerInfo> passengerInfoList) {
+                                        @RequestBody BookingDTO bookingData) {
+        log.debug("Bắt đầu đặt vé");
+        List<PassengerInfo> passengerInfoList = bookingData.getPassengerInfoList();
+        String service = bookingData.getAllService();
+        log.debug("dịch vụ: " + service);
+        Integer totalPrice = bookingData.getTotalPrice();
+        log.debug("tổng giá: " + totalPrice);
+
         try {
             if (checkDuplicateIdentification(passengerInfoList)) {
                 return ResponseEntity.badRequest().body("Có trùng hành khách!");
@@ -115,7 +123,8 @@ public class UserController {
             String commonBookingCode = bookingCodeService.generateBookingCode();
             BookingTicket bookingTicket = new BookingTicket();
             bookingTicket.setBookingCode(commonBookingCode);
-            bookingTicket.setService("something");
+            bookingTicket.setService(service);
+            bookingTicket.setTotalPrice(totalPrice);
             bookingTicketRepository.save(bookingTicket);
             // Đặt vé cho chiều đi
             bookingProcess(bookingTicket, request, passengerInfoList, departFlight, true);
@@ -191,38 +200,33 @@ public class UserController {
             if (ticketClassCode.equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (seat == null) {
+                if (pair == null) {
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                } else {
-                    passenger.setSeatRow((int) seat.charAt(2));
-                    passenger.setSeatPosition(seat);
-                }
+                    pair = splitString(seatCode);
+                } 
+                passenger.setSeatPosition(pair.a);
+                passenger.setSeatRow(pair.b);
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
             } else if (ticketClassCode.equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (seat == null) {
+                if (pair == null) {
                     String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                } else {
-                    passenger.setSeatRow(pair.b);
-                    passenger.setSeatPosition(pair.a);
-                }
+                    pair = splitString(seatCode);
+                   
+                } 
+                passenger.setSeatPosition(pair.a);
+                passenger.setSeatRow(pair.b);
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
                 Pair<String, Integer> pair = splitString(seat);
-                if (seat == null) {
+                if (pair == null) {
                     String seatCode = flightService.getEconomySeatForAutoBooking(flight);
-                    passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
-                    passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
-                } else {
-                     passenger.setSeatRow(pair.b);
-                    passenger.setSeatPosition(pair.a);
-                }
+                    pair = splitString(seatCode);
+                } 
+                passenger.setSeatPosition(pair.a);
+                passenger.setSeatRow(pair.b);
                 flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() - 1);
             }
 
@@ -450,6 +454,7 @@ public class UserController {
     }
 
     public static Pair<String, Integer> splitString(String input) {
+        log.debug("input: " + input);
         if (input != null && input.length() > 1 && Character.isLetter(input.charAt(0))) {
             // Tách phần chữ cái và phần số
             String letter = input.substring(0, 1);

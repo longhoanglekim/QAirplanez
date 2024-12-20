@@ -93,11 +93,11 @@ export const ticketStore = defineStore('ticketStore', () => {
         return JSON.parse(sessionStorage.getItem('childInformation'))
     }
 
-    const getPassengerDepartureInformation = (seatsSelected) => {
+    const getPassengerInformation = (seatsSelectedDepart, seatsSelectedReturn) => {
         const adultInformation = getAdultInformation()
         const childInformation = getChildInformation()
         const passengerInfoList = []
-        let j = 0
+        let j = 0, k = 0
         for(let i = 0; i < adultInformation.length; i++) {
             passengerInfoList.push({
                 firstName: adultInformation[i].firstName,
@@ -107,68 +107,114 @@ export const ticketStore = defineStore('ticketStore', () => {
                 identification: adultInformation[i].cccd,
                 phoneNumber: adultInformation[i].phone,
                 email: adultInformation[i].email,
-                ticketClassCode: getSelectedDeparture().selectedClass.charAt(0).toUpperCase() + getSelectedDeparture().selectedClass.slice(1), //"economy" to "Economy"
-                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
-                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+                outboundTicketClassCode: getSelectedDeparture().selectedClass.charAt(0).toUpperCase() + getSelectedDeparture().selectedClass.slice(1), //"economy" to "Economy"
+                inboundTicketClassCode: getSelectedArrival().selectedClass ? getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1) : '',
+                outboundSeatCode: j < seatsSelectedDepart.length ? seatsSelectedDepart[j] : '',
+                inboundSeatCode: k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
             })
             j++
+            k++
         }
         for(let i = 0; i < childInformation.length; i++) {
             passengerInfoList.push({
                 firstName: childInformation[i].firstName,
                 lastName: childInformation[i].lastName,
                 birthDate: childInformation[i].birthDate,
-                ticketClassCode: getSelectedDeparture().selectedClass,
                 gender: childInformation[i].gender,
-                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
-                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+                identification: childInformation[i].cccd,
+                outboundTicketClassCode: getSelectedDeparture().selectedClass.charAt(0).toUpperCase() + getSelectedDeparture().selectedClass.slice(1), //"economy" to "Economy"
+                inboundTicketClassCode: getSelectedArrival().selectedClass ? getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1) : '',
+                outboundSeatCode: j < seatsSelectedDepart.length ? seatsSelectedDepart[j] : '',
+                inboundSeatCode: k < seatsSelectedReturn.length ? seatsSelectedReturn[k] : ''
             })
             j++
+            k++
         }
         return passengerInfoList
     }
 
-    const getPassengerReturnInformation = (seatsSelected) => {
-        const adultInformation = getAdultInformation()
-        const childInformation = getChildInformation()
-        const passengerInfoList = []
-        let j = 0
-        for(let i = 0; i < adultInformation.length; i++) {
-            passengerInfoList.push({
-                firstName: adultInformation[i].firstName,
-                lastName: adultInformation[i].lastName,
-                birthdate: adultInformation[i].birthDate,
-                gender: adultInformation[i].gender,
-                identification: adultInformation[i].cccd,
-                phoneNumber: adultInformation[i].phone,
-                email: adultInformation[i].email,
-                ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
-                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
-                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
-            })
-            j++
-        }
-        for(let i = 0; i < childInformation.length; i++) {
-            passengerInfoList.push({
-                firstName: childInformation[i].firstName,
-                lastName: childInformation[i].lastName,
-                birthDate: childInformation[i].birthDate,
-                ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
-                gender: childInformation[i].gender,
-                seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
-                seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
-            })
-            j++
-        }
-        return passengerInfoList
+    const getTicketPrice = () => {
+        let price = 0
+        price += getSelectedDeparture().price * (getSelectedDeparture().adults + getSelectedDeparture().children)
+        price += getSelectedArrival().price * (getSelectedArrival().adults + getSelectedArrival().children)
+        return price
     }
 
-    const getRowAndPosition = (seat) => {
-        //seat = "D-1"
-        const row = seat.split('-')[1]
-        const position = seat.split('-')[0]
-        return {row, position}  
-    }
+    const clear = () => {
+        try {
+            sessionStorage.removeItem('departureTicket');
+            sessionStorage.removeItem('arrivalTicket');
+            sessionStorage.removeItem('adultInformation');
+            sessionStorage.removeItem('childInformation');
+            selectedDeparture.value = {
+                arrivalCode: '',
+                arrivalName: '',
+                arrivalDate: '',
+                arrivalTime: '',
+                price: '',
+                departureCode: '',
+                departureName: '',
+                departureDate: '',
+                departureTime: '',
+                flightNumber: '',
+                selectedClass: '',
+                adults: 0,
+                children: 0
+            };
+            selectedArrival.value = {
+                arrivalCode: '',
+                arrivalName: '',
+                arrivalDate: '',
+                arrivalTime: '',
+                price: '',
+                departureCode: '',
+                departureName: '',
+                departureDate: '',
+                departureTime: '',
+                flightNumber: '',
+                selectedClass: '',
+                adults: 0,
+                children: 0
+            };
+        } catch (error) {
+            console.error('Error clearing sessionStorage and store:', error);
+        }
+    };
+
+    // const getPassengerReturnInformation = (seatsSelected) => {
+    //     const adultInformation = getAdultInformation()
+    //     const childInformation = getChildInformation()
+    //     const passengerInfoList = []
+    //     let j = 0
+    //     for(let i = 0; i < adultInformation.length; i++) {
+    //         passengerInfoList.push({
+    //             firstName: adultInformation[i].firstName,
+    //             lastName: adultInformation[i].lastName,
+    //             birthdate: adultInformation[i].birthDate,
+    //             gender: adultInformation[i].gender,
+    //             identification: adultInformation[i].cccd,
+    //             phoneNumber: adultInformation[i].phone,
+    //             email: adultInformation[i].email,
+    //             ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
+    //             seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
+    //             seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+    //         })
+    //         j++
+    //     }
+    //     for(let i = 0; i < childInformation.length; i++) {
+    //         passengerInfoList.push({
+    //             firstName: childInformation[i].firstName,
+    //             lastName: childInformation[i].lastName,
+    //             birthDate: childInformation[i].birthDate,
+    //             ticketClassCode: getSelectedArrival().selectedClass.charAt(0).toUpperCase() + getSelectedArrival().selectedClass.slice(1), //"economy" to "Economy"
+    //             gender: childInformation[i].gender,
+    //             seatRow: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).row : '',
+    //             seatPosition: j < seatsSelected.length ? getRowAndPosition(seatsSelected[j]).position : ''
+    //         })
+    //         j++
+    //     }
+    //     return passengerInfoList
+    // }
 
     return {
         saveDepartureTicket, 
@@ -179,7 +225,8 @@ export const ticketStore = defineStore('ticketStore', () => {
         saveChildInformation,
         getAdultInformation,
         getChildInformation,
-        getPassengerDepartureInformation,
-        getPassengerReturnInformation
+        getPassengerInformation,
+        getTicketPrice, 
+        clear
     }
 })

@@ -230,7 +230,7 @@ export default {
             return seats.flatMap((row, rowIndex) => {
               const col = ['A', 'B', 'C', 'D', 'E', 'F'];
               return row.map((isAvailable, seatIndex) => ({
-                  id: `${col[seatIndex]}-${rowIndex + 1}`,
+                  id: `${col[seatIndex]}${rowIndex + 1}`,
                   available: isAvailable,
                   rowIndex,
                   seatIndex
