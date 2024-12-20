@@ -13,16 +13,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="notifications")
+@Table(name="flight_notifications")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Notification {
+public class FlightNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String content;
     private LocalDateTime createdDate;
+    private String flightNumber;
 }
