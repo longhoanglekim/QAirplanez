@@ -50,7 +50,7 @@ const changePassword = async () => {
             })
         });
 
-        const data = await response.json();
+        const data = await response.text();
 
         if (response.ok) {
             alert("Đổi mật khẩu thành công!");
