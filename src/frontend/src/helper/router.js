@@ -183,8 +183,8 @@ function isLoggedInUser() {
 }
 
 router.beforeEach((to, from, next) => {
-    const uiStore = useUIStore()
-    uiStore.isLoading = true
+  const uiStore = useUIStore()
+  uiStore.isLoading = true
     // Handle admin routes
     if (to.path.startsWith('/admin')) {
       // If not logged in as admin
