@@ -22,6 +22,8 @@ import NewsUser from "@/view/User/NewsUser.vue";
 import NewsItem from "@/components/User/news/NewsItem.vue";
 import DestinationDetail from "@/components/User/destination/DestinationDetail.vue";
 
+import { useUIStore } from "@/store/UIstore";
+
 const routes = [
     {
         path: '/test',
@@ -181,6 +183,8 @@ function isLoggedInUser() {
 }
 
 router.beforeEach((to, from, next) => {
+    const uiStore = useUIStore()
+    uiStore.isLoading = true
     // Handle admin routes
     if (to.path.startsWith('/admin')) {
       // If not logged in as admin
@@ -208,9 +212,13 @@ router.beforeEach((to, from, next) => {
       if (!isLoggedInUser()) {
         // Chuyển sang trang login nếu không phải trang login
         if (to.path !== '/login') {
-          return next('/login');
+          setTimeout(()=>{
+            next('/login')
+          },800)
         }
-        return next();
+        setTimeout(()=>{
+          next()
+        },800)
       }
       
       // Nếu đã đăng nhập user
@@ -218,13 +226,23 @@ router.beforeEach((to, from, next) => {
         // Chuyển sang dashboard nếu đang ở trang login
         return next('/home');
       }
-      
+      setTimeout(() => {
+        next()
+      }, 800)
       // Cho phép đi tiếp các route yêu cầu xác thực
-      return next();
     }
   
     // Cho phép đi tiếp các route không yêu cầu xác thực
-    next();
+    setTimeout(() => {
+      next()
+    }, 800)
+    
   });
 
 export default router;
+
+
+router.afterEach(() => {
+  const uiStore = useUIStore()
+  uiStore.isLoading = false
+})

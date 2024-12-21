@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white/50 fixed w-full z-50 top-0 transition-all duration-300">
+  <header class="bg-white bg-opacity-40  w-full z-50 top-0 transition-all duration-500" :class="{'fixed !bg-orange-400 bg-opacity-100': isScrolled}"> 
     <div class="container mx-auto pt-1 flex justify-between items-center">
       <!-- Logo -->
       <div class="logo">
@@ -10,16 +10,19 @@
 
       <!-- desktop Navigation -->
       <nav class="hidden lg:flex items-center space-x-8">
-        <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer">
+        <div v-for="(item, index) in menuItems" :key="index" class="group  cursor-pointer">
           <div
-            class="flex items-center justify-between rounded-full hover:text-orange-600 m-1 py-2 px-4 hover:bg-white text-slate-800">
-            <a :href="item.link" class="text-md tracking-wider font-bold">
+            class="flex items-center justify-between rounded-full  m-1  hover:text-white text-slate-800 relative transition-all duration-300">
+            <a :href="item.link" class="peer text-md tracking-wider font-bold py-2 px-4"
+              :class="{'hover:text-orange-800': !isScrolled}">
               {{ item.label }}
               <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 transition-colors" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </a>
+            <span class="absolute w-0 peer-hover:w-full left-0 border-b-2 border-white bottom-0 transition-w duration-300"
+              :class="{'!border-orange-500': !isScrolled}"></span>
           </div>
 
           <div v-if="item.submenu"
@@ -43,13 +46,13 @@
         </button>
 
         <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
-          <a href="/signup"
-            class="block text-md px-4 py-2 rounded-full w-32 ml-2 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
-            Đăng ký
-          </a>
           <a href="/login"
-            class="block text-md px-4 ml-2 py-2 rounded-full w-32 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
-            Đăng nhập
+            class="block text-sm px-4 py-2 rounded-full w-32 ml-2 font-bold text-center text-slate-800x border-slate-800 border-2">
+            <span class="w-fit mx-auto">Đăng nhập</span>
+          </a>
+          <a href="/signup"
+            class="block text-sm px-4 py-2 rounded-full w-32 ml-2 font-bold text-center text-white signup">
+            <span class="w-fit mx-auto">Đăng ký</span>
           </a>
         </div>
 
@@ -154,26 +157,7 @@ export default {
             { label: 'Service List', link: '/service-list' },
             { label: 'Service Details', link: '/service-details' },
           ],
-        },
-        {
-          label: 'Projects',
-          link: '/projects',
-          submenu: [
-            { label: 'Project Grid', link: '/project-grid' },
-            { label: 'Project Masonry', link: '/project-masonry' },
-            { label: 'Project Details', link: '/project-details' },
-          ],
-        },
-        {
-          label: 'Blog',
-          link: '/blog',
-          submenu: [
-            { label: 'Blog Grid', link: '/blog-grid' },
-            { label: 'Blog List', link: '/blog-list' },
-            { label: 'Blog Details', link: '/blog-details' },
-          ],
-        },
-        { label: 'Contact', link: '/contact' },
+        }
       ],
     };
   },
@@ -279,3 +263,10 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.signup {
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(245,97,43,1) 0%, rgba(252,210,69,1) 100%);
+}
+</style>

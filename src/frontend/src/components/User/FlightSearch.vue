@@ -1,5 +1,5 @@
 <template>
-<div class="w-5/6 md:w-3/4 xl:w-1/2 max-w-lg rounded-xl shadow-lg place-self-center bg-white m-4 text-left">
+<div class="w-full rounded-xl shadow-lg  bg-white m-4 text-left max-w-sm">
     <!-- Tab buttons -->
     <div class="rounded-t-xl bg-gray-100 relative p-4">
         <button @click="changeContent('searchFlight')" 
@@ -36,7 +36,7 @@
             </div>
 
             <!-- From City & Departure Date -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-2">
                 <div class="relative group p-1">
                     <PlaneTakeoff class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                     
@@ -78,7 +78,7 @@
             </div>
 
             <!-- To City & Return Date -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-2">
                 <div class="relative p-1 group">
                     <PlaneLanding class="w-6 h-6 absolute top-1/2 -translate-y-1/2 left-2 text-gray-500 group-focus-within:text-orange-500" />
                     <input type="text" v-model="searchToCity" 
