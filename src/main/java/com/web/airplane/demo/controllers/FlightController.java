@@ -275,6 +275,7 @@ public class FlightController {
     @PostMapping("/admin_flight/getTicketList")
     public ResponseEntity<?> getTicketListInfo() {
         List<BookingTicket> bookingTickets = bookingTicketRepository.findAll();
+        log.debug("Get ticket list + " + bookingTickets.size());
         return ResponseEntity.ok(bookingTickets.stream()
                 .map(bookingTicket -> bookingTicketService.getBookingTicketInfo(bookingTicket))
                 .collect(Collectors.toList()));
