@@ -19,8 +19,8 @@ import ImageTest from "@/view/Test/ImageTest.vue";
 import LogoutUser from "@/view/User/LogoutUser.vue"
 
 import BangTest from "@/view/Test/BangTest.vue";
-
-
+import NewsUser from "@/view/User/NewsUser.vue";
+import NewsItem from "@/components/User/news/NewsItem.vue";
 
 const routes = [
     {
@@ -147,7 +147,16 @@ const routes = [
         path: '/user',
         name: 'Profile',
         component: ProfileUser,
-    }, 
+    }, {
+        path : '/news',
+        name: 'News',
+        component: NewsUser,
+    }, {
+      path: '/news/:title',
+      name: 'NewsItem',
+      component: NewsItem,
+      props: true
+    }
 ];
 const router = createRouter({
     history: createWebHistory(),
