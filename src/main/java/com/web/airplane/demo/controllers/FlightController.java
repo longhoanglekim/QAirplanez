@@ -222,8 +222,10 @@ public class FlightController {
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
+        log.debug(flights.toString());
         log.debug(flightInfo.toString());
         if (flights.isEmpty()) return new ArrayList<>();
+        log.debug("THấy chuyến");
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
             

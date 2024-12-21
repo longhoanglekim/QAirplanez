@@ -73,7 +73,7 @@ import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
 import { useRouter } from 'vue-router';
 import { searchFlightStore } from '@/store/searchFlight';
-import { ticketStore } from '@/store/ticket';
+import { useTicketStore } from '@/store/ticket';
 import {
     ChevronDown,
     MoveRight,
@@ -85,7 +85,7 @@ import { ref, computed, onMounted } from 'vue'
 
 const router = useRouter()
 
-const storeTicket = ticketStore();
+const storeTicket = useTicketStore();
 const storeSearchFlight = searchFlightStore();
 // Ticket classes definition
 const ticketClasses = [
@@ -149,9 +149,9 @@ const userSelectTicket = (selectedTicket) => {
     // router.push(nextPage)
 }
 
-const departureCode = ref(storeSearchFlight.getOldForm().fromCityName)
+const departureCode = ref(storeSearchFlight.getOldForm().fromCity)
 
-const arrivalCode = ref(storeSearchFlight.getOldForm().toCityName)
+const arrivalCode = ref(storeSearchFlight.getOldForm().toCity)
 console.log(departureCode.value + " " + arrivalCode.value);
 // Methods
 const calculateFlightDuration = (ticket) => {
@@ -178,6 +178,7 @@ const getListTicket = async (departureDate) => {
     expectedArrivalTime: null,
     numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
   })
+  console.log(req)
   console.log('tìm kiếm chuyến bay với thông tin: ', req);
   await fetch('http://localhost:8080/api/flight/public/findFlight', {
     method: 'POST',

@@ -118,7 +118,7 @@
 <script>
 import { X, Armchair } from 'lucide-vue-next';
 
-import { ticketStore } from '@/store/ticket';
+import { useTicketStore } from '@/store/ticket';
 
 export default {
     components: {
@@ -172,7 +172,7 @@ export default {
                 this.flattenSeats(this.returnSeats);
         },
         firstSeats() {
-            const storeTicket = ticketStore()
+            const storeTicket = useTicketStore()
             if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'first') {
                 return []
             }
@@ -186,7 +186,7 @@ export default {
         },
 
          businessSeats() {
-            const storeTicket = ticketStore()
+            const storeTicket = useTicketStore()
             if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'business') {
                 return []
             }
@@ -205,7 +205,7 @@ export default {
     },
 
     economySeats() {
-        const storeTicket = ticketStore()
+        const storeTicket = useTicketStore()
         if (this.currentTrip === 'outbound' && storeTicket.getSelectedDeparture().selectedClass !== 'economy') {
             return []
         }
