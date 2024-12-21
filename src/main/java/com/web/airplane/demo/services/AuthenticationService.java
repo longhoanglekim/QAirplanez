@@ -1,16 +1,20 @@
 package com.web.airplane.demo.services;
 
+import com.mysql.cj.log.Log;
 import com.web.airplane.demo.dtos.LoginDTO;
 import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.net.http.HttpRequest;
 
 @Service
 @Slf4j
@@ -46,16 +50,17 @@ public class AuthenticationService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(input.getUsername(), input.getPassword())
         );
-
+        log.debug("Bat dau kiem tra");
         // Kiểm tra nếu xác thực thành công
         if (authentication.isAuthenticated()) {
+            log.debug("Xac thuc thanh cong");
             if (input.getUsername().contains("@")) {
                 return userRepository.findByEmail(input.getUsername());
             } else {
                 return userRepository.findByPhoneNumber(input.getUsername());
             }
         }
-
+        log.debug("Sai mat khau");
         throw new BadCredentialsException("Sai tài khoản hoặc mật khẩu.");
     }
 
@@ -65,16 +70,22 @@ public class AuthenticationService {
     }
 
     // Method to change password
-    public void changePassword(String username, String currentPassword, String newPassword) throws BadCredentialsException {
-        User user = userRepository.findByEmail(username);
-        if (user == null) {
-            user = userRepository.findByPhoneNumber(username);
-        }
+    public void changePassword(HttpServletRequest request, String currentPassword, String newPassword) throws BadCredentialsException {
+        User user = userService.getCurrentUser(request);
 
-        if (user == null || !verifyPassword(currentPassword, user.getPassword())) {
+        log.debug("Lay tai khoan hien tai");
+        if (user == null) {
             throw new BadCredentialsException("Mật khẩu hiện tại không đúng!");
         }
-
+        log.debug("Xac nhan");
+        LoginDTO loginDTO = new LoginDTO();
+        log.debug("current pass" + currentPassword);
+        loginDTO.setUsername(user.getUsername());
+        loginDTO.setPassword(currentPassword);
+        if (authenticate(loginDTO) == null) {
+            throw new BadCredentialsException("Mật khẩu hiện tại không đúng!");
+        }
+        log.debug("Set password");
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }

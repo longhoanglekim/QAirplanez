@@ -10,13 +10,17 @@ import com.web.airplane.demo.repositories.UserRepository;
 import com.web.airplane.demo.services.AuthenticationService;
 import com.web.airplane.demo.services.JwtService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.http.HttpRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -67,10 +71,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDto) {
+    @Transactional
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDto, HttpServletRequest request) {
         try {
-            authenticationService.changePassword(changePasswordDto.getUsername(),
-                    changePasswordDto.getCurrentPassword(), changePasswordDto.getNewPassword());
+            authenticationService.changePassword(request, changePasswordDto.getCurrentPassword(), changePasswordDto.getNewPassword());
             return ResponseEntity.ok("Đổi mật khẩu thành công!");
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Mật khẩu hiện tại không đúng!");
