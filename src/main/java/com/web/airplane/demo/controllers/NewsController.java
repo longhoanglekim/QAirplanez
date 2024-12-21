@@ -66,4 +66,13 @@ public class NewsController {
         }
         return ResponseEntity.ok(newsResponseList);
     }
+
+    @GetMapping("/public/news/{title}")
+    public ResponseEntity<?> getNewsByTitle(@PathVariable String title) {
+        News news = newsRepository.findByTitle(title);
+        if (news == null) {
+            return ResponseEntity.status(404).body("News not found");
+        }
+        return ResponseEntity.ok(newsService.getNewsInfo(news));
+    }
 }
