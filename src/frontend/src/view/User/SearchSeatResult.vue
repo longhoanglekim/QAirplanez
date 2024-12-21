@@ -275,7 +275,9 @@ import {
     formatCurrency
 } from '@/helper/currency';
 import { useRouter } from 'vue-router';
+import { searchTicketStore } from '@/store/searchTicket';
 
+const storeTicket = searchTicketStore()
 const router = useRouter()
 const loadData = ref(null)
 const loading = ref(true)
@@ -427,8 +429,8 @@ const loadTicketFromServer = async () => {
     try {
         mealStore.getMealList()
         const req = {
-            bookingCode: "TPV52OH0",
-            firstName: "Tô"
+            bookingCode: storeTicket.getOldForm().seatCode,
+            firstName: storeTicket.getOldForm().firstName
         }
         const response = await fetch('http://localhost:8080/api/user/public/findTicketInfo', {
             method: 'POST',

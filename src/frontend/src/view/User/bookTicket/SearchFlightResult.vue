@@ -6,7 +6,7 @@
 </div>
 
 <div class="container mx-auto px-4 pb-6 rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
-    <div class="place-items-center">
+    <div class="place-items-center text-center">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" 
@@ -22,7 +22,7 @@
     <!-- Phần tiêu đề và lọc -->
     <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 mx-auto z-10">
         <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div class="flex items-center space-x-4">
+            <div class="space-x-4">
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-red-500 mr-2">Các vé chuyến:</span>
                     <span class="text-2xl font-bold text-red-500 mr-2">{{ departureCode }}</span>
@@ -64,11 +64,6 @@
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
 </div>
-  <div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
-    <selecting-ticket departure-time="08:30 AM"
-                      arrival-time="10:45 AM"
-                      price="$250.00"></selecting-ticket>
-  </div>
 </template>
 
     
@@ -76,7 +71,6 @@
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
-import SelectingTicket from '@/components/composable/ticket/SelectingTicket.vue';
 import { useRouter } from 'vue-router';
 import { searchFlightStore } from '@/store/searchFlight';
 import { ticketStore } from '@/store/ticket';
@@ -155,9 +149,9 @@ const userSelectTicket = (selectedTicket) => {
     // router.push(nextPage)
 }
 
-const departureCode = ref(storeSearchFlight.getOldForm().fromCity)
+const departureCode = ref(storeSearchFlight.getOldForm().fromCityName)
 
-const arrivalCode = ref(storeSearchFlight.getOldForm().toCity)
+const arrivalCode = ref(storeSearchFlight.getOldForm().toCityName)
 console.log(departureCode.value + " " + arrivalCode.value);
 // Methods
 const calculateFlightDuration = (ticket) => {
@@ -227,6 +221,8 @@ const filteredAndSortedTickets = computed(() => {
 })
 
 const handleReSearch = () => {
+  departureCode.value = storeSearchFlight.getOldForm().fromCityName
+  arrivalCode.value = storeSearchFlight.getOldForm().toCityName
   getListTicket(storeSearchFlight.getOldForm().departureDate)
 }
 

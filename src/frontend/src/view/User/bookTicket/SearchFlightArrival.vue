@@ -6,7 +6,7 @@
 </div>
 
 <div class="container mx-auto px-4 pb-6 rounded-bl-lg rounded-br-lg bg-gradient-to-br from-orange-50 to-red-100 ">
-    <div class="place-items-center mb-2">
+    <div class="place-items-center mb-2 text-center">
         <button class="place-items-center rounded-b-full bg-orange-400 px-6 uppercase font-bold text-sm text-slate-800">
             Thay đổi
             <ChevronDown :class="{'rotate-180' : showingSearchBox}" 
