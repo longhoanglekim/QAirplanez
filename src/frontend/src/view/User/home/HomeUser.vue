@@ -1,8 +1,10 @@
 <template>
-  <div class="w-full h-[700px] overflow-hidden relative">
+  <div class="w-full h-[700px] overflow-hidden relative z-50">
     <img :src="require('@/assets/background/home_bg.jpg')"
-      class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover">
-    <div class="absolute inset-0 flex items-center justify-center">
+    class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover">
+    <img src="../../../../public/QAirline-12-21-2024.png" alt="" class="absolute top-0 lg:-top-24 lg:-left-40">
+    <div class="text-white absolute top-40 xl:top-60 xl:left-20 text-xl slogan text-center left-0 right-0">Vui từng chuyến bay</div>
+    <div class="absolute left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] md:top-1/2 xl:-translate-y-1/2 right-0 flex items-center justify-center max-w-xl">
       <FlightSearch @search-flight="searchFlight" @search-ticket="searchTicket" />
     </div>
   </div>
@@ -128,4 +130,19 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.qairline {
+  background-image: url('../../../../public/QAirline-12-21-2024.png');
+  z-index: 100000;
+}
+
+@font-face {
+  font-family: 'Betterday Script';
+  src: url("//src//frontend/public/Betterday\ Script\ [demo].ttf");
+}
+
+.slogan {
+  font-family: 'Betterday Script', cursive;
+  font-size: 1.8rem;
+}
+</style>

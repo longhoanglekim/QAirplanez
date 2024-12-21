@@ -43,13 +43,13 @@
         </button>
 
         <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
-          <a href="/signup"
-            class="block text-md px-4 py-2 rounded-full w-32 ml-2 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
-            Đăng ký
-          </a>
           <a href="/login"
-            class="block text-md px-4 ml-2 py-2 rounded-full w-32 font-bold text-slate-800 mt-4 hover:bg-blue-700 lg:mt-0">
-            Đăng nhập
+            class="block text-sm px-4 py-2 rounded-full w-32 ml-2 font-bold text-center text-slate-800x border-slate-800 border-2">
+            <span class="w-fit mx-auto">Đăng nhập</span>
+          </a>
+          <a href="/signup"
+            class="block text-sm px-4 py-2 rounded-full w-32 ml-2 font-bold text-center text-white signup">
+            <span class="w-fit mx-auto">Đăng ký</span>
           </a>
         </div>
 
@@ -154,26 +154,7 @@ export default {
             { label: 'Service List', link: '/service-list' },
             { label: 'Service Details', link: '/service-details' },
           ],
-        },
-        {
-          label: 'Projects',
-          link: '/projects',
-          submenu: [
-            { label: 'Project Grid', link: '/project-grid' },
-            { label: 'Project Masonry', link: '/project-masonry' },
-            { label: 'Project Details', link: '/project-details' },
-          ],
-        },
-        {
-          label: 'Blog',
-          link: '/blog',
-          submenu: [
-            { label: 'Blog Grid', link: '/blog-grid' },
-            { label: 'Blog List', link: '/blog-list' },
-            { label: 'Blog Details', link: '/blog-details' },
-          ],
-        },
-        { label: 'Contact', link: '/contact' },
+        }
       ],
     };
   },
@@ -279,3 +260,10 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.signup {
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(245,97,43,1) 0%, rgba(252,210,69,1) 100%);
+}
+</style>

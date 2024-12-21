@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <PageLoader />
     <header v-if="showNavbar">
         <PageHeader />
         <PageNavBar :key="$route.fullPath"/>
@@ -19,7 +20,7 @@ import { useRoute } from 'vue-router';
 import PageHeader from "@/components/User/general/PageHeader.vue";
 import PageFooter from "@/components/User/general/PageFooter.vue";
 import PageNavBar from "@/components/User/general/PageNavBar.vue";
-
+import PageLoader from "@/components/composable/PageLoader.vue";
 const route = useRoute();
 
 const isAdminRoute = computed(() => route.meta.isAdminRoute);
