@@ -22,4 +22,5 @@ public class FlightResponse {
     private String status;
     private BigDecimal mealDiscount;
     private BigDecimal ticketDiscount;
+    private BigDecimal basePrice;
 }

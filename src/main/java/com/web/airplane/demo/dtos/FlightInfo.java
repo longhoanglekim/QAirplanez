@@ -37,6 +37,7 @@ public class FlightInfo {
     private String status;
     private BigDecimal mealDiscount;
     private BigDecimal ticketDiscount;
+    private BigDecimal basePrice;
 
     public String getManufacture() {
         if (aircraftCode != null && !aircraftCode.isEmpty()) {

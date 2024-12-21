@@ -222,7 +222,7 @@ public class UserController {
                 Pair<String, Integer> pair = UserUtil.splitString(seat);
                 if (seat == null || seat.isEmpty()) {
                     log.debug("seat null");
-                    String seatCode = flightService.getFirstSeatForAutoBooking(flight);
+                    String seatCode = flightService.getBusinessSeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 } else {
@@ -235,7 +235,7 @@ public class UserController {
                 Pair<String, Integer> pair = UserUtil.splitString(seat);
                 if (seat == null || seat.isEmpty()) {
                     log.debug("seat null");
-                    String seatCode = flightService.getFirstSeatForAutoBooking(flight);
+                    String seatCode = flightService.getEconomySeatForAutoBooking(flight);
                     passenger.setSeatPosition(String.valueOf(seatCode.charAt(0)));
                     passenger.setSeatRow(Integer.parseInt(String.valueOf(seatCode.charAt(1))));
                 } else {

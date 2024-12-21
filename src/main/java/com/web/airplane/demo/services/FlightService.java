@@ -56,6 +56,7 @@ public class FlightService {
         flight.setFirstAvailableSeats(firstAvailableSeats);
         flight.setBusinessAvailableSeats(businessAvailableSeats);
         flight.setEconomyAvailableSeats(economyAvailableSeats);
+        flight.setBasePrice(flightInfo.getBasePrice());
         // Lưu vào cơ sở dữ liệu
         return flightRepository.save(flight);
     }
@@ -69,6 +70,7 @@ public class FlightService {
         flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
         flightInfo.setMealDiscount(flight.getMealDiscount());
         flightInfo.setTicketDiscount(flight.getTicketDiscount());
+        flightInfo.setBasePrice(flight.getBasePrice());
         if (flight.getActualDepartureTime() == null) {
             flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
             flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
@@ -268,6 +270,7 @@ public class FlightService {
         flightInfo.setCancelTime(flight.getCancelDueTime());
         flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
         flightInfo.setStatus(flight.getStatus());
+        flightInfo.setBasePrice(flight.getBasePrice());
         return flightInfo;
     }
 }
