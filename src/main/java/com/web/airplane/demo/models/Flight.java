@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,10 @@ public class Flight {
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
+    @Column(columnDefinition = "DECIMAL(19,2) DEFAULT 0.0")
+    private BigDecimal mealDiscount;
+    @Column(columnDefinition = "DECIMAL(19,2) DEFAULT 0.0")
+    private BigDecimal ticketDiscount;
 
     public Flight(String flightNumber, Airport departureAirport, Airport destinationAirport,
                   LocalDateTime expectedDepartureTime, LocalDateTime expectedArrivalTime, Aircraft aircraft, List<Passenger> passengers) {

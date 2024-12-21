@@ -5,7 +5,7 @@ import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.bookings.FlightResponse;
 import com.web.airplane.demo.enums.FlightStatus;
 import com.web.airplane.demo.models.Flight;
-import com.web.airplane.demo.models.FlightNotification;
+import com.web.airplane.demo.models.Notification;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.*;
 
@@ -32,7 +32,7 @@ public class FlightService {
     private PassengerRepository passengerRepository;
 
     @Autowired
-    private FlightNotificationRepository notificationRepository;
+    private NotificationRepository notificationRepository;
     // Phương thức tạo flight mới mà không cần actual times và passengers
     public Flight createFlight(FlightInfo flightInfo) {
 
@@ -47,7 +47,8 @@ public class FlightService {
         flight.setStatus(flightInfo.getStatus());
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
-
+        flight.setMealDiscount(flightInfo.getMealDiscount());
+        flight.setTicketDiscount(flightInfo.getTicketDiscount());
         int numberOfSeats = flight.getAircraft().getNumberOfSeats();
         int firstAvailableSeats = (int) (numberOfSeats * 0.1);
         int businessAvailableSeats = (int) (numberOfSeats * 0.2);
@@ -66,6 +67,8 @@ public class FlightService {
         flightInfo.setAircraftCode(flight.getAircraft().getManufacturer() + "-" + flight.getAircraft().getModel());
         flightInfo.setDepartureCode(flight.getDepartureAirport().getAirportCode());
         flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
+        flightInfo.setMealDiscount(flight.getMealDiscount());
+        flightInfo.setTicketDiscount(flight.getTicketDiscount());
         if (flight.getActualDepartureTime() == null) {
             flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
             flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
@@ -171,7 +174,7 @@ public class FlightService {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
             String originalTime = flight.getExpectedDepartureTime().format(formatter);
-            FlightNotification notification = new FlightNotification();
+            Notification notification = new Notification();
 
             if (flight.getExpectedDepartureTime().isBefore(flightInfo.getExpectedDepartureTime())) {
                 // Trường hợp hoãn chuyến
@@ -195,6 +198,7 @@ public class FlightService {
                         + " có thời gian khởi hành dự kiến ban đầu là " + originalTime
                         + " đã bị hoãn " + delayMessage
                         + " do lí do sắp xếp lịch trình.");
+                notification.setType("Flight");
                 flight.setStatus("Delayed");
             } else {
                 // Trường hợp đẩy sớm chuyến

@@ -2,15 +2,13 @@ package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.AircraftInfo;
 import com.web.airplane.demo.dtos.FlightInfo;
-import com.web.airplane.demo.exceptions.SeatUnavailableException;
-import com.web.airplane.demo.models.Aircraft;
-import com.web.airplane.demo.models.Airport;
-import com.web.airplane.demo.models.Flight;
-import com.web.airplane.demo.models.Passenger;
+import com.web.airplane.demo.models.*;
 import com.web.airplane.demo.repositories.AircraftRepository;
 import com.web.airplane.demo.repositories.AirportRepository;
+import com.web.airplane.demo.repositories.BookingTicketRepository;
 import com.web.airplane.demo.repositories.FlightRepository;
 import com.web.airplane.demo.services.AircraftService;
+import com.web.airplane.demo.services.BookingTicketService;
 import com.web.airplane.demo.services.FlightService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +21,16 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/flight")
 @Slf4j
 public class FlightController {
+    @Autowired
+    private BookingTicketRepository bookingTicketRepository;
+    @Autowired
+    private BookingTicketService bookingTicketService;
     @Autowired
     private AircraftService aircraftService;
     private final FlightRepository flightRepository;
@@ -269,5 +272,11 @@ public class FlightController {
         }
     }
 
-
+    @PostMapping("/admin_flight/getTicketList")
+    public ResponseEntity<?> getTicketListInfo() {
+        List<BookingTicket> bookingTickets = bookingTicketRepository.findAll();
+        return ResponseEntity.ok(bookingTickets.stream()
+                .map(bookingTicket -> bookingTicketService.getBookingTicketInfo(bookingTicket))
+                .collect(Collectors.toList()));
+    }
 }
