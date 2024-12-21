@@ -75,7 +75,8 @@ public class Flight {
     private BigDecimal mealDiscount;
     @Column(columnDefinition = "DECIMAL(19,2) DEFAULT 0.0")
     private BigDecimal ticketDiscount;
-
+    @Column(columnDefinition = "DECIMAL(19,2) DEFAULT 0.0")
+    private BigDecimal basePrice;
     public Flight(String flightNumber, Airport departureAirport, Airport destinationAirport,
                   LocalDateTime expectedDepartureTime, LocalDateTime expectedArrivalTime, Aircraft aircraft, List<Passenger> passengers) {
         this.flightNumber = flightNumber;

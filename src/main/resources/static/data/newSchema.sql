@@ -290,6 +290,7 @@ CREATE TABLE `flights` (
                            `status` VARCHAR(50) DEFAULT 'Scheduled',
                            `meal_discount` DECIMAL(19,2) DEFAULT 0.00,
                            `ticket_discount` DECIMAL(19,2) DEFAULT 0.00,
+                           `base_price` DECIMAL(19,2) DEFAULT 1000000.00,
                            PRIMARY KEY (`id`),
                            KEY `FKlref405f4r8lfgiu9gbwbdtgv` (`aircraft_id`),
                            KEY `FK1oo8ervoj8230wtvebwrqu2tf` (`departure_airport_id`),
@@ -306,8 +307,8 @@ CREATE TABLE `flights` (
 
 
 /*!40000 ALTER TABLE `flights` DISABLE KEYS */;
-INSERT INTO `flights` (id, expected_departure_time, expected_arrival_time, actual_departure_time, actual_arrival_time, flight_number, aircraft_id, departure_airport_id, destination_airport_id, cancel_due_time, economy_available_seats, business_available_seats, first_available_seats, status)
-VALUES (1, '2024-12-25 00:45:27', '2024-12-25 03:45:27', '2024-12-25 00:35:27', '2024-12-25 03:35:27', 'VN714', 14, 1, 13, NULL, 102, 35, 28, 'Scheduled');
+INSERT INTO `flights` (id, expected_departure_time, expected_arrival_time, actual_departure_time, actual_arrival_time, flight_number, aircraft_id, departure_airport_id, destination_airport_id, cancel_due_time, economy_available_seats, business_available_seats, first_available_seats, status, base_price)
+VALUES (1, '2024-12-25 00:45:27', '2024-12-25 03:45:27', '2024-12-25 00:35:27', '2024-12-25 03:35:27', 'VN714', 14, 1, 13, NULL, 102, 35, 28, 'Scheduled', 1200000.00);
 INSERT INTO `flights` (id, expected_departure_time, expected_arrival_time, actual_departure_time, actual_arrival_time, flight_number, aircraft_id, departure_airport_id, destination_airport_id, cancel_due_time, economy_available_seats, business_available_seats, first_available_seats, status)
 VALUES (2, '2024-12-28 16:04:36', '2024-12-28 20:04:36', '2024-12-28 16:00:36', '2024-12-28 20:00:36', 'VN133', 15, 10, 20, NULL, 128, 37, 24, 'Scheduled');
 INSERT INTO `flights` (id, expected_departure_time, expected_arrival_time, actual_departure_time, actual_arrival_time, flight_number, aircraft_id, departure_airport_id, destination_airport_id, cancel_due_time, economy_available_seats, business_available_seats, first_available_seats, status)
@@ -823,7 +824,7 @@ CREATE TABLE passengers (
                             booking_ticket_id BIGINT NOT NULL,
                             flight_id BIGINT NOT NULL,
                             user_id BIGINT,
-                            ticket_class_id BIGINT,
+                            ticket_class_id BIGINT
                             CONSTRAINT fk_booking_ticket FOREIGN KEY (booking_ticket_id) REFERENCES booking_tickets (id) ON DELETE CASCADE,
                             CONSTRAINT fk_flight FOREIGN KEY (flight_id) REFERENCES flights (id),
                             CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id),
