@@ -30,4 +30,9 @@ public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     Passenger findPassengerIfSeatBooked(Long flightId, Integer seatRow, String seatPosition);
 
     List<Passenger> findAllByBookingTicket(BookingTicket bookingTicket);
+
+    @Query(value = "SELECT * FROM passengers WHERE booking_ticket_id = :bookingTicketId LIMIT 1", nativeQuery = true)
+    Passenger findByBookingTicket(@Param("bookingTicketId") Long bookingTicketId);
+
+    Passenger findBySeatPositionAndSeatRowAndBookingTicket(String seatPosition, Integer row, BookingTicket bookingTicket);
 }
