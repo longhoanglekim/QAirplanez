@@ -226,12 +226,22 @@ public class FlightController {
 //                log.debug("Tim thay may bay");
 //            }
 
-            if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth() 
-            && flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
-            ) {
-                filteredFlights.add(flight);
-                log.debug("Tim thay may bay");
+            if (flight.getActualDepartureTime() == null) {
+                if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
+                        && flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
+                ) {
+                    filteredFlights.add(flight);
+                    log.debug("Tim thay may bay");
+                }
+            } else {
+                if (flight.getActualDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
+                        && flight.getActualDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
+                ) {
+                    filteredFlights.add(flight);
+                    log.debug("Tim thay may bay");
+                }
             }
+
         }
 
         return filteredFlights;
