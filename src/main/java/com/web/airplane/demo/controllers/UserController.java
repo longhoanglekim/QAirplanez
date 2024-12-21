@@ -53,11 +53,11 @@ public class UserController {
     @Autowired
     private PassengerRepository passengerRepository;
     @Autowired BookingTicketRepository bookingTicketRepository;
-    private final BookingCodeService bookingCodeService;
+    private final BookingTicketService bookingCodeService;
     @Autowired
     private ImageService imageService;
 
-    public UserController(UserRepository userRepository, UserService userService, BookingCodeService bookingCodeService) {
+    public UserController(UserRepository userRepository, UserService userService, BookingTicketService bookingCodeService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.bookingCodeService = bookingCodeService;
@@ -127,6 +127,7 @@ public class UserController {
             bookingTicket.setBookingCode(commonBookingCode);
             bookingTicket.setService(service);
             bookingTicket.setTotalPrice(totalPrice);
+            bookingTicket.setBookingDate(LocalDate.now());
             bookingTicketRepository.save(bookingTicket);
             // Đặt vé cho chiều đi
             bookingProcess(bookingTicket, request, passengerInfoList, departFlight, true);

@@ -1,5 +1,7 @@
 package com.web.airplane.demo.services;
 
+import com.web.airplane.demo.dtos.bookings.BookingTicketInfo;
+import com.web.airplane.demo.models.BookingTicket;
 import com.web.airplane.demo.repositories.BookingTicketRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +11,22 @@ import java.util.Random;
 
 
 @Service
-public class BookingCodeService {
+public class BookingTicketService {
 
     @Autowired
     private PassengerRepository passengerRepository;
     @Autowired
     private BookingTicketRepository bookingTicketRepository;
 
+
+    public BookingTicketInfo getBookingTicketInfo(BookingTicket bookingTicket) {
+        BookingTicketInfo bookingTicketInfo = new BookingTicketInfo();
+        bookingTicketInfo.setBookingCode(bookingTicket.getBookingCode());
+        bookingTicketInfo.setBookingDate(bookingTicket.getBookingDate());
+        bookingTicketInfo.setTotalPrice(bookingTicket.getTotalPrice());
+        bookingTicketInfo.setPassengerSize(bookingTicket.getPassengers().size());
+        return  bookingTicketInfo;
+    }
 
     public String generateBookingCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

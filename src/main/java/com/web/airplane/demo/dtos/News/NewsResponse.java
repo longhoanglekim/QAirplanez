@@ -19,6 +19,7 @@ public class NewsResponse {
     private LocalDateTime postingDate;
     private LocalDateTime editDate;
     private String content;
+    private String type;
 
     private List<byte[]> imageList;
 

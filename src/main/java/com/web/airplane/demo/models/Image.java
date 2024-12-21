@@ -113,6 +113,4 @@ public class Image {
         return "Image(id=" + this.getId() + ", name=" + this.getName() + ", type=" + this.getType() + ", uploadDate=" + this.getUploadDate() + ", imageData=" + java.util.Arrays.toString(this.getImageData()) + ", user=" + this.getUser() + ", news=" + this.getNews() + ")";
     }
 
-    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Food food;
 }
