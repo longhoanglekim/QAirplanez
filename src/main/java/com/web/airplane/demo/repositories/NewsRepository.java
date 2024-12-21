@@ -10,4 +10,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     Long findMaxIndex();
 
     News findByNewsIndex(Long id);
+
+    News findByTitle(String title);
 }
