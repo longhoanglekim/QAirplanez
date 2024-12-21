@@ -1,114 +1,85 @@
-http://localhost:8080/api/user/public/bookFlight?depart_flight_number=VN123&return_flight_number=VN124
-CỦA LONG
 {
-  "allService": "{\"taxiServices\":[\"vip-service\",\"child-support\"],\"meal\":{\"outboundMeals\":{\"2\":1},\"returnMeals\":{\"2\":1}}}",
-  "passengerInfoList": [
-    {
-      "firstName": "To",
-      "lastName": "Bang",
-      "birthdate": "2004-09-09",
-      "gender": "male",
-      "identification": "312434345422",
-      "phoneNumber": "0924234388",
-      "email": "doctruyen956@gmail.com",
-      "outboundTicketClassCode": "First",
-      "inboundTicketClassCode": "Business",
-      "outboundSeatCode": "",
-      "inboundSeatCode": ""
+    "bookingCode": "AFJHINH",
+    "outboundFlight": {
+        "flightNumber": "VN123",
+        "serialNumber": "B00001",
+        "departTime": "2024-12-30T06:00:00",
+        "arrivalTime": "2024-12-30T08:00:00",
+        "cancelTime": "2024-12-22T08:30:00",
+        "departAirportCode": "Hanoi(HAN)",
+        "arrivalAirportCode": "Bangkok(BKK)",
+        "status": "Scheduled"
     },
-    {
-      "firstName": "To",
-      "lastName": "To",
-      "birthdate": "2016-12-20",
-      "gender": "male",
-      "identification": "321321321321",
-      "outboundTicketClassCode": "Economy",
-      "inboundTicketClassCode": "First"
-    }
-  ],
-  "totalPrice": 3120000
-}
-
-
-
-cỦA bẰNG
-{
-  [
-    {
-      "firstName": "John",
-      "lastName": "Doe",
-      "ticketClassCode": "Economy",
-      "birthdate": "1990-05-15",
-      "identification": "A12345678",
-      "seatRow": 12,
-      "seatPosition": "A",
-      "phoneNumber": "1234567890",
-      "email": "john.doe@example.com"
+    "inboundFlight": {
+        "flightNumber": "VN124",
+        "serialNumber": "B00001",
+        "departTime": "2025-01-07T10:30:00",
+        "arrivalTime": "2025-01-07T10:30:00",
+        "cancelTime": "2025-01-02T10:30:00",
+        "departAirportCode": "Bangkok(BKK)",
+        "arrivalAirportCode": "Hanoi(HAN)",
+        "status": "Scheduled"
     },
-    {
-      "firstName": "Jane",
-      "lastName": "Smith",
-      "ticketClassCode": "Business",
-      "birthdate": "1985-03-22",
-      "identification": "B98765432",
-      "seatRow": 5,
-      "seatPosition": "C",
-      "phoneNumber": "0987654321",
-      "email": "jane.smith@example.com",
-
-    },
-  ],
-"service": {
-      "taxi": "1",
-      "meal": "1",
-      "seat": "1"
-    }
-}
-
-http://localhost:8080/api/user/public/findTicketInfo
-{
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "bookingCode": "IZ7KE1X2",
-  "firstName": "John"
-}
-
-//new json
-{
-  "allService": "{\"taxiServices\":[\"vip-service\",\"child-support\"],\"meal\":{\"outboundMeals\":{\"2\":1},\"returnMeals\":{\"2\":1}}}",
-  "passengerInfoList": [
-    {
-      "firstName": "To",
-      "lastName": "Bang",
-      "birthdate": "2004-09-09",
-      "gender": "male",
-      "identification": "312434345422",
-      "phoneNumber": "0924234388",
-      "email": "doctruyen956@gmail.com",
-      "outboundTicketClassCode": "Economy",
-      "inboundTicketClassCode": "First",
-      "outboundSeatCode": "",
-      "inboundSeatCode": ""
-    },
-    {
-      "firstName": "To",
-      "lastName": "To",
-      "birthDate": "2016-12-20",
-      "gender": "male",
-      "identification": "321321321321",
-      "outboundTicketClassCode": "Business",
-      "inboundTicketClassCode": "Business",
-      "outboundSeatCode": "",
-      "inboundSeatCode": ""
-    }
-  ],
-  "totalPrice": 3120000
-=======
-  "bookingCode": "AFJHINH",
-  "firstName": "To"
->>>>>>> 93a352093a6c118f935f4c5dc29c4cec74109eca
-=======
-  "bookingCode": "AFJHINH",
-  "firstName": "To"
->>>>>>> b82ba773602ef04ffb01721a6c938117d5e8cbdb
+    "outboundPassengerInfoList": [
+        {
+            "firstName": "To",
+            "lastName": "Bang",
+            "birthdate": "2004-09-09",
+            "bookingCode": "AFJHINH",
+            "flightNumber": "VN123",
+            "identification": "312434345422",
+            "email": "doctruyen956@gmail.com",
+            "phoneNumber": "0924234388",
+            "fullName": "To Bang",
+            "adult": true,
+            "ticketClassCode": "First",
+            "seatCode": "B1"
+        },
+        {
+            "firstName": "To",
+            "lastName": "To",
+            "birthdate": "2016-12-20",
+            "bookingCode": "AFJHINH",
+            "flightNumber": "VN123",
+            "identification": "321321321321",
+            "email": null,
+            "phoneNumber": null,
+            "fullName": "To To",
+            "adult": false,
+            "ticketClassCode": "Economy",
+            "seatCode": "C1"
+        }
+    ],
+    "inboundPassengerInfoList": [
+        {
+            "firstName": "To",
+            "lastName": "Bang",
+            "birthdate": "2004-09-09",
+            "bookingCode": "AFJHINH",
+            "flightNumber": "VN124",
+            "identification": "312434345422",
+            "email": "doctruyen956@gmail.com",
+            "phoneNumber": "0924234388",
+            "fullName": "To Bang",
+            "adult": true,
+            "ticketClassCode": "Business",
+            "seatCode": "A1"
+        },
+        {
+            "firstName": "To",
+            "lastName": "To",
+            "birthdate": "2016-12-20",
+            "bookingCode": "AFJHINH",
+            "flightNumber": "VN124",
+            "identification": "321321321321",
+            "email": null,
+            "phoneNumber": null,
+            "fullName": "To To",
+            "adult": false,
+            "ticketClassCode": "First",
+            "seatCode": "B1"
+        }
+    ],
+    "service": "{\"taxiServices\":[\"vip-service\",\"child-support\"],\"meal\":{\"outboundMeals\":{\"2\":1},\"returnMeals\":{\"2\":1}}}",
+    "price": 3120000.00
 }

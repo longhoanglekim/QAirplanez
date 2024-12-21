@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const  taxiStore =  defineStore('taxiStore', () => {
+export const  useTaxiStore =  defineStore('taxiStore', () => {
   const transferServices =  ref([
         {
             id: 'home-pickup',
