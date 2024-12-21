@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -19,4 +20,6 @@ public class FlightResponse {
     private String departAirportCode;
     private String arrivalAirportCode;
     private String status;
+    private BigDecimal mealDiscount;
+    private BigDecimal ticketDiscount;
 }

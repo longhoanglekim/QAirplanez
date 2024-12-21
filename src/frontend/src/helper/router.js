@@ -6,7 +6,6 @@ import SearchFlightResult from "@/view/User/bookTicket/SearchFlightResult.vue";
 import HomeAdmin from "@/view/Admin/HomeAdmin.vue";
 import LoginAdmin from "@/view/Admin/LoginAdmin.vue";
 import ExploreUser from "@/view/User/home/ExploreUser.vue";
-import DestinationDetail from "@/view/User/destinations/DestinationDetail.vue"
 import TestComponent from "@/view/Test/TestComponent.vue";
 import ProfileUser from "@/view/User/ProfileUser.vue";
 import SearchFlightArrival from "@/view/User/bookTicket/SearchFlightArrival.vue";
@@ -21,6 +20,7 @@ import LogoutUser from "@/view/User/LogoutUser.vue"
 import BangTest from "@/view/Test/BangTest.vue";
 import NewsUser from "@/view/User/NewsUser.vue";
 import NewsItem from "@/components/User/news/NewsItem.vue";
+import DestinationDetail from "@/components/User/destination/DestinationDetail.vue";
 
 import { useUIStore } from "@/store/UIstore";
 

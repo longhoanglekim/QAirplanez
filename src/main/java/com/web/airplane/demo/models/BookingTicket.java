@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class BookingTicket {
     private BigDecimal totalPrice;
     @OneToMany(mappedBy = "bookingTicket", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Passenger> passengers = new ArrayList<>();
+    private LocalDate bookingDate;
 
 
 }
