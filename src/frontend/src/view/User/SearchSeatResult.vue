@@ -24,7 +24,7 @@
     </div>
 
     <!-- Success state -->
-    <div v-else-if="ticketData" class="">
+    <div v-else-if="loadData" class="">
         <!-- Header -->
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-orange-800 flex items-center gap-2 mb-2">
@@ -34,7 +34,7 @@
 
             <div class="text-lg font-semibold text-orange-600 grid grid-cols-2 gap-4">
                 <h2>Mã đặt vé: {{ loadData.bookingCode }}</h2>
-                <h2>Loại vé: {{ ticketData.ticketType }}</h2>
+                <h2>Loại vé: {{ (loadData.inboundFlight ? "Khứ hồi":"Một chiều") }}</h2>
             </div>
         </div>
 
@@ -76,7 +76,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <label class="text-lg text-orange-600 font-medium">Giờ bay</label>
-                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.outboundFlight.departTime.slice(11, 16) }}</div>
+                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.outboundFlight.formattedDepartureTime}}</div>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <label class="text-lg text-orange-600 font-medium">Giờ bay</label>
-                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.inboundFlight.departTime.slice(11, 16) }}</div>
+                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.inboundFlight.departTime }}</div>
                 </div>
             </div>
         </div>
@@ -211,7 +211,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Thời hạn hủy vé: {{loadData.outboundFlight.cancelTime.slice(11,16)}} ngày {{ formatDate(loadData.outboundFlight.cancelTime) }}
+                    Thời hạn hủy vé: {{loadData.outboundFlight.cancelTime}} ngày {{ formatDate(loadData.outboundFlight.cancelTime) }}
                 </h2>
                 <div class="text-center relative">
                     <button class=" group relative bg-red-500 text-white rounded-lg px-6 py-2 text-xl font-bold hover:bg-red-600 transition-colors 
@@ -275,7 +275,9 @@ import {
     formatCurrency
 } from '@/helper/currency';
 import { useRouter } from 'vue-router';
+import { searchTicketStore } from '@/store/searchTicket';
 
+const storeTicket = searchTicketStore()
 const router = useRouter()
 const loadData = ref(null)
 const loading = ref(true)
@@ -343,39 +345,7 @@ console.log(taxiStore.getTransferServicesById('home-pickup'))
  */
 
 const cancelTicket = ref(false)
-const ticketData = ref({
-    ticketType: "Khứ hồi",
-    departureInfo: {
-        from: "Hà Nội (HAN)",
-        to: "TP.HCM (SGN)",
-        date: "2024-12-25",
-        time: "07:30",
-        flightNumber: "VN123"
-    },
-    returnInfo: {
-        from: "TP.HCM (SGN)",
-        to: "Hà Nội (HAN)",
-        date: "2024-12-30",
-        time: "16:45",
-        flightNumber: "VN124"
-    },
-    passengers: [{
-            fullName: "Nguyễn Văn A",
-            birthDate: "1990-01-15",
-            idNumber: "001090123456"
-        },
-        {
-            fullName: "Trần Thị B",
-            birthDate: "1992-05-20",
-            idNumber: "001092789012"
-        }
-    ],
-    additionalServices: [
-        "Hành lý ký gửi 23kg",
-        "Suất ăn đặc biệt",
-        "Chọn chỗ ngồi"
-    ]
-});
+
 
 const getService = (service) => {
     return JSON.parse(service)
@@ -425,10 +395,10 @@ const loadTicketFromServer = async () => {
     error.value = null
 
     try {
-        mealStore.getMealList()
+        await mealStore.getMealList()
         const req = {
-            bookingCode: "TPV52OH0",
-            firstName: "Tô"
+            bookingCode: storeTicket.getOldForm().seatCode,
+            firstName: storeTicket.getOldForm().firstName
         }
         const response = await fetch('http://localhost:8080/api/user/public/findTicketInfo', {
             method: 'POST',

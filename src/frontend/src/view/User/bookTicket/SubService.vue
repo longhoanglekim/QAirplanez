@@ -138,7 +138,7 @@ import TaxiModal from '@/components/composable/service/TaxiModal.vue';
 import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import CardWithButton from '@/components/composable/card/CardWithButton.vue';
 import {searchFlightStore} from '@/store/searchFlight';
-import {ticketStore} from "@/store/ticket";
+import {useTicketStore} from "@/store/ticket";
 import {useMealStore} from "@/store/mealStore";
 import { useRouter } from 'vue-router';
 const router = useRouter();
@@ -151,7 +151,7 @@ const mealSelectedReturn = ref({});
 const mealTotalPrice = ref(0);
 const taxiSelected = ref([]);
 const storeSearFlight = searchFlightStore();
-const storeTicket = ticketStore();
+const storeTicket = useTicketStore();
 const storeMeal = useMealStore();
 // Ghế outbound và return
 const storeForm = searchFlightStore()

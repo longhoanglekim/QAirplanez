@@ -17,4 +17,5 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
 
     @Query(value = "SELECT a.*, c.* FROM airports a JOIN countries c ON a.country_id = c.id", nativeQuery = true)
     public List<Object[]> findAllAirportsWithCountry();
+
 }

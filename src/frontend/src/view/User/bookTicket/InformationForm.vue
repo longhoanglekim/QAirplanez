@@ -33,7 +33,7 @@ import ChildPassengerForm from '@/components/composable/form/ChildPassengerForm.
 import BookingProgressBar from '@/components/composable/BookingProgressBar.vue';
 import ErrorModal from '@/components/composable/ErrorModal.vue';
 import { searchFlightStore } from '@/store/searchFlight';
-import { ticketStore } from '@/store/ticket';
+import { useTicketStore } from '@/store/ticket';
 import {
     onMounted,
     ref
@@ -43,7 +43,7 @@ import { useRouter } from 'vue-router';
 const route = useRouter()
 
 const storeForm = searchFlightStore()
-const storeTicket = ticketStore()
+const storeTicket = useTicketStore()
 const adults = ref(storeForm.getOldForm().adults)
 const children = ref(storeForm.getOldForm().children)
 const adultForms = ref([])

@@ -47,8 +47,7 @@ public class FlightService {
         flight.setStatus(flightInfo.getStatus());
         flight.setAircraft(aircraftRepository.findBySerialNumber(flightInfo.getSerialNumber()));
         flight.setCancelDueTime(flightInfo.getCancelDueTime());
-        flight.setMealDiscount(flightInfo.getMealDiscount());
-        flight.setTicketDiscount(flightInfo.getTicketDiscount());
+
         int numberOfSeats = flight.getAircraft().getNumberOfSeats();
         int firstAvailableSeats = (int) (numberOfSeats * 0.1);
         int businessAvailableSeats = (int) (numberOfSeats * 0.2);
@@ -56,7 +55,7 @@ public class FlightService {
         flight.setFirstAvailableSeats(firstAvailableSeats);
         flight.setBusinessAvailableSeats(businessAvailableSeats);
         flight.setEconomyAvailableSeats(economyAvailableSeats);
-        flight.setBasePrice(flightInfo.getBasePrice());
+
         // Lưu vào cơ sở dữ liệu
         return flightRepository.save(flight);
     }
@@ -68,9 +67,7 @@ public class FlightService {
         flightInfo.setAircraftCode(flight.getAircraft().getManufacturer() + "-" + flight.getAircraft().getModel());
         flightInfo.setDepartureCode(flight.getDepartureAirport().getAirportCode());
         flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
-        flightInfo.setMealDiscount(flight.getMealDiscount());
-        flightInfo.setTicketDiscount(flight.getTicketDiscount());
-        flightInfo.setBasePrice(flight.getBasePrice());
+
         if (flight.getActualDepartureTime() == null) {
             flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
             flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
@@ -270,7 +267,7 @@ public class FlightService {
         flightInfo.setCancelTime(flight.getCancelDueTime());
         flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
         flightInfo.setStatus(flight.getStatus());
-        flightInfo.setBasePrice(flight.getBasePrice());
+
         return flightInfo;
     }
 }

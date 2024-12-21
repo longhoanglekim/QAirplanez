@@ -23,4 +23,9 @@ public class FlightResponse {
     private BigDecimal mealDiscount;
     private BigDecimal ticketDiscount;
     private BigDecimal basePrice;
+
+    public String getFormattedDepartureTime() {
+        return departTime.getHour() + ":" + departTime.getMinute() + " "
+                + departTime.getDayOfMonth() + "/" + (departTime.getMonth().getValue()) + "/" + departTime.getYear();
+    }
 }

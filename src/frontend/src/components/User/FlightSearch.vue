@@ -236,6 +236,7 @@ import { ref, computed,defineEmits ,onMounted, nextTick, watch} from 'vue'
 import { searchFlightStore} from '@/store/searchFlight';
 import { PlaneTakeoff, PlaneLanding, BookCheck, BookUser} from 'lucide-vue-next';
 import MyDatePicker from '@/components/composable/form/MyDatePicker.vue';
+import { searchTicketStore } from '@/store/searchTicket';
 
 const airports = ref([])
 const emit = defineEmits(['search-flight', 'search-ticket'])
@@ -273,6 +274,8 @@ const form2 = ref({
   firstName: '',
   seatCode: ''
 })
+
+const storeTicket = searchTicketStore()
 
 const error = ref('')
 const isModalVisible = ref(false)
@@ -349,6 +352,7 @@ async function submitForm() {
 
 function submitFormTicket() {
   error.value = ''
+  storeTicket.saveForm(form2.value)
   emit('search-ticket', form2.value)
 }
 

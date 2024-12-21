@@ -38,11 +38,10 @@ html {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: Arial, sans-serif;
 }
 
 #app {
-  font-family: Montserrat, sans-serif;
+  font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
