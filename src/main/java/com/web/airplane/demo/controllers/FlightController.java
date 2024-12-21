@@ -77,6 +77,7 @@ public class FlightController {
                 return ResponseEntity.badRequest().body("Aircraft with given serial number not found.");
             }
 
+
             // Kiểm tra xem có chuyến bay nào đã tồn tại với cùng mã chuyến bay, mã máy bay và thời gian bay không
             boolean isFlightExist = flightRepository.existsByExpectedArrivalTimeAndFlightNumberAndAircraft(
                     flightInfo.getExpectedArrivalTime(),
@@ -92,6 +93,9 @@ public class FlightController {
             flightInfo.setCancelDueTime(flightInfo.getExpectedDepartureTime().minusHours(2));
             // Nếu không có chuyến bay trùng, tiến hành thêm chuyến bay mới
             Flight flight = flightService.createFlight(flightInfo);
+            aircraft.setStatus("Active");
+            aircraft.getFlights().add(flight);
+            aircraftRepository.save(aircraft);
             // Lưu chuyến bay mới vào cơ sở dữ liệu
             flightRepository.save(flight);
             // Trả về phản hồi thành công

@@ -5,12 +5,14 @@ import com.web.airplane.demo.dtos.FlightInfo;
 import com.web.airplane.demo.dtos.ImageResponse;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.dtos.UserInfo;
+import com.web.airplane.demo.dtos.bookings.PassengerTicketInfo;
 import com.web.airplane.demo.dtos.bookings.TicketInput;
 import com.web.airplane.demo.dtos.bookings.TicketResponse;
 import com.web.airplane.demo.exceptions.SeatUnavailableException;
 import com.web.airplane.demo.models.*;
 import com.web.airplane.demo.repositories.*;
 import com.web.airplane.demo.services.*;
+import com.web.airplane.demo.utils.UserUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -203,7 +205,7 @@ public class UserController {
             log.debug(String.valueOf(seat == null));
             if (ticketClassCode.equals("First")) {
                 passenger.setTicketClass(ticketClassRepository.findById(3L).get());
-                Pair<String, Integer> pair = splitString(seat);
+                Pair<String, Integer> pair = UserUtil.splitString(seat);
                 if (seat == null || seat.isEmpty()) {
                     log.debug("seat null");
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
@@ -216,7 +218,7 @@ public class UserController {
                 flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() - 1);
             } else if (ticketClassCode.equals("Business")) {
                 passenger.setTicketClass(ticketClassRepository.findById(2L).get());
-                Pair<String, Integer> pair = splitString(seat);
+                Pair<String, Integer> pair = UserUtil.splitString(seat);
                 if (seat == null || seat.isEmpty()) {
                     log.debug("seat null");
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
@@ -229,7 +231,7 @@ public class UserController {
                 flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() - 1);
             } else {
                 passenger.setTicketClass(ticketClassRepository.findById(1L).get());
-                Pair<String, Integer> pair = splitString(seat);
+                Pair<String, Integer> pair = UserUtil.splitString(seat);
                 if (seat == null || seat.isEmpty()) {
                     log.debug("seat null");
                     String seatCode = flightService.getFirstSeatForAutoBooking(flight);
@@ -262,9 +264,8 @@ public class UserController {
 
 
     @Transactional
-    @PostMapping("/cancel")
-    public ResponseEntity<?> cancelFlight(HttpServletRequest request,
-                                          @RequestParam("passenger_id") long passengerId,
+    @DeleteMapping("/public/cancelEachPassenger")
+    public ResponseEntity<?> cancelFlight(@RequestParam("passenger_id") long passengerId,
                                           @RequestParam("flight_number") String flightNumber) {
         // Find the flight by flight number
         Flight flight = flightRepository.findByFlightNumber(flightNumber);
@@ -277,19 +278,65 @@ public class UserController {
         if (passenger == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Passenger not found");
         }
+        if (!flight.getPassengers().contains(passenger)) {
+            return ResponseEntity.badRequest().body("Chuyến bay này k có hành khác trên");
+        }
+
         LocalDateTime localDateTime = LocalDateTime.now();
         if (flight.getCancelDueTime().isBefore(localDateTime)) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Booking is too late to cancel.");
         }
 
-
+        log.debug("Loai bo hanh khach " + passenger.getFirstName());
         // Remove the passenger from the flight's list of passengers
         flight.getPassengers().remove(passenger);
+        if (passenger.getTicketClass() != null) {
+            switch(passenger.getTicketClass().getClassName().toUpperCase()) {
+                case "ECONOMY":
+                    flight.setEconomyAvailableSeats(flight.getEconomyAvailableSeats() + 1);
+                    break;
+                case "BUSINESS":
+                    flight.setBusinessAvailableSeats(flight.getBusinessAvailableSeats() + 1);
+                    break;
+                case "FIRST":
+                    flight.setFirstAvailableSeats(flight.getFirstAvailableSeats() + 1);
+                    break;
+            }
+        }
 
         // Save the flight (cascading the removal of the passenger)
         flightRepository.save(flight);
 
         return ResponseEntity.ok().body("Passenger has been removed from the flight and deleted");
+    }
+
+    @DeleteMapping("/public/cancelByBookingCode")
+    @Transactional
+    public ResponseEntity<?> cancelBookingCode(@RequestParam(name = "booking_code") String bookingCode) {
+        log.debug("Bat dau huy ve");
+        Passenger temp = passengerRepository.findByBookingTicket(bookingTicketRepository.findBookingTicketByBookingCode(bookingCode).getId());
+        TicketInput ticketInput = new TicketInput();
+        ticketInput.setBookingCode(bookingCode);
+        ticketInput.setFirstName(temp.getFirstName());
+        ResponseEntity<?> ticketResponse = getTicketInfo(ticketInput);
+        if (ticketResponse.hasBody()) {
+            log.debug("Bat dau xoa tung hanh khach");
+            TicketResponse data = (TicketResponse) ticketResponse.getBody();
+            for (PassengerTicketInfo passengerTicketInfo : data.getOutboundPassengerInfoList()) {
+                Passenger passenger = passengerService.findByInfo(passengerTicketInfo);
+                cancelFlight(passenger.getPassengerId(), passenger.getFlight().getFlightNumber());
+            }
+            if (data.getInboundPassengerInfoList() != null) {
+                for (PassengerTicketInfo passengerTicketInfo : data.getInboundPassengerInfoList()) {
+                    Passenger passenger = passengerService.findByInfo(passengerTicketInfo);
+                    cancelFlight(passenger.getPassengerId(), passenger.getFlight().getFlightNumber());
+                }
+            }
+            bookingTicketRepository.delete(bookingTicketRepository.findBookingTicketByBookingCode(bookingCode));
+        } else {
+            return ResponseEntity.badRequest().body("Bad request");
+        }
+        return ResponseEntity.ok("Xóa danh sách hành khách thành công");
     }
 
     @GetMapping("/public/checkLogged")
@@ -475,22 +522,5 @@ public class UserController {
 
     }
 
-    public static Pair<String, Integer> splitString(String input) {
-        log.debug("input: " + input);
-        if (input != null && input.length() > 1 && Character.isLetter(input.charAt(0))) {
-            // Tách phần chữ cái và phần số
-            String letter = input.substring(0, 1);
-            String numberPart = input.substring(1);
 
-            try {
-                // Chuyển phần số từ String sang Integer
-                int number = Integer.parseInt(numberPart);
-                return new Pair<>(letter, number); // Trả về cặp (String, Integer)
-            } catch (NumberFormatException e) {
-                System.out.println("Number parsing error: " + e.getMessage());
-                return null; // Lỗi nếu phần số không hợp lệ
-            }
-        }
-        return null; // Trả về null nếu không đúng định dạng
-    }
 }
