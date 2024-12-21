@@ -380,16 +380,27 @@ public class UserController {
         ticketResponse.setBookingCode(bookingTicket.getBookingCode());
         ticketResponse.setService(bookingTicket.getService());
         ticketResponse.setPrice(bookingTicket.getTotalPrice());
-        ticketResponse.setPassengerInfoList(
-                passengerList.stream()
-                        .map(passenger -> passengerService.getPassengerInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
-                        .collect(Collectors.toList()) // Thu thập thành danh sách
-        );
         List<Flight> flights = getFlights(passengerList);
         ticketResponse.setOutboundFlight(flightService.getFlightResponse(flights.get(0)));
+
+        ticketResponse.setOutboundPassengerInfoList(
+                passengerList.stream()
+                        .filter(passenger -> passenger.getFlight().equals(flights.get(0)))
+                        .map(passenger -> passengerService.getPassengerTicketInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
+                        .collect(Collectors.toList()) // Thu thập thành danh sách
+        );
         if (flights.size() == 2) {
             ticketResponse.setInboundFlight(flightService.getFlightResponse(flights.get(1)));
+            ticketResponse.setInboundPassengerInfoList(
+                    passengerList.stream()
+                            .filter(passenger -> passenger.getFlight().equals(flights.get(1)))
+                            .map(passenger -> passengerService.getPassengerTicketInfo(passenger)) // Chuyển từ Passenger sang PassengerInfo
+                            .collect(Collectors.toList()) // Thu thập thành danh sách
+            );
         }
+
+
+
         return ResponseEntity.ok(ticketResponse);
     }
 

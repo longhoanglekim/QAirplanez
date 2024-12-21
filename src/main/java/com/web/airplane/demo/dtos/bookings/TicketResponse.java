@@ -17,7 +17,9 @@ public class TicketResponse {
     private String bookingCode;
     private FlightResponse outboundFlight;
     private FlightResponse inboundFlight;
-    private List<PassengerInfo> passengerInfoList;
+    private List<PassengerTicketInfo> outboundPassengerInfoList;
+    private List<PassengerTicketInfo> inboundPassengerInfoList;
+
     private String service;
     private BigDecimal price;
 

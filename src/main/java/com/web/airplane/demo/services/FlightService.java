@@ -66,8 +66,13 @@ public class FlightService {
         flightInfo.setAircraftCode(flight.getAircraft().getManufacturer() + "-" + flight.getAircraft().getModel());
         flightInfo.setDepartureCode(flight.getDepartureAirport().getAirportCode());
         flightInfo.setArrivalCode(flight.getDestinationAirport().getAirportCode());
-        flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
-        flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
+        if (flight.getActualDepartureTime() == null) {
+            flightInfo.setExpectedArrivalTime(flight.getExpectedArrivalTime());
+            flightInfo.setExpectedDepartureTime(flight.getExpectedDepartureTime());
+        } else {
+            flightInfo.setExpectedArrivalTime(flight.getActualArrivalTime());
+            flightInfo.setExpectedDepartureTime(flight.getActualDepartureTime());
+        }
         flightInfo.setCancelDueTime(flight.getCancelDueTime());
         flightInfo.setAvailableFirstSeats(flight.getFirstAvailableSeats() > 0);
         flightInfo.setAvailableBusinessSeats(flight.getBusinessAvailableSeats() > 0);

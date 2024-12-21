@@ -3,6 +3,7 @@ package com.web.airplane.demo.services;
 import com.web.airplane.demo.dtos.PassengerInfo;
 import com.web.airplane.demo.dtos.bookings.AdultResponse;
 import com.web.airplane.demo.dtos.bookings.ChildResponse;
+import com.web.airplane.demo.dtos.bookings.PassengerTicketInfo;
 import com.web.airplane.demo.models.Passenger;
 import com.web.airplane.demo.repositories.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,32 @@ public class PassengerService {
         passengerInfo.setFirstName(passenger.getFirstName());
         passengerInfo.setLastName(passenger.getLastName());
         passengerInfo.setBirthdate(passenger.getBirthdate());
-        passengerInfo.setIdentification(passengerInfo.getIdentification());
+        passengerInfo.setPhoneNumber(passenger.getPhoneNumber());
+        passengerInfo.setIdentification(passenger.getIdentification());
         passengerInfo.setBookingCode(passenger.getBookingTicket().getBookingCode());
         passengerInfo.setOutboundTicketClassCode(passenger.getTicketClass().getClassName());
         passengerInfo.setOutboundSeatCode(passenger.getSeatPosition() + passenger.getSeatRow());
         passengerInfo.setFlightNumber(passenger.getFlight().getFlightNumber());
+        passengerInfo.setOutboundTicketClassCode(passengerInfo.getOutboundTicketClassCode());
+        passengerInfo.setEmail(passenger.getEmail());
         return passengerInfo;
     }
+
+    public PassengerTicketInfo getPassengerTicketInfo(Passenger passenger) {
+        PassengerTicketInfo passengerInfo = new PassengerTicketInfo();
+        passengerInfo.setFirstName(passenger.getFirstName());
+        passengerInfo.setLastName(passenger.getLastName());
+        passengerInfo.setBirthdate(passenger.getBirthdate());
+        passengerInfo.setPhoneNumber(passenger.getPhoneNumber());
+        passengerInfo.setIdentification(passenger.getIdentification());
+        passengerInfo.setBookingCode(passenger.getBookingTicket().getBookingCode());
+        passengerInfo.setTicketClassCode(passenger.getTicketClass().getClassName());
+        passengerInfo.setSeatCode(passenger.getSeatPosition() + passenger.getSeatRow());
+        passengerInfo.setFlightNumber(passenger.getFlight().getFlightNumber());
+        passengerInfo.setEmail(passenger.getEmail());
+        return passengerInfo;
+    }
+
 
     public ChildResponse getChildInfo(Passenger passenger) {
         ChildResponse childResponse = new ChildResponse();
