@@ -1,10 +1,12 @@
 <template>
-  <div class="w-full h-[700px] overflow-hidden relative z-50">
+  <div class="w-full h-[700px] overflow-hidden relative">
     <img :src="require('@/assets/background/home_bg.jpg')"
     class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover">
-    <img src="../../../../public/QAirline-12-21-2024.png" alt="" class="absolute top-0 lg:-top-24 lg:-left-40">
-    <div class="text-white absolute top-40 xl:top-60 xl:left-20 text-xl slogan text-center left-0 right-0">Vui từng chuyến bay</div>
-    <div class="absolute left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] md:top-1/2 xl:-translate-y-1/2 right-0 flex items-center justify-center max-w-xl">
+    <img src="../../../../public/QAirline-12-21-2024.png" alt="" class="absolute -top-8 lg:-top-24 lg:-left-40 animate-fade-right animate-once">
+    <div class="text-white absolute top-36 xl:top-60 xl:left-20 text-xl slogan text-center left-0 right-0">Vui từng chuyến bay</div>
+    <div class="absolute bottom-0 left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] 
+                md:top-0  right-0 flex items-center justify-center max-w-xl
+                animate-fade-left animate-once">
       <FlightSearch @search-flight="searchFlight" @search-ticket="searchTicket" />
     </div>
   </div>

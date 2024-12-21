@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white/50 fixed w-full z-50 top-0 transition-all duration-300">
+  <header class="bg-white bg-opacity-40  w-full z-50 top-0 transition-all duration-500" :class="{'fixed !bg-orange-400 bg-opacity-100': isScrolled}"> 
     <div class="container mx-auto pt-1 flex justify-between items-center">
       <!-- Logo -->
       <div class="logo">
@@ -10,16 +10,19 @@
 
       <!-- desktop Navigation -->
       <nav class="hidden lg:flex items-center space-x-8">
-        <div v-for="(item, index) in menuItems" :key="index" class="group relative cursor-pointer">
+        <div v-for="(item, index) in menuItems" :key="index" class="group  cursor-pointer">
           <div
-            class="flex items-center justify-between rounded-full hover:text-orange-600 m-1 py-2 px-4 hover:bg-white text-slate-800">
-            <a :href="item.link" class="text-md tracking-wider font-bold">
+            class="flex items-center justify-between rounded-full  m-1  hover:text-white text-slate-800 relative transition-all duration-300">
+            <a :href="item.link" class="peer text-md tracking-wider font-bold py-2 px-4"
+              :class="{'hover:text-orange-800': !isScrolled}">
               {{ item.label }}
               <svg v-if="item.submenu" class="inline-block w-4 h-4 ml-1 transition-colors" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </a>
+            <span class="absolute w-0 peer-hover:w-full left-0 border-b-2 border-white bottom-0 transition-w duration-300"
+              :class="{'!border-orange-500': !isScrolled}"></span>
           </div>
 
           <div v-if="item.submenu"
