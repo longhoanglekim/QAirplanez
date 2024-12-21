@@ -5,14 +5,22 @@ import com.web.airplane.demo.dtos.bookings.AdultResponse;
 import com.web.airplane.demo.dtos.bookings.ChildResponse;
 import com.web.airplane.demo.dtos.bookings.PassengerTicketInfo;
 import com.web.airplane.demo.models.Passenger;
+import com.web.airplane.demo.repositories.BookingTicketRepository;
 import com.web.airplane.demo.repositories.PassengerRepository;
+import com.web.airplane.demo.utils.UserUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class PassengerService {
     @Autowired
     private PassengerRepository passengerRepository;
+
+    @Autowired
+    private BookingTicketRepository bookingTicketRepository;
 
     public PassengerInfo getPassengerInfo(Passenger passenger) {
         PassengerInfo passengerInfo = new PassengerInfo();
@@ -43,6 +51,13 @@ public class PassengerService {
         passengerInfo.setFlightNumber(passenger.getFlight().getFlightNumber());
         passengerInfo.setEmail(passenger.getEmail());
         return passengerInfo;
+    }
+
+    public Passenger findByInfo(PassengerTicketInfo passengerTicketInfo) {
+        Pair<String, Integer> seatPair = UserUtil.splitString(passengerTicketInfo.getSeatCode());
+        log.debug(seatPair.toString());
+        return passengerRepository.findBySeatPositionAndSeatRowAndBookingTicket(
+                seatPair.a, seatPair.b, bookingTicketRepository.findBookingTicketByBookingCode(passengerTicketInfo.getBookingCode()));
     }
 
 

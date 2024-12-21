@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Getter
 @Setter
@@ -34,6 +35,8 @@ public class FlightInfo {
     private boolean isAvailableBusinessSeats;
     private boolean isAvailableEconomySeats;
     private String status;
+    private BigDecimal mealDiscount;
+    private BigDecimal ticketDiscount;
 
     public String getManufacture() {
         if (aircraftCode != null && !aircraftCode.isEmpty()) {

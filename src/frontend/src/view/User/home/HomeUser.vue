@@ -7,7 +7,6 @@
     </div>
   </div>
   <div class="h-full bg-gray-200 p-8">
-
     <div class="space-x-0 md:space-x-6 mb-16 bg-white rounded-lg shadow-sm p-8 transition-all duration-300">
       <div class="w-full mb-4">
         <h2 class="text-2xl font-semibold mb-4">Tin mới nhất</h2>

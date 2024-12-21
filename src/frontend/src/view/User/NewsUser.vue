@@ -6,6 +6,7 @@ let announcements = ref([]);
 //let hotnews = ref([]);
 let vouchers = ref([]);
 
+
 const isAscending = ref(true);
 
 const toggleSortOrder = () => {
@@ -161,6 +162,7 @@ onMounted(() => {
                         </div>
                     </router-link>
                 </div>
+
                 <button v-if="newsList.length" @click="nextSlide"    class="absolute right-0 bg-black text-white p-2 rounded-full hover:bg-gray-700">›</button>
             </div>
         </div>
@@ -196,5 +198,5 @@ export default {
 </script>
 
 <style scoped>
-/* No additional styles needed as Tailwind CSS is used */
+
 </style>

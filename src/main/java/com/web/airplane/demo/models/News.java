@@ -26,6 +26,8 @@ public class News {
     private LocalDateTime editDate;
     private String content;
 
+    private String type;
+
     @OneToOne
     @JoinColumn(name = "image_id", referencedColumnName = "id") // Tạo cột image_id
     private Image image;
