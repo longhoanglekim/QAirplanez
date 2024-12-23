@@ -3,12 +3,12 @@
     <div class="w-full h-[700px] overflow-hidden relative">
       <img :src="require('@/assets/background/home_bg.jpg')"
         class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover ">
-      <div class="h-full w-2/3 flex flex-col items-center text-center absolute -top-0 lg:-top-24 lg:-left-40 space-y-6 left-1/2 -translate-x-1/2">
+      <div class="h-full w-2/3 flex flex-col items-center text-center absolute -top-0 lg:-top-24 lg:-left-40 space-y-6 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
         <div ><img src="../../../../public/QAirline-12-21-2024.png" alt=""
           class=" animate-fade-right animate-once">
           </div>
-        <div class="rounded-lg text-white absolute top-20 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0">
-          <p class="select-none pointer-events-none  p-3">Vui từng
+        <div class="rounded-lg text-white absolute top-20 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0 ">
+          <p class="animate-fade-right animate-once p-3">Vui từng
           chuyến bay</p></div>
         </div>
         <div id="searchBox" class="absolute bottom-0 left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] 
@@ -101,9 +101,6 @@
               </div>
             </div>
           </div>
-          <div class="w-full mb-4">
-            <h2 class="text-2xl font-semibold mb-4 text-red-700">Khuyến mãi</h2>
-          </div>
           <div class="flex flex-wrap mb-16">
             <div v-for="item in sortedVouchers" :key="item.title" class="w-full md:w-1/3 p-4">
               <router-link :to="`/news/${item.title}`"
@@ -124,16 +121,8 @@
                 </div>
               </router-link>
             </div>
-            <div class="text-center mt-8">
-              <router-link to="/news"
-                class="text-red-600 text-sm font-medium transition-colors duration-300 hover:text-red-700">
-                View all articles →
-              </router-link>
-            </div>
           </div>
-          <div class="w-full mb-4">
-            <h2 class="text-2xl font-semibold mb-4 text-red-700">Thông báo</h2>
-          </div>
+          
           <div class="flex flex-wrap mb-16">
             <div v-for="item in sortedAnnouncements" :key="item.title" class="w-full md:w-1/3 p-4">
               <router-link :to="`/news/${item.title}`"
@@ -154,12 +143,7 @@
                 </div>
               </router-link>
             </div>
-            <div class="text-center mt-8">
-              <router-link to="/news"
-                class="text-red-600 text-sm font-medium transition-colors duration-300 hover:text-red-700">
-                View all articles →
-              </router-link>
-            </div>
+
           </div>
         </div>
       </div>
@@ -239,9 +223,6 @@ const loadNews = async () => {
 
 onMounted(() => {
   loadNews();
-  announcements = computed(() => newsList.value.filter(news => news.type === 'announcement'));
-  //hotnews = computed(() => newsList.value.filter(news => news.type === 'hotnews'));
-  vouchers = computed(() => newsList.value.filter(news => news.type === 'voucher'));
 });
 </script>
 
