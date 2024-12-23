@@ -24,4 +24,9 @@ public class NewsResponse {
     private List<byte[]> imageList;
 
     private String author;
+
+    public String getFormattedPostingDate() {
+        return "Ngày " + postingDate.getDayOfMonth() + " tháng " + postingDate.getMonth().getValue() + " năm " +
+                postingDate.getYear();
+    }
 }

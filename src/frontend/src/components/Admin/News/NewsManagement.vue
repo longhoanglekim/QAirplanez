@@ -23,7 +23,7 @@
         <tr v-for="item in newsList" :key="item.index">
           <td>{{ item.index }}</td>
           <td>{{ item.title }}</td>
-          <td>{{ item.postingDate }}</td>
+          <td>{{ item.formattedPostingDate }}</td>
           <td><img :src="item.image" alt="Ảnh" class="w-20 h-20 object-cover"></td>
           <td>{{ item.content }}</td>
           <td>
