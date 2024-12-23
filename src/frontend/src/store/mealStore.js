@@ -10,6 +10,8 @@ export const useMealStore = defineStore('mealStore', () => {
         return mealList.value
     };
     const getMealById = (id) => {
+        
+        
         return mealList.value.find(meal => meal.id === id)
     }
     return {

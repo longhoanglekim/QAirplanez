@@ -44,11 +44,7 @@
                 @mouseenter="hoveredClass = ticketClass.value"
                 @mouseleave="hoveredClass = null"
             >
-                <Plane
-                    v-if="localTicket.selectedClass === ticketClass.value" 
-                    class="text-red-500 absolute w-10 h-10 top-0 left-10 transition-all duration-300 ease-in-out"
-                    :class="{'hidden': !localTicket.selectedClass}"
-                />
+    
                 <h2 
                     class="text-lg font-semibold mb-2 transition-colors duration-300" 
                     :class="{
@@ -88,8 +84,8 @@
                 </div>
             </div>
         </div>
-
-        <button 
+        <div class="text-center">
+            <button 
             v-if="localTicket.selectedClass" 
             class="w-1/3 mt-4 px-4 py-2 rounded-lg transition-all duration-300 
             text-white font-semibold
@@ -101,16 +97,14 @@
         >
             Chọn chuyến bay
         </button>
+        </div>
+        
     </div>
 </template>
-<script setup>
-import { Plane } from 'lucide-vue-next';
-
-</script>
 <script>
 export default {
     component: {
-        Plane
+        
     },
     props: {
         ticket: {

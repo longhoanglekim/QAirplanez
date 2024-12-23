@@ -42,7 +42,7 @@ public class NewsService {
         newsResponse.setTitle(news.getTitle());
         newsResponse.setPostingDate(news.getPostingDate());
         newsResponse.setEditDate(news.getEditDate());
-        newsResponse.setImageList(new ArrayList<>());
+        newsResponse.setImageData(news.getImageData());
 
 
         newsResponse.setContent(news.getContent());

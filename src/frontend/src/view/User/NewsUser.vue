@@ -2,6 +2,18 @@
 import { ref, computed, onMounted } from 'vue';
 
 const newsList = ref([]);
+const newsImg = [
+  {
+    image: require('@/assets/news/start-up.jpg')
+  },
+  {
+    image: require('@/assets/news/winter_storm.jpg')
+  },
+  {
+    image: require('@/assets/news/stonk.jpg')
+  },
+];
+
 let announcements = ref([]);
 //let hotnews = ref([]);
 let vouchers = ref([]);
@@ -71,7 +83,7 @@ onMounted(() => {
                     <div v-for="(item, index) in newsList" :key="index" class="w-1/3 p-2 box-border">
                         <router-link :to="'/news/' + item.title" class="block transform transition duration-300 hover:scale-105">
                             <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg">
-                                <img :src="item.image" alt="News Image"
+                                <img :src="newsImg[index].image" alt="News Image"
                                     class="lg:h-60 xl:h-56 md:h-64 sm:h-72 xs:h-72 h-72 rounded w-full object-cover object-center mb-6">
                                 <h3 class="tracking-widest text-gray-500 text-xs font-medium title-font">{{
                                     item.posting_date }}</h3>

@@ -28,7 +28,7 @@ const isTest = computed(() => route.meta.test);
 const isLogin = computed(() => route.meta.login);
 const isSignup = computed(() => route.meta.signup);
 
-const showNavbar = computed(() => (!isAdminRoute.value && !isTest.value ));
+const showNavbar = computed(() => (!isAdminRoute.value && !isTest.value && !isLogin.value && !isSignup.value));
 </script>
 
 <style>

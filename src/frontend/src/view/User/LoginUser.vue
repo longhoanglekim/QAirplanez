@@ -26,10 +26,10 @@
         </div>
 
         <div class="text-right mt-2">
-          <a href="#" class="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700">Quên mật khẩu?</a>
+          <a href="#" class="text-sm font-semibold text-gray-700 hover:text-orange-700 focus:text-orange-700">Quên mật khẩu?</a>
         </div>
 
-        <button type="submit" class="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+        <button type="submit" class="w-full block bg-amber-500 hover:bg-amber-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
               px-4 py-3 mt-6">Đăng nhập</button>
       </form>
 
@@ -43,7 +43,7 @@
             </div>
           </button>
 
-      <p class="mt-8">Chưa có tải khoản? <router-link to="/signup" class="text-indigo-500 hover:text-blue-700 font-semibold">Đăng ký</router-link></p>
+      <p class="mt-8">Chưa có tải khoản? <router-link to="/signup" class="text-indigo-500 hover:text-orange-700 font-semibold">Đăng ký</router-link></p>
 
 
     </div>

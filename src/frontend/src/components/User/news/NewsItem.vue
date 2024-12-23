@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   <div v-if="newsItem" class="news-item-container">
     <div class="news-item-image">
-      <img :src="newsItem.image" alt="News Image" class="w-full h-full object-cover rounded-lg shadow-md">
+      <img :src="require('@/assets/news/start-up.jpg')" alt="News Image" class="w-full h-full object-cover rounded-lg shadow-md">
     </div>
     <div class="news-item-content">
       <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ newsItem.title }}</h1>

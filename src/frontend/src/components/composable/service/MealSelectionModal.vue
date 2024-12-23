@@ -5,7 +5,6 @@
       <div class="flex justify-between items-center p-6 border-b border-yellow-500">
         <h2 class="text-2xl font-bold flex items-center text-orange-600">
           <Utensils class="h-8 w-8 mr-5"/> Chọn Suất Ăn
-          Chọn Suất Ăn
         </h2>
         <button @click="$emit('close')" class="text-gray-500 hover:text-orange-600 transition-colors">
           <X class="h-8 w-8 hover:rotate-90 transition-all duration-300 hover:scale-125"/>
@@ -20,7 +19,7 @@
             'border-yellow-500 ring-2 ring-yellow-300': (outboundMeals[meal.id] || 0) > 0,
             'hover:border-yellow-300': true
           }">
-            <img :src="meal.image" :alt="meal.name" class="w-full h-48 object-cover" />
+            <img :src="require(`@/assets/meal/${meal.image}`)" :alt="meal.name" class="w-full h-48 object-cover" />
             <div class="p-4">
               <h4 class="font-bold text-lg text-orange-600 h-8">{{ meal.name }}</h4>
               <p class="text-sm text-gray-600 mb-2 h-10">{{ meal.description }}</p>
@@ -58,7 +57,7 @@
             'border-yellow-500 ring-2 ring-yellow-300': (returnMeals[meal.id] || 0) > 0,
             'hover:border-yellow-300': true
           }">
-            <img :src="meal.image" :alt="meal.name" class="w-full h-48 object-cover" />
+            <img :src="meal.image" :alt="xxx" class="w-full h-48 object-cover" />
             <div class="p-4">
               <h4 class="font-bold text-lg text-orange-600">{{ meal.name }}</h4>
               <p class="text-sm text-gray-600 mb-2">{{ meal.description }}</p>
@@ -119,7 +118,6 @@
 <script setup>
 import { ref, computed, defineProps, defineEmits,  } from 'vue'
 import { Utensils, X } from 'lucide-vue-next'
-
 
 
 const props = defineProps({
@@ -217,5 +215,6 @@ const handleConfirm = () => {
   })
   emit('close')
 }
+
 
 </script>

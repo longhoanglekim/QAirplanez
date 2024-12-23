@@ -27,7 +27,7 @@
     <EditAircraftModal v-if="isModalOpen && isEditing" :key="currentAircraft.serialNumber" :current-aircraft="currentAircraft" @close="closeModal" @save="saveAircraft"/>
 
     <!-- Bảng máy bay -->
-    <table class="w-full border rounded-xl bg-white p-0 ">
+    <table class="w-full border rounded-xl bg-white p-0 mt-10 ">
       <thead class="rounded-t-xl bg-gray-200">
       <tr>
         <th class=" p-2 cursor-pointer" @click="sortBy('id')">

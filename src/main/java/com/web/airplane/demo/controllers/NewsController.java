@@ -39,6 +39,7 @@ public class NewsController {
         news.setTitle(editedNews.getTitle());
         news.setContent(editedNews.getContent());
         news.setPostingDate(editedNews.getPostingDate());
+        news.setImageData(editedNews.getImageData());
         newsRepository.save(news);
         return ResponseEntity.ok(newsService.getNewsInfo(news));
 

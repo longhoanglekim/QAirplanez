@@ -29,31 +29,6 @@
             </div>
         </div>
     </div>
-    <!-- Pie Chart -->
-    <div class="mt-8">
-        <h4 class="text-lg font-semibold mb-4">Biểu Đồ Phân Bố Trạng Thái Tàu Bay</h4>
-        <div class="w-full h-64 relative">
-            <canvas ref="pieChart">
-
-            </canvas>
-        </div>
-        
-        <!-- Legend -->
-        <div class="flex justify-center mt-4 gap-6">
-            <div class="flex items-center">
-                <div class="w-4 h-4 bg-green-500 rounded-full mr-2"></div>
-                <span>Đang rảnh</span>
-            </div>
-            <div class="flex items-center">
-                <div class="w-4 h-4 bg-yellow-500 rounded-full mr-2"></div>
-                <span>Được lên lịch</span>
-            </div>
-            <div class="flex items-center">
-                <div class="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
-                <span>Sửa chữa</span>
-            </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -78,7 +53,6 @@ watchEffect(() => {
     inactiveCount.value = props.aircraft.filter(plane => plane.status === 'Inactive').length
 })
 
-const pieChart = ref(null);
 
 </script>
 

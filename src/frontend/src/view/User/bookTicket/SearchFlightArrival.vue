@@ -79,7 +79,7 @@ import {
     searchFlightStore
 } from '@/store/searchFlight';
 import {
-    ticketStore
+    useTicketStore
 } from '@/store/ticket';
 import {
     ChevronDown,
@@ -95,7 +95,7 @@ import {
 
 const router = useRouter()
 
-const storeTicket = ticketStore();
+const storeTicket = useTicketStore();
 const storeSearchFlight = searchFlightStore();
 // Ticket classes definition
 const ticketClasses = [{

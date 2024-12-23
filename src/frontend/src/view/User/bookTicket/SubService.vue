@@ -174,7 +174,6 @@ const fetchSelectedAircraft = async (flightNumber) => {
   if (!response.ok) {
     throw new Error('Failed to fetch seat list');
   }
-
   return response.json();
 };
 
@@ -219,6 +218,7 @@ const handleMealConfirm = ({outboundMeals, returnMeals, totalPrice}) => {
   mealSelectedOutBound.value = outboundMeals;
   mealSelectedReturn.value = returnMeals;
   mealTotalPrice.value = totalPrice;
+  console.log(mealList.value)
 }
 
 // Đóng modal

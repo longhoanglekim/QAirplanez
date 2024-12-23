@@ -16,6 +16,7 @@ public class EditNewsDTO {
     private LocalDateTime editDate;
     private String content;
     private String type;
+    private String imageData;
     private List<byte[]> imageList;
 
 }

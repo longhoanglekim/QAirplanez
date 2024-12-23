@@ -150,5 +150,6 @@ onMounted(async () => {
   await refreshFlightData()
   await storeAirport.reloadAirports()
   await storeAircraft.reloadAircraft()
+  console.log('flights', flights.value)
 })
 </script>
