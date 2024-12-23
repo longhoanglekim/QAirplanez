@@ -41,9 +41,12 @@
                     <QrCode class="text-red-500 w-64 h-64"/>
                 </div>
             </div>
-            <button @click="downloadTicket" class="mt-6 w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold">
+            <button @click="downloadTicket" class="mt-6 w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-10">
                 Tải Vé Điện Tử
             </button>
+            <router-link to="/home" class="w-full bg-white-500 text-red-500 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-colors font-semibold border-2 border-red-500 p-3 mt-10">
+                Về trang chủ
+            </router-link >
         </div>
     </div>
 </div>

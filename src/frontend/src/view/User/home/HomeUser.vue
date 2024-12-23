@@ -7,8 +7,8 @@
         <div xl:p-20><img src="../../../../public/QAirline-12-21-2024.png" alt=""
           class=" animate-fade-right animate-once">
           </div>
-        <div class=" cursor-default  rounded-lg text-white absolute top-36 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0 ">
-          <p class="select-none pointer-events-none bg-black bg-opacity-50 p-3">Vui từng
+        <div class=" cursor-default  rounded-lg text-white absolute top-36 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0">
+          <p class="select-none pointer-events-none  p-3">Vui từng
           chuyến bay</p></div>
         </div>
         <div id="searchBox" class="absolute bottom-0 left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] 
@@ -231,6 +231,7 @@ const loadNews = async () => {
     }
     const data = await response.json();
     newsList.value = data;
+    console.log('Loaded news:', data);
   } catch (error) {
     console.error('Error loading news:', error);
   }

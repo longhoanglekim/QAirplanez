@@ -3,8 +3,8 @@
     <div class="container mx-auto pt-1 flex justify-between items-center">
       <!-- Logo -->
       <div class="logo">
-        <a href="/home" class="text-slate-500 text-2xl font-bold">
-          <img src="@/assets/home/logo5122.png" alt="logo" class="h-10">
+        <a href="/home" class="text-slate-500 text-2xl font-bold absolute xl:-top-14 -left-5 z-50">
+          <img src="../../../../public/QAirline-12-21-2024.png" alt="logo" class="h-40">
         </a>
       </div>
 
