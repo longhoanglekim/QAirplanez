@@ -193,8 +193,8 @@ public class UserController {
             log.debug("THÊM KHÁCH HÀNG");
 
             Passenger passenger = new Passenger();
-            passenger.setFirstName(passengerInfo.getFirstName());
-            passenger.setLastName(passengerInfo.getLastName());
+            passenger.setFirstName(passengerInfo.getFirstName().trim());
+            passenger.setLastName(passengerInfo.getLastName().trim());
             passenger.setBirthdate(passengerInfo.getBirthdate());
             passenger.setFlight(flight);
             passenger.setEmail(passengerInfo.getEmail());
@@ -480,7 +480,8 @@ public class UserController {
 
     boolean checkIfExistPassengerWithFirstName(List<Passenger> passengerList, String firstName) {
         for (Passenger passenger : passengerList) {
-            if (passenger.getFirstName().equalsIgnoreCase(firstName)) {
+            log.debug(String.valueOf(passenger.getFirstName().equals(firstName)));
+            if (passenger.getFirstName().trim().equals(removeSpaces(firstName))) {
                 return true; // Tìm thấy hành khách có firstName khớp
             }
         }
@@ -522,6 +523,11 @@ public class UserController {
 
 
     }
-
+    private String removeSpaces(String input) {
+        if (input == null) {
+            return null; // Xử lý trường hợp chuỗi null
+        }
+        return input.replaceAll("\\s+", ""); // Loại bỏ tất cả các khoảng trắng
+    }
 
 }

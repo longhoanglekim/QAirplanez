@@ -187,7 +187,9 @@ public class FlightController {
 
         // Find and filter outbound flights
         List<Flight> flights = new ArrayList<>();
-        flights = findAndFilterFlights(flightInfo.getDepartureCode(), flightInfo.getArrivalCode(), flightInfo);
+
+        flights = findAndFilterFlights(airportRepository.findByCity(flightInfo.getDepartureCode()).getAirportCode(),
+                airportRepository.findByCity(flightInfo.getArrivalCode()).getAirportCode(), flightInfo);
 
         if (flights.isEmpty()) {
             log.debug("Khong tim thay chuyen bay phu hop");
@@ -228,14 +230,8 @@ public class FlightController {
         log.debug("THấy chuyến");
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
-            
-//            if (isWithinOneWeek(flight.getExpectedDepartureTime(), flightInfo.getExpectedDepartureTime()) &&
-//                    isWithinOneWeek(flight.getExpectedArrivalTime(), flightInfo.getExpectedArrivalTime())) {
-//                filteredFlights.add(flight);
-//                log.debug("Tim thay may bay");
-//            }
-
             if (flight.getActualDepartureTime() == null) {
+                log.debug("đã hoãn");
                 if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
                         && flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
                 ) {
@@ -243,6 +239,7 @@ public class FlightController {
                     log.debug("Tim thay may bay");
                 }
             } else {
+                log.debug("K hoãn");
                 if (flight.getActualDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
                         && flight.getActualDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
                 ) {

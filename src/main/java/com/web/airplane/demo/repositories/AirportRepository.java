@@ -15,6 +15,8 @@ public interface AirportRepository extends JpaRepository<Airport, Long> {
     @Query(value = "SELECT DISTINCT city FROM airports", nativeQuery = true)
     public List<String> getAllCity();
 
+    public Airport findByCity(String city);
+
     @Query(value = "SELECT a.*, c.* FROM airports a JOIN countries c ON a.country_id = c.id", nativeQuery = true)
     public List<Object[]> findAllAirportsWithCountry();
 
