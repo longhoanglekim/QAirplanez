@@ -411,6 +411,10 @@ const loadTicketFromServer = async () => {
         if (response.ok) {
             const res = await response.json()
             loadData.value = res
+            if (loadData.value.cancelTime == null) {
+                loadData.value.outboundFlight.cancelTime = new Date(loadData.value.outboundFlight.departTime).toLocaleDateString('vi-VN')
+                loadData.value.outboundFlight.cancelTime.setHours(loadData.value.outboundFlight.cancelTime.getHours() - 20)
+            }
 
         } else {
             error.value = await response.text()

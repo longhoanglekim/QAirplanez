@@ -1,10 +1,10 @@
 <template>
-  <header class="bg-white bg-opacity-40  w-full z-50 top-0 transition-all duration-500" :class="{'fixed !bg-orange-400 bg-opacity-100': isScrolled}"> 
-    <div class="container mx-auto pt-1 flex justify-between items-center">
+  <header class="fixed xl:relative bg-white bg-opacity-40  w-full z-50 top-0 transition-all duration-500" :class="{'fixed !bg-orange-400 bg-opacity-100': isScrolled}"> 
+    <div class="container mx-auto pt-1 flex justify-between items-center relative">
       <!-- Logo -->
       <div class="logo">
-        <a href="/home" class="text-slate-500 text-2xl font-bold">
-          <img src="@/assets/home/logo5122.png" alt="logo" class="h-10">
+        <a href="/home" class="text-slate-500 text-2xl font-bold absolute -top-20 xl:-top-12 -left-5 z-50">
+          <img src="../../../../public/QAirline-12-21-2024.png" alt="logo" class="h-8 xl:h-40">
         </a>
       </div>
 
@@ -37,13 +37,6 @@
 
       <!-- Header Actions -->
       <div class="flex items-center space-x-4">
-        <!-- Search Button -->
-        <button @click="toggleSearch" class="text-white hover:text-blue-900 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
 
         <div v-if='!isLoggedIn()' class="hidden lg:flex items-center space-x-2">
           <a href="/login"
@@ -76,24 +69,17 @@
         </div>
 
         <button @click="toggleMobileMenu"
-          class="lg:hidden text-white hover:text-blue-900 transition-colors bg-black rounded">
-          <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          class="lg:hidden text-white hover:text-blue-900 transition-colors rounded">
+          <Menu class="w-8 h-8" />
         </button>
       </div>
     </div>
 
-    <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black/50 lg:hidden z-40 w-1/2">
+    <div v-if="mobileMenuOpen" class="fixed inset-0 bg-black/50 lg:hidden z-40 w-2/3">
       <div class="container mx-auto px-4 py-8">
         <div v-for="(item, index) in menuItems" :key="index" class="mb-6">
           <div @click="toggleMobileSubmenu(index)"
-            class="text-white text-2xl font-bold uppercase flex justify-between items-center">
+            class="text-white text-2xl font-bold flex justify-between items-center">
             <a :href="item.link" class=" text-md tracking-wider transition-colors duration-300">
               {{ item.label }}
             </a>
@@ -112,12 +98,30 @@
           </div>
         </div>
       </div>
+      <div v-if='!isLoggedIn()' class=" space-x-8 fixed bottom-10 flex h-12">
+        <a href="/login"
+          class=" text-sm p-2 h-12 rounded w-32 font-bold text-center text-white border-white border-2 hover:bg-white hover:text-slate-800">
+          <span class="w-full mx-auto">Đăng nhập</span>
+        </a>
+        <a href="/signup"
+          class=" text-sm p-2 h-12 rounded w-32  font-bold text-center text-white signup">
+          <span class="w-full mx-auto">Đăng ký</span>
+        </a>
+      </div>
+      <div v-else class="fixed bottom-40">
+        <button>Đăng xuất</button>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
+
+import { Menu } from 'lucide-vue-next';
 export default {
+  components: {
+    Menu,
+  },
   data() {
     return {
       imageData: null,
@@ -150,12 +154,11 @@ export default {
         },
         { label: 'Tin tức', link: '/news' },
         {
-          label: 'Services',
+          label: 'Dịch vụ',
           link: '/services',
           submenu: [
-            { label: 'Service Grid', link: '/service-grid' },
-            { label: 'Service List', link: '/service-list' },
-            { label: 'Service Details', link: '/service-details' },
+            { label: 'Vận chuyển', link: '/service/transport' },
+            { label: 'Món ăn', link: '/service/meals' },
           ],
         }
       ],
@@ -177,9 +180,6 @@ export default {
     },
     handleScroll() {
       this.isScrolled = window.scrollY > 30;
-    },
-    toggleSearch() {
-      alert('chua co tinh nang nay');
     },
     toggleMobileMenu() {
       this.mobileMenuOpen = !this.mobileMenuOpen;
@@ -269,4 +269,5 @@ export default {
 .signup {
   background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(245,97,43,1) 0%, rgba(252,210,69,1) 100%);
 }
+
 </style>

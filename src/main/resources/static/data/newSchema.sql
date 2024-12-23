@@ -434,17 +434,39 @@ VALUES
 --
 
 
+USE `qairlinez`;
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: qairlinez
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `meals`
+--
+
 DROP TABLE IF EXISTS `meals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `meals` (
-                         `id` bigint NOT NULL AUTO_INCREMENT,
-                         `description` varchar(255) DEFAULT NULL,
-                         `dietary_info` varchar(255) DEFAULT NULL,
-                         `image` varchar(255) DEFAULT NULL,
-                         `name` varchar(255) DEFAULT NULL,
-                         `price` double NOT NULL,
-                         PRIMARY KEY (`id`)
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `dietary_info` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `price` double NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -454,7 +476,7 @@ CREATE TABLE `meals` (
 
 LOCK TABLES `meals` WRITE;
 /*!40000 ALTER TABLE `meals` DISABLE KEYS */;
-INSERT INTO `meals` VALUES (1,'Cơm rang cực ngon','Món mặn',NULL,'Cơm rang bò Wagu',150000),(2,'Kem Merino với các vị chanh, cam, socola, dâu tây','Đồ ngọt',NULL,'Kem Merino',25000),(3,'Đậu hũ được chế biến với phong cách cay nồng của Tứ Xuyên, với hành tỏi ớt tiêu,...','Món chay, cay',NULL,'Đậu phụ Tứ Xuyên',120000);
+INSERT INTO `meals` VALUES (1,'Cơm rang cực ngon','Món mặn','com-rang.jpg','Cơm rang bò Wagu',150000),(2,'Kem Merino với các vị chanh, cam, socola, dâu tây','Đồ ngọt','kem-merino.jpg','Kem Merino',25000),(3,'Đậu hũ được chế biến với phong cách cay nồng của Tứ Xuyên, với hành tỏi ớt tiêu,...','Món chay, cay','dau-hu-tu-xuyen.jpg','Đậu phụ Tứ Xuyên',120000);
 /*!40000 ALTER TABLE `meals` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-cover bg-center flex items-center justify-center" :style="{ backgroundImage: 'url(/path/to/your-image.jpg)' }">
+  <div class="h-screen bg-cover bg-center flex items-center justify-center bg-slate-200">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
       <h2 class="text-2xl font-semibold text-center text-orange-600 mb-6">Đăng Nhập Admin</h2>
       <form @submit.prevent="handleSubmit">
@@ -27,7 +27,7 @@
         <button type="submit" class="w-full py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-600">
           Đăng Nhập
         </button>
-      </form>orange
+      </form>
     </div>
   </div>
 </template>

@@ -20,7 +20,7 @@
       <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
         <div class="flex justify-between items-center mb-4">
           <UsersSVG class="text-orange-500" />
-          <span class="text-2xl font-bold text-orange-700">12,456</span>
+          <span class="text-2xl font-bold text-orange-700">{{ getPassengerSize }}</span>
         </div>
         <h2 class="text-lg font-semibold text-gray-800">Tổng số hành khách</h2>
         <p class="text-sm text-gray-500">Trong năm</p>
@@ -29,7 +29,7 @@
       <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-700">
         <div class="flex justify-between items-center mb-4">
           <ChartSVG class="text-red-700" />
-          <span class="text-2xl font-bold text-red-900">123,650,000 VND</span>
+          <span class="text-2xl font-bold text-red-900">{{ getTotalRent }} VND</span>
         </div>
         <h2 class="text-lg font-semibold text-gray-800">Doanh thu</h2>
         <p class="text-sm text-gray-500">Trong năm</p>
@@ -103,6 +103,7 @@ export default {
         });
         const data = await response.json();
         bookings.value = data;
+        console.log('Fetched bookings:', data);
         getChartData();
         console.log('Fetched bookings:', data);
       } catch (error) {
@@ -121,6 +122,22 @@ export default {
       console.log('Monthly data:', monthlyData);
       return monthlyData;
     } 
+
+    const getPassengerSize = computed (() => {
+      let totalPassenger = 0;
+      for (let i = 0; i < bookings.value.length; i++) {
+        totalPassenger += bookings.value[i].passengerSize;
+      }
+      return totalPassenger;
+    })
+
+    const getTotalRent = computed(() => {
+      let totalRent = 0;
+      for (let i = 0; i < bookings.value.length; i++) {
+        totalRent += bookings.value[i].totalPrice;
+      }
+      return totalRent;
+    })
 
     const initializeChart = () => {
       const ctx = document.getElementById('verticalBarChart').getContext('2d');
@@ -154,7 +171,9 @@ export default {
 
     return {
       totalTicket,
-      bookings
+      bookings,
+      getPassengerSize,
+      getTotalRent
     }
   }
 }
