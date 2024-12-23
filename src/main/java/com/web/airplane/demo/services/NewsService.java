@@ -1,5 +1,6 @@
 package com.web.airplane.demo.services;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,10 @@ public class NewsService {
     private NewsRepository newsRepository;
      @Autowired
      private UserService userService;
+     @Autowired
+     private ImageService imageService;
     
-    public NewsResponse createNews(AddNewsDTO newsInfo, HttpServletRequest request) {
+    public NewsResponse createNews(AddNewsDTO newsInfo, HttpServletRequest request) throws IOException {
         News news = new News();
         news.setNewsIndex(newsRepository.findMaxIndex() + 1);
         news.setTitle(newsInfo.getTitle());
@@ -30,6 +33,7 @@ public class NewsService {
         news.setPostingDate(LocalDateTime.now());
         User user = userService.getCurrentUser(request);
         news.setAuthor(user);
+        news.setImage(imageService.storeImage(newsInfo.getFile()));
         newsRepository.save(news);
         return getNewsInfo(news);
     }
@@ -42,9 +46,6 @@ public class NewsService {
         newsResponse.setTitle(news.getTitle());
         newsResponse.setPostingDate(news.getPostingDate());
         newsResponse.setEditDate(news.getEditDate());
-        newsResponse.setImageData(news.getImageData());
-
-
         newsResponse.setContent(news.getContent());
         newsResponse.setAuthor(news.getAuthor().getFirstname() + " " + news.getAuthor().getLastname());
         return newsResponse;

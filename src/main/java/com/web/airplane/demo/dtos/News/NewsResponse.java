@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,9 +21,8 @@ public class NewsResponse {
     private LocalDateTime editDate;
     private String content;
     private String type;
-    private String imageData;
+    private MultipartFile file;
 
-    private List<byte[]> imageList;
 
     private String author;
 

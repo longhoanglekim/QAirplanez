@@ -452,13 +452,7 @@ public class UserController {
         return ResponseEntity.ok(ticketResponse);
     }
 
-    private boolean isAdult(Passenger passenger) {
 
-        LocalDate today = LocalDate.now();
-        int age = Period.between(passenger.getBirthdate(), today).getYears(); // Tính số năm
-
-        return age >= 18;
-    }
 //    private boolean checkIfExistInboundFlight(List<Passenger> passengerList) {
 //        Map<String, Integer> identificationCount = new HashMap<>();
 //

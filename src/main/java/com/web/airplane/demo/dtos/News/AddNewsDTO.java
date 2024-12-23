@@ -3,6 +3,7 @@ package com.web.airplane.demo.dtos.News;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -11,6 +12,6 @@ public class AddNewsDTO {
     private String title;
     private String content;
     private String type;
-    private String imageData;
+    private MultipartFile file;
 }
     

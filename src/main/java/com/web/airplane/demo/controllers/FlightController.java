@@ -187,9 +187,9 @@ public class FlightController {
 
         // Find and filter outbound flights
         List<Flight> flights = new ArrayList<>();
-
-        flights = findAndFilterFlights(airportRepository.findByCity(flightInfo.getDepartureCode()).getAirportCode(),
-                airportRepository.findByCity(flightInfo.getArrivalCode()).getAirportCode(), flightInfo);
+        log.debug(flightInfo.toString());
+        flights = findAndFilterFlights(flightInfo.getDepartureCode(),
+                flightInfo.getArrivalCode(), flightInfo);
 
         if (flights.isEmpty()) {
             log.debug("Khong tim thay chuyen bay phu hop");

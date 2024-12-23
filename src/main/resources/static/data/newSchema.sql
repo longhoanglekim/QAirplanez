@@ -198,10 +198,9 @@ CREATE TABLE `news` (
 
 INSERT INTO news (`news_index`, title, posting_date, content, author_id)
 VALUES
-    (1, 'Breaking News: Market Hits New High', '2024-12-17 10:00:00', 'The stock market reached an all-time high today, fueled by optimism about the economy. Investors are seeing strong earnings reports from major corporations.', 2),
-    (2, 'Weather Alert: Winter Storm Approaching', '2024-12-17 12:00:00', 'A winter storm is expected to hit the region by tomorrow morning. Residents are advised to prepare for heavy snow and icy roads.', 2),
-    (3, 'New Technology Startup Gains Attention', '2024-12-17 14:00:00', 'A new tech startup focused on AI solutions is making waves in Silicon Valley. The company has already secured a significant amount of investment and is poised for growth.', 2);
-
+    (1, 'Tin tức nóng: Kỷ lục doanh số đặt vé máy bay mới', '2024-12-17 10:00:00', 'Hôm nay, doanh số đặt vé máy bay của công ty đạt mức cao nhất mọi thời đại, được thúc đẩy bởi sự lạc quan về sự phục hồi của ngành du lịch sau đại dịch. Công ty ghi nhận lượng đặt vé tăng mạnh trong những tháng gần đây.', 1),
+    (2, 'Thông báo: Khuyến mãi đặc biệt dịp cuối năm', '2024-12-17 12:00:00', 'Công ty đang triển khai chương trình khuyến mãi đặc biệt nhân dịp cuối năm với nhiều ưu đãi hấp dẫn như giảm giá vé, tặng quà, tích điểm thưởng cho khách hàng. Thời gian khuyến mãi kéo dài đến hết ngày 31 tháng 12.', 1),
+    (3, 'Ra mắt ứng dụng đặt vé máy bay mới', '2024-12-17 14:00:00', 'Công ty vừa chính thức ra mắt ứng dụng đặt vé máy bay mới với giao diện thân thiện, dễ sử dụng và tích hợp nhiều tính năng tiện ích như thanh toán trực tuyến, lựa chọn chỗ ngồi, quản lý hành trình. Ứng dụng hiện đã có mặt trên các hệ điều hành iOS và Android.', 1);
 --
 -- Table structure for table `airports`
 --
