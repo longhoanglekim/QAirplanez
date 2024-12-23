@@ -3,11 +3,11 @@
     <div class="w-full h-[700px] overflow-hidden relative">
       <img :src="require('@/assets/background/home_bg.jpg')"
         class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover ">
-      <div class="h-full w-2/3 flex flex-col items-center text-center absolute -top-8 lg:-top-24 lg:-left-40 space-y-6 ">
-        <div xl:p-20><img src="../../../../public/QAirline-12-21-2024.png" alt=""
+      <div class="h-full w-2/3 flex flex-col items-center text-center absolute -top-0 lg:-top-24 lg:-left-40 space-y-6 left-1/2 -translate-x-1/2">
+        <div ><img src="../../../../public/QAirline-12-21-2024.png" alt=""
           class=" animate-fade-right animate-once">
           </div>
-        <div class=" cursor-default  rounded-lg text-white absolute top-36 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0">
+        <div class="rounded-lg text-white absolute top-20 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0">
           <p class="select-none pointer-events-none  p-3">Vui từng
           chuyến bay</p></div>
         </div>
