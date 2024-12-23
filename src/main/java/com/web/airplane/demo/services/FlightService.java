@@ -256,18 +256,14 @@ public class FlightService {
         FlightResponse flightInfo = new FlightResponse();
         flightInfo.setFlightNumber(flight.getFlightNumber());
 
-        StringBuilder departCode = new StringBuilder(airportRepository.findByAirportCode(flight.getDepartureAirport().getAirportCode()).getCity());
-        departCode.append("(").append(flight.getDepartureAirport().getAirportCode()).append(")");
-        flightInfo.setDepartAirportCode(departCode.toString());
-        StringBuilder arrivalCode = new StringBuilder(airportRepository.findByAirportCode(flight.getDestinationAirport().getAirportCode()).getCity());
-        arrivalCode.append("(").append(flight.getDestinationAirport().getAirportCode()).append(")");
-        flightInfo.setArrivalAirportCode(arrivalCode.toString());
+        flightInfo.setDepartAirportCode(airportRepository.findByAirportCode(flight.getDepartureAirport().getAirportCode()).getCity() + "(" + flight.getDepartureAirport().getAirportCode() + ")");
+        flightInfo.setArrivalAirportCode(airportRepository.findByAirportCode(flight.getDestinationAirport().getAirportCode()).getCity() + "(" + flight.getDestinationAirport().getAirportCode() + ")");
         flightInfo.setArrivalTime(flight.getExpectedArrivalTime());
         flightInfo.setDepartTime(flight.getExpectedDepartureTime());
         flightInfo.setCancelTime(flight.getCancelDueTime());
         flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
         flightInfo.setStatus(flight.getStatus());
-
+        flightInfo.setCancelTime(flight.getCancelDueTime());
         return flightInfo;
     }
 }

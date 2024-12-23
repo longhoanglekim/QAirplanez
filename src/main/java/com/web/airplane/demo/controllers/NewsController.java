@@ -4,6 +4,7 @@ import com.web.airplane.demo.dtos.News.EditNewsDTO;
 import com.web.airplane.demo.dtos.News.NewsResponse;
 import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.NewsRepository;
+import com.web.airplane.demo.services.ImageService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import com.web.airplane.demo.services.NewsService;
 import com.web.airplane.demo.dtos.News.AddNewsDTO;
 import com.web.airplane.demo.models.News;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +28,23 @@ public class NewsController {
     private NewsService newsService;
     @Autowired
     private NewsRepository newsRepository;
+    @Autowired
+    private ImageService imageService;
 
     @PostMapping("/admin_news/create")
     @Transactional
-    public ResponseEntity<?> createNews(@RequestBody AddNewsDTO news, HttpServletRequest request) {
+    public ResponseEntity<?> createNews(@RequestBody AddNewsDTO news, HttpServletRequest request) throws IOException {
 
         return ResponseEntity.ok(newsService.createNews(news, request));
     }
     @PutMapping("/admin_news/edit")
     @Transactional
-    public ResponseEntity<?> editNews(@RequestBody EditNewsDTO editedNews, @RequestParam(name = "index") Long index) {
+    public ResponseEntity<?> editNews(@RequestBody EditNewsDTO editedNews, @RequestParam(name = "index") Long index) throws IOException {
         News news = newsRepository.findByNewsIndex(index);
         news.setTitle(editedNews.getTitle());
         news.setContent(editedNews.getContent());
         news.setPostingDate(editedNews.getPostingDate());
-        news.setImageData(editedNews.getImageData());
+        news.setImage(imageService.storeImage(editedNews.getFile()));
         newsRepository.save(news);
         return ResponseEntity.ok(newsService.getNewsInfo(news));
 
