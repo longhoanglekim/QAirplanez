@@ -425,6 +425,11 @@ const loadTicketFromServer = async () => {
 const handleCancelTicket = () => {
     cancelTicket.value = false
     console.log("huy ve")
+    const res = fetch(`http://localhost:808/user/api/public/cancelByBookingCode?booking-code=+${loadData.value.bookingCode}`, {
+        method : 'DELETE'
+    }) 
+    const r = res.text()
+    console.log(r)
     router.push('/')    
 }
 

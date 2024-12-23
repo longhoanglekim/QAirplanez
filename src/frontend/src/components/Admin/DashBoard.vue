@@ -29,10 +29,10 @@
       <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-700">
         <div class="flex justify-between items-center mb-4">
           <ChartSVG class="text-red-700" />
-          <span class="text-2xl font-bold text-red-900">$2.3M</span>
+          <span class="text-2xl font-bold text-red-900">123,650,000 VND</span>
         </div>
-        <h2 class="text-lg font-semibold text-gray-800">Total Revenue</h2>
-        <p class="text-sm text-gray-500">Current Quarter</p>
+        <h2 class="text-lg font-semibold text-gray-800">Doanh thu</h2>
+        <p class="text-sm text-gray-500">Trong năm</p>
       </div>
     </div>
     <div class="text-center mt-4">

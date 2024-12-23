@@ -28,6 +28,8 @@ public class News {
 
     private String type;
 
+    private String imageData;
+
     @OneToOne
     @JoinColumn(name = "image_id", referencedColumnName = "id") // Tạo cột image_id
     private Image image;

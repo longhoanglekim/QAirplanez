@@ -1,5 +1,6 @@
 <template>
-<div class="bg-gradient-to-br from-orange-50 to-red-100 img bg-cover bg-center p-4 border-b-4 border-indigo-500">
+  <div class="bg-gradient-to-br from-orange-50 to-red-100">
+    <div class=" img bg-cover bg-center p-4 border-b-4 border-indigo-500">
     <div class=" search-result  text-emerald-950 bg-white text-xl font-bold uppercase text-center p-5 shadow-lg rounded-lg w-72 mx-auto m-20">
         Kết quả tìm kiếm
     </div>
@@ -64,6 +65,8 @@
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
 </div>
+  </div>
+
 </template>
 
     
@@ -192,7 +195,7 @@ const getListTicket = async (departureDate) => {
       console.log('data', data)
         tickets.value = data.map(flight => ({
     ...flight,
-    basePrice: 250000,
+    basePrice: Math.round(Math.random() * 500)*1000  + 500000,
     selectedClass: null
   }))
   })
@@ -222,8 +225,8 @@ const filteredAndSortedTickets = computed(() => {
 })
 
 const handleReSearch = () => {
-  departureCode.value = storeSearchFlight.getOldForm().fromCityName
-  arrivalCode.value = storeSearchFlight.getOldForm().toCityName
+  departureCode.value = storeSearchFlight.getOldForm().fromCity
+  arrivalCode.value = storeSearchFlight.getOldForm().toCity
   getListTicket(storeSearchFlight.getOldForm().departureDate)
 }
 

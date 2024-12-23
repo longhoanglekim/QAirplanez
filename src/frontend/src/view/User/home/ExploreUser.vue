@@ -8,7 +8,7 @@
             class="mySlides fade"
             v-show="index === currentSlide"
         >
-          <img :src="'https://drive.google.com/uc?export=view&id=1DjQHk5gkHmLdhRcoppW1cuBFzbVnPXgG'" alt="Slide image" class="slide-image" />
+          <img :src="slide.image" alt="Slide image" class="slide-image" />
 
           <button
               class="text-area"
@@ -17,7 +17,7 @@
               @mouseleave="isHolding = false"
               :class="{ holding: isHolding }"
           >
-            <h2>{{ slide.city }}</h2>
+            <h2>{{ slide.title }}</h2>
             <p>{{ slide.description }}</p>
             <div class="location-info">
               <span>📍 {{ slide.country }}</span>
@@ -101,7 +101,29 @@ export default {
     return {
       currentSlide: 0,
       isHolding: false,
-      allSlides: null,
+      allSlides: [
+        {
+          image: require("@/assets/destination/danang.jpg"),
+          title: "Đà Nẵng",
+          description:
+              "Đến với Đà Nẵng để mê mẩn trước những bãi cát trắng, đắm mình giữa làn nước xanh dưới cái nắng vàng ươm.",
+          location: "Việt Nam",
+        },
+        {
+          image: require("@/assets/destination/hanoi.jpg"),
+          title: "Hà Nội",
+          description:
+              "Khám phá thủ đô với vẻ đẹp cổ kính và những di tích lịch sử độc đáo.",
+          location: "Việt Nam",
+        },
+        {
+          image: require("@/assets/destination/bangkok.jpg"),
+          title: "Bangkok",
+          description:
+              "Khám phá thành phố sôi động với các ngôi chùa và món ăn đường phố tuyệt vời.",
+          location: "Thái Lan",
+        },
+      ],
       searchQuery: "",
       filteredLocations: [],
       showSuggestions: false,
@@ -123,7 +145,6 @@ export default {
   },
   mounted() {
     document.title = 'Khám phá';
-    this.downloadImage();
     this.startSlideshow();
     document.addEventListener("click", this.handleOutsideClick);
     this.resetDisplayedDestinations();
@@ -132,21 +153,6 @@ export default {
     document.removeEventListener("click", this.handleOutsideClick);
   },
   methods: {
-    downloadImage() {
-      console.log("Downloading...")
-      fetch("http://localhost:8080/api/airport/public/airportList")
-          .then((response) => response.json()) // Chuyển dữ liệu thành JSON
-          .then((data) => {
-            this.allSlides = data; // Gán dữ liệu vào allSlides
-            data.forEach(dt => {
-
-              console.log(dt.image);
-            });
-          })
-          .catch((error) => {
-            console.error("Lỗi khi lấy dữ liệu:", error); // Xử lý lỗi nếu có
-          });
-    },
     resetDisplayedDestinations() {
       this.displayedDestinations = [...this.destinations];
     },

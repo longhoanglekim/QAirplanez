@@ -30,6 +30,7 @@ public class Image {
     @OneToOne(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private News news;
 
+
     public void setId(Long id) {
         this.id = id;
     }
