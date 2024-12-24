@@ -1,15 +1,11 @@
 package com.web.airplane.demo.dtos.News;
 
-import com.web.airplane.demo.models.Image;
-import com.web.airplane.demo.models.User;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +17,9 @@ public class NewsResponse {
     private LocalDateTime editDate;
     private String content;
     private String type;
-    private MultipartFile file;
+    private String urlImage;
+
+
 
 
     private String author;
@@ -30,4 +28,5 @@ public class NewsResponse {
         return "Ngày " + postingDate.getDayOfMonth() + " tháng " + postingDate.getMonth().getValue() + " năm " +
                 postingDate.getYear();
     }
+
 }

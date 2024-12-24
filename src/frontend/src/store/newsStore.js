@@ -1,4 +1,26 @@
+
+
+
 export const newsStore = () => {
+
+    const getNews = async () => {  
+        try {
+                const  response = await fetch('http://localhost:8080/api/news/public/newsList', {
+                    method : 'Get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                }
+            } catch(error) {
+                console.log(error);
+            }
+
+    }
     // Hàm xóa tin tức
     const deleteNews = async (index) => {
         try {
@@ -50,7 +72,8 @@ export const newsStore = () => {
 
     return {
         deleteNews,
-        editNews
+        editNews,
+        getNews
     };
 };
 

@@ -63,15 +63,11 @@
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
     </div>
 </div>
-<div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center py-4">
-    <selecting-ticket departure-time="08:30 AM" arrival-time="10:45 AM" price="$250.00"></selecting-ticket>
-</div>
 </template>
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
-import SelectingTicket from '@/components/composable/ticket/SelectingTicket.vue';
 import {
     useRouter
 } from 'vue-router';

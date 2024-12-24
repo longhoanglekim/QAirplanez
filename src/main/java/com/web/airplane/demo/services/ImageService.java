@@ -32,4 +32,9 @@ public class ImageService {
         // Trả về ảnh dưới dạng base64
         return "data:image/" + image.getType() + ";base64," + base64Image;
     }
+
+    public String getNewsImageById(Long id) {
+        Image image = imageRepository.findById(id).get();
+        return getImage(image);
+    }
 }

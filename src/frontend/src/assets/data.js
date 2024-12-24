@@ -10,6 +10,7 @@ const fetchNewsData = async () => {
         });
         if (response.ok) {
             news = await response.json();
+            console.log(news)
         }
     } catch(error) {
         console.log(error);

@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import com.web.airplane.demo.services.NewsService;
 import com.web.airplane.demo.dtos.News.AddNewsDTO;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -33,8 +36,16 @@ public class NewsController {
 
     @PostMapping("/admin_news/create")
     @Transactional
-    public ResponseEntity<?> createNews(@RequestBody AddNewsDTO news, HttpServletRequest request) throws IOException {
-
+    public ResponseEntity<?> createNews(@RequestParam(name="image") MultipartFile image, @RequestParam(name="title") String title, @RequestParam(name="content") String content, HttpServletRequest request) throws IOException {
+        AddNewsDTO news = new AddNewsDTO();
+        news.setTitle(title);
+        news.setContent(content);
+        if (image == null) {
+            log.debug("image for news not found");
+            return ResponseEntity.status(400).body("Image is required");
+        }
+        news.setFile(image);
+        log.debug("set file ok");
         return ResponseEntity.ok(newsService.createNews(news, request));
     }
     @PutMapping("/admin_news/edit")
@@ -81,4 +92,15 @@ public class NewsController {
         }
         return ResponseEntity.ok(newsService.getNewsInfo(news));
     }
+
+    /*
+     * User user = userService.getCurrentUser(request);
+        Image currentAvatar = user.getAvatarList().get(user.getAvatarList().size() - 1);
+        String imgUrl = imageService.getImage(currentAvatar);
+        ImageResponse imageResponse = new ImageResponse();
+        imageResponse.setImageUrl(imgUrl);
+        // Trả về ảnh dưới dạng base64
+        return ResponseEntity.ok(imageResponse);
+     */
+    
 }
