@@ -24,6 +24,7 @@ public class News {
     private String title;
     private LocalDateTime postingDate;
     private LocalDateTime editDate;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String type;

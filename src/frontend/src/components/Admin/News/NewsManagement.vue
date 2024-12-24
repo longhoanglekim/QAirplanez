@@ -130,7 +130,7 @@ const editNews = (editedNews) => {
   const body = {
     title: editedNews.title,
     postingDate: editedNews.postingDate,
-    editDate: new Date().toISOString(), // Lấy thời gian hiện tại làm `editDate`
+    editDate: new Date().toISOString(),
     content: editedNews.content,
     imageList: editedNews.imageList, // Đảm bảo `imageList` là mảng chuỗi base64
   };

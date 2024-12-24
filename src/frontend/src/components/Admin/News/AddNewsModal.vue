@@ -44,6 +44,9 @@ const formData = new FormData();
 
 const handleFileChange = (event) => {
     image.value = event.target.files[0];
+    if (image.value) {
+      console.log("chua truyen anh");
+    }
 }
 const postNews = async () => {
     formData.append('title', title.value);

@@ -41,12 +41,14 @@ public class NewsService {
         news.setPostingDate(LocalDateTime.now());
         User user = userService.getCurrentUser(request);
         news.setAuthor(user);
-
-        Image newImage = new Image();
-        newImage = imageService.storeImage(newsInfo.getFile());
-        imageRepository.save(newImage);
-        news.setImage(newImage);
+        if (newsInfo.getFile() != null) {
+            Image newImage = new Image();
+            newImage = imageService.storeImage(newsInfo.getFile());
+            imageRepository.save(newImage);
+            news.setImage(newImage);
+        }
         log.debug("newsGetfile"+ newsInfo.getFile());
+
         newsRepository.save(news);
 
 
