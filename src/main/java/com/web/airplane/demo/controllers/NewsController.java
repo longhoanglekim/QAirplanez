@@ -36,16 +36,18 @@ public class NewsController {
 
     @PostMapping("/admin_news/create")
     @Transactional
-    public ResponseEntity<?> createNews(@RequestParam(name="image") MultipartFile image, @RequestParam(name="title") String title, @RequestParam(name="content") String content, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> createNews(@RequestParam(name="image", required = false) MultipartFile image, @RequestParam(name="title") String title, @RequestParam(name="content") String content, HttpServletRequest request) throws IOException {
         AddNewsDTO news = new AddNewsDTO();
         news.setTitle(title);
         news.setContent(content);
-        if (image == null) {
+        if (image == null || image.isEmpty()) {
             log.debug("image for news not found");
-            return ResponseEntity.status(400).body("Image is required");
+//            return ResponseEntity.status(400).body("Image is required");
+        } else {
+            news.setFile(image);
+            log.debug("set file ok");
         }
-        news.setFile(image);
-        log.debug("set file ok");
+
         return ResponseEntity.ok(newsService.createNews(news, request));
     }
     @PutMapping("/admin_news/edit")
@@ -55,7 +57,9 @@ public class NewsController {
         news.setTitle(editedNews.getTitle());
         news.setContent(editedNews.getContent());
         news.setPostingDate(editedNews.getPostingDate());
-        news.setImage(imageService.storeImage(editedNews.getFile()));
+        if (editedNews.getFile() != null) {
+            news.setImage(imageService.storeImage(editedNews.getFile()));
+        }
         newsRepository.save(news);
         return ResponseEntity.ok(newsService.getNewsInfo(news));
 

@@ -111,10 +111,14 @@ public class FlightService {
     }
 
     public String getEconomySeatForAutoBooking(Flight flight) {
-        for (int row = getMaxBusinessRow(flight) + 1; row <= getMaxFirstRow(flight); row++) {
+        for (int row = getMaxBusinessRow(flight) + 1; row <= getMaxEconomyRow(flight); row++) {
             // Vòng lặp qua các cột ghế từ A đến F
             for (char col ='A'; col <= 'F'; col++) {
-                if (passengerRepository.findPassengerIfSeatBooked(flight.getId(), row, String.valueOf(col)) == null) {
+                Passenger passenger = passengerRepository.findPassengerIfSeatBooked(flight.getId(), row, String.valueOf(col));
+                if (passenger != null) {
+                    log.debug(passenger.getFirstName());
+                } else  {
+                    log.debug("Có thể chuyển");
                     return col + String.valueOf(row);
                 }
             }
