@@ -51,7 +51,7 @@
               <router-link :to="`/news/${sortedHotNews[0].title}`"
                 class="group block transition-transform duration-300 hover:-translate-y-1">
                 <div class="p-4 transition-all duration-300 group-hover:bg-orange-50">
-                  <img :src="newsImg[0].image"
+                  <img :src="sortedHotNews[0].urlImage"
                     class="rounded-lg object-cover w-full h-64 shadow-sm transition-all duration-300 group-hover:shadow-md">
                   <h1 class="text-red-800 text-3xl font-semibold mt-4 mb-2 leading-tight 
                          transition-colors duration-300">
@@ -68,13 +68,13 @@
             </div>
 
             <div class="w-full md:w-1/2">
-              <div v-for="(post, index) in otherHotNews" :key="post.title"
+              <div v-for="(post) in otherHotNews" :key="post.title"
                 class="rounded-lg w-full flex flex-col md:flex-row mb-6">
                 <router-link :to="`/news/${post.title}`"
                   class="group flex flex-col md:flex-row w-full transition-transform duration-300 hover:-translate-y-1">
                   <div
                     class="flex flex-col md:flex-row w-full transition-all duration-300 group-hover:bg-orange-50 p-2">
-                    <img :src="newsImg[index].image"
+                    <img :src="post.urlImage"
                       class="block rounded-lg w-full md:w-32 h-32 object-cover m-4 md:m-0 shadow-sm transition-all duration-300 group-hover:shadow-md" />
                     <div class="bg-transparent px-4 py-3 w-full md:w-3/4 ml-0 md:ml-4">
                       <div class="md:mt-0 text-red-800 font-medium text-lg mb-2 
@@ -96,7 +96,7 @@
               <div class="text-center mt-8">
                 <router-link to="/news"
                   class="text-red-600 text-sm font-medium transition-colors duration-300 hover:text-red-700">
-                  View all articles →
+                  Xem tất cả
                 </router-link>
               </div>
             </div>
@@ -161,17 +161,6 @@ import { Ticket, Earth } from 'lucide-vue-next';
 
 const newsList = ref([]);
 
-const newsImg = [
-  {
-    image: require('@/assets/news/start-up.jpg')
-  },
-  {
-    image: require('@/assets/news/winter_storm.jpg')
-  },
-  {
-    image: require('@/assets/news/stonk.jpg')
-  },
-];
 
 let announcements = ref([]);
 //let hotnews = ref([]);
@@ -221,8 +210,8 @@ const loadNews = async () => {
   }
 };
 
-onMounted(() => {
-  loadNews();
+onMounted( async () => {
+  await loadNews();
 });
 </script>
 

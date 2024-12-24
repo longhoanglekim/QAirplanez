@@ -20,11 +20,11 @@
         </tr>
         </thead>
         <tbody class="text-left">
-        <tr v-for="item in newsList" :key="item.index">
+        <tr v-for="item in newsList" :key="item.title">
           <td>{{ item.index }}</td>
           <td>{{ item.title }}</td>
           <td>{{ item.formattedPostingDate }}</td>
-          <td><img :src="item.image" alt="Ảnh" class="w-20 h-20 object-cover"></td>
+          <td><img :src="item.urlImage" alt="Ảnh" class="w-20 h-20 object-cover"></td>
           <td>{{ item.content }}</td>
           <td>
             <div class="relative">
@@ -60,14 +60,13 @@
 
 <script setup>
 import { PlusIcon } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import AddNewsModal from './AddNewsModal.vue';
 import { newsStore } from "@/store/newsStore";
-import { news } from '@/assets/data';
 
 import EditNewsModal from "@/components/Admin/News/EditNewsModal.vue";
 
-const newsList = ref(news); // Danh sách tin tức
+const newsList = ref([]); // Danh sách tin tức
 const isAddNewsModalOpen = ref(false); // Trạng thái mở modal thêm tin tức
 const isEditNewsModalOpen = ref(false); // Trạng thái mở modal thêm tin tức
 const dropdownIndex = ref(null); // Trạng thái dropdown
@@ -90,38 +89,22 @@ const closeEditNewsModal = () => {
 };
 
 // Post tin tức mới
-const postNews = async (news) => {
+const postNews = async () => {
+  isAddNewsModalOpen.value = false;
   try {
-    const newNews = {
-      ...news,
-      date: new Date().toISOString().split('T')[0],
-      image: news.image || '@/assets/logo.png'
-    };
-
-    const response = await fetch('http://localhost:8080/api/news/admin_news/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('adminToken')}`
-      },
-      body: JSON.stringify(newNews)
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to post news: ${response.statusText}`);
+        const  response = await fetch('http://localhost:8080/api/news/public/newsList', {
+            method : 'Get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        });
+        if (response.ok) {
+            newsList.value = await response.json();
+        }
+    } catch(error) {
+        console.log(error);
     }
-
-    const result = await response.json();
-    newsList.value.push({
-      ...result,
-      index: newsList.value.length + 1
-    });
-
-    isAddNewsModalOpen.value = false;
-  } catch (error) {
-    console.error('Error posting news:', error);
-    alert('Có lỗi xảy ra khi thêm tin tức. Vui lòng thử lại.');
-  }
 };
 
 // Xóa tin tức
@@ -185,6 +168,12 @@ const toggleDropdown = (index) => {
     dropdownIndex.value = index; // Mở dropdown
   }
 };
+
+
+onMounted(async () => {
+  newsList.value = await newsStore().getNews();
+  console.log('newsList:', newsList.value);
+});
 </script>
 
 <style scoped>

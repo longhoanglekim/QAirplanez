@@ -11,11 +11,16 @@ import com.web.airplane.demo.dtos.News.NewsResponse;
 import com.web.airplane.demo.models.Image;
 import com.web.airplane.demo.models.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.web.airplane.demo.models.News;
+import com.web.airplane.demo.repositories.ImageRepository;
 import com.web.airplane.demo.repositories.NewsRepository;
 
+@Slf4j
 @Service
 public class NewsService {
      @Autowired
@@ -24,7 +29,10 @@ public class NewsService {
      private UserService userService;
      @Autowired
      private ImageService imageService;
+    @Autowired
+    private ImageRepository imageRepository;
     
+    @Transactional
     public NewsResponse createNews(AddNewsDTO newsInfo, HttpServletRequest request) throws IOException {
         News news = new News();
         news.setNewsIndex(newsRepository.findMaxIndex() + 1);
@@ -33,8 +41,16 @@ public class NewsService {
         news.setPostingDate(LocalDateTime.now());
         User user = userService.getCurrentUser(request);
         news.setAuthor(user);
-        news.setImage(imageService.storeImage(newsInfo.getFile()));
+
+        Image newImage = new Image();
+        newImage = imageService.storeImage(newsInfo.getFile());
+        imageRepository.save(newImage);
+        news.setImage(newImage);
+        log.debug("newsGetfile"+ newsInfo.getFile());
         newsRepository.save(news);
+
+
+
         return getNewsInfo(news);
     }
 
@@ -48,6 +64,8 @@ public class NewsService {
         newsResponse.setEditDate(news.getEditDate());
         newsResponse.setContent(news.getContent());
         newsResponse.setAuthor(news.getAuthor().getFirstname() + " " + news.getAuthor().getLastname());
+        if (news.getImage() != null) newsResponse.setUrlImage(imageService.getImage(news.getImage()));
+        
         return newsResponse;
     }
 
