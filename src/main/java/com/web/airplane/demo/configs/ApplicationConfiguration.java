@@ -1,7 +1,6 @@
 package com.web.airplane.demo.configs;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.security.access.expression.SecurityExpressionHandler;
+
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,16 +12,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 public class ApplicationConfiguration {
-    private final UserRepository userRepository;
+
     private final UserDetailsServiceImpl accountService;
 
-    public ApplicationConfiguration(UserRepository userRepository, UserDetailsServiceImpl accountService) {
-        this.userRepository = userRepository;
+    public ApplicationConfiguration(UserDetailsServiceImpl accountService) {
         this.accountService = accountService;
     }
 
@@ -62,5 +63,15 @@ public class ApplicationConfiguration {
                                 "ROLE_ADMIN_PASSENGER_READ > ROLE_USER"
         );
     }
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        configuration.setAllowCredentials(true);
+        return source;
+    }
 }
