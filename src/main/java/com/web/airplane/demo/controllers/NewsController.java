@@ -2,7 +2,6 @@ package com.web.airplane.demo.controllers;
 
 import com.web.airplane.demo.dtos.News.EditNewsDTO;
 import com.web.airplane.demo.dtos.News.NewsResponse;
-import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.NewsRepository;
 import com.web.airplane.demo.services.ImageService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,14 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import com.web.airplane.demo.services.NewsService;
 import com.web.airplane.demo.dtos.News.AddNewsDTO;
 import com.web.airplane.demo.models.News;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -20,8 +20,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpRequest;
-
 @RestController
 @RequestMapping("/api/auth")
 @Slf4j

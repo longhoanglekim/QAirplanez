@@ -1,6 +1,5 @@
 package com.web.airplane.demo.services;
 
-import com.mysql.cj.log.Log;
 import com.web.airplane.demo.dtos.LoginDTO;
 import com.web.airplane.demo.dtos.RegisterDTO;
 import com.web.airplane.demo.exceptions.AccountAlreadyExistedException;
@@ -13,8 +12,6 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.net.http.HttpRequest;
 
 @Service
 @Slf4j
