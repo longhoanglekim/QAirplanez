@@ -1,8 +1,7 @@
 <template>
   <div class="bg-gradient-to-br from-orange-50 to-red-100">
     <div class=" img bg-cover bg-center p-4 border-b-4 border-indigo-500">
-      <div
-          class=" search-result  text-emerald-950 bg-white text-xl font-bold uppercase text-center p-5 shadow-lg rounded-lg w-72 mx-auto m-20">
+      <div class=" search-result  text-emerald-950 bg-white text-xl font-bold uppercase text-center p-5 shadow-lg rounded-lg w-72 mx-auto m-20">
         Kết quả tìm kiếm
       </div>
     </div>
@@ -13,7 +12,7 @@
           Thay đổi
           <ChevronDown :class="{'rotate-180' : showingSearchBox}"
                        @click="toggleSearchBox"
-                       class="ease-in-out duration-300 cursor-pointer hover:text-blue-500"/>
+                       class="ease-in-out duration-300 cursor-pointer hover:text-blue-500" />
         </button>
       </div>
       <div class="transition-all duration-500 ease-in-out relative place-items-center"
@@ -28,7 +27,7 @@
             <div class="flex items-center">
               <span class="text-2xl font-bold text-red-500 mr-2">Các vé chuyến:</span>
               <span class="text-2xl font-bold text-red-500 mr-2">{{ departureCode }}</span>
-              <MoveRight class="text-red-500"/>
+              <MoveRight class="text-red-500" />
               <span class="text-2xl font-bold text-red-500 ml-2">{{ arrivalCode }}</span>
             </div>
             <span class="text-orange-500">Tìm được: {{ tickets.length }} chuyến bay</span>
@@ -36,8 +35,7 @@
 
           <div class="flex items-center space-x-4">
             <div class="relative">
-              <select v-model="sortOption"
-                      class="appearance-none w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select v-model="sortOption" class="appearance-none w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="price">Giá thấp nhất</option>
                 <option value="duration">Thời gian ngắn nhất</option>
                 <option value="departure">Giờ khởi hành</option>
@@ -45,7 +43,7 @@
 
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
               </div>
             </div>
@@ -56,86 +54,36 @@
       <!-- Danh sách vé -->
       <div v-if="filteredAndSortedTickets.length > 0" class="z-10 space-y-4">
         <FlightTicket v-for="(ticket, index) in filteredAndSortedTickets" :key="index"
-                      :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket"/>
+                      :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket" />
       </div>
 
       <div v-else class="text-center py-16 bg-white rounded-lg shadow-md">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-300 mb-4" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
         <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
         <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
       </div>
-
-      <!-- Danh sách vé về -->
-      <div v-if="storeSearchFlight.getOldForm().returnDate">
-        <!-- Phần tiêu đề và lọc -->
-        <div class=" mb-6 bg-white shadow-md max-w-4xl rounded-lg p-4 mx-auto z-10">
-          <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div class="space-x-4">
-              <div class="flex items-center">
-                <span class="text-2xl font-bold text-red-500 mr-2">Các vé chuyến:</span>
-                <span class="text-2xl font-bold text-red-500 mr-2">{{ arrivalCode }}</span>
-                <MoveRight class="text-red-500"/>
-                <span class="text-2xl font-bold text-red-500 ml-2">{{ departureCode }}</span>
-              </div>
-              <span class="text-orange-500">Tìm được: {{ tickets.length }} chuyến bay</span>
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <div class="relative">
-                <select v-model="sortOption"
-                        class="appearance-none w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="price">Giá thấp nhất</option>
-                  <option value="duration">Thời gian ngắn nhất</option>
-                  <option value="departure">Giờ khởi hành</option>
-                </select>
-
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Danh sách vé -->
-        <div v-if="filteredAndSortedArrivalTickets.length > 0" class="z-10 space-y-4">
-          <FlightTicket v-for="(ticket, index) in filteredAndSortedArrivalTickets " :key="index"
-                        :ticket="ticket" :ticket-classes="ticketClasses" @selected="userSelectTicket"/>
-        </div>
-
-        <div v-else class="text-center py-16 bg-white rounded-lg shadow-md">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-300 mb-4" fill="none"
-               viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-          <p class="text-xl text-orange-600 mb-4">Không tìm thấy chuyến bay phù hợp</p>
-          <p class="text-sm text-gray-500">Vui lòng thử lại với tiêu chí tìm kiếm khác</p>
-        </div>
-
-      </div>
     </div>
   </div>
+
 </template>
+
 
 
 <script setup>
 import FlightSearch from '@/components/User/FlightSearch.vue'
 import FlightTicket from '@/components/composable/ticket/FlightTicket.vue';
-import {useRouter} from 'vue-router';
-import {searchFlightStore} from '@/store/searchFlight';
-import {useTicketStore} from '@/store/ticket';
+import { useRouter } from 'vue-router';
+import { searchFlightStore } from '@/store/searchFlight';
+import { useTicketStore } from '@/store/ticket';
 import {
   ChevronDown,
   MoveRight,
 
 } from 'lucide-vue-next'
 
-import {ref, computed, onMounted} from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 
 const router = useRouter()
@@ -176,18 +124,18 @@ const ticketClasses = [
 // Reactive state
 const sortOption = ref('price')
 const tickets = ref([])
-const arrivalTickets = ref([]); // Danh sách vé chiều về
+
 const showingSearchBox = ref(false)
 const toggleSearchBox = () => {
   showingSearchBox.value = !showingSearchBox.value
 }
 
 
+
 const userSelectTicket = (selectedTicket) => {
   //luu ve vao store
   selectedTicket.adults = storeSearchFlight.getOldForm().adults
   selectedTicket.children = storeSearchFlight.getOldForm().children
-  selectedTicket.returnDate = storeSearchFlight.getOldForm().returnDate
   storeTicket.saveDepartureTicket(selectedTicket)
   console.log(selectedTicket);
   //xu li round-trip vs one-way
@@ -205,7 +153,7 @@ const userSelectTicket = (selectedTicket) => {
 }
 
 const departureCode = ref(storeSearchFlight.getOldForm().fromCity)
-const returnDate = ref(storeSearchFlight.getOldForm().returnDate)
+
 const arrivalCode = ref(storeSearchFlight.getOldForm().toCity)
 console.log(departureCode.value + " " + arrivalCode.value);
 // Methods
@@ -247,46 +195,7 @@ const getListTicket = async (departureDate) => {
         console.log('data', data)
         tickets.value = data.map(flight => ({
           ...flight,
-          basePrice: Math.round(Math.random() * 500) * 1000 + 500000,
-          selectedClass: null
-        }))
-        arrivalTickets.value = data.map(flight => ({
-          ...flight,
-          basePrice: Math.round(Math.random() * 500) * 1000 + 500000,
-          selectedClass: null
-        }))
-      })
-      .catch(error => {
-        console.error('Lỗi:', error);
-      });
-}
-const getArrivalListTicket = async (departureDate) => {
-  const date = new Date(departureDate);
-  const offset = date.getTimezoneOffset();
-  date.setMinutes(date.getMinutes() - offset);
-
-  const req = JSON.stringify({
-    departureCode: arrivalCode.value,
-    arrivalCode: departureCode.value,
-    expectedDepartureTime: date.toISOString().slice(0, 16),
-    expectedArrivalTime: null,
-    numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
-  })
-  console.log(req)
-  console.log('tìm kiếm chuyến bay với thông tin: ', req);
-  await fetch('http://localhost:8080/api/flight/public/findFlight', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: req
-  })
-      .then(response => response.json())
-      .then(data => {
-        console.log('data', data)
-        arrivalTickets.value = data.map(flight => ({
-          ...flight,
-          basePrice: Math.round(Math.random() * 500) * 1000 + 500000,
+          basePrice: Math.round(Math.random() * 500)*1000  + 500000,
           selectedClass: null
         }))
       })
@@ -314,39 +223,17 @@ const filteredAndSortedTickets = computed(() => {
 
   return result
 })
-const filteredAndSortedArrivalTickets = computed(() => {
-  let result = [...arrivalTickets.value]
-
-  // Sorting
-  switch (sortOption.value) {
-    case 'price':
-      result.sort((a, b) => a.basePrice - b.basePrice)
-      break
-    case 'duration':
-      result.sort((a, b) => calculateFlightDuration(a) - calculateFlightDuration(b))
-      break
-    case 'departure':
-      result.sort((a, b) => convertTimeToMinutes(a.departureTime) - convertTimeToMinutes(b.departureTime))
-      break
-  }
-
-  return result
-})
 
 const handleReSearch = () => {
-  console.log("Đổi thông tin")
   departureCode.value = storeSearchFlight.getOldForm().fromCity
   arrivalCode.value = storeSearchFlight.getOldForm().toCity
-  returnDate.value = storeSearchFlight.getOldForm().returnDate
   getListTicket(storeSearchFlight.getOldForm().departureDate)
-  getArrivalListTicket(storeSearchFlight.getOldForm().returnDate)
 }
 
 // Lifecycle hook
 onMounted(() => {
   document.title = 'Kết quả tìm kiếm chuyến bay';
   getListTicket(storeSearchFlight.getOldForm().departureDate)
-  getArrivalListTicket(storeSearchFlight.getOldForm().returnDate)
 })
 
 
