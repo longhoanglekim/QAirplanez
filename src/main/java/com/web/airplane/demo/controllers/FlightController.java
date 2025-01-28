@@ -113,7 +113,6 @@ public class FlightController {
         log.debug("Validate flight info");
         // Check for null values
         if (flightInfo == null) return false;
-        log.debug("flightInfo: " + flightInfo);
         // Validate required fields
         if (flightInfo.getSerialNumber() == null || flightInfo.getSerialNumber().trim().isEmpty() ||
             flightInfo.getDepartureCode() == null || flightInfo.getDepartureCode().trim().isEmpty() ||
@@ -186,7 +185,7 @@ public class FlightController {
         log.debug("Find flight");
 
         // Find and filter outbound flights
-        List<Flight> flights = new ArrayList<>();
+        List<Flight> flights;
         log.debug(flightInfo.toString());
         flights = findAndFilterFlights(flightInfo.getDepartureCode(),
                 flightInfo.getArrivalCode(), flightInfo);
@@ -220,7 +219,7 @@ public class FlightController {
 
         // Step 1: Find all flights between the two airports
         List<Flight> flights = new ArrayList<>();
-        flights = (ArrayList<Flight>) flightRepository.findAllByDepartureAirportAndDestinationAirport(
+        flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
         );
@@ -230,24 +229,12 @@ public class FlightController {
         log.debug("THấy chuyến");
         List<Flight> filteredFlights = new ArrayList<>();
         for (Flight flight : flights) {
-            if (flight.getActualDepartureTime() == null) {
-                log.debug("đã hoãn");
                 if (flight.getExpectedDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
                         && flight.getExpectedDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
                 ) {
                     filteredFlights.add(flight);
-                    log.debug("Tim thay may bay");
+                    log.debug("Tim thay may bay tu" + departureAirportCode + " den " + destinationAirportCode);
                 }
-            } else {
-                log.debug("K hoãn");
-                if (flight.getActualDepartureTime().getDayOfMonth() == flightInfo.getExpectedDepartureTime().getDayOfMonth()
-                        && flight.getActualDepartureTime().getMonth() == flightInfo.getExpectedDepartureTime().getMonth()
-                ) {
-                    filteredFlights.add(flight);
-                    log.debug("Tim thay may bay");
-                }
-            }
-
         }
 
         return filteredFlights;

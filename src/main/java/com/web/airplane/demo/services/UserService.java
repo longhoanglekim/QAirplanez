@@ -9,7 +9,6 @@ import com.web.airplane.demo.models.User;
 import com.web.airplane.demo.repositories.PassengerRepository;
 import com.web.airplane.demo.repositories.RoleRepository;
 import com.web.airplane.demo.repositories.UserRepository;
-import com.web.airplane.demo.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -110,7 +110,7 @@
                 </div>
                 
                 <div v-if="form.ticketType === 'round-trip'" class="relative group">
-                    <MyDatePicker v-model="form.returnDate" label="Ngày về" 
+                    <MyDatePicker class="absolute" v-model="form.returnDate" label="Ngày về"
                     :disable-date-from="new Date(Math.max(form.departureDate, Date.now()))" 
                     :range="true"  ref="returnDateRef"/>
                 </div>
