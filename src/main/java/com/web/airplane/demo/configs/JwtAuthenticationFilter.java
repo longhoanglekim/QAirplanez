@@ -31,6 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Todo : Setup that we don't need to use shouldNotFilter
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -42,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         if (authHeader.contains("Bearer")) {
             authHeader = authHeader.substring(7);
         }
@@ -70,8 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug(path);
         List<String> publicPaths = Arrays.asList("/api/auth/", "/api/ticket_class/", "/api/flight/public/", "/api/airport/public/",
                 "/api/meal/public", "api/user/public",
-                "/api/news/public",
-                "/test/string");
+                "/api/news/public");
 
         return path.contains("/public/") || path.contains("/favicon.ico")
                 || publicPaths.stream().anyMatch(path::startsWith);

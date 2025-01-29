@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useAircraftStore = defineStore('aircraft-store', () => {
   const aircraft = ref([])
   const reloadAircraft = async () => {
-    const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/aircraftList', {
+    const response = await fetch('http://localhost:8080/api/aircraft/aircraftList', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export const useAircraftStore = defineStore('aircraft-store', () => {
 
   const addAircraft = async (aircraft) => {
     try {
-      const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/addAircraft', {
+      const response = await fetch('http://localhost:8080/api/aircraft/addAircraft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const useAircraftStore = defineStore('aircraft-store', () => {
 
   const editAircraft = async (aircraft) => {
     try {
-        const response = await fetch('http://localhost:8080/api/aircraft/admin_aircraft/editAircraft', {
+        const response = await fetch('http://localhost:8080/api/aircraft/editAircraft', {
             method: 'PUT',
             headers: {
             'Content-Type': 'application/json',

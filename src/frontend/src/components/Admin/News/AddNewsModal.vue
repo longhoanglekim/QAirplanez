@@ -59,7 +59,7 @@ const postNews = async () => {
     }
     
     try {
-        const response = await fetch('http://localhost:8080/api/news/admin_news/create', {
+        const response = await fetch('http://localhost:8080/api/news/create', {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('adminToken')}`

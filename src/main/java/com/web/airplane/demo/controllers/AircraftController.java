@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class AircraftController {
     }
 
 
-    @PostMapping("/admin_aircraft/addAircraft")
+    @PreAuthorize("hasRole('ADMIN_AIRCRAFT')")
+    @PostMapping("/addAircraft")
     public ResponseEntity<?> addAircraft(@RequestBody AircraftInfo aircraftInfo) {
         try {
             log.debug(aircraftInfo.toString());
@@ -45,7 +47,8 @@ public class AircraftController {
         }
     }
 
-    @GetMapping("/admin_aircraft/aircraftList")
+    @PreAuthorize("hasRole('ADMIN_AIRCRAFT')")
+    @GetMapping("/aircraftList")
     public List<AircraftInfo> getAircraftList() {
         List<Aircraft> aircraftList = aircraftRepository.findAll();
         List<AircraftInfo> aircraftInfoList = new ArrayList<>();
@@ -56,7 +59,8 @@ public class AircraftController {
         return aircraftInfoList;
     }
 
-    @PutMapping("/admin_aircraft/editAircraft")
+    @PreAuthorize("hasRole('ADMIN_AIRCRAFT')")
+    @PutMapping("/editAircraft")
     public ResponseEntity<?> editAircraft(@RequestBody AircraftInfo aircraftInfo) {
         try {
             // find tau bay
@@ -82,7 +86,8 @@ public class AircraftController {
         }
     }
 
-    @DeleteMapping("/admin_aircraft/delete_aircraft")
+    @PreAuthorize("hasRole('ADMIN_AIRCRAFT')")
+    @DeleteMapping("/delete_aircraft")
     @Transactional
     public ResponseEntity<?> deleteAircraft(@RequestParam(name = "serial_number") String serialNumber) {
         try {

@@ -24,7 +24,7 @@ export const newsStore = () => {
     // Hàm xóa tin tức
     const deleteNews = async (index) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/news/admin_news/delete?index=` + index, {
+            const response = await fetch(`http://localhost:8080/api/news/delete?index=` + index, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const newsStore = () => {
     // Hàm chỉnh sửa tin tức
     const editNews = async (index, updatedNews) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/news/admin_news/edit?index=` + index, {
+            const response = await fetch(`http://localhost:8080/api/news/edit?index=` + index, {
                 method: 'PUT', // Sử dụng PUT hoặc PATCH tùy thuộc vào API
                 headers: {
                     'Content-Type': 'application/json',
