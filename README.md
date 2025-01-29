@@ -1,8 +1,3 @@
-
-## 1.Database
-### Link database:
-- `src/main/resources/static/data/data.sql`
-
 # ✈️ Flight Booking System - QAirplanez
 
 ## Assignment for Web Programming - INT3306 7
