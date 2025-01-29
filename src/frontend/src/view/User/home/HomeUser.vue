@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="w-full h-[700px] overflow-hidden relative">
+    <div class="w-full h-[900px] overflow-hidden relative">
       <img :src="require('@/assets/background/home_bg.jpg')"
         class="w-full h-full rounded-tl-lg rounded-tr-lg object-cover ">
       <div class="h-full w-2/3 flex flex-col items-center text-center absolute -top-0 lg:-top-24 lg:-left-40 space-y-6 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0">
         <div ><img src="../../../../public/QAirline-12-21-2024.png" alt=""
           class=" animate-fade-right animate-once">
           </div>
-        <div class="rounded-lg text-white absolute top-20 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0 ">
+        <div class="rounded-lg text-white absolute top-30 xl:top-80 xl:left-15 text-xl slogan text-center left-0 right-0 ">
           <p class="animate-fade-right animate-once p-3">Vui từng
           chuyến bay</p></div>
         </div>
-        <div id="searchBox" class="absolute bottom-0 left-0 md:left-[24rem] lg:left-[40rem] xl:left-[60rem] 
+        <div id="searchBox" class="absolute bottom-10 left-0 md:left-[20rem] lg:left-[50rem] xl:left-[50rem]
                   md:top-0  right-0 flex items-center justify-center max-w-xl
                   animate-fade-left animate-once">
           <FlightSearch @search-flight="searchFlight" @search-ticket="searchTicket" />
@@ -53,7 +53,7 @@
                 <div class="p-4 transition-all duration-300 group-hover:bg-orange-50">
                   <img :src="sortedHotNews[0].urlImage"
                     class="rounded-lg object-cover w-full h-64 shadow-sm transition-all duration-300 group-hover:shadow-md">
-                  <h1 class="text-red-800 text-3xl font-semibold mt-4 mb-2 leading-tight 
+                  <h1 class="text-red-800 text-3xl font-semibold mt-4 mb-2 leading-tight
                          transition-colors duration-300">
                     {{ sortedHotNews[0].title }}
                   </h1>
@@ -77,7 +77,7 @@
                     <img :src="post.urlImage"
                       class="block rounded-lg w-full md:w-32 h-32 object-cover m-4 md:m-0 shadow-sm transition-all duration-300 group-hover:shadow-md" />
                     <div class="bg-transparent px-4 py-3 w-full md:w-3/4 ml-0 md:ml-4">
-                      <div class="md:mt-0 text-red-800 font-medium text-lg mb-2 
+                      <div class="md:mt-0 text-red-800 font-medium text-lg mb-2
                               transition-colors duration-300">
                         {{ post.title }}
                       </div>
@@ -108,7 +108,7 @@
                 <div class="p-4 transition-all duration-300 group-hover:bg-orange-50">
                   <img :src="item.image"
                     class="rounded-lg object-cover w-full h-32 shadow-sm transition-all duration-300 group-hover:shadow-md">
-                  <h3 class="text-red-800 text-xl font-semibold mt-4 mb-2 leading-tight 
+                  <h3 class="text-red-800 text-xl font-semibold mt-4 mb-2 leading-tight
                            transition-colors duration-300">
                     {{ item.title }}
                   </h3>
@@ -122,7 +122,7 @@
               </router-link>
             </div>
           </div>
-          
+
           <div class="flex flex-wrap mb-16">
             <div v-for="item in sortedAnnouncements" :key="item.title" class="w-full md:w-1/3 p-4">
               <router-link :to="`/news/${item.title}`"
@@ -130,7 +130,7 @@
                 <div class="p-4 transition-all duration-300 group-hover:bg-orange-50">
                   <img :src="item.image"
                     class="rounded-lg object-cover w-full h-32 shadow-sm transition-all duration-300 group-hover:shadow-md">
-                  <h3 class="text-red-800 text-xl font-semibold mt-4 mb-2 leading-tight 
+                  <h3 class="text-red-800 text-xl font-semibold mt-4 mb-2 leading-tight
                            transition-colors duration-300">
                     {{ item.title }}
                   </h3>

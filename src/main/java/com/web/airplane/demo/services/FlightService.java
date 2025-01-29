@@ -267,7 +267,6 @@ public class FlightService {
         flightInfo.setCancelTime(flight.getCancelDueTime());
         flightInfo.setSerialNumber(flight.getAircraft().getSerialNumber());
         flightInfo.setStatus(flight.getStatus());
-        flightInfo.setCancelTime(flight.getCancelDueTime());
         return flightInfo;
     }
 }
