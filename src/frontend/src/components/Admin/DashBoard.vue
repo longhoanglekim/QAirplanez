@@ -94,7 +94,7 @@ export default {
 
     const fetchBookings = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/flight/admin_flight/getTicketList', {
+        const response = await fetch('http://localhost:8080/api/flight/getTicketList', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export const useFlightStore = defineStore('flight-store', () => {
     const flights = ref([])
     const reloadFlights = async () => {
-        const response = await fetch('http://localhost:8080/api/flight/admin_flight/flightList', {
+        const response = await fetch('http://localhost:8080/api/flight/flightList', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export const useFlightStore = defineStore('flight-store', () => {
 
     const addFlight = async (flight) => {
         try {
-            const response = await fetch('http://localhost:8080/api/flight/admin_flight/addFlight', {
+            const response = await fetch('http://localhost:8080/api/flight/addFlight', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const useFlightStore = defineStore('flight-store', () => {
     const editFlight = async (flight) => {
         try {
             console.log('flightstore editFlight: ' + JSON.stringify(flight))
-            const response = await fetch('http://localhost:8080/api/flight/admin_flight/editFlight', {
+            const response = await fetch('http://localhost:8080/api/flight/editFlight', {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const useFlightStore = defineStore('flight-store', () => {
 
     const deleteFlight = async (flight) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/flight/admin_flight/deleteFlight?flight_number=${flight.flightNumber}`, {
+            const response = await fetch(`http://localhost:8080/api/flight/deleteFlight?flight_number=${flight.flightNumber}`, {
                 method: 'DELETE',
                 headers: {
                 'Content-Type': 'application/json',

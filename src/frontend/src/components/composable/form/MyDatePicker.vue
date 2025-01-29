@@ -53,7 +53,7 @@
     >
       <div 
         v-if="isCalendarOpen" 
-        class="absolute z-20 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden w-64"
+        class="absolute  z-20 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-visible w-64"
       >
         <!-- Header với gradient và icon -->
         <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">

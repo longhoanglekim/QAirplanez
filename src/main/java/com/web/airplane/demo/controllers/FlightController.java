@@ -47,7 +47,8 @@ public class FlightController {
 
 
 
-    @GetMapping("/admin_flight/flightList")
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @GetMapping("/flightList")
     public List<FlightInfo> getFlightList() {
         log.debug("Get flight list");
         List<Flight> flights = flightRepository.findAll();
@@ -60,14 +61,14 @@ public class FlightController {
         return flightInfoList;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/passengers")
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @GetMapping("/passengers")
     public List<Passenger> getAllPassengers(@RequestParam("flight_id") long flightId) {
         return flightRepository.findById(flightId).get().getPassengers();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/admin_flight/addFlight")
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @PostMapping("/addFlight")
     public ResponseEntity<?> addFlight(@RequestBody FlightInfo flightInfo) {
         try {
             // Validate flight info
@@ -135,7 +136,9 @@ public class FlightController {
         return true;
     }
 
-    @DeleteMapping("/admin_flight/deleteFlight")
+
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @DeleteMapping("/deleteFlight")
     @Transactional
     public ResponseEntity<?> deleteFlight(@RequestParam(name = "flight_number") String flightNumber ) {
         try {
@@ -218,7 +221,7 @@ public class FlightController {
         log.debug("Tìm chuyến bay từ " + departureAirportCode + " đến " + destinationAirportCode);
 
         // Step 1: Find all flights between the two airports
-        List<Flight> flights = new ArrayList<>();
+        List<Flight> flights;
         flights = flightRepository.findAllByDepartureAirportAndDestinationAirport(
                 airportRepository.findByAirportCode(departureAirportCode),
                 airportRepository.findByAirportCode(destinationAirportCode)
@@ -248,7 +251,8 @@ public class FlightController {
                 (timeToCheck.isEqual(oneWeekAfter) || timeToCheck.isBefore(oneWeekAfter));
     }
 
-    @PutMapping("/admin_flight/editFlight")
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @PutMapping("/editFlight")
     @Transactional
     public ResponseEntity<?> editFlight(@RequestBody FlightInfo flightInfo) {
         try {
@@ -258,7 +262,8 @@ public class FlightController {
         }
     }
 
-    @PostMapping("/admin_flight/getTicketList")
+    @PreAuthorize("hasRole('ADMIN_FLIGHT')")
+    @PostMapping("/getTicketList")
     public ResponseEntity<?> getTicketListInfo() {
         List<BookingTicket> bookingTickets = bookingTicketRepository.findAll();
         log.debug("Get ticket list + " + bookingTickets.size());

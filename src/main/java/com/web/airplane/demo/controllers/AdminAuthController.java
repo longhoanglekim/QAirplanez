@@ -46,7 +46,8 @@ public class AdminAuthController {
                 
                 // Check if user has ADMIN role
                 if (!userDetails.getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                        .map(a -> a.getAuthority())  // Lấy danh sách quyền của user
+                        .anyMatch(role -> role.equals("ROLE_ADMIN") || role.equals("ROLE_ADMIN_FLIGHT"))) {
                             log.debug("User does not have ADMIN role");
                     return ResponseEntity.status(403)
                         .body(new LoginResponse().setError("Không có quyền truy cập"));

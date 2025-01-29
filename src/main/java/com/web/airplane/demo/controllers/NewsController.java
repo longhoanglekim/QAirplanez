@@ -7,6 +7,7 @@ import com.web.airplane.demo.services.ImageService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,8 @@ public class NewsController {
     @Autowired
     private ImageService imageService;
 
-    @PostMapping("/admin_news/create")
+    @PreAuthorize("hasRole('ADMIN_NEWS')")
+    @PostMapping("/create")
     @Transactional
     public ResponseEntity<?> createNews(@RequestParam(name="image", required = false) MultipartFile image, @RequestParam(name="title") String title, @RequestParam(name="content") String content, HttpServletRequest request) throws IOException {
         AddNewsDTO news = new AddNewsDTO();
@@ -47,7 +49,8 @@ public class NewsController {
 
         return ResponseEntity.ok(newsService.createNews(news, request));
     }
-    @PutMapping("/admin_news/edit")
+    @PreAuthorize("hasRole('ADMIN_NEWS')")
+    @PutMapping("/edit")
     @Transactional
     public ResponseEntity<?> editNews(@RequestBody EditNewsDTO editedNews, @RequestParam(name = "index") Long index) throws IOException {
         News news = newsRepository.findByNewsIndex(index);
@@ -62,7 +65,8 @@ public class NewsController {
 
     }
 
-    @DeleteMapping("/admin_news/delete")
+    @PreAuthorize("hasRole('ADMIN_NEWS')")
+    @DeleteMapping("/delete")
     @Transactional
     public ResponseEntity<?> deleteNews(@RequestParam(name = "index") Long index) {
         log.debug("Delete" + index);

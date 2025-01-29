@@ -119,7 +119,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <label class="text-lg text-orange-600 font-medium">Giờ bay</label>
-                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.inboundFlight.departTime }}</div>
+                    <div class="text-xl font-bold text-orange-800 mt-1">{{ loadData.inboundFlight.formattedDepartureTime }}</div>
                 </div>
             </div>
         </div>
