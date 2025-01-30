@@ -159,6 +159,7 @@ public class FlightService {
         }
         // ITERATOR ALL PASSSENGER LIST IN FLIGHT, AND UPDATE TRUE FOR EACH SEAT
         for (Passenger passenger : flight.getPassengers()) {
+            log.debug(passenger.getSeatPosition() + passenger.getSeatRow());
             int row = passenger.getSeatRow() - 1;
             int col = passenger.getSeatPosition().charAt(0) - 'A';
             seatList.get(row).set(col, false);

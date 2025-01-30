@@ -79,7 +79,7 @@ public class NewsController {
         return ResponseEntity.ok("Đã xóa News với index = " + index);
     }
 
-    @GetMapping("/public/newsList")
+    @GetMapping("/newsList")
     public ResponseEntity<?> getNews() {
         List<News> newsList = newsRepository.findAll();
         List<NewsResponse> newsResponseList = new ArrayList<>();
@@ -89,7 +89,7 @@ public class NewsController {
         return ResponseEntity.ok(newsResponseList);
     }
 
-    @GetMapping("/public/news/{title}")
+    @GetMapping("/news/{title}")
     public ResponseEntity<?> getNewsByTitle(@PathVariable String title) {
         News news = newsRepository.findByTitle(title);
         if (news == null) {
@@ -98,14 +98,5 @@ public class NewsController {
         return ResponseEntity.ok(newsService.getNewsInfo(news));
     }
 
-    /*
-     * User user = userService.getCurrentUser(request);
-        Image currentAvatar = user.getAvatarList().get(user.getAvatarList().size() - 1);
-        String imgUrl = imageService.getImage(currentAvatar);
-        ImageResponse imageResponse = new ImageResponse();
-        imageResponse.setImageUrl(imgUrl);
-        // Trả về ảnh dưới dạng base64
-        return ResponseEntity.ok(imageResponse);
-     */
     
 }

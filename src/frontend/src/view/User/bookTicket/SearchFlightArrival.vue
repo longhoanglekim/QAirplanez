@@ -169,7 +169,7 @@ const getListTicket = async (departureDate) => {
         numOfTicket: storeSearchFlight.getOldForm().adults + storeSearchFlight.getOldForm().children,
     })
 
-    await fetch('http://localhost:8080/api/flight/public/findFlight', {
+    await fetch('http://localhost:8080/api/flight/findFlight', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

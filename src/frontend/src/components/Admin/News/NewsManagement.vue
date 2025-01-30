@@ -92,7 +92,7 @@ const closeEditNewsModal = () => {
 const postNews = async () => {
   isAddNewsModalOpen.value = false;
   try {
-        const  response = await fetch('http://localhost:8080/api/news/public/newsList', {
+        const  response = await fetch('http://localhost:8080/api/news/newsList', {
             method : 'Get',
             headers: {
                 'Content-Type': 'application/json',

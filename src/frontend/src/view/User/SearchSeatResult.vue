@@ -401,7 +401,7 @@ const loadTicketFromServer = async () => {
             firstName: storeTicket.getOldForm().firstName
         }
         console.log(JSON.stringify(req))
-        const response = await fetch('http://localhost:8080/api/user/public/findTicketInfo', {
+        const response = await fetch('http://localhost:8080/api/user/findTicketInfo', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -431,7 +431,7 @@ const loadTicketFromServer = async () => {
 const handleCancelTicket = async () => {
     try {
     // Thực hiện yêu cầu fetch đến API
-    const res = await fetch(`http://localhost:8080/api/user/public/cancelByBookingCode?booking_code=${loadData.value.bookingCode}`, {
+    const res = await fetch(`http://localhost:8080/api/user/cancelByBookingCode?booking_code=${loadData.value.bookingCode}`, {
       method: 'DELETE', // Nếu API yêu cầu phương thức GET hoặc POST, bạn có thể thay đổi
     });
 

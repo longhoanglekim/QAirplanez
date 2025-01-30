@@ -25,7 +25,7 @@ public class AirportController {
     }
 
 
-    @GetMapping("/public/airportList")
+    @GetMapping("/airportList")
     public List<AirportInfo> getAllAirport() {
         List<Airport> airportList = airportRepository.findAllAirport();
         List<AirportInfo> airportInfos = new ArrayList<>();
@@ -37,7 +37,7 @@ public class AirportController {
 
     }
 
-    @GetMapping("/public/airportListByCountry")
+    @GetMapping("/airportListByCountry")
     public List<AirportCountryInfoDTO> getAllAirportWithAirportInfosCountry() {
         List<Object[]> airportList = airportRepository.findAllAirportsWithCountry();
         List<AirportCountryInfoDTO> airportCountryInfoDTOs = new ArrayList<>();
