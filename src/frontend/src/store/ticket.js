@@ -190,7 +190,7 @@ export const useTicketStore = defineStore('ticket', () => {
 
     const fetchAllBookings = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/booking/public/bookingList')
+            const response = await fetch('http://localhost:8080/api/booking/bookingList')
             if (!response.ok) {
                 throw new Error('Failed to fetch bookings')
             }

@@ -23,12 +23,12 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
-    @GetMapping("/public/getMealList")
+    @GetMapping("/getMealList")
     public List<Meal> getAllMeals() {
         return mealService.getAllMeals();
     }
 
-    @GetMapping("/public/getMealById/{id}")
+    @GetMapping("/getMealById/{id}")
     public Meal getMealById(@PathVariable Long id) {
         return mealService.getMealById(id);
     }

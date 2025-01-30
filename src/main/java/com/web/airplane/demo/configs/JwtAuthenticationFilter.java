@@ -10,6 +10,7 @@ package com.web.airplane.demo.configs;
         import org.springframework.security.core.context.SecurityContextHolder;
         import org.springframework.security.core.userdetails.UserDetails;
         import org.springframework.security.core.userdetails.UserDetailsService;
+        import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
         import org.springframework.stereotype.Component;
         import org.springframework.web.filter.OncePerRequestFilter;
         import java.io.IOException;
@@ -39,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-
         log.debug(authHeader);
         if (authHeader == null ) {
             filterChain.doFilter(request, response);
@@ -67,17 +67,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
         log.debug("filter");
     }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        log.debug(path);
-        List<String> publicPaths = Arrays.asList("/api/auth/", "/api/ticket_class/", "/api/flight/public/", "/api/airport/public/",
-                "/api/meal/public", "api/user/public",
-                "/api/news/public");
-
-        return path.contains("/public/") || path.contains("/favicon.ico")
-                || publicPaths.stream().anyMatch(path::startsWith);
-    }
-
 }

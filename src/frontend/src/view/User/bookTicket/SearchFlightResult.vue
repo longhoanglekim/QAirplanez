@@ -183,7 +183,7 @@ const getListTicket = async (departureDate) => {
   })
   console.log(req)
   console.log('tìm kiếm chuyến bay với thông tin: ', req);
-  await fetch('http://localhost:8080/api/flight/public/findFlight', {
+  await fetch('http://localhost:8080/api/flight/findFlight', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

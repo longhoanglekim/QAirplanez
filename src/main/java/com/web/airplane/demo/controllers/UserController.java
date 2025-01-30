@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @Transactional
-    @PostMapping("/public/bookFlight")
+    @PostMapping("/bookFlight")
     public ResponseEntity<?> bookFlight(@RequestParam("depart_flight_number") String departFlightNumber,
                                         @RequestParam(value = "return_flight_number", required = false) String returnFlightNumber,
                                         HttpServletRequest request,
@@ -265,7 +265,7 @@ public class UserController {
 
 
     @Transactional
-    @DeleteMapping("/public/cancelEachPassenger")
+    @DeleteMapping("/cancelEachPassenger")
     public ResponseEntity<?> cancelFlight(@RequestParam("passenger_id") long passengerId,
                                           @RequestParam("flight_number") String flightNumber) {
         // Find the flight by flight number
@@ -311,7 +311,7 @@ public class UserController {
         return ResponseEntity.ok().body("Passenger has been removed from the flight and deleted");
     }
 
-    @DeleteMapping("/public/cancelByBookingCode")
+    @DeleteMapping("/cancelByBookingCode")
     @Transactional
     public ResponseEntity<?> cancelBookingCode(@RequestParam(name = "booking_code") String bookingCode) {
         log.debug("Bat dau huy ve");
@@ -409,7 +409,7 @@ public class UserController {
         return ResponseEntity.ok(imageResponse);
     }
 
-    @PostMapping("/public/findTicketInfo")
+    @PostMapping("/findTicketInfo")
     public ResponseEntity<?> getTicketInfo(@RequestBody TicketInput ticketInput) {
         log.debug("Bắt đầu tìm vé");
         BookingTicket bookingTicket = bookingTicketRepository.findBookingTicketByBookingCode(ticketInput.getBookingCode());

@@ -164,7 +164,7 @@ const outboundSeats = ref([]);
 const returnSeats = ref([]);
 const mealList = ref([]);
 const fetchSelectedAircraft = async (flightNumber) => {
-  const response = await fetch('http://localhost:8080/api/flight/public/getSeatList?flight_number=' + flightNumber, {
+  const response = await fetch('http://localhost:8080/api/flight/getSeatList?flight_number=' + flightNumber, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -246,7 +246,7 @@ const handleSubmit = async () => {
     totalPrice: getPrice() + storeTicket.getTicketPrice()
   }
   console.log('data', data)
-  const bookingLink = 'http://localhost:8080/api/user/public/bookFlight?depart_flight_number=' 
+  const bookingLink = 'http://localhost:8080/api/user/bookFlight?depart_flight_number='
   + departFlightNumber 
   + (returnFlightNumber && returnFlightNumber !== '' ? '&return_flight_number=' + returnFlightNumber : '')
   console.log('bookingLink', bookingLink)

@@ -153,7 +153,7 @@ public class FlightController {
         }
     }
 
-    @GetMapping("/public/getAircraft")
+    @GetMapping("/getAircraft")
     // Todo: Chỉnh thành get list ghế ngồi, thêm vào aircraftInfo
     public AircraftInfo getAircraft(@RequestParam(name = "flight_number") String flightNumber) {
         log.debug("Get aircraft info");
@@ -162,7 +162,7 @@ public class FlightController {
         return aircraftService.getAircraftInfo(aircraft);
     }
 
-    @GetMapping("/public/getSeatList")
+    @GetMapping("/getSeatList")
     public ResponseEntity<?> getSeatList(@RequestParam(name = "flight_number") String flightNumber) {
         log.debug("Get seat list");
         try {
@@ -183,7 +183,7 @@ public class FlightController {
      *      expected destination time
      * @return list of flightInfo
      */
-    @PostMapping("/public/findFlight")
+    @PostMapping("/findFlight")
     public List<FlightInfo> findFlight(@RequestBody FlightInfo flightInfo) {
         log.debug("Find flight");
 
